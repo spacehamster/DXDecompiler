@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D75528F5-54F9-4E31-94F6-03C194F74CF2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SlimShader</RootNamespace>
+    <AssemblyName>SlimShader</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile5</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="SlimShader.nuspec" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Chunks\Rdef\ShaderRequiresFlags.cs" />
+    <Compile Include="Chunks\Sfi0\SfiFlags.cs" />
+    <Compile Include="Chunks\Shex\Number4Type.cs" />
+    <Compile Include="Chunks\Shex\ResInfoReturnType.cs" />
+    <Compile Include="Chunks\Shex\Tokens\StreamDeclarationToken.cs" />
+    <Compile Include="Chunks\Spdb\DebuggingChunk.cs" />
+    <Compile Include="Chunks\Sfi0\Sfi0Chunk.cs" />
+    <Compile Include="Chunks\Xsgn\MinPrecision.cs" />
+    <Compile Include="Chunks\Xsgn\SignatureParameterDescriptionCollection.cs" />
+    <Compile Include="Decompiler\ComparisonType.cs" />
+    <Compile Include="Decompiler\Declarations.cs" />
+    <Compile Include="Decompiler\DXDecompiler.cs" />
+    <Compile Include="Decompiler\Extentsions.cs" />
+    <Compile Include="Decompiler\ResourceDefinitions.cs" />
+    <Compile Include="Decompiler\Signatures.cs" />
+    <Compile Include="Decompiler\Instructions.cs" />
+    <Compile Include="Decompiler\Operands.cs" />
+    <Compile Include="Decompiler\Reflect.cs" />
+    <Compile Include="Decompiler\ConversionFlags.cs" />
+    <Compile Include="DX9Shader\Asm\AsmWriter.cs" />
+    <Compile Include="DX9Shader\Asm\DX9DoubleConverter.cs" />
+    <Compile Include="DX9Shader\Bytecode\BytecodeParser.cs" />
+    <Compile Include="DX9Shader\Bytecode\CommentToken.cs" />
+    <Compile Include="DX9Shader\Bytecode\Declaration.cs" />
+    <Compile Include="DX9Shader\Bytecode\EnumExtensions.cs" />
+    <Compile Include="DX9Shader\Bytecode\FourCC.cs" />
+    <Compile Include="DX9Shader\Bytecode\InstructionToken.cs" />
+    <Compile Include="DX9Shader\Bytecode\Parameter.cs" />
+    <Compile Include="DX9Shader\Bytecode\Statistics.cs" />
+    <Compile Include="DX9Shader\Bytecode\Token.cs" />
+    <Compile Include="DX9Shader\Bytecode\InstructionVerifier.cs" />
+    <Compile Include="DX9Shader\Bytecode\Opcode.cs" />
+    <Compile Include="DX9Shader\Bytecode\RegisterKey.cs" />
+    <Compile Include="DX9Shader\Bytecode\RegisterType.cs" />
+    <Compile Include="DX9Shader\Bytecode\ResultModifier.cs" />
+    <Compile Include="DX9Shader\Bytecode\ShaderReader.cs" />
+    <Compile Include="DX9Shader\Bytecode\ShaderModel.cs" />
+    <Compile Include="DX9Shader\Bytecode\SourceModifier.cs" />
+    <Compile Include="DX9Shader\Decompiler\Compiler\AssociativityTester.cs" />
+    <Compile Include="DX9Shader\Decompiler\Compiler\ConstantCompiler.cs" />
+    <Compile Include="DX9Shader\Decompiler\Compiler\DotProductGrouper.cs" />
+    <Compile Include="DX9Shader\Decompiler\Compiler\LengthGrouper.cs" />
+    <Compile Include="DX9Shader\Decompiler\Compiler\MatrixMultiplicationCompiler.cs" />
+    <Compile Include="DX9Shader\Decompiler\Compiler\MatrixMultiplicationGrouper.cs" />
+    <Compile Include="DX9Shader\Decompiler\Compiler\NodeCompiler.cs" />
+    <Compile Include="DX9Shader\Decompiler\Compiler\NodeGrouper.cs" />
+    <Compile Include="DX9Shader\Decompiler\Compiler\NormalizeGrouper.cs" />
+    <Compile Include="DX9Shader\Decompiler\Compiler\RegisterState.cs" />
+    <Compile Include="DX9Shader\Decompiler\Constant.cs" />
+    <Compile Include="DX9Shader\Decompiler\ConstantNode.cs" />
+    <Compile Include="DX9Shader\Decompiler\HlslAst.cs" />
+    <Compile Include="DX9Shader\Decompiler\HlslTreeNode.cs" />
+    <Compile Include="DX9Shader\Decompiler\HlslWriter.cs" />
+    <Compile Include="DX9Shader\Decompiler\IHasComponentIndex.cs" />
+    <Compile Include="DX9Shader\Decompiler\NormalizeOutputNode.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\AbsoluteOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\AddOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\CompareOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\CosineOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\DivisionOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\FractionalOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\LinearInterpolateOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\MaximumOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\MinimumOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\MoveOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\MultiplyAddOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\MultiplyOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\NegateOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\Operation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\PowerOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\ReciprocalOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\ReciprocalSquareRootOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\SignGreaterOrEqualOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\SignLessOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\SineOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\SquareRootOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\SubtractOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\Operations\UnaryOperation.cs" />
+    <Compile Include="DX9Shader\Decompiler\RegisterComponentKey.cs" />
+    <Compile Include="DX9Shader\Decompiler\RegisterInputNode.cs" />
+    <Compile Include="DX9Shader\Decompiler\TextureLoadOutputNode.cs" />
+    <Compile Include="Number4.cs" />
+    <Compile Include="Chunks\Shex\RegisterCounts.cs" />
+    <Compile Include="Chunks\Shex\SyncFlags.cs" />
+    <Compile Include="Chunks\Xsgn\PatchConstantSignatureChunk.cs" />
+    <Compile Include="Chunks\Stat\StatisticsChunk.cs" />
+    <Compile Include="Chunks\ChunkType.cs" />
+    <Compile Include="Chunks\BytecodeChunk.cs" />
+    <Compile Include="BytecodeContainer.cs" />
+    <Compile Include="BytecodeContainerHeader.cs" />
+    <Compile Include="Chunks\EnumExtensions.cs" />
+    <Compile Include="Chunks\Xsgn\EnumExtensions.cs" />
+    <Compile Include="Chunks\Xsgn\InputOutputSignatureChunk.cs" />
+    <Compile Include="Chunks\Xsgn\InputSignatureChunk.cs" />
+    <Compile Include="Chunks\Xsgn\Name.cs" />
+    <Compile Include="Chunks\Xsgn\OutputSignatureChunk.cs" />
+    <Compile Include="Chunks\Xsgn\RegisterComponentType.cs" />
+    <Compile Include="Chunks\Xsgn\SignatureElementSize.cs" />
+    <Compile Include="Chunks\Xsgn\SignatureParameterDescription.cs" />
+    <Compile Include="Chunks\Ifce\ClassInstance.cs" />
+    <Compile Include="Chunks\Ifce\ClassType.cs" />
+    <Compile Include="Chunks\Ifce\InterfacesChunk.cs" />
+    <Compile Include="Chunks\Ifce\InterfaceSlot.cs" />
+    <Compile Include="Util\BytecodeReader.cs" />
+    <Compile Include="ParseException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Chunks\Rdef\ConstantBufferType.cs" />
+    <Compile Include="Chunks\Rdef\ConstantBuffer.cs" />
+    <Compile Include="Chunks\Rdef\EnumExtensions.cs" />
+    <Compile Include="Chunks\Rdef\ResourceBinding.cs" />
+    <Compile Include="Chunks\Rdef\ResourceDefinitionChunk.cs" />
+    <Compile Include="Chunks\Rdef\ShaderResourceViewDimension.cs" />
+    <Compile Include="Chunks\Rdef\ConstantBufferFlags.cs" />
+    <Compile Include="Chunks\Rdef\ShaderFlags.cs" />
+    <Compile Include="Chunks\Rdef\ShaderInputFlags.cs" />
+    <Compile Include="Chunks\Rdef\ShaderInputType.cs" />
+    <Compile Include="Chunks\Rdef\ShaderType.cs" />
+    <Compile Include="Chunks\Rdef\ShaderTypeMember.cs" />
+    <Compile Include="Chunks\Rdef\ShaderVariable.cs" />
+    <Compile Include="Chunks\Rdef\ShaderVariableClass.cs" />
+    <Compile Include="Chunks\Rdef\ShaderVariableFlags.cs" />
+    <Compile Include="Chunks\Rdef\ShaderVariableType.cs" />
+    <Compile Include="Chunks\Common\ComponentMask.cs" />
+    <Compile Include="Chunks\Shex\ConstantBufferAccessPattern.cs" />
+    <Compile Include="Chunks\Shex\CustomDataClass.cs" />
+    <Compile Include="Chunks\Shex\EnumExtensions.cs" />
+    <Compile Include="Chunks\Shex\ExtendedOperandType.cs" />
+    <Compile Include="Chunks\Shex\GlobalFlags.cs" />
+    <Compile Include="Chunks\Shex\InstructionTestBoolean.cs" />
+    <Compile Include="Chunks\Shex\InstructionTokenExtendedType.cs" />
+    <Compile Include="Chunks\Shex\InterpolationMode.cs" />
+    <Compile Include="Number.cs" />
+    <Compile Include="Chunks\Shex\NumberType.cs" />
+    <Compile Include="Chunks\Shex\NumberTypeAttribute.cs" />
+    <Compile Include="Chunks\Shex\OpcodeHeader.cs" />
+    <Compile Include="Chunks\Shex\OpcodeType.cs" />
+    <Compile Include="Chunks\Shex\Operand4ComponentName.cs" />
+    <Compile Include="Chunks\Shex\Operand4ComponentSelectionMode.cs" />
+    <Compile Include="Chunks\Shex\OperandIndexDimension.cs" />
+    <Compile Include="Chunks\Shex\OperandIndexRepresentation.cs" />
+    <Compile Include="Chunks\Shex\OperandModifier.cs" />
+    <Compile Include="Chunks\Shex\OperandNumComponents.cs" />
+    <Compile Include="Chunks\Shex\OperandType.cs" />
+    <Compile Include="Chunks\Common\Primitive.cs" />
+    <Compile Include="Chunks\Common\PrimitiveTopology.cs" />
+    <Compile Include="Chunks\Common\ProgramType.cs" />
+    <Compile Include="Chunks\Shex\ResourceDimension.cs" />
+    <Compile Include="Chunks\Common\ResourceReturnType.cs" />
+    <Compile Include="Chunks\Shex\SamplerMode.cs" />
+    <Compile Include="Chunks\Shex\ShaderMessageFormat.cs" />
+    <Compile Include="Chunks\Shex\ShaderProgramChunk.cs" />
+    <Compile Include="Chunks\Common\ShaderVersion.cs" />
+    <Compile Include="Chunks\Shex\SystemValueName.cs" />
+    <Compile Include="Chunks\Common\TessellatorDomain.cs" />
+    <Compile Include="Chunks\Common\TessellatorOutputPrimitive.cs" />
+    <Compile Include="Chunks\Common\TessellatorPartitioning.cs" />
+    <Compile Include="Chunks\Shex\Tokens\ConstantBufferDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\ControlPointCountDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\CustomDataToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\DeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\FunctionBodyDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\FunctionTableDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\GeometryShaderInputPrimitiveDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\GeometryShaderInstanceCountDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\GeometryShaderMaxOutputVertexCountDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\GeometryShaderOutputPrimitiveTopologyDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\GlobalFlagsDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\HullShaderForkPhaseInstanceCountDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\HullShaderMaxTessFactorDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\ImmediateConstantBufferDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\ImmediateDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\IndexableTempRegisterDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\IndexingRangeDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\InputRegisterDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\InstructionToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\InterfaceDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\NameToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\OpcodeToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\Operand.cs" />
+    <Compile Include="Chunks\Shex\Tokens\OperandIndex.cs" />
+    <Compile Include="Chunks\Shex\Tokens\OutputRegisterDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\PixelShaderInputRegisterDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\RawShaderResourceViewDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\RawThreadGroupSharedMemoryDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\RawUnorderedAccessViewDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\ResourceDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\ResourceReturnTypeToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\SamplerDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\ShaderMessageDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\StructuredShaderResourceViewDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\StructuredThreadGroupSharedMemoryDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\StructuredUnorderedAccessViewDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\TempRegisterDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\TessellatorDomainDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\TessellatorOutputPrimitiveDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\TessellatorPartitioningDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\ThreadGroupDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\TypedUnorderedAccessViewDeclarationToken.cs" />
+    <Compile Include="Chunks\Shex\Tokens\UnorderedAccessViewDeclarationTokenBase.cs" />
+    <Compile Include="Chunks\Shex\UnorderedAccessViewCoherency.cs" />
+    <Compile Include="Util\DecoderExtensions.cs" />
+    <Compile Include="Chunks\DescriptionAttribute.cs" />
+    <Compile Include="Util\DoubleConverter.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
