@@ -29,6 +29,10 @@ namespace SlimShader.Chunks.Rdef
 				case ShaderInputType.UavRwStructured :
 				case ShaderInputType.UavRwStructuredWithCounter :
 					return "r/w";
+				case ShaderInputType.UavAppendStructured:
+					return "append";
+				case ShaderInputType.UavConsumeStructured:
+					return "consume";
 				case ShaderInputType.UavRwTyped:
 				default :
 					return value.GetDescription();
@@ -43,6 +47,8 @@ namespace SlimShader.Chunks.Rdef
 				{
 					case ShaderInputType.Structured:
 					case ShaderInputType.UavRwStructured:
+					case ShaderInputType.UavAppendStructured:
+					case ShaderInputType.UavConsumeStructured:
 						return "struct";
 					case ShaderInputType.ByteAddress:
 					case ShaderInputType.UavRwByteAddress:

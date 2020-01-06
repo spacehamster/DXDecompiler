@@ -2,18 +2,18 @@
 
 namespace SlimShader.DX9Shader
 {
-    public class NormalizeOutputNode : HlslTreeNode, IHasComponentIndex
-    {
-        public NormalizeOutputNode(IEnumerable<HlslTreeNode> inputs, int componentIndex)
-        {
-            foreach (HlslTreeNode input in inputs)
-            {
-                AddInput(input);
-            }
+	public class NormalizeOutputNode : HlslTreeNode, IHasComponentIndex
+	{
+		public NormalizeOutputNode(IEnumerable<HlslTreeNode> inputs, int componentIndex)
+		{
+			foreach (HlslTreeNode input in inputs)
+			{
+				AddInput(input);
+			}
 
-            ComponentIndex = componentIndex;
-        }
+			ComponentIndex = componentIndex;
+		}
 
-        public int ComponentIndex { get; }
-    }
+		public int ComponentIndex { get; }
+	}
 }

@@ -16,33 +16,15 @@ namespace SlimShader.DX9Shader
 		Pixel = 0xFFFF
 	}
 
-	// D3DXSHADER
-	[Flags]
-	enum ShaderFlags
-	{
-		Debug = 1,
-		SkipValidation = 2,
-		SkipOptimization = 4,
-		RowMajor = 8,
-		ColumnMajor = 16,
-		PartialPrecision = 32,
-		ForceVSSoftwareNoOpt = 64,
-		ForcePSSoftwareNoOpt = 128,
-		NoPreShader = 256,
-		AvoidFlowControl = 512,
-		PreferFlowControl = 1024,
-		EnableBackwardsCompatibility = 2048,
-		IEEEStrictness = 4096,
-		UseLegacyD3DX931Dll = 8192
-	}
-
 	public class ShaderModel
 	{
 		public int MajorVersion { get; private set; }
 		public int MinorVersion { get; private set; }
 		public ShaderType Type { get; private set; }
 
-		public IList<Token> Instructions { get; private set; }
+		public IList<Token> Tokens { get; private set; }
+		public ConstantTable ConstantTable { get; private set; }
+		public IEnumerable<InstructionToken> Instructions => Tokens.OfType<InstructionToken>();
 
 		public ShaderModel(int majorVersion, int minorVersion, ShaderType type)
 		{
@@ -50,7 +32,7 @@ namespace SlimShader.DX9Shader
 			MinorVersion = minorVersion;
 			Type = type;
 
-			Instructions = new List<Token>();
+			Tokens = new List<Token>();
 		}
 
 		static string ReadStringNullTerminated(Stream stream)
@@ -64,7 +46,7 @@ namespace SlimShader.DX9Shader
 			return builder.ToString();
 		}
 
-		public ConstantTable ParseConstantTable()
+		internal ConstantTable ParseConstantTable()
 		{
 			var constantDeclarations = new List<ConstantDeclaration>();
 
@@ -110,14 +92,16 @@ namespace SlimShader.DX9Shader
 					ConstantDeclaration declaration = ReadConstantDeclaration(ctabReader);
 					constantDeclarations.Add(declaration);
 				}
-				return new ConstantTable(compilerInfo, shaderModel, majorVersion, minorVersion, constantDeclarations);
+				var ct = new ConstantTable(compilerInfo, shaderModel, majorVersion, minorVersion, constantDeclarations);
+				ConstantTable = ct;
+				return ConstantTable;
 			}
 		}
 
 		private byte[] GetConstantTableData()
 		{
 			int ctabToken = FourCC.Make("CTAB");
-			var ctabComment = Instructions.FirstOrDefault(x => x.Opcode == Opcode.Comment && x.Data[0] == ctabToken);
+			var ctabComment = Tokens.FirstOrDefault(x => x.Opcode == Opcode.Comment && x.Data[0] == ctabToken);
 			if (ctabComment == null)
 			{
 				return null;
@@ -175,32 +159,6 @@ namespace SlimShader.DX9Shader
 			System.Diagnostics.Debug.Assert(structMemberInfoOffset == 0);
 
 			return new ConstantDeclaration(name, registerSet, registerIndex, registerCount, cl, type, rows, columns, numElements, defaultValue);
-		}
-
-		public void ToFile(string filename)
-		{
-			throw new NotImplementedException();
-			/*FileStream file = new FileStream(filename, FileMode.Create, FileAccess.Write);
-			using (BinaryWriter writer = new BinaryWriter(file))
-			{
-				writer.Write((byte)MinorVersion);
-				writer.Write((byte)MajorVersion);
-				writer.Write((ushort)Type);
-
-				foreach (Instruction i in Instructions)
-				{
-					uint instruction =
-						(uint)i.Opcode |
-						(uint)(i.Modifier << 16) |
-						((uint)(i.Params.Length << (i.Opcode == Opcode.Comment ? 16 : 24))) |
-						(i.Predicated ? (uint)(0x10000000) : 0);
-					writer.Write(instruction);
-					foreach (uint param in i.Params)
-					{
-						writer.Write(param);
-					}
-				}
-			}*/
 		}
 	}
 }

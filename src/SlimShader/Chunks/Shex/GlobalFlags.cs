@@ -20,6 +20,7 @@ namespace SlimShader.Chunks.Shex
 		/// <summary>
 		/// Force early depth-stencil test.
 		/// </summary>
+		[Description("forceEarlyDepthStencil")]
 		ForceEarlyDepthStencilTest = 4,
 
 		/// <summary>

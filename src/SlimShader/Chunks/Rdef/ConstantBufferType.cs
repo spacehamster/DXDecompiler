@@ -17,6 +17,7 @@ namespace SlimShader.Chunks.Rdef
 		/// <summary>
 		/// A buffer containing texture data.
 		/// </summary>
+		[Description("tbuffer")]
 		TextureBuffer,
 
 		/// <summary>

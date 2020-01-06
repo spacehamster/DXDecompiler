@@ -62,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DX9Tests.cs" />
+    <Content Include="Shaders\Internal\DynamicIndexing.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Internal\DynamicIndexing.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Compile Include="Util.cs" />
     <Compile Include="Util\DecoderExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -932,25 +938,10 @@
     <None Include="Shaders\3Dmigoto\structured_buffers_5.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\3Dmigoto\structured_buffers_dup_4.o">
+    <None Include="Shaders\3Dmigoto\structured_buffers_extra_4.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\3Dmigoto\structured_buffers_dup_5.o">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Shaders\3Dmigoto\structured_buffers_inner_4.o">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Shaders\3Dmigoto\structured_buffers_inner_5.o">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Shaders\3Dmigoto\structured_buffers_primative_5.o">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Shaders\3Dmigoto\structured_buffers_rw_5.o">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Shaders\3Dmigoto\structured_buffers_rw_inner_5.o">
+    <None Include="Shaders\3Dmigoto\structured_buffers_extra_5.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\3Dmigoto\sv_gsinstanceid.o">
@@ -1606,25 +1597,10 @@
     <Content Include="Shaders\3Dmigoto\structured_buffers_5.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Shaders\3Dmigoto\structured_buffers_dup_4.asm">
+    <Content Include="Shaders\3Dmigoto\structured_buffers_extra_4.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Shaders\3Dmigoto\structured_buffers_dup_5.asm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shaders\3Dmigoto\structured_buffers_inner_4.asm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shaders\3Dmigoto\structured_buffers_inner_5.asm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shaders\3Dmigoto\structured_buffers_primative_5.asm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shaders\3Dmigoto\structured_buffers_rw_5.asm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shaders\3Dmigoto\structured_buffers_rw_inner_5.asm">
+    <Content Include="Shaders\3Dmigoto\structured_buffers_extra_5.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\3Dmigoto\sv_gsinstanceid.asm">
@@ -1900,30 +1876,42 @@
     <Content Include="Shaders\HlslCrossCompiler\hs5\basic.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Shaders\HlslCrossCompiler\ps4\fxaa.hlsl" />
+    <Content Include="Shaders\HlslCrossCompiler\ps4\fxaa.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\HlslCrossCompiler\ps4\fxaa.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Shaders\HlslCrossCompiler\ps4\primID.hlsl" />
+    <Content Include="Shaders\HlslCrossCompiler\ps4\primID.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\HlslCrossCompiler\ps4\primID.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Shaders\HlslCrossCompiler\ps5\conservative_depth.hlsl" />
+    <Content Include="Shaders\HlslCrossCompiler\ps5\conservative_depth.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\HlslCrossCompiler\ps5\conservative_depth_ge.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\HlslCrossCompiler\ps5\conservative_depth_le.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Shaders\HlslCrossCompiler\ps5\interfaces.hlsl" />
+    <Content Include="Shaders\HlslCrossCompiler\ps5\interfaces.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\HlslCrossCompiler\ps5\interfaces.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Shaders\HlslCrossCompiler\ps5\interface_arrays.hlsl" />
+    <Content Include="Shaders\HlslCrossCompiler\ps5\interface_arrays.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\HlslCrossCompiler\ps5\interface_arrays.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Shaders\HlslCrossCompiler\ps5\sample.hlsl" />
+    <Content Include="Shaders\HlslCrossCompiler\ps5\sample.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\HlslCrossCompiler\ps5\sample.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1984,16 +1972,28 @@
     <Content Include="Shaders\Internal\BasicHLSL_VS.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Shaders\Internal\Interfaces.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Internal\Interfaces.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\Internal\HLSLSample_PS.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Internal\HLSLSample_VS.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Shaders\Internal\SampleHLSL.hlsl">
+    <Content Include="Shaders\Internal\HLSLSample.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Internal\BasicHLSL.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Internal\ResourceDefinitions.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Internal\ResourceDefinitions.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Internal\Textures_PS.asm">
@@ -2423,10 +2423,19 @@
     <None Include="Shaders\Internal\BasicHLSL_VS.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Shaders\Internal\DynamicIndexing.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Internal\Interfaces.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Shaders\Internal\HLSLSample_PS.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Internal\HLSLSample_VS.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Internal\ResourceDefinitions.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Internal\Textures_PS.o">

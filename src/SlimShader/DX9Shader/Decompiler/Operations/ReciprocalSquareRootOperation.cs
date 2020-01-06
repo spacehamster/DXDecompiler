@@ -1,20 +1,20 @@
 ﻿namespace SlimShader.DX9Shader
 {
-    public class ReciprocalSquareRootOperation : UnaryOperation
-    {
-        public ReciprocalSquareRootOperation(HlslTreeNode value)
-        {
-            AddInput(value);
-        }
+	public class ReciprocalSquareRootOperation : UnaryOperation
+	{
+		public ReciprocalSquareRootOperation(HlslTreeNode value)
+		{
+			AddInput(value);
+		}
 
-        public override string Mnemonic => "rsqrt";
+		public override string Mnemonic => "rsqrt";
 
-        public override HlslTreeNode Reduce()
-        {
-            var squareRoot = new SquareRootOperation(Value);
-            var division = new DivisionOperation(new ConstantNode(1), squareRoot);
-            Replace(division);
-            return division;
-        }
-    }
+		public override HlslTreeNode Reduce()
+		{
+			var squareRoot = new SquareRootOperation(Value);
+			var division = new DivisionOperation(new ConstantNode(1), squareRoot);
+			Replace(division);
+			return division;
+		}
+	}
 }

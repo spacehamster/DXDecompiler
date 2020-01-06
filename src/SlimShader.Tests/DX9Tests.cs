@@ -83,7 +83,7 @@ namespace SlimShader.Tests
 		/// Compare ASM output produced by fxc.exe and SlimShader.
 		/// </summary>
 		[TestCaseSource("TestShaders")]
-		public void DecompileShaders(string relPath)
+		public void RecompileShaders(string relPath)
 		{
 			string file = $"{ShaderDirectory}/{relPath}";
 			// Arrange.
@@ -97,7 +97,8 @@ namespace SlimShader.Tests
 				File.ReadAllLines(file + ".asm").Select(x => x.Trim()));
 
 			// Act.
-			var shaderModel = ShaderReader.ReadShader(File.ReadAllBytes(file + ".o"));
+			var binaryFileBytes = File.ReadAllBytes(file + ".o");
+			var shaderModel = ShaderReader.ReadShader(binaryFileBytes);
 			var hlslWriter = new HlslWriter(shaderModel);
 			string decompiledHLSL = "";
 			using (var stream = new MemoryStream())
@@ -110,6 +111,21 @@ namespace SlimShader.Tests
 				}
 			}
 			File.WriteAllText($"{OutputDir}/{relPath}.d.hlsl", decompiledHLSL);
+
+			using (var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
+			{
+				var profile = shaderModel.Type == DX9Shader.ShaderType.Pixel ?
+					$"ps_{shaderModel.MajorVersion}_{shaderModel.MinorVersion}" :
+					$"vs_{shaderModel.MajorVersion}_{shaderModel.MinorVersion}";
+				var compiledShader = ShaderBytecode.Compile(decompiledHLSL, "main", profile);
+				var disassembly = shaderBytecode.Disassemble();
+				var redisassembly = compiledShader.Bytecode.Disassemble();
+				File.WriteAllText($"{OutputDir}/{relPath}.d1.asm", disassembly);
+				File.WriteAllText($"{OutputDir}/{relPath}.d2.asm", redisassembly);
+
+				// Assert.
+				Warn.If(disassembly, Is.EqualTo(redisassembly));
+			}
 
 			// Assert.
 			Assert.Pass();

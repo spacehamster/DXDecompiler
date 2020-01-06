@@ -14,6 +14,7 @@ namespace SlimShader.Decompiler
 		{
 			WriteInputSignature();
 			WriteOutputSignature();
+			WritePatchConstant();
 		}
 		void WriteInputSignature()
 		{
@@ -29,32 +30,81 @@ namespace SlimShader.Decompiler
 			Output.AppendLine("};");
 			Output.AppendLine();
 		}
-		void WriteOutputSignature()
+		void WritePatchConstant()
 		{
-			var signature = Container.OutputSignature;
-			Output.AppendLine("struct ShaderOutput");
+			if (Container.PatchConstantSignature == null) return;
+			Output.AppendLine("struct PatchConstant");
 			Output.AppendLine("{");
 			indent++;
-			foreach (var param in signature.Parameters)
+			foreach (var group in Container.PatchConstantSignature.Parameters.GroupBy(p => p.SemanticName))
 			{
-				WriteSignatureParamater(param);
+				var count = group.Count();
+				var param = group.First();
+				AddIndent();
+				var fieldType = GetFieldType(param);
+				string array = count > 1 ? $"[{count}]" : "";
+				Output.Append($"{fieldType} field{param.Register}{param.ReadWriteMask.GetDescription().Trim()}{array} : {GetSemanticName(param)};");
+				DebugSignatureParamater(param);
 			}
 			indent--;
 			Output.AppendLine("};");
 			Output.AppendLine();
+		}
+		void WriteOutputSignature()
+		{
+			var signature = Container.OutputSignature;
+			if (Container.Shader.Version.ProgramType == ProgramType.GeometryShader)
+			{
+				foreach(var group in signature.Parameters.GroupBy(p => p.Stream)){
+					Output.AppendLine($"struct Stream{group.Key}Output");
+					Output.AppendLine("{");
+					indent++;
+					foreach (var param in group)
+					{
+						WriteSignatureParamater(param);
+					}
+					indent--;
+					Output.AppendLine("};");
+					Output.AppendLine();
+				}
+			}
+			else
+			{
+				Output.AppendLine("struct ShaderOutput");
+				Output.AppendLine("{");
+				indent++;
+				foreach (var param in signature.Parameters)
+				{
+					WriteSignatureParamater(param);
+				}
+				indent--;
+				Output.AppendLine("};");
+				Output.AppendLine();
+			}
 		}
 		void WriteSignatureParamater(SignatureParameterDescription param)
 		{
 			
 			AddIndent();
 			var fieldType = GetFieldType(param);
-			Output.Append($"{fieldType} field{param.Register} : {param.SemanticName};");
+			Output.Append($"{fieldType} {param.GetName()} : {GetSemanticName(param)};");
 			DebugSignatureParamater(param);
-
+		}
+		string GetSemanticName(SignatureParameterDescription param)
+		{
+			if(param.SemanticName == "TEXCOORD")
+			{
+				return $"{param.SemanticName}{param.SemanticIndex}";
+			}
+			return param.SemanticName;
 		}
 		string GetFieldType(SignatureParameterDescription param)
 		{
 			string fieldType = param.ComponentType.GetDescription();
+			if (param.MinPrecision != MinPrecision.None)
+			{
+				fieldType = param.MinPrecision.GetTypeName();
+			}
 			int componentCount = 0;
 			if (param.Mask.HasFlag(ComponentMask.X)) componentCount += 1;
 			if (param.Mask.HasFlag(ComponentMask.Y)) componentCount += 1;

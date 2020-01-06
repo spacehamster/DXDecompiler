@@ -113,7 +113,7 @@ namespace SlimShader.DX9Shader
 			WriteIndent();
 			WriteLine("{0}_{1}_{2}", shaderType, shader.MajorVersion, shader.MinorVersion);
 
-			foreach (Token instruction in shader.Instructions)
+			foreach (Token instruction in shader.Tokens)
 			{
 				WriteInstruction(instruction);
 			}
@@ -168,7 +168,7 @@ namespace SlimShader.DX9Shader
 		}
 		public void WriteStatistics()
 		{
-			var instructions = shader.Instructions
+			var instructions = shader.Tokens
 				.ToArray();
 			int instructionCount = 0;
 			int arithmeticCount = 0;
@@ -246,26 +246,7 @@ namespace SlimShader.DX9Shader
 			if (rawBytes[0] == 0 && rawBytes[1] == 0 && rawBytes[2] == 0 && rawBytes[3] == 128)
 				return "-0"; // "Negative" zero
 			var floatValue = BitConverter.ToSingle(rawBytes, 0);
-			var foo = (floatValue).ToString("G7");
-			return foo;
-			var test = (floatValue).ToString("F99");
-			while(test[test.Length - 1] == '0')
-			{
-				test = test.Substring(0, test.Length - 1);
-			}
-			if(test[test.Length - 1] == '.')
-			{
-				test = test.Substring(0, test.Length - 1);
-			}
-			return test;
-			
-
-			if (Math.Abs(floatValue) > 10000000000000000.0) // TODO: Threshold is guessed
-				return DX9DoubleConverter.ToExactString(floatValue);
-			return DX9DoubleConverter.ToExactString(floatValue);
-			var result = ((double)floatValue).ToString("F6");
-			if (!result.StartsWith("-") && floatValue < 0.0f)
-				result = "-" + result;
+			var result = (floatValue).ToString("G7");
 			return result;
 		}
 
@@ -485,9 +466,9 @@ namespace SlimShader.DX9Shader
 						GetSourceName(instruction, 4));
 					break;
 				case Opcode.BreakC:
-					WriteLine("break_{0} {1} {2}",
+					WriteLine("break_{0} {1}, {2}",
 						((IfComparison)instruction.Modifier).ToString().ToLower(),
-						GetDestinationName(instruction),
+						GetSourceName(instruction, 0),
 						GetSourceName(instruction, 1));
 					indent--;
 					break;

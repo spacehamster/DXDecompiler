@@ -15,16 +15,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlimShader.Compiler", "Slim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlimShader.VirtualMachine.Jitter", "SlimShader.VirtualMachine.Jitter\SlimShader.VirtualMachine.Jitter.csproj", "{32D8D38E-918D-40A7-BFD5-83B0EF596F6B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{696D19DB-4683-42E8-B08B-70765815B1AB}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HlslUnit", "HlslUnit\HlslUnit.csproj", "{2967300A-54B4-40BD-972A-5A72143415A8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HlslUnit.Tests", "HlslUnit.Tests\HlslUnit.Tests.csproj", "{B67F268E-7C9B-4CD9-B49A-75D8B0A73774}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{73CFD457-69CB-40D5-8AE5-7E3ADD7D433D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

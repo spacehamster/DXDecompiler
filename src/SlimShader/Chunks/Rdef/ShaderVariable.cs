@@ -14,7 +14,7 @@ namespace SlimShader.Chunks.Rdef
 	/// </summary>
 	public class ShaderVariable
 	{
-		private ShaderTypeMember Member { get; set; }
+		public ShaderTypeMember Member { get; private set; }
 
 		/// <summary>
 		/// The variable name.
@@ -48,7 +48,7 @@ namespace SlimShader.Chunks.Rdef
 		/// <summary>
 		/// Size of the variable (in bytes).
 		/// </summary>
-		public uint Size { get; set; }
+		public uint Size { get; private set; }
 
 		/// <summary>
 		/// Flags, which identify shader-variable properties.

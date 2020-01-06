@@ -178,7 +178,14 @@ namespace SlimShader.DX9Shader
 		{
 			RegisterType type = registerKey.Type;
 			if (type != RegisterType.ColorOut &&
-				type != RegisterType.Const)
+				type != RegisterType.Const &&
+				type != RegisterType.Temp &&
+				type != RegisterType.RastOut &&
+				type != RegisterType.ConstInt && 
+				type != RegisterType.Addr &&
+				type != RegisterType.Output &&
+				type != RegisterType.AttrOut &&
+				type != RegisterType.ConstBool)
 			{
 				throw new ArgumentException($"Register type {type} requires declaration instruction,", nameof(registerKey));
 			}

@@ -78,6 +78,7 @@ namespace SlimShader.Chunks.Rdef
 				case ShaderInputType.Texture:
 				case ShaderInputType.Structured:
 				case ShaderInputType.ByteAddress:
+				case ShaderInputType.TBuffer:
 					hlslBind = $"t{BindPoint}";
 					break;
 				case ShaderInputType.UavRwTyped:
@@ -109,7 +110,7 @@ namespace SlimShader.Chunks.Rdef
 			string hlslBindPoint = GetBindPointDescription();
 			return string.Format("// {0,-30} {1,10} {2,7} {3,11} {4,14} {5,6}",
 				Name, typeDescription, returnType,
-				Dimension.GetDescription(Type, ReturnType) + (Dimension.IsMultiSampled() ? NumSamples.ToString() : string.Empty),
+				Dimension.GetDescription(Type, ReturnType) + (Dimension.IsMultiSampled() && NumSamples > 0 ? NumSamples.ToString() : string.Empty),
 				hlslBindPoint, BindCount);
 		}
 	}

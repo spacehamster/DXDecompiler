@@ -5,6 +5,7 @@ namespace SlimShader.Chunks.Rdef
 		[Description("cbuffer")]
 		CBuffer = 0,
 
+		[Description("tbuffer")]
 		TBuffer = 1,
 
 		[Description("texture")]

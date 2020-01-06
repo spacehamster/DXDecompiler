@@ -3,17 +3,6 @@ using System.IO;
 
 namespace SlimShader.DX9Shader
 {
-	enum IfComparison
-	{
-		None,
-		GT,
-		EQ,
-		GE,
-		LT,
-		NE,
-		LE
-	}
-
 	public class Token
 	{
 		public Opcode Opcode { get; private set; }
@@ -291,15 +280,15 @@ namespace SlimShader.DX9Shader
 			return (ResultModifier)((Data[destIndex] >> 20) & 0xF);
 		}
 
-		public int GetDestinationWriteMask()
+		public ComponentFlags GetDestinationWriteMask()
 		{
 			int destIndex = GetDestinationParamIndex();
-			return (int)((Data[destIndex] >> 16) & 0xF);
+			return (ComponentFlags)((Data[destIndex] >> 16) & 0xF);
 		}
 
 		public string GetDestinationWriteMaskName(int destinationLength, bool hlsl)
 		{
-			int writeMask = GetDestinationWriteMask();
+			ComponentFlags writeMask = GetDestinationWriteMask();
 			int writeMaskLength = GetDestinationMaskLength();
 
 			if (!hlsl)
@@ -311,17 +300,17 @@ namespace SlimShader.DX9Shader
 				return "";
 			}
 			// Check if mask is the same length and of the form .xyzw
-			if (writeMaskLength == destinationLength && writeMask == ((1 << writeMaskLength) - 1))
+			if (writeMaskLength == destinationLength && writeMask == (ComponentFlags)((1 << writeMaskLength) - 1))
 			{
 				return "";
 			}
 
 			string writeMaskName =
 				string.Format(".{0}{1}{2}{3}",
-				((writeMask & 1) != 0) ? "x" : "",
-				((writeMask & 2) != 0) ? "y" : "",
-				((writeMask & 4) != 0) ? "z" : "",
-				((writeMask & 8) != 0) ? "w" : "");
+				((writeMask & ComponentFlags.X) != 0) ? "x" : "",
+				((writeMask & ComponentFlags.Y) != 0) ? "y" : "",
+				((writeMask & ComponentFlags.Z) != 0) ? "z" : "",
+				((writeMask & ComponentFlags.W) != 0) ? "w" : "");
 			return writeMaskName;
 		}
 
@@ -329,10 +318,11 @@ namespace SlimShader.DX9Shader
 		// Length of ".yw" = 4 (xyzw)
 		public int GetDestinationMaskedLength()
 		{
-			int writeMask = GetDestinationWriteMask();
+			ComponentFlags writeMask = GetDestinationWriteMask();
 			for (int i = 3; i != 0; i--)
 			{
-				if ((writeMask & (1 << i)) != 0)
+				var mask = (ComponentFlags)(1 << i);
+				if ((writeMask & mask) != ComponentFlags.None)
 				{
 					return i + 1;
 				}
@@ -343,11 +333,12 @@ namespace SlimShader.DX9Shader
 		// Length of ".yw" = 2
 		public int GetDestinationMaskLength()
 		{
-			int writeMask = GetDestinationWriteMask();
+			ComponentFlags writeMask = GetDestinationWriteMask();
 			int length = 0;
 			for (int i = 0; i < 4; i++)
 			{
-				if ((writeMask & (1 << i)) != 0)
+				var mask = (ComponentFlags)(1 << i);
+				if ((writeMask & mask) != ComponentFlags.None)
 				{
 					length++;
 				}
@@ -371,25 +362,24 @@ namespace SlimShader.DX9Shader
 			return swizzleArray;
 		}
 
-		public string GetSourceSwizzleName(int srcIndex)
+		public string GetSourceSwizzleName(int srcIndex, bool hlsl = false)
 		{
-			int swizzleLength;
+			int swizzleLength = 4;
 			if (Opcode == Opcode.Dp4)
 			{
 				swizzleLength = 4;
 			}
 			//TODO: Probably useful in hlsl mode
-			/*else if (Opcode == Opcode.Dp3)
+			else if (hlsl) 
 			{
-				swizzleLength = 3;
-			}
-			else if (HasDestination) 
-			{
-				swizzleLength = GetDestinationMaskLength();
-			}*/
-			else
-			{
-				swizzleLength = 4;
+				if (Opcode == Opcode.Dp3)
+				{
+					swizzleLength = 3;
+				}
+				else if (HasDestination)
+				{
+					swizzleLength = GetDestinationMaskLength();
+				}
 			}
 
 			string swizzleName = "";
@@ -523,7 +513,7 @@ namespace SlimShader.DX9Shader
 					}
 					throw new NotImplementedException();
 				case RegisterType.Addr:
-					throw new NotImplementedException();
+					return "tex";
 				default:
 					//return "Warning - Not Implemented register type";
 					throw new NotImplementedException();

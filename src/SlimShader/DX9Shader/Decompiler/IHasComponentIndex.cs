@@ -1,7 +1,7 @@
 ﻿namespace SlimShader.DX9Shader
 {
-    public interface IHasComponentIndex
-    {
-        int ComponentIndex { get; }
-    }
+	public interface IHasComponentIndex
+	{
+		int ComponentIndex { get; }
+	}
 }

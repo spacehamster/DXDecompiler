@@ -8,12 +8,26 @@ rem CompileShader.bat
 rem "C:\Program Files (x86)\Windows Kits\8.1\bin\x86\fxc" %1/%2 /Fo %1/%3.o /Fc %1/%3.asm /T %4 /E %5 /nologo %6 %7
 rem args are: folder, sourceFile, bytecode output, assembly output, profile, entrypoint, extra args
 rem args are: folder, input, output, profile, entrypoint, extra args
+
+
+
 CALL CompileShader.bat Internal Textures.hlsl Textures_VS vs_5_0 VS || GOTO :error
 CALL CompileShader.bat Internal Textures.hlsl Textures_PS ps_5_0 PS || GOTO :error
-CALL CompileShader.bat Internal SampleHLSL.hlsl HLSLSample_VS vs_5_0 RenderSceneVS || GOTO :error
-CALL CompileShader.bat Internal SampleHLSL.hlsl HLSLSample_PS ps_5_0 RenderScenePS || GOTO :error
+CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_VS vs_5_0 RenderSceneVS || GOTO :error
+CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_PS ps_5_0 RenderScenePS || GOTO :error
 CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_VS vs_5_0 VSMain || GOTO :error
 CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_PS ps_5_0 PSMain || GOTO :error
+CALL CompileShader.bat Internal Interfaces.hlsl Interfaces ps_5_0 main || GOTO :error
+CALL CompileShader.bat Internal DynamicIndexing.hlsl DynamicIndexing ps_5_0 main || GOTO :error
+CALL CompileShader.bat Internal ResourceDefinitions.hlsl ResourceDefinitions ps_5_0 main || GOTO :error
+
+Set UNITY_INCLUDES="%cd%\Unity\CGIncludes"
+CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_VS_25 vs_5_0 vert "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=25" "/DUNITY_REVERSED_Z=1" || GOTO :error
+CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_PS_25 ps_5_0 frag "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=25" "/DUNITY_REVERSED_Z=1" || GOTO :error
+CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_VS_50 vs_5_0 vert "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=50" "/DUNITY_REVERSED_Z=1" || GOTO :error
+CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_PS_50 ps_5_0 frag "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=50" "/DUNITY_REVERSED_Z=1" || GOTO :error
+
+rem CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_PS ps_5_0 frag "/DFOG_EXP2=1" "/I CGIncludes" || GOTO :error
 
 CALL CompileShader.bat FxDis test.hlsl test_VS vs_5_0 VS || GOTO :error
 CALL CompileShader.bat FxDis test.hlsl test_PS ps_5_0 PS || GOTO :error
@@ -219,13 +233,9 @@ CALL CompileShader.bat 3Dmigoto signatures_ps.hlsl signatures_ps_2 ps_5_0 main "
 CALL CompileShader.bat 3Dmigoto signatures_vs.hlsl signatures_vs vs_5_0 main || GOTO :error
 CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_5 ps_5_0 main || GOTO :error
 CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_4 ps_4_0 main || GOTO :error
-CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_inner_5 ps_5_0 main "/DUSE_INNER_STRUCT=1" "/DUSE_DYNAMICALLY_INDEXED_ARRAYS=1" || GOTO :error
-CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_inner_4 ps_4_0 main "/DUSE_INNER_STRUCT=1" "/DUSE_DYNAMICALLY_INDEXED_ARRAYS=1" || GOTO :error
-CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_dup_5 ps_5_0 main "/DUSE_DUP_NAME=1" || GOTO :error
-CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_dup_4 ps_4_0 main "/DUSE_DUP_NAME=1" || GOTO :error
-CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_primative_5 ps_5_0 main "/DUSE_PRIMITIVE_TYPES=1" "/DUSE_DOUBLES=1" || GOTO :error
-CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_rw_5 ps_5_0 main "/DUSE_RW_STRUCTURED_BUFFER=1" || GOTO :error
-CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_rw_inner_5 ps_5_0 main "/DUSE_RW_STRUCTURED_BUFFER=1" "/DUSE_INNER_STRUCT=1" "/DUSE_DYNAMICALLY_INDEXED_ARRAYS=1"  || GOTO :error
+CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_extra_5 ps_5_0 main "/DUSE_INNER_STRUCT=1" "/DUSE_DUP_NAME=1" "/DUSE_PRIMITIVE_TYPES=1" "/DUSE_DOUBLES=1" "/DUSE_RW_STRUCTURED_BUFFER=1" "/DUSE_DYNAMICALLY_INDEXED_ARRAYS=1" || GOTO :error
+CALL CompileShader.bat 3Dmigoto structured_buffers.hlsl structured_buffers_extra_4 ps_4_0 main "/DUSE_INNER_STRUCT=1" "/DUSE_DUP_NAME=1" "/DUSE_PRIMITIVE_TYPES=1" "/DUSE_DOUBLES=1" "/DUSE_RW_STRUCTURED_BUFFER=1" "/DUSE_DYNAMICALLY_INDEXED_ARRAYS=1" || GOTO :error
+
 CALL CompileShader.bat 3Dmigoto sv_gsinstanceid.hlsl sv_gsinstanceid gs_5_0 main || GOTO :error
 
 GOTO :EOF

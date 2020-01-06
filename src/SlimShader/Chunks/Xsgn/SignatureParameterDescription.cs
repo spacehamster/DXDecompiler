@@ -120,11 +120,10 @@ namespace SlimShader.Chunks.Xsgn
 			result.Mask = mask.DecodeValue<ComponentMask>(0, 7);
 			result.ReadWriteMask = mask.DecodeValue<ComponentMask>(8, 15);
 
-			uint unk0 = 0;
 			if (size == SignatureElementSize._8)
 			{
-				unk0 = parameterReader.ReadUInt32();
-				result.MinPrecision = (MinPrecision)unk0;
+				MinPrecision minPrecision = (MinPrecision)parameterReader.ReadUInt32();
+				result.MinPrecision = minPrecision;
 			}
 
 			// This is my guesswork, but it works so far...
@@ -138,7 +137,7 @@ namespace SlimShader.Chunks.Xsgn
 
 			// Vertex and pixel shaders need special handling for SystemValueType in the output signature.
 			if ((programType == ProgramType.PixelShader || programType == ProgramType.VertexShader)
-				&& (chunkType == ChunkType.Osg5 || chunkType == ChunkType.Osgn))
+				&& (chunkType == ChunkType.Osg5 || chunkType == ChunkType.Osgn || chunkType == ChunkType.Osg1))
 			{
 				if (result.Register == 0xffffffff)
 					switch (result.SemanticName.ToUpper())

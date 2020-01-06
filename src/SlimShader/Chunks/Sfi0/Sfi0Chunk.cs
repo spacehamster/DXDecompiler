@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using SlimShader.Chunks.Common;
 using SlimShader.Util;
@@ -21,6 +23,10 @@ namespace SlimShader.Chunks.Sfi0
 			var flags = (SfiFlags)reader.ReadInt32();
 			var result = new Sfi0Chunk();
 			result.Flags = flags;
+			if(int.TryParse(flags.ToString(), out int discard))
+			{
+				throw new Exception($"Invalid SfiFlags {Convert.ToString((int)flags, 2)} {flags.ToString()}");
+			}
 			result._version = version;
 			return result;
 		}
@@ -51,6 +57,10 @@ namespace SlimShader.Chunks.Sfi0
 				if (Flags.HasFlag(SfiFlags.RequiresShaderExtensionsFor11_1))
 				{
 					sb.AppendLine("//       Shader extensions for 11.1");
+				}
+				if (Flags.HasFlag(SfiFlags.TypedUAVLoadAdditionalFormats))
+				{
+					sb.AppendLine("//       Typed UAV Load Additional Formats");
 				}
 				sb.AppendLine("//");
 				sb.AppendLine("//");

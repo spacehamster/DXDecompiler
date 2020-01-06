@@ -26,7 +26,6 @@ namespace SlimShader.Chunks.Xsgn
 				case Name.Depth:
 				case Name.DepthGreaterEqual :
 				case Name.DepthLessEqual :
-					return false;
 				default :
 					return true;
 			}
@@ -44,6 +43,8 @@ namespace SlimShader.Chunks.Xsgn
 					return OperandType.OutputCoverageMask.GetDescription();
 				case Name.Depth:
 					return OperandType.OutputDepth.GetDescription();
+				case Name.PrimitiveID:
+					return "primID";
 				default:
 					throw new ArgumentOutOfRangeException("value", "Unrecognised name: " + value);
 			}

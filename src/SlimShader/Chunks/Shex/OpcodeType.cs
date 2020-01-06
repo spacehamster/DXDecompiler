@@ -625,7 +625,10 @@
 		[Description("atomic_umin")]
 		AtomicUMin,
 
+		[Description("imm_atomic_alloc")]
 		ImmAtomicAlloc,
+
+		[Description("imm_atomic_consume")]
 		ImmAtomicConsume,
 
 		[NumberType(NumberType.Int)]
@@ -709,7 +712,7 @@
 		DMovC,
 
 		[Description("dtof")]
-		DToD,
+		DToF,
 		[Description("ftod")]
 		FToD,
 		[Description("eval_snapped")]

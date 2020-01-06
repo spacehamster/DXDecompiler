@@ -69,7 +69,10 @@ namespace SlimShader.Chunks.Shex.Tokens
 		public OperandModifier Modifier { get; private set; }
 		public OperandIndex[] Indices { get; private set; }
 		public Number4 ImmediateValues { get; private set; }
-
+		public OperandMinPrecision MinPrecision { get; private set; }
+#if DEBUG
+		internal uint OperandData;
+#endif
 		public Operand(OpcodeType parentType)
 		{
 			ParentType = parentType;
@@ -90,6 +93,9 @@ namespace SlimShader.Chunks.Shex.Tokens
 		        return null;
 
 			var operand = new Operand(parentType);
+#if DEBUG
+			operand.OperandData = token0;
+#endif
 
 			var numComponents = token0.DecodeValue<OperandNumComponents>(0, 1);
 			switch (numComponents)
@@ -245,6 +251,7 @@ namespace SlimShader.Chunks.Shex.Tokens
 			{
 				case ExtendedOperandType.Modifier:
 					operand.Modifier = token1.DecodeValue<OperandModifier>(6, 13);
+					operand.MinPrecision = token1.DecodeValue<OperandMinPrecision>(14, 16);
 					break;
 			}
 		}
@@ -326,8 +333,9 @@ namespace SlimShader.Chunks.Shex.Tokens
 							if (!string.IsNullOrEmpty(components))
 								components = "." + components;
 						}
-
-						return Modifier.Wrap(string.Format("{0}{1}{2}", OperandType.GetDescription(), index, components));
+						string minPrecision = MinPrecision == OperandMinPrecision.Default ?
+							string.Empty : $" {MinPrecision.GetDescription()}";
+						return Modifier.Wrap(string.Format("{0}{1}{2}{3}", OperandType.GetDescription(), index, components, minPrecision));
 					}
 			}
 		}

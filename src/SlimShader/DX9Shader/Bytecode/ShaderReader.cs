@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,13 @@ namespace SlimShader.DX9Shader
 		public ShaderReader(Stream input, bool leaveOpen = false)
 			: base(input, new UTF8Encoding(false, true))
 		{
+		}
+		static public ShaderModel ReadShader(Stream stream)
+		{
+			using (var ss = new ShaderReader(stream))
+			{
+				return ss.ReadShader();
+			}
 		}
 		static public ShaderModel ReadShader(byte[] data)
 		{
@@ -33,10 +41,10 @@ namespace SlimShader.DX9Shader
 			{
 				Token instruction = ReadInstruction(shader);
 				InstructionVerifier.Verify(instruction);
-				shader.Instructions.Add(instruction);
+				shader.Tokens.Add(instruction);
 				if (instruction.Opcode == Opcode.End) break;
 			}
-
+			shader.ParseConstantTable();
 			return shader;
 		}
 
@@ -69,7 +77,33 @@ namespace SlimShader.DX9Shader
 				for (int i = 0; i < size; i++)
 				{
 					token.Data[i] = ReadUInt32();
-					inst.Params.Add(new Parameter(token.Data[i]));
+					if(opcode == Opcode.Def || opcode == Opcode.DefB || opcode == Opcode.DefI)
+					{
+
+					}
+					else if(opcode == Opcode.Dcl)
+					{
+						if (i == 0)
+						{
+							inst.Operands.Add(new DeclarationOperand(token.Data[i]));
+						} else
+						{
+							inst.Operands.Add(new DestinationOperand(token.Data[i]));
+						}
+					} else if(i == 0 && opcode != Opcode.BreakC && opcode != Opcode.IfC && opcode != Opcode.If)
+					{
+						inst.Operands.Add(new DestinationOperand(token.Data[i]));
+					} else if ((token.Data[i] & (1 << 13)) != 0)
+					{
+						//Relative Address mode
+						token.Data[i+1] = ReadUInt32();
+						inst.Operands.Add(new SourceOperand(token.Data[i], token.Data[i+1]));
+						i++;
+					} else
+					{
+						inst.Operands.Add(new SourceOperand(token.Data[i]));
+					}
+					
 				}
 			}
 
@@ -77,7 +111,7 @@ namespace SlimShader.DX9Shader
 			{
 				token.Modifier = (int)((instructionToken >> 16) & 0xff);
 				token.Predicated = (instructionToken & 0x10000000) != 0;
-				System.Diagnostics.Debug.Assert((instructionToken & 0xE0000000) == 0);
+				Debug.Assert((instructionToken & 0xE0000000) == 0, "Instruction has unexpected bits set");
 			}
 
 			return token;

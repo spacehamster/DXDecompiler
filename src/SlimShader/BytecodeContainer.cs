@@ -83,7 +83,10 @@ namespace SlimShader
     				Chunks.Add(chunk);
 			}
 		}
+		internal BytecodeContainer()
+		{
 
+		}
 		public static BytecodeContainer Parse(byte[] bytes)
 		{
 			return new BytecodeContainer(bytes);

@@ -1,12 +1,12 @@
 ﻿namespace SlimShader.DX9Shader
 {
-    public class SquareRootOperation : UnaryOperation
-    {
-        public SquareRootOperation(HlslTreeNode value)
-        {
-            AddInput(value);
-        }
+	public class SquareRootOperation : UnaryOperation
+	{
+		public SquareRootOperation(HlslTreeNode value)
+		{
+			AddInput(value);
+		}
 
-        public override string Mnemonic => "sqrt";
-    }
+		public override string Mnemonic => "sqrt";
+	}
 }
