@@ -15,6 +15,7 @@ namespace SlimShader.Chunks.Sfi0
 		RequiresMinimumPrecisionDataTypes = 0x10,
 		RequiresDoublePrecisionExtensions = 0x20,
 		RequiresShaderExtensionsFor11_1 = 0x40,
-		TypedUAVLoadAdditionalFormats = 0x800
+		TypedUAVLoadAdditionalFormats = 0x800,
+		SVArrayIndexFromFeedingRasterizer = 0x2000
 	}
 }

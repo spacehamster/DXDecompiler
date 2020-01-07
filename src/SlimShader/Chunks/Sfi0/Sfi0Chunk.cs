@@ -62,6 +62,10 @@ namespace SlimShader.Chunks.Sfi0
 				{
 					sb.AppendLine("//       Typed UAV Load Additional Formats");
 				}
+				if (Flags.HasFlag(SfiFlags.SVArrayIndexFromFeedingRasterizer))
+				{
+					sb.AppendLine("//       SV_RenderTargetArrayIndex or SV_ViewportArrayIndex from any shader feeding rasterizer");
+				}
 				sb.AppendLine("//");
 				sb.AppendLine("//");
 			}
