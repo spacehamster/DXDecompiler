@@ -42,6 +42,7 @@ namespace SlimShader.Decompiler
 				}
 			}
 			var resourceBindingLookup = Container.ResourceDefinition.ResourceBindings
+				.Where(rb => rb.Type != ShaderInputType.Sampler)
 				.ToDictionary(rb => rb.Name, rb => rb);
 			foreach (var rb in Container.ResourceDefinition.ResourceBindings)
 			{
