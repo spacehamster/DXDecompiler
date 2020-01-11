@@ -37,26 +37,30 @@ namespace SlimShader.Chunks.Sfi0
 			if (Flags != SfiFlags.None && _version.MajorVersion >= 5)
 			{
 				sb.AppendLine("// Note: shader requires additional functionality:");
-				if (Flags.HasFlag(SfiFlags.RequiresDoublePrecisionFloatingPoint)){
+				if (Flags.HasFlag(SfiFlags.DoublePrecisionFloatingPoint)){
 					sb.AppendLine("//       Double-precision floating point");
 				}
-				if (Flags.HasFlag(SfiFlags.RequiresEarlyDepthStencil))
+				if (Flags.HasFlag(SfiFlags.EarlyDepthStencil))
 				{
 					sb.AppendLine("//       Early depth-stencil");
 				}
-				if (Flags.HasFlag(SfiFlags.RequiresUAVSlots64)){
+				if (Flags.HasFlag(SfiFlags.UAVSlots64)){
 					sb.AppendLine("//       64 UAV slots");
 				}
-				if (Flags.HasFlag(SfiFlags.RequiresMinimumPrecisionDataTypes))
+				if (Flags.HasFlag(SfiFlags.MinimumPrecisionDataTypes))
 				{
 					sb.AppendLine("//       Minimum-precision data types");
 				}
-				if (Flags.HasFlag(SfiFlags.RequiresDoublePrecisionExtensions)){
+				if (Flags.HasFlag(SfiFlags.DoublePrecisionExtensions)){
 					sb.AppendLine("//       Double-precision extensions for 11.1");
 				}
-				if (Flags.HasFlag(SfiFlags.RequiresShaderExtensionsFor11_1))
+				if (Flags.HasFlag(SfiFlags.ShaderExtensionsFor11_1))
 				{
 					sb.AppendLine("//       Shader extensions for 11.1");
+				}
+				if (Flags.HasFlag(SfiFlags.ComparisonFilteringForFeatureLevel9))
+				{
+					sb.AppendLine("//       Comparison filtering for feature level 9");
 				}
 				if (Flags.HasFlag(SfiFlags.TypedUAVLoadAdditionalFormats))
 				{
