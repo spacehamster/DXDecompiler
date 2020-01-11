@@ -14,8 +14,7 @@ namespace SlimShader.Decompiler
 	{
 		/*
 		 * This should be merged with Declrations
-		 * Resource Definitions and InputOutput Signatures have corrispondting declration tokens
-		 * 
+		 * Resource Definitions and InputOutput Signatures have corresponding declration tokens
 		 */
 		void WriteResoureDefinitions()
 		{

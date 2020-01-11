@@ -260,6 +260,8 @@ namespace SlimShader.DX9Shader
 					{
 						throw new NotImplementedException();
 					}
+				case RegisterType.Loop:
+					return "aL";
 				default:
 					throw new NotImplementedException();
 			}

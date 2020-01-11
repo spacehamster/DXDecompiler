@@ -249,9 +249,37 @@ namespace SlimShader.DX9Shader
 			var result = (floatValue).ToString("G7");
 			return result;
 		}
-
+		bool AddIndentInstruction(Token instruction)
+		{
+			switch (instruction.Opcode)
+			{
+				case Opcode.If:
+				case Opcode.IfC:
+				case Opcode.Rep:
+				case Opcode.Loop:
+				case Opcode.Else:
+					return true;
+			}
+			return false;
+		}
+		bool RemoveIndentInstruction(Token instruction)
+		{
+			switch (instruction.Opcode)
+			{
+				case Opcode.Else:
+				case Opcode.Endif:
+				case Opcode.EndLoop:
+				case Opcode.EndRep:
+					return true;
+			}
+			return false;
+		}
 		private void WriteInstruction(Token instruction)
 		{
+			if (AddIndentInstruction(instruction))
+			{
+				indent++;
+			}
 			if (instruction.Opcode != Opcode.Comment && instruction.Opcode != Opcode.End)
 			{
 				WriteIndent();
@@ -446,11 +474,9 @@ namespace SlimShader.DX9Shader
 				case Opcode.Rep:
 					WriteLine("rep {0}",
 						GetDestinationName(instruction));
-					indent++;
 					break;
 				case Opcode.EndRep:
 					WriteLine("endrep");
-					indent--;
 					break;
 				case Opcode.DSX:
 					WriteLine("dsx{0} {1}, {2}",
@@ -470,7 +496,20 @@ namespace SlimShader.DX9Shader
 						((IfComparison)instruction.Modifier).ToString().ToLower(),
 						GetSourceName(instruction, 0),
 						GetSourceName(instruction, 1));
-					indent--;
+					break;
+				//TODO: Add tests for Loop, and Lit
+				case Opcode.Loop:
+					WriteLine("loop {0}, {1}",
+						GetSourceName(instruction, 0),
+						GetSourceName(instruction, 1));
+					break;
+				case Opcode.EndLoop:
+					WriteLine("endloop");
+					break;
+				case Opcode.Lit:
+					WriteLine("lit{0} {1}, {2}",
+						GetInstructionModifier(instruction), GetDestinationName(instruction),
+						GetSourceName(instruction, 1));
 					break;
 				case Opcode.Comment:
 				case Opcode.End:
@@ -479,6 +518,10 @@ namespace SlimShader.DX9Shader
 					WriteLine(instruction.Opcode.ToString());
 					//WriteLine("// Warning - Not Implemented");
 					throw new NotImplementedException();
+			}
+			if (RemoveIndentInstruction(instruction))
+			{
+				indent--;
 			}
 		}
 	}
