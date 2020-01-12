@@ -511,13 +511,18 @@ namespace SlimShader.DX9Shader
 						GetInstructionModifier(instruction), GetDestinationName(instruction),
 						GetSourceName(instruction, 1));
 					break;
+				case Opcode.ExpP:
+					WriteLine("expp{0} {1}, {2}",
+						GetInstructionModifier(instruction), GetDestinationName(instruction),
+						GetSourceName(instruction, 1));
+					break;
 				case Opcode.Comment:
 				case Opcode.End:
 					break;
 				default:
 					WriteLine(instruction.Opcode.ToString());
 					//WriteLine("// Warning - Not Implemented");
-					throw new NotImplementedException();
+					throw new NotImplementedException($"Instruction not implemented {instruction.Opcode}");
 			}
 			if (RemoveIndentInstruction(instruction))
 			{

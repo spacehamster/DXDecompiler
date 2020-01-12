@@ -119,8 +119,11 @@ namespace SlimShader.DX9Shader
 							return 1;
 						}
 					}
+				//Guessing
+				case Opcode.ExpP:
+					return 1;
 				default:
-					throw new NotImplementedException();
+					throw new NotImplementedException($"Instruction not implemented {token.Opcode}");
 			}
 		}
 		public static SlotType GetSlotType(this Token token)
