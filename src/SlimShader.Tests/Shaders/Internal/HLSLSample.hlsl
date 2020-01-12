@@ -35,7 +35,7 @@ SamplerState g_samLinear;
 //--------------------------------------------------------------------------------------
 struct VS_OUTPUT
 {
-	float4 Position   : POSITION;   // vertex position 
+	float4 Position   : SV_Position;   // vertex position 
 	float4 Diffuse    : COLOR0;     // vertex diffuse color (note that COLOR0 is clamped from 0..1)
 	float2 TextureUV  : TEXCOORD0;  // vertex texture coords 
 };
@@ -44,7 +44,7 @@ struct VS_OUTPUT
 //--------------------------------------------------------------------------------------
 // This shader computes standard transform and lighting
 //--------------------------------------------------------------------------------------
-VS_OUTPUT RenderSceneVS(float4 vPos : POSITION,
+VS_OUTPUT RenderSceneVS(float4 vPos : SV_Position,
 	float3 vNormal : NORMAL,
 	float2 vTexCoord0 : TEXCOORD0,
 	uniform int nNumLights,
@@ -52,7 +52,7 @@ VS_OUTPUT RenderSceneVS(float4 vPos : POSITION,
 	uniform bool bAnimate)
 {
 
-	VS_OUTPUT Output;
+	VS_OUTPUT Output = (VS_OUTPUT)0;
 	float3 vNormalWorldSpace;
 
 	// Transform the position from object space to homogeneous projection space
@@ -85,7 +85,7 @@ VS_OUTPUT RenderSceneVS(float4 vPos : POSITION,
 //--------------------------------------------------------------------------------------
 struct PS_OUTPUT
 {
-	float4 RGBColor : SV_TARGET;  // Pixel color    
+	float4 RGBColor : SV_TARGET;  // Pixel color
 };
 
 

@@ -55,8 +55,59 @@
 // COLOR                    0   xyzw        1     NONE   float   xyzw
 // TEXCOORD                 0   xy          2     NONE   float   xy  
 //
-vs_5_0
-dcl_globalFlags refactoringAllowed
+//
+// Constant buffer to DX9 shader constant mappings:
+//
+// Target Reg Buffer  Source Reg Component
+// ---------- ------- ---------- ---------
+// i0         cb1              0         0
+//
+// Target Reg Buffer  Start Reg # of Regs        Data Conversion
+// ---------- ------- --------- --------- ----------------------
+// c1         cb0             0         5  ( FLT, FLT, FLT, FLT)
+// c6         cb0             6         3  ( FLT, FLT, FLT, FLT)
+// c9         cb0            10         4  ( FLT, FLT, FLT, FLT)
+// c13        cb1             0         1  ( FLT,BOOL,BOOL, FLT)
+//
+//
+// Runtime generated constant mappings:
+//
+// Target Reg                               Constant Description
+// ---------- --------------------------------------------------
+// c0                              Vertex Shader position offset
+//
+//
+// Level9 shader bytecode:
+//
+    vs_2_x
+    def c14, 0, 1, 0, 0
+    dcl_texcoord v0
+    dcl_texcoord1 v1
+    dcl_texcoord2 v2
+    dp3 r0.x, v1, c6
+    dp3 r0.y, v1, c7
+    dp3 r0.z, v1, c8
+    nrm r1.xyz, r0
+    dp3 r0.x, r1, c3.yzww
+    max r0.x, r0.x, c14.x
+    mov r0.yzw, c14.x
+    rep i0
+      mad r0.yzw, c4.xxyz, r0.x, r0
+    endrep
+    mov r1.xyz, c1
+    mul r1.xyz, r1, c5
+    mad oT0.xyz, c2, r0.yzww, r1
+    dp4 r0.x, v0, c9
+    dp4 r0.y, v0, c10
+    dp4 r0.z, v0, c12
+    mad oPos.xy, r0.z, c0, r0
+    mov oPos.w, r0.z
+    dp4 oPos.z, v0, c11
+    mul oT1.xy, v2, c13.y
+    mov oT0.w, c14.y
+
+// approximately 26 instruction slots used
+vs_4_0
 dcl_constantbuffer CB0[14], immediateIndexed
 dcl_constantbuffer CB1[1], immediateIndexed
 dcl_input v0.xyzw

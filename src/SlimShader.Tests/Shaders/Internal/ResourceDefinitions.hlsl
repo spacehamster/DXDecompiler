@@ -105,28 +105,28 @@ cbuffer matrices {
 SamplerState samp0;
 SamplerComparisonState samp1;
 
-Buffer<float4> tex0;
-Texture1D<float4> tex1;
-Texture1DArray<float4> tex2;
-Texture2D<float4> tex3;
-Texture2DArray<float4> tex4;
-Texture3D<float4> tex5;
-TextureCube<float4> tex6;
-TextureCubeArray<float4> tex7;
-ByteAddressBuffer tex8;
-StructuredBuffer<struct foo> tex9;
-Texture2DMS<float, 4> tex10;
-Texture2DMSArray<float, 4> tex11;
-AppendStructuredBuffer<struct foo> uav0;
-ConsumeStructuredBuffer<struct foo> uav1;
-RWBuffer<float4> uav3;
-RWByteAddressBuffer uav4;
-RWStructuredBuffer<struct foo> uav5;
-RWTexture1D<float4> uav6;
-RWTexture1DArray<float4> uav7;
-RWTexture2D<float4> uav8;
-RWTexture2DArray<float4> uav9;
-RWTexture3D<float4> uav10;
+Buffer<float4> tex0 : register(t0);
+Texture1D<float4> tex1 : register(t1);
+Texture1DArray<float4> tex2 : register(t2);
+Texture2D<float4> tex3 : register(t3);
+Texture2DArray<float4> tex4 : register(t4);
+Texture3D<float4> tex5 : register(t5);
+TextureCube<float4> tex6 : register(t6);
+TextureCubeArray<float4> tex7 : register(t7);
+ByteAddressBuffer tex8 : register(t8);
+StructuredBuffer<struct foo> tex9 : register(t9);
+Texture2DMS<float, 4> tex10 : register(t10);
+Texture2DMSArray<float, 4> tex11 : register(t11);
+AppendStructuredBuffer<struct foo> uav1 : register(u1);
+ConsumeStructuredBuffer<struct foo> uav2 : register(u2);
+RWBuffer<float4> uav3 : register(u3);
+RWByteAddressBuffer uav4 : register(u4);
+RWStructuredBuffer<struct foo> uav5 : register(u5);
+RWTexture1D<float4> uav6 : register(u6);
+RWTexture1DArray<float4> uav7 : register(u7);
+RWTexture2D<float4> uav8 : register(u8);
+RWTexture2DArray<float4> uav9 : register(u9);
+RWTexture3D<float4> uav10 : register(u10);
 
 float4 main(int index : POSITION) : SV_Target
 {
@@ -161,10 +161,11 @@ float4 main(int index : POSITION) : SV_Target
 	result += tex9.Load(index).sValue2;
 	result += tex10.Load(index, index);
 	result += tex11.Load(index, index);
-	struct foo value = uav1.Consume();
+
+	struct foo value = uav2.Consume();
 	result += value.sValue1;
 	value.sValue1 += result;
-	uav0.Append(value);
+	uav1.Append(value);
 	result += uav3.Load(index);
 	result += uav4.Load(index);
 	result += uav5.Load(index).sValue2;

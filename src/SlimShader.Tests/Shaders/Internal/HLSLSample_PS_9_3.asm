@@ -37,8 +37,34 @@
 // -------------------- ----- ------ -------- -------- ------- ------
 // SV_TARGET                0   xyzw        0   TARGET   float   xyzw
 //
-ps_5_0
-dcl_globalFlags refactoringAllowed
+//
+// Constant buffer to DX9 shader constant mappings:
+//
+// Target Reg Buffer  Start Reg # of Regs        Data Conversion
+// ---------- ------- --------- --------- ----------------------
+// c0         cb0             0         1  (BOOL, FLT, FLT, FLT)
+//
+//
+// Sampler/Resource to DX9 shader sampler mappings:
+//
+// Target Sampler Source Sampler  Source Resource
+// -------------- --------------- ----------------
+// s0             s0              t0               
+//
+//
+// Level9 shader bytecode:
+//
+    ps_2_x
+    dcl t0
+    dcl t1.xy
+    dcl_2d s0
+    texld r0, t1, s0
+    mul r0, r0, t0
+    cmp r0, -c0.x, t0, r0
+    mov oC0, r0
+
+// approximately 4 instruction slots used (1 texture, 3 arithmetic)
+ps_4_0
 dcl_constantbuffer CB0[1], immediateIndexed
 dcl_sampler s0, mode_default
 dcl_resource_texture2d (float,float,float,float) t0
@@ -47,7 +73,7 @@ dcl_input_ps linear v2.xy
 dcl_output o0.xyzw
 dcl_temps 1
 if_nz cb0[0].x
-  sample_indexable(texture2d)(float,float,float,float) r0.xyzw, v2.xyxx, t0.xyzw, s0
+  sample r0.xyzw, v2.xyxx, t0.xyzw, s0
   mul o0.xyzw, r0.xyzw, v1.xyzw
 else 
   mov o0.xyzw, v1.xyzw

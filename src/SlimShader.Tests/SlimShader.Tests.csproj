@@ -62,6 +62,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DX9Tests.cs" />
+    <Content Include="Shaders\Internal\BasicHLSL_PS_9_0.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Internal\BasicHLSL_PS_9_3.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Internal\BasicHLSL_VS_9_0.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Internal\BasicHLSL_VS_9_3.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\Internal\DynamicIndexing.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1972,6 +1984,11 @@
     <Content Include="Shaders\Internal\BasicHLSL_VS.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Shaders\Internal\HLSLSample_PS_9_0.asm" />
+    <Content Include="Shaders\Internal\HLSLSample_PS_9_3.asm" />
+    <Content Include="Shaders\Internal\HLSLSample_VS_9_0.asm" />
+    <Content Include="Shaders\Internal\HLSLSample_VS_9_3.asm" />
+    <Content Include="Shaders\Internal\HullShader.hlsl" />
     <Content Include="Shaders\Internal\Interfaces.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2420,12 +2437,28 @@
     <None Include="Shaders\Internal\BasicHLSL_PS.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Shaders\Internal\BasicHLSL_PS_9_0.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Internal\BasicHLSL_PS_9_3.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Shaders\Internal\BasicHLSL_VS.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Internal\BasicHLSL_VS_9_0.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Internal\BasicHLSL_VS_9_3.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Internal\DynamicIndexing.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Shaders\Internal\HLSLSample_PS_9_0.o" />
+    <None Include="Shaders\Internal\HLSLSample_PS_9_3.o" />
+    <None Include="Shaders\Internal\HLSLSample_VS_9_0.o" />
+    <None Include="Shaders\Internal\HLSLSample_VS_9_3.o" />
     <None Include="Shaders\Internal\Interfaces.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

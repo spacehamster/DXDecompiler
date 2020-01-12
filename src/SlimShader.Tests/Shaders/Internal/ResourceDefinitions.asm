@@ -220,7 +220,7 @@
 //
 // }
 //
-// Resource bind info for uav0
+// Resource bind info for uav1
 // {
 //
 //   struct foo
@@ -233,7 +233,7 @@
 //
 // }
 //
-// Resource bind info for uav1
+// Resource bind info for uav2
 // {
 //
 //   struct foo
@@ -266,21 +266,21 @@
 // ------------------------------ ---------- ------- ----------- -------------- ------
 // samp0                             sampler      NA          NA             s0      1 
 // samp1                           sampler_c      NA          NA             s1      1 
-// tbuffer1                          tbuffer      NA          NA             t0      1 
-// tex0                              texture  float4         buf             t1      1 
-// tex1                              texture  float4          1d             t2      1 
-// tex2                              texture  float4     1darray             t3      1 
-// tex3                              texture  float4          2d             t4      1 
-// tex4                              texture  float4     2darray             t5      1 
-// tex5                              texture  float4          3d             t6      1 
-// tex6                              texture  float4        cube             t7      1 
-// tex7                              texture  float4   cubearray             t8      1 
-// tex8                              texture    byte         r/o             t9      1 
-// tex9                              texture  struct         r/o            t10      1 
-// tex10                             texture   float       2dMS4            t11      1 
-// tex11                             texture   float  2darrayMS4            t12      1 
-// uav0                                  UAV  struct      append             u1      1 
-// uav1                                  UAV  struct     consume             u2      1 
+// tex0                              texture  float4         buf             t0      1 
+// tex1                              texture  float4          1d             t1      1 
+// tex2                              texture  float4     1darray             t2      1 
+// tex3                              texture  float4          2d             t3      1 
+// tex4                              texture  float4     2darray             t4      1 
+// tex5                              texture  float4          3d             t5      1 
+// tex6                              texture  float4        cube             t6      1 
+// tex7                              texture  float4   cubearray             t7      1 
+// tex8                              texture    byte         r/o             t8      1 
+// tex9                              texture  struct         r/o             t9      1 
+// tex10                             texture   float       2dMS4            t10      1 
+// tex11                             texture   float  2darrayMS4            t11      1 
+// tbuffer1                          tbuffer      NA          NA            t12      1 
+// uav1                                  UAV  struct      append             u1      1 
+// uav2                                  UAV  struct     consume             u2      1 
 // uav3                                  UAV  float4         buf             u3      1 
 // uav4                                  UAV    byte         r/w             u4      1 
 // uav5                                  UAV  struct         r/w             u5      1 
@@ -323,19 +323,19 @@ dcl_constantbuffer CB5[3], immediateIndexed
 dcl_constantbuffer CB6[1], immediateIndexed
 dcl_sampler s0, mode_default
 dcl_sampler s1, mode_comparison
-dcl_resource_buffer (mixed,mixed,mixed,mixed) t0
-dcl_resource_buffer (float,float,float,float) t1
-dcl_resource_texture1d (float,float,float,float) t2
-dcl_resource_texture1darray (float,float,float,float) t3
-dcl_resource_texture2d (float,float,float,float) t4
-dcl_resource_texture2darray (float,float,float,float) t5
-dcl_resource_texture3d (float,float,float,float) t6
-dcl_resource_texturecube (float,float,float,float) t7
-dcl_resource_texturecubearray (float,float,float,float) t8
-dcl_resource_raw t9
-dcl_resource_structured t10, 32
-dcl_resource_texture2dms(4) (float,float,float,float) t11
-dcl_resource_texture2dmsarray(4) (float,float,float,float) t12
+dcl_resource_buffer (float,float,float,float) t0
+dcl_resource_texture1d (float,float,float,float) t1
+dcl_resource_texture1darray (float,float,float,float) t2
+dcl_resource_texture2d (float,float,float,float) t3
+dcl_resource_texture2darray (float,float,float,float) t4
+dcl_resource_texture3d (float,float,float,float) t5
+dcl_resource_texturecube (float,float,float,float) t6
+dcl_resource_texturecubearray (float,float,float,float) t7
+dcl_resource_raw t8
+dcl_resource_structured t9, 32
+dcl_resource_texture2dms(4) (float,float,float,float) t10
+dcl_resource_texture2dmsarray(4) (float,float,float,float) t11
+dcl_resource_buffer (mixed,mixed,mixed,mixed) t12
 dcl_uav_structured u1, 32
 dcl_uav_structured u2, 32
 dcl_uav_typed_buffer (float,float,float,float) u3
@@ -359,7 +359,7 @@ ld_structured_indexable(structured_buffer, stride=32)(mixed,mixed,mixed,mixed) r
 ld_structured_indexable(structured_buffer, stride=32)(mixed,mixed,mixed,mixed) r2.z, r0.x, l(24), u2.xxxx
 ld_structured_indexable(structured_buffer, stride=32)(mixed,mixed,mixed,mixed) r2.w, r0.x, l(28), u2.xxxx
 imm_atomic_alloc r0.x, u1
-ld_indexable(buffer)(mixed,mixed,mixed,mixed) r3.xyzw, l(0, 0, 0, 0), t0.xyzw
+ld_indexable(buffer)(mixed,mixed,mixed,mixed) r3.xyzw, l(0, 0, 0, 0), t12.xyzw
 add r3.xyzw, r3.xyzw, cb0[0].xyzw
 add r3.xyzw, r3.xyzw, cb1[19].xyzw
 add r3.xyzw, r3.xyzw, cb1[191].xyzw
@@ -380,35 +380,35 @@ add r3.xyz, r4.xyzx, cb4[3].xyzx
 add r3.xyzw, r3.xyzw, cb5[2].xyzw
 add r3.xyzw, r3.xyzw, cb6[0].xxxx
 itof r0.y, v0.x
-sample_indexable(texture2d)(float,float,float,float) r4.xyzw, r0.yyyy, t4.xyzw, s0
+sample_indexable(texture2d)(float,float,float,float) r4.xyzw, r0.yyyy, t3.xyzw, s0
 add r3.xyzw, r3.xyzw, r4.xyzw
-sample_c_indexable(texture2d)(float,float,float,float) r0.z, r0.yyyy, t4.xxxx, s1, l(0.500000)
+sample_c_indexable(texture2d)(float,float,float,float) r0.z, r0.yyyy, t3.xxxx, s1, l(0.500000)
 add r3.xyzw, r0.zzzz, r3.xyzw
-ld_indexable(buffer)(float,float,float,float) r4.xyzw, v0.xxxx, t1.xyzw
+ld_indexable(buffer)(float,float,float,float) r4.xyzw, v0.xxxx, t0.xyzw
 add r3.xyzw, r3.xyzw, r4.xyzw
-ld_indexable(texture1d)(float,float,float,float) r4.xyzw, v0.xxxx, t2.xyzw
+ld_indexable(texture1d)(float,float,float,float) r4.xyzw, v0.xxxx, t1.xyzw
 add r3.xyzw, r3.xyzw, r4.xyzw
-ld_indexable(texture1darray)(float,float,float,float) r4.xyzw, v0.xxxx, t3.xyzw
+ld_indexable(texture1darray)(float,float,float,float) r4.xyzw, v0.xxxx, t2.xyzw
 add r3.xyzw, r3.xyzw, r4.xyzw
-ld_indexable(texture2d)(float,float,float,float) r4.xyzw, v0.xxxx, t4.xyzw
+ld_indexable(texture2d)(float,float,float,float) r4.xyzw, v0.xxxx, t3.xyzw
 add r3.xyzw, r3.xyzw, r4.xyzw
-ld_indexable(texture2darray)(float,float,float,float) r4.xyzw, v0.xxxx, t5.xyzw
+ld_indexable(texture2darray)(float,float,float,float) r4.xyzw, v0.xxxx, t4.xyzw
 add r3.xyzw, r3.xyzw, r4.xyzw
-ld_indexable(texture3d)(float,float,float,float) r4.xyzw, v0.xxxx, t6.xyzw
+ld_indexable(texture3d)(float,float,float,float) r4.xyzw, v0.xxxx, t5.xyzw
 add r3.xyzw, r3.xyzw, r4.xyzw
-sample_indexable(texturecube)(float,float,float,float) r4.xyzw, r0.yyyy, t7.xyzw, s0
-sample_indexable(texturecubearray)(float,float,float,float) r5.xyzw, r0.yyyy, t8.xyzw, s0
+sample_indexable(texturecube)(float,float,float,float) r4.xyzw, r0.yyyy, t6.xyzw, s0
+sample_indexable(texturecubearray)(float,float,float,float) r5.xyzw, r0.yyyy, t7.xyzw, s0
 add r3.xyzw, r3.xyzw, r4.xyzw
 add r3.xyzw, r5.xyzw, r3.xyzw
-ld_raw_indexable(raw_buffer)(mixed,mixed,mixed,mixed) r0.y, v0.x, t9.xxxx
+ld_raw_indexable(raw_buffer)(mixed,mixed,mixed,mixed) r0.y, v0.x, t8.xxxx
 utof r0.y, r0.y
 add r3.xyzw, r0.yyyy, r3.xyzw
-ld_structured_indexable(structured_buffer, stride=32)(mixed,mixed,mixed,mixed) r4.xyzw, v0.x, l(16), t10.xyzw
+ld_structured_indexable(structured_buffer, stride=32)(mixed,mixed,mixed,mixed) r4.xyzw, v0.x, l(16), t9.xyzw
 add r3.xyzw, r3.xyzw, r4.xyzw
 mov r4.x, v0.x
 mov r4.z, l(0)
-ldms_indexable(texture2dms)(float,float,float,float) r0.y, r4.xxzz, t11.yxzw, v0.x
-ldms_indexable(texture2dmsarray)(float,float,float,float) r0.z, r4.xxxz, t12.yzxw, v0.x
+ldms_indexable(texture2dms)(float,float,float,float) r0.y, r4.xxzz, t10.yxzw, v0.x
+ldms_indexable(texture2dmsarray)(float,float,float,float) r0.z, r4.xxxz, t11.yzxw, v0.x
 add r3.xyzw, r0.yyyy, r3.xyzw
 add r3.xyzw, r0.zzzz, r3.xyzw
 add r3.xyzw, r1.xyzw, r3.xyzw
