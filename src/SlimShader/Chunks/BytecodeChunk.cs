@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SlimShader.Chunks.Aon9;
 using SlimShader.Chunks.Ifce;
 using SlimShader.Chunks.Rdef;
 using SlimShader.Chunks.Sfi0;
@@ -27,7 +28,10 @@ namespace SlimShader.Chunks
 			{ "SPDB".ToFourCc(), ChunkType.Spdb },
 			{ "STAT".ToFourCc(), ChunkType.Stat },
 			{ "ISG1".ToFourCc(), ChunkType.Isg1 },
-			{ "OSG1".ToFourCc(), ChunkType.Osg1 }
+			{ "OSG1".ToFourCc(), ChunkType.Osg1 },
+			{ "Aon9".ToFourCc(), ChunkType.Aon9 },
+			{ "XNAS".ToFourCc(), ChunkType.Xnas },
+			{ "XNAP".ToFourCc(), ChunkType.Xnap },
 		};
 
 		public BytecodeContainer Container { get; private set; }
@@ -87,6 +91,11 @@ namespace SlimShader.Chunks
 					break;
 				case ChunkType.Stat:
 					chunk = StatisticsChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Xnas:
+				case ChunkType.Xnap:
+				case ChunkType.Aon9:
+					chunk = Level9ShaderChunk.Parse(chunkContentReader, chunkSize);
 					break;
 				default :
 					throw new ParseException("Invalid chunk type: " + chunkType);

@@ -19,6 +19,7 @@ namespace SlimShader.Tests
 		public void SetUp()
 		{
 			Directory.CreateDirectory(OutputDir);
+			AssertTraceListener.Init();
 		}
 		private static string OutputDir => $@"{TestContext.CurrentContext.TestDirectory}/Shaders";
 		private static string ShaderDirectory => $"{TestContext.CurrentContext.TestDirectory}/Shaders";

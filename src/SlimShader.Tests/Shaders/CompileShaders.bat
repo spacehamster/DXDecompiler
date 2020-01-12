@@ -15,16 +15,30 @@ CALL CompileShader.bat Internal Textures.hlsl Textures_VS vs_5_0 VS || GOTO :err
 CALL CompileShader.bat Internal Textures.hlsl Textures_PS ps_5_0 PS || GOTO :error
 CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_VS vs_5_0 RenderSceneVS || GOTO :error
 CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_PS ps_5_0 RenderScenePS || GOTO :error
-CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_VS_9_3 vs_4_0_level_9_3 RenderSceneVS || GOTO :error
-CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_PS_9_3 ps_4_0_level_9_3 RenderScenePS || GOTO :error
 CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_VS_9_0 vs_4_0_level_9_0 RenderSceneVS || GOTO :error
 CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_PS_9_0 ps_4_0_level_9_0 RenderScenePS || GOTO :error
+CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_VS_9_1 vs_4_0_level_9_1 RenderSceneVS || GOTO :error
+CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_PS_9_1 ps_4_0_level_9_1 RenderScenePS || GOTO :error
+CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_VS_9_3 vs_4_0_level_9_3 RenderSceneVS || GOTO :error
+CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_PS_9_3 ps_4_0_level_9_3 RenderScenePS || GOTO :error
 CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_VS vs_5_0 VSMain || GOTO :error
 CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_PS ps_5_0 PSMain || GOTO :error
-CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_VS_9_3 vs_4_0_level_9_3 VSMain || GOTO :error
-CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_PS_9_3 ps_4_0_level_9_3 PSMain || GOTO :error
 CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_VS_9_0 vs_4_0_level_9_0 VSMain || GOTO :error
 CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_PS_9_0 ps_4_0_level_9_0 PSMain || GOTO :error
+CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_VS_9_1 vs_4_0_level_9_1 VSMain || GOTO :error
+CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_PS_9_1 ps_4_0_level_9_1 PSMain || GOTO :error
+CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_VS_9_3 vs_4_0_level_9_3 VSMain || GOTO :error
+CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_PS_9_3 ps_4_0_level_9_3 PSMain || GOTO :error
+
+CALL CompileShader.bat Internal HLSLx9_Test.hlsl HLSL9x_Test_VS_9_0 vs_4_0_level_9_0 VSMain || GOTO :error
+CALL CompileShader.bat Internal HLSLx9_Test.hlsl HLSL9x_Test_PS_9_1 ps_4_0_level_9_0 PSMain || GOTO :error
+CALL CompileShader.bat Internal HLSLx9_Test.hlsl HLSL9x_Test_VS_9_2 vs_4_0_level_9_1 VSMain || GOTO :error
+CALL CompileShader.bat Internal HLSLx9_Test.hlsl HLSL9x_Test_PS_9_2 ps_4_0_level_9_1 PSMain || GOTO :error
+CALL CompileShader.bat Internal HLSLx9_Test.hlsl HLSL9x_Test_VS_9_3 vs_4_0_level_9_3 VSMain || GOTO :error
+CALL CompileShader.bat Internal HLSLx9_Test.hlsl HLSL9x_Test_PS_9_3 ps_4_0_level_9_3 PSMain || GOTO :error
+
+CALL CompileShader.bat Internal HLSLx9_Test2.hlsl HLSL9x_Test2_PS_9_3 ps_4_0_level_9_3 PSMain || GOTO :error
+
 CALL CompileShader.bat Internal Interfaces.hlsl Interfaces ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal DynamicIndexing.hlsl DynamicIndexing ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal ResourceDefinitions.hlsl ResourceDefinitions ps_5_0 main || GOTO :error

@@ -130,6 +130,5 @@ namespace SlimShader.Tests
 			// Assert.
 			Assert.Pass();
 		}
-
 	}
 }

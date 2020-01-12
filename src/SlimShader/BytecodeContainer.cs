@@ -131,6 +131,14 @@ namespace SlimShader
 			if (Interfaces != null)
 				sb.Append(Interfaces);
 
+			foreach(var dx9Shader in Chunks
+				.OfType<Chunks.Aon9.Level9ShaderChunk>()
+				.OrderBy(chunk => chunk.ChunkType))
+			{
+				sb.AppendLine("//");
+				sb.Append(dx9Shader);
+			}
+
 			if (Shader != null)
 				sb.Append(Shader);
 

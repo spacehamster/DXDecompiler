@@ -72,6 +72,21 @@ namespace SlimShader.Chunks
 		/// <summary>
 		/// ?
 		/// </summary>
-		Osg1
+		Osg1,
+
+		/// <summary>
+		/// Level 9 Shader Chunk
+		/// </summary>
+		Aon9,
+
+		/// <summary>
+		/// Level 9 XNA Prepass Shader Chunk
+		/// </summary>
+		Xnap,
+
+		/// <summary>
+		/// Level 9 XNA Shader Chunk
+		/// </summary>
+		Xnas,
 	}
 }

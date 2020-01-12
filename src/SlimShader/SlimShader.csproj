@@ -39,6 +39,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chunks\Aon9\DataConversionType.cs" />
+    <Compile Include="Chunks\Aon9\LoopRegisterMapping.cs" />
+    <Compile Include="Chunks\Aon9\Level9ShaderChunk.cs" />
+    <Compile Include="Chunks\Aon9\RuntimeConstantDescription.cs" />
+    <Compile Include="Chunks\Aon9\RuntimeConstantMapping.cs" />
+    <Compile Include="Chunks\Aon9\Unknown1Mapping.cs" />
+    <Compile Include="Chunks\Aon9\ConstantBufferMapping.cs" />
+    <Compile Include="Chunks\Aon9\SamplerMapping.cs" />
     <Compile Include="Chunks\Rdef\ShaderRequiresFlags.cs" />
     <Compile Include="Chunks\Sfi0\SfiFlags.cs" />
     <Compile Include="Chunks\Shex\MinPrecision.cs" />

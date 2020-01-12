@@ -34,7 +34,8 @@ namespace SlimShader.DX9Shader
 			byte minorVersion = ReadByte();
 			byte majorVersion = ReadByte();
 			ShaderType shaderType = (ShaderType)ReadUInt16();
-
+			Debug.Assert(shaderType == ShaderType.Pixel || shaderType == ShaderType.Vertex, 
+				$"Shader does not contain a valid shader type {shaderType}");
 			var shader = new ShaderModel(majorVersion, minorVersion, shaderType);
 
 			while (true)
@@ -53,6 +54,7 @@ namespace SlimShader.DX9Shader
 
 			uint instructionToken = ReadUInt32();
 			Opcode opcode = (Opcode)(instructionToken & 0xffff);
+			//Debug.Assert(opcode <= Opcode.Breakp || (opcode >= Opcode.Phase && opcode <= Opcode.End), $"Invalid opcode {opcode}");
 			int size;
 			if (opcode == Opcode.Comment)
 			{
