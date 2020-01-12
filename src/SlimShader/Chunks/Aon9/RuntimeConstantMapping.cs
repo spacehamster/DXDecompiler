@@ -12,9 +12,8 @@ namespace SlimShader.Chunks.Aon9
 		public static RuntimeConstantMapping Parse(BytecodeReader reader)
 		{
 			var result = new RuntimeConstantMapping();
-			//Guessing order
-			result.TargetReg = reader.ReadUInt16();
 			result.ConstantDescription = (RuntimeConstantDescription)reader.ReadUInt16();
+			result.TargetReg = reader.ReadUInt16();
 			Debug.Assert(
 				Enum.IsDefined(typeof(RuntimeConstantDescription), result.ConstantDescription),
 				$"Unknown RuntimeConstantDescription {result.ConstantDescription}");
