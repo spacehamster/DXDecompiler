@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using SlimShader.Chunks.Common;
 using SlimShader.Util;
 
 namespace SlimShader.Chunks.Aon9
 {
-	class Level9ShaderChunk : BytecodeChunk
+	public class Level9ShaderChunk : BytecodeChunk
 	{
 		public DX9Shader.ShaderModel ShaderModel;
 		public List<ConstantBufferMapping> ConstantBufferMappings = new List<ConstantBufferMapping>();
@@ -16,12 +17,12 @@ namespace SlimShader.Chunks.Aon9
 		public List<Unknown1Mapping> Unknown0Mappings = new List<Unknown1Mapping>();
 		public List<SamplerMapping> SamplerMappings = new List<SamplerMapping>();
 		public List<RuntimeConstantMapping> RuntimeConstantMappings = new List<RuntimeConstantMapping>();
+		public ShaderVersion Version;
 		internal static BytecodeChunk Parse(BytecodeReader chunkContentReader, uint chunkSize)
 		{
+			var result = new Level9ShaderChunk();
 			uint chunkSize2 = chunkContentReader.ReadUInt32();
-			uint minor = chunkContentReader.ReadByte();
-			uint major = chunkContentReader.ReadByte();
-			uint shaderType = chunkContentReader.ReadUInt16();
+			result.Version = ShaderVersion.ParseAon9(chunkContentReader);
 			uint shaderSize = chunkContentReader.ReadUInt32();
 			var shaderOffset = chunkContentReader.ReadUInt32();
 			var cbMappingCount = chunkContentReader.ReadUInt16();
@@ -34,7 +35,6 @@ namespace SlimShader.Chunks.Aon9
 			var samplerMappingOffset = chunkContentReader.ReadUInt16();
 			var runtimeConstantMappingCount = chunkContentReader.ReadUInt16();
 			var runtimeConstantMappingOffset = chunkContentReader.ReadUInt16();
-			var result = new Level9ShaderChunk();
 			if (cbMappingCount > 0)
 			{
 				var mappingReader = chunkContentReader.CopyAtOffset(cbMappingOffset);

@@ -54,7 +54,7 @@ namespace SlimShader.DX9Shader
 
 			uint instructionToken = ReadUInt32();
 			Opcode opcode = (Opcode)(instructionToken & 0xffff);
-			//Debug.Assert(opcode <= Opcode.Breakp || (opcode >= Opcode.Phase && opcode <= Opcode.End), $"Invalid opcode {opcode}");
+			Debug.Assert(opcode <= Opcode.Breakp || (opcode >= Opcode.Phase && opcode <= Opcode.End), $"Invalid opcode {opcode}");
 			int size;
 			if (opcode == Opcode.Comment)
 			{
@@ -113,7 +113,8 @@ namespace SlimShader.DX9Shader
 			{
 				token.Modifier = (int)((instructionToken >> 16) & 0xff);
 				token.Predicated = (instructionToken & 0x10000000) != 0;
-				Debug.Assert((instructionToken & 0xE0000000) == 0, "Instruction has unexpected bits set");
+				token.CoIssue = (instructionToken & 0x40000000) != 0;
+				Debug.Assert((instructionToken & 0xA0000000) == 0, $"Instruction has unexpected bits set {instructionToken & 0xE0000000}");
 			}
 
 			return token;

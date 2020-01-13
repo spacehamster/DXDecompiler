@@ -6,10 +6,12 @@ using NUnit.Framework;
 using SharpDX.D3DCompiler;
 using SlimShader.Chunks;
 using SlimShader.Chunks.Rdef;
+using SlimShader.Chunks.Shex;
+using SlimShader.Chunks.Shex.Tokens;
 using SlimShader.Chunks.Xsgn;
 using SlimShader.Decompiler;
 using SlimShader.Tests.Util;
-
+using SlimShader.Util;
 namespace SlimShader.Tests
 {
 	[TestFixture]
@@ -176,7 +178,22 @@ namespace SlimShader.Tests
 				Assert.AreEqual(shaderReflection.InterfaceSlotCount, container.ResourceDefinition.InterfaceSlotCount);
 				Assert.AreEqual((bool) shaderReflection.IsSampleFrequencyShader, container.Statistics.IsSampleFrequencyShader);
 				Assert.AreEqual(shaderReflection.MoveInstructionCount, container.Statistics.MovInstructionCount);
-				//Assert.AreEqual(shaderReflection.RequiresFlags, 0); // TODO
+
+				var flags = ShaderRequiresFlags.None;
+				if(container.Version.MajorVersion >= 5)
+				{
+					if (container.Sfi0 != null) {
+						flags = (ShaderRequiresFlags)container.Sfi0.Flags;
+					} else
+					{
+						var dcl = container.Shader.DeclarationTokens
+							.OfType<GlobalFlagsDeclarationToken>()
+							.FirstOrDefault();
+						var globals = dcl?.Flags ?? 0;
+						flags = (ShaderRequiresFlags)Chunks.Sfi0.Sfi0Chunk.GlobalFlagsToRequireFlags(globals);
+					}
+				}
+				Assert.AreEqual(shaderReflection.RequiresFlags, flags);
 
 				int expectedSizeX, expectedSizeY, expectedSizeZ;
 				uint actualSizeX, actualSizeY, actualSizeZ;
@@ -186,7 +203,37 @@ namespace SlimShader.Tests
 				Assert.AreEqual(expectedSizeY, actualSizeY);
 				Assert.AreEqual(expectedSizeZ, actualSizeZ);
 
-				//Assert.AreEqual((int) shaderReflection.MinFeatureLevel, 0); // TODO
+
+				SharpDX.Direct3D.FeatureLevel featureLevel = 0;
+				if (container.Chunks.OfType<Chunks.Aon9.Level9ShaderChunk>().Any())
+				{
+					var level9Chunk = container.Chunks
+						.OfType<Chunks.Aon9.Level9ShaderChunk>()
+						.First();
+					featureLevel = level9Chunk.ShaderModel.MinorVersion == 1
+						? SharpDX.Direct3D.FeatureLevel.Level_9_3 :
+						SharpDX.Direct3D.FeatureLevel.Level_9_1;
+				} else if(container.Version.MajorVersion == 4 && container.Version.MinorVersion == 0)
+				{
+					featureLevel = SharpDX.Direct3D.FeatureLevel.Level_10_0;
+				}
+				else if (container.Version.MajorVersion == 4 && container.Version.MinorVersion == 1)
+				{
+					featureLevel = SharpDX.Direct3D.FeatureLevel.Level_10_1;
+				}
+				else if (container.Version.MajorVersion == 5 && container.Version.MinorVersion == 0)
+				{
+					featureLevel = SharpDX.Direct3D.FeatureLevel.Level_11_0;
+					if (flags.HasFlag(ShaderRequiresFlags.ShaderRequires64UnorderedAccessViews)){
+						featureLevel = SharpDX.Direct3D.FeatureLevel.Level_11_1;
+					}
+				}
+				else if (container.Version.MajorVersion == 5 && container.Version.MinorVersion == 1)
+				{
+					featureLevel = SharpDX.Direct3D.FeatureLevel.Level_11_1;
+				}
+
+				Assert.AreEqual(shaderReflection.MinFeatureLevel, featureLevel); // TODO
 
 				Assert.AreEqual(desc.ArrayInstructionCount, container.Statistics.ArrayInstructionCount);
 				Assert.AreEqual(desc.BarrierInstructions, container.Statistics.BarrierInstructions);
@@ -227,7 +274,9 @@ namespace SlimShader.Tests
 				Assert.AreEqual(desc.TextureNormalInstructions, container.Statistics.TextureNormalInstructions);
 				Assert.AreEqual(desc.TextureStoreInstructions, container.Statistics.TextureStoreInstructions);
 				Assert.AreEqual(desc.UintInstructionCount, container.Statistics.UIntInstructionCount);
-				//Assert.AreEqual(desc.Version, container.ResourceDefinition.Target); // TODO
+
+				var version = Chunks.Common.ShaderVersion.FromShexToken((uint)desc.Version);
+				Assert.AreEqual(version.ToString(), container.ResourceDefinition.Target.ToString());
 
 				for (int i = 0; i < shaderReflection.Description.ConstantBuffers; i++)
 					CompareConstantBuffer(shaderReflection.GetConstantBuffer(i),
@@ -248,6 +297,7 @@ namespace SlimShader.Tests
 				for (int i = 0; i < shaderReflection.Description.PatchConstantParameters; i++)
 					CompareParameter(shaderReflection.GetPatchConstantParameterDescription(i),
 						container.PatchConstantSignature.Parameters[i]);
+
 			}
 		}
 

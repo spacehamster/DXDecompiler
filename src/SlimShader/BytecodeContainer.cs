@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SlimShader.Chunks;
+using SlimShader.Chunks.Common;
 using SlimShader.Chunks.Ifce;
 using SlimShader.Chunks.Rdef;
 using SlimShader.Chunks.Sfi0;
 using SlimShader.Chunks.Shex;
+using SlimShader.Chunks.Shex.Tokens;
 using SlimShader.Chunks.Stat;
 using SlimShader.Chunks.Xsgn;
 using SlimShader.Util;
@@ -64,6 +66,11 @@ namespace SlimShader
 			get { return Chunks.OfType<InterfacesChunk>().SingleOrDefault(); }
 		}
 
+		public ShaderVersion Version
+		{
+			get { return Shader.Version; }
+		}
+
 		public BytecodeContainer(byte[] rawBytes)
 		{
 			_rawBytes = rawBytes;
@@ -108,7 +115,18 @@ namespace SlimShader
 			}
 
 			if (Sfi0 != null)
+			{
 				sb.Append(Sfi0);
+			} else if(Version.MajorVersion >= 5)
+			{
+				var globalFlagsDcl = Shader.DeclarationTokens
+					.OfType<GlobalFlagsDeclarationToken>()
+					.FirstOrDefault();
+				if (globalFlagsDcl != null)
+				{
+					sb.Append(Sfi0Chunk.GlobalFlagsToString(globalFlagsDcl?.Flags ?? 0));
+				}
+			}
 
 			if (ResourceDefinition != null)
 				sb.Append(ResourceDefinition);

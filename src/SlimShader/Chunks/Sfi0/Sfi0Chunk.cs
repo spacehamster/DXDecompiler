@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using SlimShader.Chunks.Common;
+using SlimShader.Chunks.Shex;
 using SlimShader.Util;
 
 namespace SlimShader.Chunks.Sfi0
@@ -16,57 +17,57 @@ namespace SlimShader.Chunks.Sfi0
 	/// </summary>
 	public class Sfi0Chunk : BytecodeChunk
 	{
-		public SfiFlags Flags;
+		public ShaderRequiresFlags Flags;
 		private ShaderVersion _version;
 		public static Sfi0Chunk Parse(BytecodeReader reader, ShaderVersion version)
 		{
-			var flags = (SfiFlags)reader.ReadInt32();
+			var flags = (ShaderRequiresFlags)reader.ReadInt32();
 			var result = new Sfi0Chunk();
 			result.Flags = flags;
-			if(int.TryParse(flags.ToString(), out int discard))
-			{
-				throw new Exception($"Invalid SfiFlags {Convert.ToString((int)flags, 2)} {flags.ToString()}");
-			}
+			Debug.Assert((flags & (ShaderRequiresFlags.UavsAtEveryStage)) == 0,
+				$"Unexpected SfiFlags {Convert.ToString((int)flags, 2)} {flags.ToString()}");
 			result._version = version;
 			return result;
 		}
-
-		public override string ToString()
+		public static string RequireFlagsToString(ShaderRequiresFlags flags)
 		{
 			var sb = new StringBuilder();
-			if (Flags != SfiFlags.None && _version.MajorVersion >= 5)
+			if (flags != ShaderRequiresFlags.None)
 			{
 				sb.AppendLine("// Note: shader requires additional functionality:");
-				if (Flags.HasFlag(SfiFlags.DoublePrecisionFloatingPoint)){
+				if (flags.HasFlag(ShaderRequiresFlags.Doubles))
+				{
 					sb.AppendLine("//       Double-precision floating point");
 				}
-				if (Flags.HasFlag(SfiFlags.EarlyDepthStencil))
+				if (flags.HasFlag(ShaderRequiresFlags.EarlyDepthStencil))
 				{
 					sb.AppendLine("//       Early depth-stencil");
 				}
-				if (Flags.HasFlag(SfiFlags.UAVSlots64)){
+				if (flags.HasFlag(ShaderRequiresFlags.Requires64Uavs))
+				{
 					sb.AppendLine("//       64 UAV slots");
 				}
-				if (Flags.HasFlag(SfiFlags.MinimumPrecisionDataTypes))
+				if (flags.HasFlag(ShaderRequiresFlags.MinimumPrecision))
 				{
 					sb.AppendLine("//       Minimum-precision data types");
 				}
-				if (Flags.HasFlag(SfiFlags.DoublePrecisionExtensions)){
+				if (flags.HasFlag(ShaderRequiresFlags.DoubleExtensionsFor11Point1))
+				{
 					sb.AppendLine("//       Double-precision extensions for 11.1");
 				}
-				if (Flags.HasFlag(SfiFlags.ShaderExtensionsFor11_1))
+				if (flags.HasFlag(ShaderRequiresFlags.ShaderExtensionsFor11Point1))
 				{
 					sb.AppendLine("//       Shader extensions for 11.1");
 				}
-				if (Flags.HasFlag(SfiFlags.ComparisonFilteringForFeatureLevel9))
+				if (flags.HasFlag(ShaderRequiresFlags.Level9ComparisonFiltering))
 				{
 					sb.AppendLine("//       Comparison filtering for feature level 9");
 				}
-				if (Flags.HasFlag(SfiFlags.TypedUAVLoadAdditionalFormats))
+				if (flags.HasFlag(ShaderRequiresFlags.TypedUAVLoadAdditionalFormats))
 				{
 					sb.AppendLine("//       Typed UAV Load Additional Formats");
 				}
-				if (Flags.HasFlag(SfiFlags.SVArrayIndexFromFeedingRasterizer))
+				if (flags.HasFlag(ShaderRequiresFlags.SVArrayIndexFromFeedingRasterizer))
 				{
 					sb.AppendLine("//       SV_RenderTargetArrayIndex or SV_ViewportArrayIndex from any shader feeding rasterizer");
 				}
@@ -74,6 +75,28 @@ namespace SlimShader.Chunks.Sfi0
 				sb.AppendLine("//");
 			}
 			return sb.ToString();
+		}
+		public static ShaderRequiresFlags GlobalFlagsToRequireFlags(GlobalFlags flags)
+		{
+			ShaderRequiresFlags result = ShaderRequiresFlags.None;
+			if (flags.HasFlag(GlobalFlags.ForceEarlyDepthStencilTest))
+			{
+				result |= ShaderRequiresFlags.EarlyDepthStencil;
+			}
+			return result;
+		}
+		public static string GlobalFlagsToString(GlobalFlags flags)
+		{
+			var requireFlags = GlobalFlagsToRequireFlags(flags);
+			return RequireFlagsToString(requireFlags);
+		}
+		public override string ToString()
+		{
+			if (_version.MajorVersion >= 5)
+			{
+				return RequireFlagsToString(Flags);
+			}
+			return string.Empty;
 		}
 	}
 }

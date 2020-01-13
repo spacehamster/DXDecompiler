@@ -17,11 +17,29 @@ namespace SlimShader.Chunks.Common
 		public static ShaderVersion ParseShex(BytecodeReader reader)
 		{
 			uint versionToken = reader.ReadUInt32();
+			return FromShexToken(versionToken);
+		}
+
+		public static ShaderVersion FromShexToken(uint versionToken)
+		{
 			return new ShaderVersion
 			{
 				MinorVersion = versionToken.DecodeValue<byte>(0, 3),
 				MajorVersion = versionToken.DecodeValue<byte>(4, 7),
 				ProgramType = versionToken.DecodeValue<ProgramType>(16, 31)
+			};
+		}
+
+		public static ShaderVersion ParseAon9(BytecodeReader reader)
+		{
+			byte minor = reader.ReadByte();
+			byte major = reader.ReadByte();
+			ushort shaderType = reader.ReadUInt16();
+			return new ShaderVersion
+			{
+				MinorVersion = minor,
+				MajorVersion = major,
+				ProgramType = shaderType == 0xFFFF ? ProgramType.PixelShader : ProgramType.VertexShader
 			};
 		}
 
@@ -61,6 +79,10 @@ namespace SlimShader.Chunks.Common
 				MinorVersion = target.DecodeValue<byte>(0, 7),
 				ProgramType = programType
 			};
+		}
+		public override string ToString()
+		{
+			return $"{ProgramType.GetDescription()}_{MajorVersion}_{MinorVersion}";
 		}
 	}
 }

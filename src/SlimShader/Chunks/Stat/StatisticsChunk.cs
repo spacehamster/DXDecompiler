@@ -202,21 +202,20 @@ namespace SlimShader.Chunks.Stat
 
 			//TODO
 			var unknown0 = reader.ReadUInt32();
-
 			//if (unknown0 != 0) throw new System.Exception($"unknown0 is {unknown0}");
-			//Debug.Assert(unknown0 == 0);
+			Debug.Assert(unknown0 == 0, $"Statistics unknown1 is {unknown0}");
 
 			result.InputPrimitive = (Primitive) reader.ReadUInt32();
 			result.GeometryShaderOutputTopology = (PrimitiveTopology) reader.ReadUInt32();
 			result.GeometryShaderMaxOutputVertexCount = reader.ReadUInt32();
 
 			var unknown1 = reader.ReadUInt32();
-			//if (unknown1 != 0 && unknown0 != 1) throw new System.Exception($"unknown1 is {unknown1}");
-			//Debug.Assert(unknown1 == 0 || unknown1 == 1);
+			//if (unknown1 == 0 || unknown1 == 1 || unknown1 == 3) throw new System.Exception($"unknown1 is {unknown1}");
+			Debug.Assert(unknown1 == 0 || unknown1 == 1 || unknown1 == 3, $"Statistics unknown1 is {unknown1}");
 
 			var unknown2 = reader.ReadUInt32();
 			//if (unknown2 != 0 && unknown2 != 2) throw new System.Exception($"unknown2 is {unknown2}");
-			//Debug.Assert(unknown2 == 0 || unknown2 == 2); // TODO
+			Debug.Assert(unknown2 == 0 || unknown2 == 2, $"Statistics unknown1 is {unknown2}"); // TODO
 
 			result.IsSampleFrequencyShader = (reader.ReadUInt32() == 1);
 

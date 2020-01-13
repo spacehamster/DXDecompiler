@@ -10,7 +10,7 @@ namespace SlimShader.DX9Shader
 
 		public int Modifier { get; set; }
 		public bool Predicated { get; set; }
-
+		public bool CoIssue { get; set; }
 		public bool HasDestination
 		{
 			get

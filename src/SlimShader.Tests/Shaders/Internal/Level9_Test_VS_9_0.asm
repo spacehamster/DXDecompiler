@@ -4,7 +4,7 @@
 //
 // Buffer Definitions: 
 //
-// cbuffer cbPerObject
+// cbuffer MyBuffer
 // {
 //
 //   float4x4 g_mWorldViewProjection;   // Offset:    0 Size:    64
@@ -18,7 +18,7 @@
 //
 // Name                                 Type  Format         Dim      HLSL Bind  Count
 // ------------------------------ ---------- ------- ----------- -------------- ------
-// cbPerObject                       cbuffer      NA          NA            cb0      1 
+// MyBuffer                          cbuffer      NA          NA           cb13      1 
 //
 //
 //
@@ -28,23 +28,25 @@
 // -------------------- ----- ------ -------- -------- ------- ------
 // POSITION                 0   xyzw        0     NONE   float   xyzw
 // NORMAL                   0   xyz         1     NONE   float   xyz 
-// TEXCOORD                 0   xy          2     NONE   float   xy  
+// COLOR                    0   xyzw        2     NONE   float   xyzw
+// TEXCOORD                 0   xy          3     NONE   float   xy  
 //
 //
 // Output signature:
 //
 // Name                 Index   Mask Register SysValue  Format   Used
 // -------------------- ----- ------ -------- -------- ------- ------
-// NORMAL                   0   xyz         0     NONE   float   xyz 
-// TEXCOORD                 0   xy          1     NONE   float   xy  
-// SV_POSITION              0   xyzw        2      POS   float   xyzw
+// SV_POSITION              0   xyzw        0      POS   float   xyzw
+// NORMAL                   0   xyz         1     NONE   float   xyz 
+// COLOR                    0   xyzw        2     NONE   float   xyzw
+// TEXCOORD                 0   xy          3     NONE   float   xy  
 //
 //
 // Constant buffer to DX9 shader constant mappings:
 //
 // Target Reg Buffer  Start Reg # of Regs        Data Conversion
 // ---------- ------- --------- --------- ----------------------
-// c1         cb0             0         7  ( FLT, FLT, FLT, FLT)
+// c1         cb13            0         7  ( FLT, FLT, FLT, FLT)
 //
 //
 // Runtime generated constant mappings:
@@ -60,6 +62,7 @@
     dcl_texcoord v0
     dcl_texcoord1 v1
     dcl_texcoord2 v2
+    dcl_texcoord3 v3
     dp4 oPos.z, v0, c3
     dp3 oT0.x, v1, c5
     dp3 oT0.y, v1, c6
@@ -70,15 +73,16 @@
     mul r1.xy, r0.z, c0
     mov oPos.w, r0.z
     add oPos.xy, r0, r1
-    mov oT1.xy, v2
+    mov oT1, v2
+    mov oT2.xy, v3
 
-// approximately 11 instruction slots used
+// approximately 12 instruction slots used
 //
 // Constant buffer to DX9 shader constant mappings:
 //
 // Target Reg Buffer  Start Reg # of Regs        Data Conversion
 // ---------- ------- --------- --------- ----------------------
-// c0         cb0             0         4  ( FLT, FLT, FLT, FLT)
+// c0         cb13            0         4  ( FLT, FLT, FLT, FLT)
 //
 //
 // XNA Prepass shader bytecode:
@@ -97,7 +101,7 @@
 //
 // Target Reg Buffer  Start Reg # of Regs        Data Conversion
 // ---------- ------- --------- --------- ----------------------
-// c0         cb0             0         7  ( FLT, FLT, FLT, FLT)
+// c0         cb13            0         7  ( FLT, FLT, FLT, FLT)
 //
 //
 // XNA shader bytecode:
@@ -106,33 +110,38 @@
     dcl_texcoord v0
     dcl_texcoord1 v1
     dcl_texcoord2 v2
-    dp3 r3.x, r1, c4
-    dp3 r3.y, r1, c5
-    dp3 r3.z, r1, c6
-    mov oT0.xyz, r3
-    mov oT1.xy, r2
+    dcl_texcoord3 v3
+    dp3 r4.x, r1, c4
+    dp3 r4.y, r1, c5
+    dp3 r4.z, r1, c6
+    mov oT0.xyz, r4
+    mov oT1, r2
+    mov oT2.xy, r3
     dp4 r1.x, r0, c0
     dp4 r1.y, r0, c1
     dp4 r1.z, r0, c2
     dp4 r1.w, r0, c3
     mov oPos, r1
 
-// approximately 10 instruction slots used
+// approximately 11 instruction slots used
 vs_4_0
-dcl_constantbuffer CB0[7], immediateIndexed
+dcl_constantbuffer CB13[7], immediateIndexed
 dcl_input v0.xyzw
 dcl_input v1.xyz
-dcl_input v2.xy
-dcl_output o0.xyz
-dcl_output o1.xy
-dcl_output_siv o2.xyzw, position
-dp3 o0.x, v1.xyzx, cb0[4].xyzx
-dp3 o0.y, v1.xyzx, cb0[5].xyzx
-dp3 o0.z, v1.xyzx, cb0[6].xyzx
-mov o1.xy, v2.xyxx
-dp4 o2.x, v0.xyzw, cb0[0].xyzw
-dp4 o2.y, v0.xyzw, cb0[1].xyzw
-dp4 o2.z, v0.xyzw, cb0[2].xyzw
-dp4 o2.w, v0.xyzw, cb0[3].xyzw
+dcl_input v2.xyzw
+dcl_input v3.xy
+dcl_output_siv o0.xyzw, position
+dcl_output o1.xyz
+dcl_output o2.xyzw
+dcl_output o3.xy
+dp4 o0.x, v0.xyzw, cb13[0].xyzw
+dp4 o0.y, v0.xyzw, cb13[1].xyzw
+dp4 o0.z, v0.xyzw, cb13[2].xyzw
+dp4 o0.w, v0.xyzw, cb13[3].xyzw
+dp3 o1.x, v1.xyzx, cb13[4].xyzx
+dp3 o1.y, v1.xyzx, cb13[5].xyzx
+dp3 o1.z, v1.xyzx, cb13[6].xyzx
+mov o2.xyzw, v2.xyzw
+mov o3.xy, v3.xyxx
 ret 
-// Approximately 9 instruction slots used
+// Approximately 10 instruction slots used
