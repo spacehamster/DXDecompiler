@@ -17,14 +17,13 @@ CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_VS vs_5_0 RenderScene
 CALL CompileShader.bat Internal HLSLSample.hlsl HLSLSample_PS ps_5_0 RenderScenePS || GOTO :error
 CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_VS vs_5_0 VSMain || GOTO :error
 CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_PS ps_5_0 PSMain || GOTO :error
-
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_VS_9_0 vs_4_0_level_9_0 VSMain || GOTO :error
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_PS_9_1 ps_4_0_level_9_0 PSMain || GOTO :error
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_VS_9_2 vs_4_0_level_9_1 VSMain || GOTO :error
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_PS_9_2 ps_4_0_level_9_1 PSMain || GOTO :error
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_VS_9_3 vs_4_0_level_9_3 VSMain || GOTO :error
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_PS_9_3 ps_4_0_level_9_3 PSMain || GOTO :error
-
+CALL CompileShader.bat Internal UbfeTest.hlsl UbfeTest vs_5_0 VSMain || GOTO :error
 CALL CompileShader.bat Internal Interfaces.hlsl Interfaces ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal DynamicIndexing.hlsl DynamicIndexing ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal ResourceDefinitions.hlsl ResourceDefinitions ps_5_0 main || GOTO :error
