@@ -15,7 +15,8 @@ namespace SlimShader.Decompiler
 		StringBuilder Output = new StringBuilder();
 		BytecodeContainer Container;
 		RegisterState RegisterState;
-		Functions Functions;
+		Interfaces Interfaces;
+		Dictionary<string, string> Functions = new Dictionary<string, string>();
 		public bool EmitRegisterDeclarations = true;
 		public bool EmitPackingOffset = true;
 		public Dictionary<string, ConstantBuffer> m_ConstantBufferLookup;
@@ -35,8 +36,8 @@ namespace SlimShader.Decompiler
 			m_ResourceBindingLookup = new Dictionary<string, ResourceBinding>();
 			if (Container.Interfaces != null)
 			{
-				Functions = new Functions(Container);
-				foreach(var kv in Functions.GetRegisterMapping())
+				Interfaces = new Interfaces(Container);
+				foreach(var kv in Interfaces.GetRegisterMapping())
 				{
 					RegisterState.AddRegister(kv.Key, new Register(kv.Value));
 				}
@@ -57,6 +58,10 @@ namespace SlimShader.Decompiler
 				var rb = resourceBindingLookup[cb.Name];
 				m_ConstantBufferLookup.Add(rb.GetBindPointDescription(), cb);
 			}
+		}
+		public void AddFunction(string name, string def)
+		{
+			Functions[name] = def;
 		}
 		public string GetMainFuncName()
 		{
@@ -132,9 +137,9 @@ namespace SlimShader.Decompiler
 			}
 			WriteResoureDefinitions();
 			WriteSignatures();
-			if (Functions != null)
+			if (Interfaces != null)
 			{
-				Output.AppendLine(Functions.Dump());
+				Output.AppendLine(Interfaces.Dump());
 			}
 			LogDeclaration(Container.Shader.DeclarationTokens);
 			WriteDeclarationAnnotations(Container.Shader.DeclarationTokens);
@@ -144,8 +149,8 @@ namespace SlimShader.Decompiler
 			TranslateInstructions();
 			indent--;
 			Output.AppendLine("}");
-
-			return Output.ToString();
+			string functionDefs = string.Join("\n", Functions.Values);
+			return string.Format("{0}\n{1}", functionDefs, Output.ToString());
 		}
 		void DecompileHullShader()
 		{
@@ -408,7 +413,7 @@ namespace SlimShader.Decompiler
 		void TranslateInstructions()
 		{
 			var tokens = Container.Shader.Tokens;
-			if(Functions != null)
+			if(Interfaces != null)
 			{
 				tokens = Container.Shader.Tokens
 					.TakeWhile(t => t.Header.OpcodeType != OpcodeType.Label)

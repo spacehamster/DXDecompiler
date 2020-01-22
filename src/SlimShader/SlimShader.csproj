@@ -60,7 +60,7 @@
     <Compile Include="Decompiler\Declarations.cs" />
     <Compile Include="Decompiler\DXDecompiler.cs" />
     <Compile Include="Decompiler\Extensions.cs" />
-    <Compile Include="Decompiler\Functions.cs" />
+    <Compile Include="Decompiler\Interfaces.cs" />
     <Compile Include="Decompiler\Register.cs" />
     <Compile Include="Decompiler\RegisterState.cs" />
     <Compile Include="Decompiler\ResourceDefinitions.cs" />

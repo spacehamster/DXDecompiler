@@ -10,13 +10,13 @@ using SlimShader.Chunks;
 
 namespace SlimShader.Decompiler
 {
-	public class Functions
+	public class Interfaces
 	{
 		BytecodeContainer Container;
 		StringBuilder Output = new StringBuilder();
 		Dictionary<string, List<OpcodeToken>> FunctionBodies = new Dictionary<string, List<OpcodeToken>>();
 		Dictionary<string, List<string>> FunctionTables = new Dictionary<string, List<string>>();
-		public Functions(BytecodeContainer container)
+		public Interfaces(BytecodeContainer container)
 		{
 			Container = container;
 			List<OpcodeToken> currentBody = null;

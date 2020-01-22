@@ -143,39 +143,39 @@ namespace SlimShader.Decompiler
 						{
 							if (token.Operands[1].OperandType != OperandType.Null)
 							{
-								CallHelper1("cos", token, 1, 2);
+								CallHelper("cos", token, 1, 2);
 							}
 							if (token.Operands[0].OperandType != OperandType.Null)
 							{
-								CallHelper1("cos", token, 0, 2);
+								CallHelper("cos", token, 0, 2);
 							}
 						}
 						else
 						{
 							if (token.Operands[0].OperandType != OperandType.Null)
 							{
-								CallHelper1("sin", token, 0, 2);
+								CallHelper("sin", token, 0, 2);
 							}
 							if (token.Operands[1].OperandType != OperandType.Null)
 							{
-								CallHelper1("cos", token, 1, 2);
+								CallHelper("cos", token, 1, 2);
 							}
 						}
 						break;
 					}
 				case OpcodeType.Dp2:
 					{
-						CallHelper2("dot", token, 0, 1, 2);
+						CallHelper("dot", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.Dp3:
 					{
-						CallHelper2("dot", token, 0, 1, 2);
+						CallHelper("dot", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.Dp4:
 					{
-						CallHelper2("dot", token, 0, 1, 2);
+						CallHelper("dot", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.Ne:
@@ -228,77 +228,77 @@ namespace SlimShader.Decompiler
 					}
 				case OpcodeType.Log:
 					{
-						CallHelper1("log", token, 0, 1);
+						CallHelper("log", token, 0, 1);
 						break;
 					}
 				case OpcodeType.Rsq:
 					{
-						CallHelper1("normalize", token, 0, 1);
+						CallHelper("normalize", token, 0, 1);
 						break;
 					}
 				case OpcodeType.Exp:
 					{
-						CallHelper1("exp2", token, 0, 1);
+						CallHelper("exp2", token, 0, 1);
 						break;
 					}
 				case OpcodeType.Sqrt:
 					{
-						CallHelper1("sqrt", token, 0, 1);
+						CallHelper("sqrt", token, 0, 1);
 						break;
 					}
 				case OpcodeType.RoundPi:
 					{
-						CallHelper1("ceil", token, 0, 1);
+						CallHelper("ceil", token, 0, 1);
 						break;
 					}
 				case OpcodeType.RoundNi:
 					{
-						CallHelper1("floor", token, 0, 1);
+						CallHelper("floor", token, 0, 1);
 						break;
 					}
 				case OpcodeType.RoundZ:
 					{
-						CallHelper1("trunc", token, 0, 1);
+						CallHelper("trunc", token, 0, 1);
 						break;
 					}
 				case OpcodeType.RoundNe:
 					{
-						CallHelper1("roundEven", token, 0, 1);
+						CallHelper("roundEven", token, 0, 1);
 						break;
 					}
 				case OpcodeType.Frc:
 					{
-						CallHelper1("frac", token, 0, 1);
+						CallHelper("frac", token, 0, 1);
 						break;
 					}
 				case OpcodeType.IMax:
 					{
-						CallHelper2("max", token, 0, 1, 2);
+						CallHelper("max", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.UMax:
 					{
-						CallHelper2("max", token, 0, 1, 2);
+						CallHelper("max", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.Max:
 					{
-						CallHelper2("max", token, 0, 1, 2);
+						CallHelper("max", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.IMin:
 					{
-						CallHelper2("min", token, 0, 1, 2);
+						CallHelper("min", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.UMin:
 					{
-						CallHelper2("min", token, 0, 1, 2);
+						CallHelper("min", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.Min:
 					{
-						CallHelper2("min", token, 0, 1, 2);
+						CallHelper("min", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.Gather4:
@@ -371,31 +371,30 @@ namespace SlimShader.Decompiler
 					}
 				case OpcodeType.FirstBitHi:
 					{
-						CallHelper1("firstbithigh", token, 0, 1);
+						CallHelper("firstbithigh", token, 0, 1);
 						break;
 					}
 				case OpcodeType.FirstBitSHi:
 					{
-						CallHelper1("firstbithigh", token, 0, 1);
+						CallHelper("firstbithigh", token, 0, 1);
 						break;
 					}
 				case OpcodeType.BfRev:
 					{
-						CallHelper1("reversebits ", token, 0, 1);
+						CallHelper("reversebits ", token, 0, 1);
 						break;
 					}
 				case OpcodeType.Bfi:
 					{
-						AddIndent();
-						AddAssignToDest(token.Operands[0]);
-						string src0 = GetOperandName(token.Operands[1]);
-						string src1 = GetOperandName(token.Operands[2]);
-						string src2 = GetOperandName(token.Operands[3]);
-						string src3 = GetOperandName(token.Operands[4]);
-						string width = $"({src0} & 0x1f)";
-						string offset = $"({src1} & 0x1f)";
-						string bitmask = $"(((1 << {width})-1) << {offset}) & 0xffffffff";
-						Output.AppendLine($"(({src2} << {offset}) & ({bitmask})) | ({src3} & ~({bitmask}));");
+						string bfiFunc = @"int4 BFI(uint4 src0, uint4 src1, uint4 src2, uint4 src3){
+	uint4 width = src0 & 0x1f;
+	uint4 offset = src1 & 0x1f;
+	uint4 mask = (((1 << width)-1) << offset) & 0xffffffff;
+	int4 dest = ((src2 << offset) & bitmask) | (src3 & ~bitmask)
+	return dest;
+}";
+						AddFunction("BFI", bfiFunc);
+						CallHelper("BFI", token, 0, 1, 2, 3, 4);
 						break;
 					}
 				case OpcodeType.Emit:
@@ -618,17 +617,17 @@ namespace SlimShader.Decompiler
 					}
 				case OpcodeType.EvalCentroid:
 					{
-						CallHelper1("EvaluateAttributeCentroid", token, 0, 1);
+						CallHelper("EvaluateAttributeCentroid", token, 0, 1);
 						break;
 					}
 				case OpcodeType.EvalSampleIndex:
 					{
-						CallHelper2("EvaluateAttributeAtSample", token, 0, 1, 2);
+						CallHelper("EvaluateAttributeAtSample", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.EvalSnapped:
 					{
-						CallHelper2("EvaluateAttributeSnapped", token, 0, 1, 2);
+						CallHelper("EvaluateAttributeSnapped", token, 0, 1, 2);
 						break;
 					}
 				case OpcodeType.StoreRaw:
@@ -765,57 +764,78 @@ namespace SlimShader.Decompiler
 				case OpcodeType.UBfe:
 				case OpcodeType.IBfe:
 					{
-						throw new NotImplementedException(token.ToString());
+						string name = token.Header.OpcodeType == OpcodeType.UBfe ?
+							"UBFE" : "IBFE";
+						string returnType = token.Header.OpcodeType == OpcodeType.UBfe ?
+							"uint4" : "int4";
+						string template = @"{0} {1}(uint4 src1, uint4 src2, {0} value){{
+    {0} result = 0;
+    for(uint i = 0; i < 4; i++){{
+        uint width = src1[i] & 0x1f;
+        uint offset =src2[i] & 0x1f;
+        if(width == 0){{
+            result[i] = 0;
+        }} else if(width + offset < 32){{
+            result[i] = value << (32-(width + offset));
+            result[i] = result[i] >> (32 - width);
+        }} else {{
+            result[i] = value >> (32 - width);
+        }}
+    }}
+    return result;
+}}";
+						AddFunction(name, string.Format(template, returnType, name));
+						CallHelper(name, token, 0, 1, 2, 3);
 						break;
 					}
 				case OpcodeType.Rcp:
 					{
-						CallHelper1("rcp", token, 0, 1);
+						CallHelper("rcp", token, 0, 1);
 						break;
 					}
 				case OpcodeType.F32ToF16:
 					{
-						CallHelper1("f32tof16", token, 0, 1);
+						CallHelper("f32tof16", token, 0, 1);
 						break;
 					}
 				case OpcodeType.F16ToF32:
 					{
-						CallHelper1("f16tof32", token, 0, 1);
+						CallHelper("f16tof32", token, 0, 1);
 						break;
 					}
 				case OpcodeType.INeg:
 					{
-						CallHelper1("negate", token, 0, 1);
+						CallHelper("negate", token, 0, 1);
 						break;
 					}
 				case OpcodeType.DerivRtx:
 					{
-						CallHelper1("ddx", token, 0, 1);
+						CallHelper("ddx", token, 0, 1);
 						break;
 					}
 				case OpcodeType.RtxCoarse:
 					{
-						CallHelper1("ddx_coarse", token, 0, 1);
+						CallHelper("ddx_coarse", token, 0, 1);
 						break;
 					}
 				case OpcodeType.RtxFine:
 					{
-						CallHelper1("ddx_fine", token, 0, 1);
+						CallHelper("ddx_fine", token, 0, 1);
 						break;
 					}
 				case OpcodeType.DerivRty:
 					{
-						CallHelper1("ddy", token, 0, 1);
+						CallHelper("ddy", token, 0, 1);
 						break;
 					}
 				case OpcodeType.RtyCoarse:
 					{
-						CallHelper1("ddy_coarse", token, 0, 1);
+						CallHelper("ddy_coarse", token, 0, 1);
 						break;
 					}
 				case OpcodeType.RtyFine:
 					{
-						CallHelper1("ddy_fine", token, 0, 1);
+						CallHelper("ddy_fine", token, 0, 1);
 						break;
 					}
 				case OpcodeType.Not:
@@ -866,7 +886,7 @@ namespace SlimShader.Decompiler
 					{
 						if (token.Operands[1].OperandType == OperandType.Rasterizer)
 						{
-							CallHelper1("GetRenderTargetSamplePosition", token, 0, 2);
+							CallHelper("GetRenderTargetSamplePosition", token, 0, 2);
 						}
 						else
 						{
@@ -910,18 +930,18 @@ namespace SlimShader.Decompiler
 				case OpcodeType.Dfma:
 				case OpcodeType.Drcp:
 					{
-						CallHelper1("rcp", token, 0, 1);
+						CallHelper("rcp", token, 0, 1);
 						break;
 					}
 				case OpcodeType.Msad:
-					CallHelper2("msad4", token, 0, 1, 2);
+					CallHelper("msad4", token, 0, 1, 2);
 					break;
 				case OpcodeType.Bufinfo:
 					//TODO: need to mask op[0] with no swizzle
 					AddCallInterfaceNoDest("GetDimensions", token, 1, 0);
 					break;
 				case OpcodeType.FirstBitLo:
-					CallHelper1("firstbitlow", token, 0, 1);
+					CallHelper("firstbitlow", token, 0, 1);
 					break;
 				case OpcodeType.SampleInfo:
 					AddIndent();
@@ -939,22 +959,19 @@ namespace SlimShader.Decompiler
 					throw new Exception($"Unexpected token {token}");
 			}
 		}
-		void CallHelper1(string name, InstructionToken instruction, int dest, int src0)
+		void CallHelper(string name, InstructionToken instruction, int dest, params int[] srcs)
 		{
 			AddIndent();
 			WriteOperand(instruction.Operands[dest]);
 			Output.AppendFormat(" = {0}(", name);
-			WriteOperand(instruction.Operands[src0]);
-			Output.AppendLine(");");
-		}
-		void CallHelper2(string name, InstructionToken instruction, int dest, int src0, int src1)
-		{
-			AddIndent();
-			WriteOperand(instruction.Operands[dest]);
-			Output.AppendFormat(" = {0}(", name);
-			WriteOperand(instruction.Operands[src0]);
-			Output.Append(", ");
-			WriteOperand(instruction.Operands[src1]);
+			for (int i = 0; i < srcs.Length; i++)
+			{
+				WriteOperand(instruction.Operands[srcs[i]]);
+				if (i < srcs.Length - 1)
+				{
+					Output.Append(", ");
+				}
+			}
 			Output.AppendLine(");");
 		}
 		void CallBinaryOp(string symbol, InstructionToken instruction, int dest, int src0, int src1)
