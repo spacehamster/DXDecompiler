@@ -12,7 +12,7 @@ struct VS_OUTPUT
 	float4 Diffuse	: COLOR0;
 	float2 TextureUV	: TEXCOORD0;
 };
-cbuffer MyBuffer  : register(b11)
+cbuffer MyBuffer1  : register(b11)
 {
 	int4 g_nNumLights0 : packoffset(c10);
 	int4 g_nNumLights1 : packoffset(c15);
@@ -20,7 +20,7 @@ cbuffer MyBuffer  : register(b11)
 	int4 g_nNumLights3 : packoffset(c25);
 	float4 g_LightDiffuse: packoffset(c30);
 }
-cbuffer MyBuffer  : register(b13)
+cbuffer MyBuffer2  : register(b13)
 {
 	matrix		g_mWorldViewProjection	: packoffset(c0);
 	matrix		g_mWorld				: packoffset(c4);

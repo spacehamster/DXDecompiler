@@ -63,7 +63,7 @@ namespace SlimShader.Decompiler
 				}
 				else if (operand.SelectionMode == Operand4ComponentSelectionMode.Swizzle)
 				{
-					for(int i = 0; i < 4; i++)
+					for (int i = 0; i < 4; i++)
 					{
 						if (((int)mask & (1 << i)) == 0)
 							continue;
@@ -238,17 +238,20 @@ namespace SlimShader.Decompiler
 			if (member.Type.VariableClass == ShaderVariableClass.Struct)
 			{
 				size = member.Type.Members.Last().Offset + GetCBVarSize(member.Type.Members.Last(), true);
-			} else if(member.Type.VariableClass == ShaderVariableClass.MatrixRows)
+			}
+			else if (member.Type.VariableClass == ShaderVariableClass.MatrixRows)
 			{
 				var columns = (uint)member.Type.Columns;
 				var rows = (uint)member.Type.Rows;
 				size = (rows - 1) * 16 + columns * 4;
-			} else if(member.Type.VariableClass == ShaderVariableClass.MatrixColumns)
+			}
+			else if (member.Type.VariableClass == ShaderVariableClass.MatrixColumns)
 			{
 				var columns = (uint)member.Type.Columns;
 				var rows = (uint)member.Type.Rows;
 				size = (columns - 1) * 16 + rows * 4;
-			} else
+			}
+			else
 			{
 				size = (uint)member.Type.Columns * (uint)member.Type.Rows * 4;
 			}
@@ -263,5 +266,18 @@ namespace SlimShader.Decompiler
 		{
 			return $"{param.SemanticName.ToLower()}{param.SemanticIndex}";
 		}
+		public static ConstantBufferType ToCBType(this ShaderInputType type)
+		{
+			switch (type)
+			{
+				case ShaderInputType.CBuffer:
+					return ConstantBufferType.ConstantBuffer;
+				case ShaderInputType.TBuffer:
+					return ConstantBufferType.TextureBuffer;
+				default:
+					return ConstantBufferType.ResourceBindInformation;
+			}
+		}
 	}
+
 }

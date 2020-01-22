@@ -4,7 +4,7 @@
 //
 // Buffer Definitions: 
 //
-// cbuffer MyBuffer
+// cbuffer MyBuffer2
 // {
 //
 //   float4x4 g_mWorldViewProjection;   // Offset:    0 Size:    64
@@ -18,7 +18,7 @@
 //
 // Name                                 Type  Format         Dim      HLSL Bind  Count
 // ------------------------------ ---------- ------- ----------- -------------- ------
-// MyBuffer                          cbuffer      NA          NA           cb13      1 
+// MyBuffer2                         cbuffer      NA          NA           cb13      1 
 //
 //
 //

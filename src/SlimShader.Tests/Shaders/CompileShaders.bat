@@ -27,6 +27,7 @@ CALL CompileShader.bat Internal UbfeTest.hlsl UbfeTest vs_5_0 VSMain || GOTO :er
 CALL CompileShader.bat Internal Interfaces.hlsl Interfaces ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal DynamicIndexing.hlsl DynamicIndexing ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal ResourceDefinitions.hlsl ResourceDefinitions ps_5_0 main || GOTO :error
+CALL CompileShader.bat Internal DuplicateNames.hlsl DuplicateNames ps_5_0 main || GOTO :error
 
 Set UNITY_INCLUDES="%cd%\Unity\CGIncludes"
 CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_VS_25 vs_5_0 vert "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=25" "/DUNITY_REVERSED_Z=1" || GOTO :error

@@ -42,21 +42,49 @@ namespace SlimShader.Decompiler
 					RegisterState.AddRegister(kv.Key, new Register(kv.Value));
 				}
 			}
-			var resourceBindingLookup = Container.ResourceDefinition.ResourceBindings
-				.Where(rb => rb.Type != ShaderInputType.Sampler)
-				.ToDictionary(rb => rb.Name, rb => rb);
+
 			foreach (var rb in Container.ResourceDefinition.ResourceBindings)
 			{
 				m_ResourceBindingLookup.Add(rb.GetBindPointDescription(), rb);
 			}
-			foreach (var cb in Container.ResourceDefinition.ConstantBuffers)
+
+			//Note that resources can have duplicate name and resources of differenttypes can share names
+			var resourceBindingLookup = new Dictionary<string, ResourceBinding>();
+			var resourceBindingsByType = Container.ResourceDefinition.ResourceBindings
+				.GroupBy(rb => rb.Type.ToCBType());
+			foreach(var typeGroup in resourceBindingsByType)
 			{
-				if(cb.BufferType == ConstantBufferType.InterfacePointers)
-				{
-					continue;
+				var type = typeGroup.Key;
+				var bindingsByName = typeGroup
+					.GroupBy(rb => rb.Name);
+				foreach (var nameGroup in bindingsByName) {
+					var bindings = nameGroup.ToArray();
+					for (int i = 0; i < bindings.Length; i++)
+					{
+						var rb = bindings[i];
+						resourceBindingLookup.Add($"{type}${rb.Name}${i}", rb);
+					}
 				}
-				var rb = resourceBindingLookup[cb.Name];
-				m_ConstantBufferLookup.Add(rb.GetBindPointDescription(), cb);
+			}
+			var bufferBindingsByType = Container.ResourceDefinition.ConstantBuffers
+				.Where(cb => cb.BufferType != ConstantBufferType.InterfacePointers)
+				.GroupBy(cb => cb.BufferType);
+			foreach (var typeGroup in bufferBindingsByType)
+			{
+				var type = typeGroup.Key;
+				var bindingsByName = typeGroup
+					.GroupBy(cb => cb.Name);
+				foreach (var nameGroup in bindingsByName)
+				{
+					var bindings = nameGroup.ToArray();
+					for (int i = 0; i < bindings.Length; i++)
+					{
+						var cb = bindings[i];
+						var key = $"{type}${cb.Name}${i}";
+						var rb = resourceBindingLookup[key];
+						m_ConstantBufferLookup.Add(rb.GetBindPointDescription(), cb);
+					}
+				}
 			}
 		}
 		public void AddFunction(string name, string def)
