@@ -70,36 +70,41 @@ namespace SlimShader.Decompiler
 						Output.AppendLine(");");
 						break;
 					}
+				case OpcodeType.DMov:
 				case OpcodeType.Mov:
 					{
 						WriteMoveBinaryOp(token.Operands[0], token.Operands[1]);
 						break;
 					}
-				case OpcodeType.Mad:
-					{
-						CallTernaryOp("*", "+", token, 0, 1, 2, 3);
-						break;
-					}
-				case OpcodeType.IMad:
-					{
-						CallTernaryOp("*", "+", token, 0, 1, 2, 3);
-						break;
-					}
 				case OpcodeType.DAdd:
-					{
-						CallBinaryOp("+", token, 0, 1, 2);
-						break;
-					}
 				case OpcodeType.IAdd:
-					{
-						CallBinaryOp("+", token, 0, 1, 2);
-						break;
-					}
 				case OpcodeType.Add:
 					{
 						CallBinaryOp("+", token, 0, 1, 2);
 						break;
 					}
+				case OpcodeType.Dfma:
+				case OpcodeType.IMad:
+				case OpcodeType.Mad:
+					{
+						CallTernaryOp("*", "+", token, 0, 1, 2, 3);
+						break;
+					}
+				case OpcodeType.DMul:
+				case OpcodeType.IMul:
+				case OpcodeType.Mul:
+					{
+						CallBinaryOp("*", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.UDiv:
+				case OpcodeType.Ddiv:
+				case OpcodeType.Div:
+					{
+						CallBinaryOp("/", token, 0, 1, 2);
+						break;
+					}
+				// Bitwise operations
 				case OpcodeType.Or:
 					{
 						CallBinaryOp("|", token, 0, 1, 2);
@@ -108,265 +113,6 @@ namespace SlimShader.Decompiler
 				case OpcodeType.And:
 					{
 						CallBinaryOp("&", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Ge:
-					{
-						AddComparision(token, ComparisonType.Ge);
-						break;
-					}
-				case OpcodeType.Mul:
-					{
-						CallBinaryOp("*", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.IMul:
-					{
-						CallBinaryOp("*", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.UDiv:
-					{
-						CallBinaryOp("/", token, 0, 2, 3);
-						CallBinaryOp("%", token, 1, 2, 3);
-						break;
-					}
-				case OpcodeType.Div:
-					{
-						CallBinaryOp("/", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Sincos:
-					{
-						if (token.Operands[0].OperandType == token.Operands[2].OperandType &&
-							token.Operands[0].Indices[0].Value == token.Operands[2].Indices[0].Value)
-						{
-							if (token.Operands[1].OperandType != OperandType.Null)
-							{
-								CallHelper("cos", token, 1, 2);
-							}
-							if (token.Operands[0].OperandType != OperandType.Null)
-							{
-								CallHelper("cos", token, 0, 2);
-							}
-						}
-						else
-						{
-							if (token.Operands[0].OperandType != OperandType.Null)
-							{
-								CallHelper("sin", token, 0, 2);
-							}
-							if (token.Operands[1].OperandType != OperandType.Null)
-							{
-								CallHelper("cos", token, 1, 2);
-							}
-						}
-						break;
-					}
-				case OpcodeType.Dp2:
-					{
-						CallHelper("dot", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Dp3:
-					{
-						CallHelper("dot", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Dp4:
-					{
-						CallHelper("dot", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Ne:
-					{
-						AddComparision(token, ComparisonType.Ne);
-						break;
-					}
-				case OpcodeType.IGe:
-					{
-						AddComparision(token, ComparisonType.Ge);
-						break;
-					}
-				case OpcodeType.ILt:
-					{
-						AddComparision(token, ComparisonType.Lt);
-						break;
-					}
-				case OpcodeType.Lt:
-					{
-						AddComparision(token, ComparisonType.Lt);
-						break;
-					}
-				case OpcodeType.IEq:
-					{
-						AddComparision(token, ComparisonType.Eq);
-						break;
-					}
-				case OpcodeType.ULt:
-					{
-						AddComparision(token, ComparisonType.Lt);
-						break;
-					}
-				case OpcodeType.UGe:
-					{
-						AddComparision(token, ComparisonType.Ge);
-						break;
-					}
-				case OpcodeType.MovC:
-					{
-						AddMOVCBinaryOp(token.Operands[0], token.Operands[1],
-							token.Operands[2], token.Operands[3]);
-						break;
-					}
-				case OpcodeType.SwapC:
-					{
-						// TODO needs temps!!
-						AddMOVCBinaryOp(token.Operands[0], token.Operands[2], token.Operands[4], token.Operands[3]);
-						AddMOVCBinaryOp(token.Operands[1], token.Operands[2], token.Operands[3], token.Operands[4]);
-						break;
-					}
-				case OpcodeType.Log:
-					{
-						CallHelper("log", token, 0, 1);
-						break;
-					}
-				case OpcodeType.Rsq:
-					{
-						CallHelper("normalize", token, 0, 1);
-						break;
-					}
-				case OpcodeType.Exp:
-					{
-						CallHelper("exp2", token, 0, 1);
-						break;
-					}
-				case OpcodeType.Sqrt:
-					{
-						CallHelper("sqrt", token, 0, 1);
-						break;
-					}
-				case OpcodeType.RoundPi:
-					{
-						CallHelper("ceil", token, 0, 1);
-						break;
-					}
-				case OpcodeType.RoundNi:
-					{
-						CallHelper("floor", token, 0, 1);
-						break;
-					}
-				case OpcodeType.RoundZ:
-					{
-						CallHelper("trunc", token, 0, 1);
-						break;
-					}
-				case OpcodeType.RoundNe:
-					{
-						CallHelper("roundEven", token, 0, 1);
-						break;
-					}
-				case OpcodeType.Frc:
-					{
-						CallHelper("frac", token, 0, 1);
-						break;
-					}
-				case OpcodeType.IMax:
-					{
-						CallHelper("max", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.UMax:
-					{
-						CallHelper("max", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Max:
-					{
-						CallHelper("max", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.IMin:
-					{
-						CallHelper("min", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.UMin:
-					{
-						CallHelper("min", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Min:
-					{
-						CallHelper("min", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Gather4:
-					{
-						TranslateTextureSample(token);
-						break;
-					}
-				case OpcodeType.Gather4PoC:
-					{
-						break;
-					}
-				case OpcodeType.Gather4Po:
-					{
-						break;
-					}
-				case OpcodeType.Gather4C:
-					{
-						break;
-					}
-				case OpcodeType.Sample:
-					{
-						TranslateTextureSample(token);
-						break;
-					}
-				case OpcodeType.SampleL:
-					{
-						TranslateTextureSample(token);
-						break;
-					}
-				case OpcodeType.SampleC:
-					{
-						TranslateTextureSample(token);
-						break;
-					}
-				case OpcodeType.SampleCLz:
-					{
-						TranslateTextureSample(token);
-						break;
-					}
-				case OpcodeType.SampleD:
-					{
-						TranslateTextureSample(token);
-						break;
-					}
-				case OpcodeType.SampleB:
-					{
-						TranslateTextureSample(token);
-						break;
-					}
-				case OpcodeType.Ret:
-					{
-						if (Container.Shader.Version.ProgramType != ProgramType.ComputeShader &&
-							Container.Shader.Version.ProgramType != ProgramType.GeometryShader)
-						{
-							AddIndent();
-							Output.AppendLine($"return output;");
-						}
-						break;
-					}
-				case OpcodeType.InterfaceCall:
-					{
-						AddIndent();
-						var register = RegisterState.GetRegister(token);
-						Output.AppendFormat("{0}();\n", register?.Name ?? token.ToString());
-						break;
-					}
-				case OpcodeType.Label:
-					{
 						break;
 					}
 				case OpcodeType.FirstBitHi:
@@ -397,38 +143,117 @@ namespace SlimShader.Decompiler
 						CallHelper("BFI", token, 0, 1, 2, 3, 4);
 						break;
 					}
-				case OpcodeType.Emit:
+				case OpcodeType.UShr:
+					{
+						CallBinaryOp(">>", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.IShr:
+					{
+						CallBinaryOp(">>", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.IShl:
+					{
+						CallBinaryOp("<<", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.UBfe:
+				case OpcodeType.IBfe:
+					{
+						string name = token.Header.OpcodeType == OpcodeType.UBfe ?
+							"UBFE" : "IBFE";
+						string returnType = token.Header.OpcodeType == OpcodeType.UBfe ?
+							"uint4" : "int4";
+						string template = @"{0} {1}(uint4 src1, uint4 src2, {0} value){{
+    {0} result = 0;
+    for(uint i = 0; i < 4; i++){{
+        uint width = src1[i] & 0x1f;
+        uint offset =src2[i] & 0x1f;
+        if(width == 0){{
+            result[i] = 0;
+        }} else if(width + offset < 32){{
+            result[i] = value << (32-(width + offset));
+            result[i] = result[i] >> (32 - width);
+        }} else {{
+            result[i] = value >> (32 - width);
+        }}
+    }}
+    return result;
+}}";
+						AddFunction(name, string.Format(template, returnType, name));
+						CallHelper(name, token, 0, 1, 2, 3);
+						break;
+					}
+				case OpcodeType.Not:
 					{
 						AddIndent();
-						Output.Append("TODO_Get_Stream");
-						Output.AppendLine(".Append(output);");
+						AddAssignToDest(token.Operands[0]);
+						Output.Append("~");
+						WriteOperand(token.Operands[1]);
+						Output.AppendLine(";");
 						break;
 					}
-				case OpcodeType.Cut:
+				case OpcodeType.Xor:
+					{
+						CallBinaryOp("^", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.CountBits:
 					{
 						AddIndent();
-						Output.Append("TODO_Get_Stream");
-						Output.AppendLine(".RestartStrip();");
+						AddAssignToDest(token.Operands[0]);
+						Output.Append(" = bitCount(");
+						WriteOperand(token.Operands[1]);
+						Output.AppendLine(");");
 						break;
 					}
-				case OpcodeType.CutStream:
+				//Comparisons
+				case OpcodeType.DNe:
+				case OpcodeType.INe:
+				case OpcodeType.Ne:
 					{
-						AddIndent();
-						WriteOperand(token.Operands[0]);
-						Output.AppendLine(".RestartStrip();");
+						AddComparision(token, ComparisonType.Ne);
 						break;
 					}
-				case OpcodeType.EmitStream:
+				case OpcodeType.ILt:
+				case OpcodeType.DLt:
+				case OpcodeType.ULt:
+				case OpcodeType.Lt:
 					{
-						AddIndent();
-						WriteOperand(token.Operands[0]);
-						Output.AppendLine(".Append(output);");
+						AddComparision(token, ComparisonType.Lt);
 						break;
 					}
-				case OpcodeType.EmitThenCutStream:
+				case OpcodeType.IGe:
+				case OpcodeType.UGe:
+				case OpcodeType.DGe:
+				case OpcodeType.Ge:
 					{
+						AddComparision(token, ComparisonType.Ge);
 						break;
 					}
+				case OpcodeType.DEq:
+				case OpcodeType.IEq:
+				case OpcodeType.Eq:
+					{
+						AddComparision(token, ComparisonType.Eq);
+						break;
+					}
+				case OpcodeType.DMovC:
+				case OpcodeType.MovC:
+					{
+						AddMOVCBinaryOp(token.Operands[0], token.Operands[1],
+							token.Operands[2], token.Operands[3]);
+						break;
+					}
+				case OpcodeType.SwapC:
+					{
+						// TODO needs temps!!
+						AddMOVCBinaryOp(token.Operands[0], token.Operands[2], token.Operands[4], token.Operands[3]);
+						AddMOVCBinaryOp(token.Operands[1], token.Operands[2], token.Operands[3], token.Operands[4]);
+						break;
+					}
+				//ControlFlow
 				case OpcodeType.Loop:
 					{
 						AddIndent();
@@ -490,49 +315,6 @@ namespace SlimShader.Decompiler
 						Output.AppendLine("continue;");
 						break;
 					}
-				case OpcodeType.Default:
-					{
-						AddIndent();
-						Output.AppendLine("default:");
-						break;
-					}
-				case OpcodeType.Nop:
-					{
-						break;
-					}
-				case OpcodeType.Sync:
-					{
-						AddIndent();
-						if (token.SyncFlags == SyncFlags.UnorderedAccessViewGlobal)
-						{
-							Output.AppendLine("DeviceMemoryBarrier();");
-						}
-						else if (token.SyncFlags == SyncFlags.SharedMemory)
-						{
-							Output.AppendLine("GroupMemoryBarrier();");
-						}
-						else if (token.SyncFlags == (SyncFlags.SharedMemory | SyncFlags.UnorderedAccessViewGlobal))
-						{
-							Output.AppendLine("AllMemoryBarrier();");
-						}
-						else if (token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.UnorderedAccessViewGlobal))
-						{
-							Output.AppendLine("DeviceMemoryBarrierWithGroupSync();");
-						}
-						else if (token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.SharedMemory))
-						{
-							Output.AppendLine("GroupMemoryBarrierWithGroupSync();");
-						}
-						else if (token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.SharedMemory | SyncFlags.UnorderedAccessViewGlobal))
-						{
-							Output.AppendLine("AllMemoryBarrierWithGroupSync();");
-						}
-						else
-						{
-							throw new Exception($"Unknown Memory Sync Flags {token.SyncFlags}");
-						}
-						break;
-					}
 				case OpcodeType.Switch:
 					{
 						AddIndent();
@@ -551,83 +333,176 @@ namespace SlimShader.Decompiler
 						Output.AppendLine(":");
 						break;
 					}
-				case OpcodeType.Eq:
+				case OpcodeType.Default:
 					{
-						AddComparision(token, ComparisonType.Eq);
+						AddIndent();
+						Output.AppendLine("default:");
 						break;
 					}
-				case OpcodeType.UShr:
+				case OpcodeType.Ret:
 					{
-						CallBinaryOp(">>", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.IShl:
-					{
-						CallBinaryOp("<<", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.IShr:
-					{
-						CallBinaryOp(">>", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Ld:
-					{
-						AddLoad(token);
-						break;
-					}
-				case OpcodeType.LdMs:
-					{
-						AddCallInterface("LoadMs", token, 0, 2, 1);
-						break;
-					}
-				case OpcodeType.LdStructured:
-					{
-						AddLoadStructured(token);
-						break;
-					}
-				case OpcodeType.LdUavTyped:
-					{
-						AddCallInterface("Load", token, 0, 2, 1);
-						break;
-					}
-				case OpcodeType.LdRaw:
-					{
-						AddCallInterface("Load", token, 0, 2, 1);
-						break;
-					}
-				case OpcodeType.Discard:
-					{
-						if (token.Operands[0].OperandType == OperandType.Immediate32 ||
-							token.Operands[0].OperandType == OperandType.Immediate64)
+						if (Container.Shader.Version.ProgramType != ProgramType.ComputeShader &&
+							Container.Shader.Version.ProgramType != ProgramType.GeometryShader)
 						{
 							AddIndent();
-							Output.Append("discard;");
+							Output.AppendLine($"return output;");
+						}
+						break;
+					}
+				case OpcodeType.Label:
+					{
+						break;
+					}
+				//Functions
+				case OpcodeType.Sincos:
+					{
+						if (token.Operands[0].OperandType == token.Operands[2].OperandType &&
+							token.Operands[0].Indices[0].Value == token.Operands[2].Indices[0].Value)
+						{
+							if (token.Operands[1].OperandType != OperandType.Null)
+							{
+								CallHelper("cos", token, 1, 2);
+							}
+							if (token.Operands[0].OperandType != OperandType.Null)
+							{
+								CallHelper("cos", token, 0, 2);
+							}
 						}
 						else
 						{
-							WriteConditional(token);
+							if (token.Operands[0].OperandType != OperandType.Null)
+							{
+								CallHelper("sin", token, 0, 2);
+							}
+							if (token.Operands[1].OperandType != OperandType.Null)
+							{
+								CallHelper("cos", token, 1, 2);
+							}
 						}
 						break;
 					}
-				case OpcodeType.Lod:
+				case OpcodeType.Dp2:
+					{
+						CallHelper("dot", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.Dp3:
+					{
+						CallHelper("dot", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.Dp4:
+					{
+						CallHelper("dot", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.Log:
+					{
+						CallHelper("log", token, 0, 1);
+						break;
+					}
+				case OpcodeType.Rsq:
+					{
+						CallHelper("normalize", token, 0, 1);
+						break;
+					}
+				case OpcodeType.Exp:
+					{
+						CallHelper("exp2", token, 0, 1);
+						break;
+					}
+				case OpcodeType.Sqrt:
+					{
+						CallHelper("sqrt", token, 0, 1);
+						break;
+					}
+				case OpcodeType.RoundPi:
+					{
+						CallHelper("ceil", token, 0, 1);
+						break;
+					}
+				case OpcodeType.RoundNi:
+					{
+						CallHelper("floor", token, 0, 1);
+						break;
+					}
+				case OpcodeType.RoundZ:
+					{
+						CallHelper("trunc", token, 0, 1);
+						break;
+					}
+				case OpcodeType.RoundNe:
+					{
+						CallHelper("roundEven", token, 0, 1);
+						break;
+					}
+				case OpcodeType.Frc:
+					{
+						CallHelper("frac", token, 0, 1);
+						break;
+					}
+				case OpcodeType.IMax:
+				case OpcodeType.UMax:
+				case OpcodeType.DMax:
+				case OpcodeType.Max:
+					{
+						CallHelper("max", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.IMin:
+				case OpcodeType.UMin:
+				case OpcodeType.DMin:
+				case OpcodeType.Min:
+					{
+						CallHelper("min", token, 0, 1, 2);
+						break;
+					}
+				//Resource Operations
+				case OpcodeType.Gather4:
 					{
 						TranslateTextureSample(token);
 						break;
 					}
-				case OpcodeType.EvalCentroid:
+				case OpcodeType.Gather4PoC:
 					{
-						CallHelper("EvaluateAttributeCentroid", token, 0, 1);
 						break;
 					}
-				case OpcodeType.EvalSampleIndex:
+				case OpcodeType.Gather4Po:
 					{
-						CallHelper("EvaluateAttributeAtSample", token, 0, 1, 2);
 						break;
 					}
-				case OpcodeType.EvalSnapped:
+				case OpcodeType.Gather4C:
 					{
-						CallHelper("EvaluateAttributeSnapped", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.Sample:
+					{
+						TranslateTextureSample(token);
+						break;
+					}
+				case OpcodeType.SampleL:
+					{
+						TranslateTextureSample(token);
+						break;
+					}
+				case OpcodeType.SampleC:
+					{
+						TranslateTextureSample(token);
+						break;
+					}
+				case OpcodeType.SampleCLz:
+					{
+						TranslateTextureSample(token);
+						break;
+					}
+				case OpcodeType.SampleD:
+					{
+						TranslateTextureSample(token);
+						break;
+					}
+				case OpcodeType.SampleB:
+					{
+						TranslateTextureSample(token);
 						break;
 					}
 				case OpcodeType.StoreRaw:
@@ -656,6 +531,67 @@ namespace SlimShader.Decompiler
 						AddCallInterfaceNoDest("Store", token, 0, 1, 2);
 						break;
 					}
+				case OpcodeType.Ld:
+					{
+						AddLoad(token);
+						break;
+					}
+				case OpcodeType.LdMs:
+					{
+						AddCallInterface("LoadMs", token, 0, 2, 1);
+						break;
+					}
+				case OpcodeType.LdStructured:
+					{
+						AddLoadStructured(token);
+						break;
+					}
+				case OpcodeType.LdUavTyped:
+					{
+						AddCallInterface("Load", token, 0, 2, 1);
+						break;
+					}
+				case OpcodeType.LdRaw:
+					{
+						AddCallInterface("Load", token, 0, 2, 1);
+						break;
+					}
+				case OpcodeType.Lod:
+					{
+						TranslateTextureSample(token);
+						break;
+					}
+				case OpcodeType.Resinfo:
+					{
+						int parameterCount = token.Operands[0].GetNumSwizzleElements();
+						for (int i = 0; i < 3 - parameterCount; i++)
+						{
+							AddIndent();
+							Output.AppendLine($"float unused{i};");
+						}
+						AddIndent();
+						WriteOperandWithMask(token.Operands[2], ComponentMask.None);
+						Output.Append(".GetDimensions(");
+						WriteOperand(token.Operands[1]);
+						var usedMask = token.Operands[0].GetUsedComponents();
+						for (int i = 0; i < 4; i++)
+						{
+							var mask = (ComponentMask)(1 << i);
+							if (!usedMask.HasFlag(mask))
+							{
+								continue;
+							}
+							Output.Append(", ");
+							WriteOperandWithMask(token.Operands[0], mask);
+						}
+						for (int i = 0; i < 3 - parameterCount; i++)
+						{
+							Output.Append($", unused{i}");
+						}
+						Output.AppendLine(");");
+						break;
+					}
+				//Atomic Operations
 				case OpcodeType.AtomicAnd:
 					{
 						AddCallInterfaceNoDest("InterlockedAnd", token, 0, 1, 2);
@@ -761,33 +697,113 @@ namespace SlimShader.Decompiler
 						AddCallInterface("Consume", token, 0, 1);
 						break;
 					}
-				case OpcodeType.UBfe:
-				case OpcodeType.IBfe:
+				// Misc
+				case OpcodeType.Nop:
 					{
-						string name = token.Header.OpcodeType == OpcodeType.UBfe ?
-							"UBFE" : "IBFE";
-						string returnType = token.Header.OpcodeType == OpcodeType.UBfe ?
-							"uint4" : "int4";
-						string template = @"{0} {1}(uint4 src1, uint4 src2, {0} value){{
-    {0} result = 0;
-    for(uint i = 0; i < 4; i++){{
-        uint width = src1[i] & 0x1f;
-        uint offset =src2[i] & 0x1f;
-        if(width == 0){{
-            result[i] = 0;
-        }} else if(width + offset < 32){{
-            result[i] = value << (32-(width + offset));
-            result[i] = result[i] >> (32 - width);
-        }} else {{
-            result[i] = value >> (32 - width);
-        }}
-    }}
-    return result;
-}}";
-						AddFunction(name, string.Format(template, returnType, name));
-						CallHelper(name, token, 0, 1, 2, 3);
 						break;
 					}
+				case OpcodeType.InterfaceCall:
+					{
+						AddIndent();
+						var register = RegisterState.GetRegister(token);
+						Output.AppendFormat("{0}();\n", register?.Name ?? token.ToString());
+						break;
+					}
+				case OpcodeType.Emit:
+					{
+						AddIndent();
+						Output.Append("TODO_Get_Stream");
+						Output.AppendLine(".Append(output);");
+						break;
+					}
+				case OpcodeType.Cut:
+					{
+						AddIndent();
+						Output.Append("TODO_Get_Stream");
+						Output.AppendLine(".RestartStrip();");
+						break;
+					}
+				case OpcodeType.CutStream:
+					{
+						AddIndent();
+						WriteOperand(token.Operands[0]);
+						Output.AppendLine(".RestartStrip();");
+						break;
+					}
+				case OpcodeType.EmitStream:
+					{
+						AddIndent();
+						WriteOperand(token.Operands[0]);
+						Output.AppendLine(".Append(output);");
+						break;
+					}
+				case OpcodeType.EmitThenCutStream:
+					{
+						break;
+					}
+				case OpcodeType.Sync:
+					{
+						AddIndent();
+						if (token.SyncFlags == SyncFlags.UnorderedAccessViewGlobal)
+						{
+							Output.AppendLine("DeviceMemoryBarrier();");
+						}
+						else if (token.SyncFlags == SyncFlags.SharedMemory)
+						{
+							Output.AppendLine("GroupMemoryBarrier();");
+						}
+						else if (token.SyncFlags == (SyncFlags.SharedMemory | SyncFlags.UnorderedAccessViewGlobal))
+						{
+							Output.AppendLine("AllMemoryBarrier();");
+						}
+						else if (token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.UnorderedAccessViewGlobal))
+						{
+							Output.AppendLine("DeviceMemoryBarrierWithGroupSync();");
+						}
+						else if (token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.SharedMemory))
+						{
+							Output.AppendLine("GroupMemoryBarrierWithGroupSync();");
+						}
+						else if (token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.SharedMemory | SyncFlags.UnorderedAccessViewGlobal))
+						{
+							Output.AppendLine("AllMemoryBarrierWithGroupSync();");
+						}
+						else
+						{
+							throw new Exception($"Unknown Memory Sync Flags {token.SyncFlags}");
+						}
+						break;
+					}
+				case OpcodeType.Discard:
+					{
+						if (token.Operands[0].OperandType == OperandType.Immediate32 ||
+							token.Operands[0].OperandType == OperandType.Immediate64)
+						{
+							AddIndent();
+							Output.Append("discard;");
+						}
+						else
+						{
+							WriteConditional(token);
+						}
+						break;
+					}
+				case OpcodeType.EvalCentroid:
+					{
+						CallHelper("EvaluateAttributeCentroid", token, 0, 1);
+						break;
+					}
+				case OpcodeType.EvalSampleIndex:
+					{
+						CallHelper("EvaluateAttributeAtSample", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.EvalSnapped:
+					{
+						CallHelper("EvaluateAttributeSnapped", token, 0, 1, 2);
+						break;
+					}
+				case OpcodeType.Drcp:
 				case OpcodeType.Rcp:
 					{
 						CallHelper("rcp", token, 0, 1);
@@ -838,50 +854,6 @@ namespace SlimShader.Decompiler
 						CallHelper("ddy_fine", token, 0, 1);
 						break;
 					}
-				case OpcodeType.Not:
-					{
-						AddIndent();
-						AddAssignToDest(token.Operands[0]);
-						Output.Append("~");
-						WriteOperand(token.Operands[1]);
-						Output.AppendLine(";");
-						break;
-					}
-				case OpcodeType.Xor:
-					{
-						CallBinaryOp("^", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Resinfo:
-					{
-						int parameterCount = token.Operands[0].GetNumSwizzleElements();
-						for (int i = 0; i < 3 - parameterCount; i++)
-						{
-							AddIndent();
-							Output.AppendLine($"float unused{i};");
-						}
-						AddIndent();
-						WriteOperandWithMask(token.Operands[2], ComponentMask.None);
-						Output.Append(".GetDimensions(");
-						WriteOperand(token.Operands[1]);
-						var usedMask = token.Operands[0].GetUsedComponents();
-						for (int i = 0; i < 4; i++)
-						{
-							var mask = (ComponentMask)(1 << i);
-							if (!usedMask.HasFlag(mask))
-							{
-								continue;
-							}
-							Output.Append(", ");
-							WriteOperandWithMask(token.Operands[0], mask);
-						}
-						for (int i = 0; i < 3 - parameterCount; i++)
-						{
-							Output.Append($", unused{i}");
-						}
-						Output.AppendLine(");");
-						break;
-					}
 				case OpcodeType.SamplePos:
 					{
 						if (token.Operands[1].OperandType == OperandType.Rasterizer)
@@ -894,43 +866,10 @@ namespace SlimShader.Decompiler
 						}
 						break;
 					}
-				case OpcodeType.CountBits:
-					{
-						AddIndent();
-						AddAssignToDest(token.Operands[0]);
-						Output.Append(" = bitCount(");
-						WriteOperand(token.Operands[1]);
-						Output.AppendLine(");");
-						break;
-					}
 				case OpcodeType.Abort:
 					{
 						AddIndent();
 						Output.AppendLine("abort();");
-						break;
-					}
-				case OpcodeType.DMax:
-				case OpcodeType.DMin:
-				case OpcodeType.DMul:
-					{
-						CallBinaryOp("*", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.DEq:
-				case OpcodeType.DGe:
-				case OpcodeType.DLt:
-				case OpcodeType.DNe:
-				case OpcodeType.DMov:
-				case OpcodeType.DMovC:
-				case OpcodeType.Ddiv:
-					{
-						CallBinaryOp("/", token, 0, 1, 2);
-						break;
-					}
-				case OpcodeType.Dfma:
-				case OpcodeType.Drcp:
-					{
-						CallHelper("rcp", token, 0, 1);
 						break;
 					}
 				case OpcodeType.Msad:
@@ -947,9 +886,6 @@ namespace SlimShader.Decompiler
 					AddIndent();
 					AddAssignToDest(token.Operands[0]);
 					Output.AppendLine("GetRenderTargetSampleCount();");
-					break;
-				case OpcodeType.INe:
-					CallBinaryOp("!=", token, 0, 1, 2);
 					break;
 				case OpcodeType.HsForkPhase:
 					break;
