@@ -63,9 +63,21 @@ namespace SlimShader.Chunks.Sfi0
 				{
 					sb.AppendLine("//       Comparison filtering for feature level 9");
 				}
+				if (flags.HasFlag(ShaderRequiresFlags.StencilRef))
+				{
+					sb.AppendLine("//       PS Output Stencil Ref");
+				}
+				if (flags.HasFlag(ShaderRequiresFlags.InnerCoverage))
+				{
+					sb.AppendLine("//       PS Inner Coverage");
+				}
 				if (flags.HasFlag(ShaderRequiresFlags.TypedUAVLoadAdditionalFormats))
 				{
 					sb.AppendLine("//       Typed UAV Load Additional Formats");
+				}
+				if (flags.HasFlag(ShaderRequiresFlags.Rovs))
+				{
+					sb.AppendLine("//       Raster Ordered UAVs");
 				}
 				if (flags.HasFlag(ShaderRequiresFlags.SVArrayIndexFromFeedingRasterizer))
 				{

@@ -478,14 +478,14 @@ namespace SlimShader.Decompiler
 			}
 		}
 		// TODO: Use OperandType for lookup instead of ShaderInputType
-		ConstantBuffer GetConstantBuffer(OperandType type, uint bindPoint)
+		ConstantBuffer GetConstantBuffer(OperandType type, uint id)
 		{
-			var hlslBind = $"{type.GetDescription()}{bindPoint}";
+			var hlslBind = $"{type.GetDescription()}{id}";
 			return m_ConstantBufferLookup[hlslBind];
 		}
-		ResourceBinding GetResourceBinding(OperandType type, uint bindPoint)
+		ResourceBinding GetResourceBinding(OperandType type, uint id)
 		{
-			var hlslBind = $"{type.GetDescription()}{bindPoint}";
+			var hlslBind = $"{type.GetDescription()}{id}";
 			return m_ResourceBindingLookup[hlslBind];
 		}
 	}

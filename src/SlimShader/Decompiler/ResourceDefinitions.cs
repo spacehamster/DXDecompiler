@@ -216,7 +216,7 @@ namespace SlimShader.Decompiler
 			{
 				var dcl = Container.Shader.DeclarationTokens
 					.OfType<UnorderedAccessViewDeclarationTokenBase>()
-					.Single(t => t.Operand.Indices[0].Value == resourceBinding.BindPoint);
+					.Single(t => t.Operand.Indices[0].Value == resourceBinding.ID);
 				if (dcl.Coherency == UnorderedAccessViewCoherency.GloballyCoherent)
 				{
 					Output.Append("globallycoherent ");

@@ -246,6 +246,18 @@
 		/// <summary>
 		/// Cycle counter
 		/// </summary>
-		CycleCounter = 40
+		CycleCounter = 40,
+
+		/// <summary>
+		/// Stencil Ref
+		/// </summary>
+		[Description("oStencilRef")]
+		StencilRef = 41,
+
+		/// <summary>
+		/// InnerCoverage
+		/// </summary>
+		[Description("vInnerCoverage")]
+		InnerCoverage = 42
 	}
 }

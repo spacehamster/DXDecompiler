@@ -46,27 +46,36 @@ namespace SlimShader.Chunks.Rdef
 				Creator = creator
 			};
 
-			if (target.MajorVersion >= 5)
+			if (target.MajorVersion == 5)
 			{
-				string rd11 = headerReader.ReadUInt32().ToFourCcString();
-				if (rd11 != "RD11")
-					throw new ParseException("Expected RD11.");
+				if (target.MinorVersion == 0)
+				{
+					string rd11 = headerReader.ReadUInt32().ToFourCcString();
+					if (rd11 != "RD11")
+						throw new ParseException("Expected RD11.");
+				} else
+				{
+					var unknown0 = headerReader.ReadUInt32();
+					Debug.Assert(unknown0 == 625218323);
+				}
 
 				var unknown1 = headerReader.ReadUInt32(); // TODO
 				Debug.Assert(unknown1 == 60);
 
-				var unknown2 = headerReader.ReadUInt32();
-				Debug.Assert(unknown2 == 24);
+				var constantBufferStride = headerReader.ReadUInt32();
+				Debug.Assert(constantBufferStride == 24);
 
-				var unknown3 = headerReader.ReadUInt32();
-				Debug.Assert(unknown3 == 32);
+				var resourceBindingStride = headerReader.ReadUInt32();
+				Debug.Assert(resourceBindingStride == (target.MinorVersion == 0 ? 32 : 40));
 
+				//Shader Variable Stride?
 				var unknown4 = headerReader.ReadUInt32();
 				Debug.Assert(unknown4 == 40);
 
 				var unknown5 = headerReader.ReadUInt32();
 				Debug.Assert(unknown5 == 36);
 
+				//Shader Type Member Stride?
 				var unknown6 = headerReader.ReadUInt32();
 				Debug.Assert(unknown6 == 12);
 
@@ -79,8 +88,8 @@ namespace SlimShader.Chunks.Rdef
 
 			var resourceBindingReader = reader.CopyAtOffset((int) resourceBindingOffset);
 			for (int i = 0; i < resourceBindingCount; i++)
-				result.ResourceBindings.Add(ResourceBinding.Parse(reader, resourceBindingReader));
-
+				result.ResourceBindings.Add(ResourceBinding.Parse(reader, resourceBindingReader, target));
+			
 			return result;
 		}
 		

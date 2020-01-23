@@ -71,7 +71,7 @@ namespace SlimShader.Chunks.Shex
 					Length = opcodeToken0.DecodeValue(24, 30),
 					IsExtended = (opcodeToken0.DecodeValue(31, 31) == 1)
 				};
-
+				var pos = reader.CurrentPosition;
 				OpcodeToken opcodeToken;
 				if (opcodeHeader.OpcodeType == OpcodeType.CustomData)
 				{
@@ -85,9 +85,16 @@ namespace SlimShader.Chunks.Shex
 				{
 					opcodeToken = InstructionToken.Parse(reader, opcodeHeader);
 				}
-
 				opcodeToken.Header = opcodeHeader;
 				program.Tokens.Add(opcodeToken);
+
+				//TODO: Fix token parsing for SM5.1
+				if(reader.CurrentPosition < pos + opcodeHeader.Length * 4)
+				{
+					reader.ReadBytes((int)(pos + opcodeHeader.Length * 4 - reader.CurrentPosition));
+				}
+				Debug.Assert(reader.CurrentPosition == pos + opcodeHeader.Length * 4,
+					$"Expected token length of: {opcodeHeader.Length * 4}, read {reader.CurrentPosition - pos}");
 			}
 
 			program.LinkControlFlowInstructions();

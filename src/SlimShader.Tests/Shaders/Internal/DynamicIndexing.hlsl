@@ -17,6 +17,8 @@ cbuffer indexBuffer {
 }
 float4 main() : SV_Target
 {
+	//TODO: Add SM5.1 dynamic indexing test case
+	//https://docs.microsoft.com/en-us/windows/win32/direct3d12/dynamic-indexing-using-hlsl-5-1
 	float4 result = 0;
 	result += cValue2[index1];
 	result += tValue2[index1];

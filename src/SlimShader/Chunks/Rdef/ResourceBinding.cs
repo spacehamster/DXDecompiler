@@ -1,5 +1,6 @@
 using SlimShader.Chunks.Common;
 using SlimShader.Util;
+using System.Diagnostics;
 
 namespace SlimShader.Chunks.Rdef
 {
@@ -29,6 +30,11 @@ namespace SlimShader.Chunks.Rdef
 		public uint BindCount { get; private set; }
 
 		/// <summary>
+		/// Bindpoint for SM <= 5.0, ID for SM5.1.
+		/// </summary>
+		public uint ID { get; private set; }
+
+		/// <summary>
 		/// Shader input-parameter options.
 		/// </summary>
 		public ShaderInputFlags Flags { get; private set; }
@@ -48,11 +54,11 @@ namespace SlimShader.Chunks.Rdef
 		/// </summary>
 		public uint NumSamples { get; private set; }
 
-		public static ResourceBinding Parse(BytecodeReader reader, BytecodeReader resourceBindingReader)
+		public static ResourceBinding Parse(BytecodeReader reader, BytecodeReader resourceBindingReader, ShaderVersion target)
 		{
 			uint nameOffset = resourceBindingReader.ReadUInt32();
 			var nameReader = reader.CopyAtOffset((int) nameOffset);
-			return new ResourceBinding
+			var result = new ResourceBinding
 			{
 				Name = nameReader.ReadString(),
 				Type = (ShaderInputType) resourceBindingReader.ReadUInt32(),
@@ -63,6 +69,17 @@ namespace SlimShader.Chunks.Rdef
 				BindCount = resourceBindingReader.ReadUInt32(),
 				Flags = (ShaderInputFlags) resourceBindingReader.ReadUInt32()
 			};
+			if(target.MajorVersion == 5 && target.MinorVersion == 1)
+			{
+				//TODO: Might be related to spacing?
+				var unk0 = resourceBindingReader.ReadUInt32();
+				Debug.Assert(unk0 == 0);
+				result.ID = resourceBindingReader.ReadUInt32();
+			} else
+			{
+				result.ID = result.BindPoint;
+			}
+			return result;
 		}
 		public string GetBindPointDescription()
 		{
@@ -70,16 +87,16 @@ namespace SlimShader.Chunks.Rdef
 			switch (Type)
 			{
 				case ShaderInputType.CBuffer:
-					hlslBind = $"cb{BindPoint}";
+					hlslBind = $"cb{ID}";
 					break;
 				case ShaderInputType.Sampler:
-					hlslBind = $"s{BindPoint}";
+					hlslBind = $"s{ID}";
 					break;
 				case ShaderInputType.Texture:
 				case ShaderInputType.Structured:
 				case ShaderInputType.ByteAddress:
 				case ShaderInputType.TBuffer:
-					hlslBind = $"t{BindPoint}";
+					hlslBind = $"t{ID}";
 					break;
 				case ShaderInputType.UavRwTyped:
 				case ShaderInputType.UavRwStructured:
@@ -87,10 +104,10 @@ namespace SlimShader.Chunks.Rdef
 				case ShaderInputType.UavAppendStructured:
 				case ShaderInputType.UavConsumeStructured:
 				case ShaderInputType.UavRwStructuredWithCounter:
-					hlslBind = $"u{BindPoint}";
+					hlslBind = $"u{ID}";
 					break;
 				default:
-					hlslBind = $"unk{BindPoint}";
+					hlslBind = $"unk{ID}";
 					break;
 			}
 			return hlslBind;
