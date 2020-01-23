@@ -39,7 +39,7 @@ namespace SlimShader.Tests
 			// Arrange.
 			var asmFileText = string.Join(Environment.NewLine,
 				File.ReadAllLines(file + ".asm").Select(x => x.Trim()));
-			asmFileText = TestUtils.NormalizeFloats(asmFileText);
+			asmFileText = TestUtils.NormalizeAssembly(asmFileText);
 			// Act.
 			var bytecode = File.ReadAllBytes(file + ".o");
 			var shader = ShaderReader.ReadShader(bytecode);

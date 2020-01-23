@@ -70,8 +70,8 @@ namespace SlimShader.Tests
 
 			File.WriteAllText($"{file}.d.asm", decompiledAsmText);
 
-			decompiledAsmText = TestUtils.NormalizeFloats(decompiledAsmText);
-			asmFileText = TestUtils.NormalizeFloats(asmFileText);
+			decompiledAsmText = TestUtils.NormalizeAssembly(decompiledAsmText);
+			asmFileText = TestUtils.NormalizeAssembly(asmFileText);
 
 			// Assert.
 			Assert.That(decompiledAsmText, Is.EqualTo(asmFileText));
