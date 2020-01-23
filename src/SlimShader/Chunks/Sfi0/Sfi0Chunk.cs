@@ -63,6 +63,10 @@ namespace SlimShader.Chunks.Sfi0
 				{
 					sb.AppendLine("//       Comparison filtering for feature level 9");
 				}
+				if (flags.HasFlag(ShaderRequiresFlags.TiledResources))
+				{
+					sb.AppendLine("//       Tiled resources");
+				}
 				if (flags.HasFlag(ShaderRequiresFlags.StencilRef))
 				{
 					sb.AppendLine("//       PS Output Stencil Ref");

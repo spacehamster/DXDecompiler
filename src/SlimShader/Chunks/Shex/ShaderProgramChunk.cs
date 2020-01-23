@@ -93,7 +93,8 @@ namespace SlimShader.Chunks.Shex
 				{
 					reader.ReadBytes((int)(pos + opcodeHeader.Length * 4 - reader.CurrentPosition));
 				}
-				Debug.Assert(reader.CurrentPosition == pos + opcodeHeader.Length * 4,
+				Debug.Assert(reader.CurrentPosition == pos + opcodeHeader.Length * 4 
+					|| opcodeHeader.OpcodeType == OpcodeType.CustomData,
 					$"Expected token length of: {opcodeHeader.Length * 4}, read {reader.CurrentPosition - pos}");
 			}
 

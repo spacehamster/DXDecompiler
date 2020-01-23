@@ -556,6 +556,10 @@ namespace SlimShader.Decompiler
 						AddCallInterface("Load", token, 0, 2, 1);
 						break;
 					}
+				case OpcodeType.LdS:
+					AddIndent();
+					AddCallInterface("Load", token, 0, 2, 1, 3);
+					break;
 				case OpcodeType.Lod:
 					{
 						TranslateTextureSample(token);
@@ -890,6 +894,9 @@ namespace SlimShader.Decompiler
 				case OpcodeType.HsForkPhase:
 					break;
 				case OpcodeType.HsJoinPhase:
+					break;
+				case OpcodeType.CheckAccessFullyMapped:
+					CallHelper("CheckAccessFullyMapped", token, 0, 1);
 					break;
 				default:
 					throw new Exception($"Unexpected token {token}");

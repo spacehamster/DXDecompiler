@@ -751,6 +751,54 @@
 		[Description("itod")]
 		Itod,
 		[Description("utod")]
-		Utod
+		Utod,
+
+		[Description("gather4_s")]
+		Gather4S = 219,
+
+		[Description("gather4_c_s")]
+		Gather4CS = 220,
+
+		[Description("gather4_po_s")]
+		Gather4PoS = 221,
+
+		[Description("gather4_po_c_s")]
+		Gather4PoCS = 222,
+
+		[Description("ld_s")]
+		LdS = 223,
+
+		[Description("ldms_s")]
+		LdMsS = 224,
+
+		[Description("ld_uav_typed_s")]
+		LdUavTypedS = 225,
+
+		[Description("ld_raw_s")]
+		LdRawS = 226,
+
+		[Description("ld_structured_s")]
+		LdStructuredS = 227,
+
+		[Description("sample_l_s")]
+		SampleLS = 228,
+
+		[Description("sample_c_lz_s")]
+		SampleCLzS = 229,
+
+		[Description("sample_cl_s")]
+		SampleClS = 230,
+
+		[Description("sample_b_cl_s")]
+		SampleBClS = 231,
+
+		[Description("sample_d_cl_s")]
+		SampleDClS = 232,
+
+		[Description("sample_c_cl_s")]
+		SampleCClS = 233,
+
+		[Description("check_access_fully_mapped")]
+		CheckAccessFullyMapped = 234,
 	}
 }

@@ -38,6 +38,28 @@ CALL CompileShader.bat Internal TiledResources.hlsl TiledResources ps_5_0 main |
 CALL CompileShader.bat Internal DuplicateNames.hlsl DuplicateNames ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal RasterOrderViews.hlsl RasterOrderViews ps_5_1 main || GOTO :error
 
+CALL CompileShader.bat Internal/Operations Texture_Buffer.hlsl Texture_Buffer ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_ByteAddressBuffer.hlsl Texture_ByteAddressBuffer ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_StructuredBuffer.hlsl Texture_StructuredBuffer ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_Texture1D.hlsl Texture_Texture1D ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_Texture1DArray.hlsl Texture_Texture1DArray ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_Texture2D.hlsl Texture_Texture2D ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_Texture2DArray.hlsl Texture_Texture2DArray ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_Texture2DMS.hlsl Texture_Texture2DMS ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_Texture2DMSArray.hlsl Texture_Texture2DMSArray ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_Texture3D.hlsl Texture_Texture3D ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_TextureCube.hlsl Texture_TextureCube ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations Texture_TextureCubeArray.hlsl Texture_TextureCubeArray ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations UAV_AppendStructuredBuffer.hlsl UAV_AppendStructuredBuffer ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations UAV_ConsumeStructuredBuffer.hlsl UAV_ConsumeStructuredBuffer ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations UAV_RWBuffer.hlsl UAV_RWBuffer ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations UAV_RWByteAddressBuffer.hlsl UAV_RWByteAddressBuffer ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations UAV_RWStructuredBuffer.hlsl UAV_RWStructuredBuffer ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations UAV_RWTexture1D.hlsl UAV_RWTexture1D ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations UAV_RWTexture2D.hlsl UAV_RWTexture2D ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations UAV_RWTexture2DArray.hlsl UAV_RWTexture2DArray ps_5_0 main /Od || GOTO :error
+CALL CompileShader.bat Internal/Operations UAV_RWTexture3D.hlsl UAV_RWTexture3D ps_5_0 main /Od || GOTO :error
+
 Set UNITY_INCLUDES="%cd%\Unity\CGIncludes"
 CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_VS_25 vs_5_0 vert "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=25" "/DUNITY_REVERSED_Z=1" || GOTO :error
 CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_PS_25 ps_5_0 frag "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=25" "/DUNITY_REVERSED_Z=1" || GOTO :error

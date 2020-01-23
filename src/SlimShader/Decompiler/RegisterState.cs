@@ -240,6 +240,13 @@ namespace SlimShader.Decompiler
 						OutputRegisters.Add(register);
 						break;
 					}
+				case OperandType.StencilRef:
+					{
+						var register = new Register("oStencilRef");
+						AddRegister(key, register);
+						OutputRegisters.Add(register);
+						break;
+					}
 				case OperandType.Output:
 					break;
 				default:
@@ -347,6 +354,16 @@ namespace SlimShader.Decompiler
 						break;
 					}
 				case OperandType.InputPatchConstant:
+					{
+						// TODO
+						break;
+					}
+				case OperandType.InnerCoverage:
+					{
+						// TODO
+						break;
+					}
+				case OperandType.StencilRef:
 					{
 						// TODO
 						break;

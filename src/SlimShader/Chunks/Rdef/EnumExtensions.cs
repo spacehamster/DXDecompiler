@@ -49,6 +49,7 @@ namespace SlimShader.Chunks.Rdef
 					case ShaderInputType.UavRwStructured:
 					case ShaderInputType.UavAppendStructured:
 					case ShaderInputType.UavConsumeStructured:
+					case ShaderInputType.UavRwStructuredWithCounter:
 						return "struct";
 					case ShaderInputType.ByteAddress:
 					case ShaderInputType.UavRwByteAddress:

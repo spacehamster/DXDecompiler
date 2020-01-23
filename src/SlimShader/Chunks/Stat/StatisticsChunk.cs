@@ -211,7 +211,9 @@ namespace SlimShader.Chunks.Stat
 
 			var unknown1 = reader.ReadUInt32();
 			//if (unknown1 == 0 || unknown1 == 1 || unknown1 == 3) throw new System.Exception($"unknown1 is {unknown1}");
-			Debug.Assert(unknown1 == 0 || unknown1 == 1 || unknown1 == 3, $"Statistics unknown1 is {unknown1}");
+			//TODO: CheckAccessFullyMapped textures have large unknown1
+			//Texture_Texture2D, Texture_Texture2DArray, Texture_TextureCube, Texture_TextureCubeArray
+			Debug.Assert(unknown1 == 0 || unknown1 == 1 || unknown1 == 3 || unknown1 == 15 || unknown1 == 83, $"Statistics unknown1 is {unknown1}");
 
 			var unknown2 = reader.ReadUInt32();
 			//if (unknown2 != 0 && unknown2 != 2) throw new System.Exception($"unknown2 is {unknown2}");
