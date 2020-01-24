@@ -59,10 +59,12 @@ namespace SlimShader.Chunks.Shex.Tokens
 
 		public override string ToString()
 		{
-			return string.Format("{0}{1} {2}", 
-				TypeDescription, 
-				Coherency.GetDescription(), 
-				Operand);
+			return string.Format("{0}{1}{2} {3}{4}", 
+				TypeDescription,
+				Coherency.GetDescription(),
+				GetRasterOrderedAccessDescription(),
+				Operand,
+				IsSM51 ? $", space={SpaceIndex}" : "");
 		}
 	}
 }

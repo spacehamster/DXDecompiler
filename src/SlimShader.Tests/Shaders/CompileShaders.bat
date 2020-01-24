@@ -37,6 +37,7 @@ CALL CompileShader.bat Internal DynamicIndexing.hlsl DynamicIndexing ps_5_0 main
 CALL CompileShader.bat Internal TiledResources.hlsl TiledResources ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal DuplicateNames.hlsl DuplicateNames ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal RasterOrderViews.hlsl RasterOrderViews ps_5_1 main || GOTO :error
+CALL CompileShader.bat Internal SM51_test.hlsl SM51_test ps_5_1 main /enable_unbounded_descriptor_tables  || GOTO :error
 
 CALL CompileShader.bat Internal/Operations Texture_Buffer.hlsl Texture_Buffer ps_5_0 main /Od || GOTO :error
 CALL CompileShader.bat Internal/Operations Texture_ByteAddressBuffer.hlsl Texture_ByteAddressBuffer ps_5_0 main /Od || GOTO :error

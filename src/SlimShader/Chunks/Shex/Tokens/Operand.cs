@@ -310,14 +310,14 @@ namespace SlimShader.Chunks.Shex.Tokens
 							case OperandIndexDimension._3D:
 								index = (Indices[0].Representation == OperandIndexRepresentation.Relative
 										|| Indices[0].Representation == OperandIndexRepresentation.Immediate32PlusRelative
-										|| ParentType.IsDeclaration())
+										|| !ParentType.IsDeclaration())
 										? string.Format("[{0}:{1}][{2}]", Indices[0], Indices[1], Indices[2])
-										: string.Format("{0}[{1}][{2}]", Indices[0], Indices[1], Indices[2]);
+										: string.Format("{0}[{1}:{2}]", Indices[0], Indices[1], Indices[2]);
 								break;
 						}
 
 						string components = string.Empty;
-						if (ParentType != OpcodeType.DclConstantBuffer)
+						if (ParentType.OpcodeHasSwizzle())
 						{
 							switch (SelectionMode)
 							{

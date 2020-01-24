@@ -192,6 +192,11 @@ namespace SlimShader.Tests
 						var globals = dcl?.Flags ?? 0;
 						flags = (ShaderRequiresFlags)Chunks.Sfi0.Sfi0Chunk.GlobalFlagsToRequireFlags(globals);
 					}
+					// Looks like bug in sharpdx
+					flags &= ~ShaderRequiresFlags.ShaderRequiresTypedUnorderedAccessViewLoadAdditionalFormatS;
+					flags &= ~ShaderRequiresFlags.ShaderRequiresStencilRef;
+					flags &= ~ShaderRequiresFlags.ShaderRequiresInnerCoverage;
+					flags &= ~ShaderRequiresFlags.ShaderRequiresRovs;
 				}
 				Assert.AreEqual(shaderReflection.RequiresFlags, flags);
 

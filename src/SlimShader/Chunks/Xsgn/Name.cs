@@ -72,6 +72,13 @@ namespace SlimShader.Chunks.Xsgn
 		DepthGreaterEqual = 67,
 
 		[Description("DEPTHLE")]
-		DepthLessEqual = 68
+		DepthLessEqual = 68,
+
+		[Description("STENCILREF")]
+		StencilRef = 69,
+
+		[Description("INNERCOVERAGE")]
+		InnerCoverage = 70,
+
 	}
 }

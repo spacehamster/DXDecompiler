@@ -87,7 +87,8 @@ namespace SlimShader.Chunks.Shex.Tokens
 			var result = new StructuredUnorderedAccessViewDeclarationToken
 			{
 				Coherency = token0.DecodeValue<UnorderedAccessViewCoherency>(16, 16),
-				HasOrderPreservingCounter = (token0.DecodeValue(23, 23) == 0),
+				IsRasterOrderedAccess = token0.DecodeValue<bool>(17, 17),
+				HasOrderPreservingCounter = token0.DecodeValue<bool>(23, 23),
 				Operand = Operand.Parse(reader, token0.DecodeValue<OpcodeType>(0, 10)),
 				ByteStride = reader.ReadUInt32()
 			};
@@ -100,11 +101,14 @@ namespace SlimShader.Chunks.Shex.Tokens
 
 		public override string ToString()
 		{
-			return string.Format("{0}{1} {2}, {3}", 
+			return string.Format("{0}{1}{2}{3} {4}, {5}{6}", 
 				TypeDescription,
 				Coherency.GetDescription(),
+				HasOrderPreservingCounter ? "_opc" : "",
+				GetRasterOrderedAccessDescription(),
 				Operand, 
-				ByteStride);
+				ByteStride,
+				IsSM51 ? $", space={SpaceIndex}" : "");
 		}
 	}
 }

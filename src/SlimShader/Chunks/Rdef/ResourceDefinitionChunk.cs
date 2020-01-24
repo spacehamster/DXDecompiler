@@ -112,9 +112,15 @@ namespace SlimShader.Chunks.Rdef
 			{
 				sb.AppendLine("// Resource Bindings:");
 				sb.AppendLine("//");
-				sb.AppendLine("// Name                                 Type  Format         Dim      HLSL Bind  Count");
-				sb.AppendLine("// ------------------------------ ---------- ------- ----------- -------------- ------");
+				if (!Target.IsSM51)
+				{
+					sb.AppendLine("// Name                                 Type  Format         Dim      HLSL Bind  Count");
+					sb.AppendLine("// ------------------------------ ---------- ------- ----------- -------------- ------");
+				} else {
+					sb.AppendLine("// Name                                 Type  Format         Dim      ID      HLSL Bind  Count");
+					sb.AppendLine("// ------------------------------ ---------- ------- ----------- ------- -------------- ------");
 
+				}
 				foreach (var resourceBinding in ResourceBindings)
 					sb.AppendLine(resourceBinding.ToString());
 

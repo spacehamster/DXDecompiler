@@ -122,6 +122,21 @@ namespace SlimShader.Chunks.Shex
 				//todo
 				//|| (type >= OpcodeType.HsDecls && type <= OpcodeType.HsJoinPhase);
 		}
+		public static bool OpcodeHasSwizzle(this OpcodeType type)
+		{
+			switch (type)
+			{
+				case OpcodeType.DclConstantBuffer:
+				case OpcodeType.DclUnorderedAccessViewRaw:
+				case OpcodeType.DclUnorderedAccessViewStructured:
+				case OpcodeType.DclUnorderedAccessViewTyped:
+				case OpcodeType.DclResource:
+				case OpcodeType.DclSampler:
+					return false;
+				default:
+					return true;
+			}
+		}
 
 		public static NumberType GetNumberType(this OpcodeType type)
 		{

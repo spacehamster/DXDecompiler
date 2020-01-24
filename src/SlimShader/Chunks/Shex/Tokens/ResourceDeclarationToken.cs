@@ -134,8 +134,13 @@ namespace SlimShader.Chunks.Shex.Tokens
 
 		public override string ToString()
 		{
-			return string.Format("{0}_{1}{2} ({3}) t{4}", TypeDescription, ResourceDimension.GetDescription(),
-				(IsMultiSampled) ? "(" + SampleCount + ")" : string.Empty, ReturnType, Operand.Indices[0].Value);
+			return string.Format("{0}_{1}{2} ({3}) {4}{5}", 
+				TypeDescription, 
+				ResourceDimension.GetDescription(),
+				(IsMultiSampled) ? "(" + SampleCount + ")" : string.Empty, 
+				ReturnType,
+				Operand,
+				IsSM51 ? $", space={SpaceIndex}" : "");
 		}
 	}
 }

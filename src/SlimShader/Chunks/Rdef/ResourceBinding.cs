@@ -50,9 +50,16 @@ namespace SlimShader.Chunks.Rdef
 		public ResourceReturnType ReturnType { get; private set; }
 
 		/// <summary>
-		/// The number of samples for a multisampled texture; otherwise 0.
+		/// Denotes the register space of the resource. SM5.1 and higher only.
 		/// </summary>
 		public uint NumSamples { get; private set; }
+
+		/// <summary>
+		/// The number of samples for a multisampled texture; otherwise 0.
+		/// </summary>
+		public uint SpaceIndex { get; private set; }
+
+		private bool m_IsSM51;
 
 		public static ResourceBinding Parse(BytecodeReader reader, BytecodeReader resourceBindingReader, ShaderVersion target)
 		{
@@ -71,9 +78,9 @@ namespace SlimShader.Chunks.Rdef
 			};
 			if(target.MajorVersion == 5 && target.MinorVersion == 1)
 			{
-				//TODO: Might be related to spacing?
-				var unk0 = resourceBindingReader.ReadUInt32();
-				Debug.Assert(unk0 == 0);
+				result.m_IsSM51 = true;
+
+				result.SpaceIndex = resourceBindingReader.ReadUInt32();
 				result.ID = resourceBindingReader.ReadUInt32();
 			} else
 			{
@@ -87,16 +94,16 @@ namespace SlimShader.Chunks.Rdef
 			switch (Type)
 			{
 				case ShaderInputType.CBuffer:
-					hlslBind = $"cb{ID}";
+					hlslBind = $"cb{BindPoint}";
 					break;
 				case ShaderInputType.Sampler:
-					hlslBind = $"s{ID}";
+					hlslBind = $"s{BindPoint}";
 					break;
 				case ShaderInputType.Texture:
 				case ShaderInputType.Structured:
 				case ShaderInputType.ByteAddress:
 				case ShaderInputType.TBuffer:
-					hlslBind = $"t{ID}";
+					hlslBind = $"t{BindPoint}";
 					break;
 				case ShaderInputType.UavRwTyped:
 				case ShaderInputType.UavRwStructured:
@@ -104,10 +111,41 @@ namespace SlimShader.Chunks.Rdef
 				case ShaderInputType.UavAppendStructured:
 				case ShaderInputType.UavConsumeStructured:
 				case ShaderInputType.UavRwStructuredWithCounter:
-					hlslBind = $"u{ID}";
+					hlslBind = $"u{BindPoint}";
 					break;
 				default:
-					hlslBind = $"unk{ID}";
+					hlslBind = $"unk{BindPoint}";
+					break;
+			}
+			return hlslBind;
+		}
+		public string GetIDDescription()
+		{
+			string hlslBind;
+			switch (Type)
+			{
+				case ShaderInputType.CBuffer:
+					hlslBind = $"CB{ID}";
+					break;
+				case ShaderInputType.Sampler:
+					hlslBind = $"S{ID}";
+					break;
+				case ShaderInputType.Texture:
+				case ShaderInputType.Structured:
+				case ShaderInputType.ByteAddress:
+				case ShaderInputType.TBuffer:
+					hlslBind = $"T{ID}";
+					break;
+				case ShaderInputType.UavRwTyped:
+				case ShaderInputType.UavRwStructured:
+				case ShaderInputType.UavRwByteAddress:
+				case ShaderInputType.UavAppendStructured:
+				case ShaderInputType.UavConsumeStructured:
+				case ShaderInputType.UavRwStructuredWithCounter:
+					hlslBind = $"U{ID}";
+					break;
+				default:
+					hlslBind = $"UNK{ID}";
 					break;
 			}
 			return hlslBind;
@@ -128,10 +166,23 @@ namespace SlimShader.Chunks.Rdef
 			string dimDescription = Dimension.GetDescription(Type, ReturnType);
 			dimDescription += (Dimension.IsMultiSampled() && NumSamples > 0 ? 
 					NumSamples.ToString() : string.Empty);
-			return string.Format("// {0,-30} {1,10} {2,7} {3,11} {4,14} {5,6}",
-				Name, typeDescription, returnType,
-				dimDescription,
-				hlslBindPoint, BindCount);
+			if (!m_IsSM51)
+			{
+				return string.Format("// {0,-30} {1,10} {2,7} {3,11} {4,14} {5,6}",
+					Name, typeDescription, returnType,
+					dimDescription,
+					hlslBindPoint, BindCount);
+			} else
+			{
+				var hlslBind = SpaceIndex > 0 ? 
+					$"{hlslBindPoint},space{SpaceIndex}" : 
+					hlslBindPoint;
+				return string.Format("// {0,-30} {1,10} {2,7} {3,11} {4, 7} {5,14} {6,6}",
+					Name, typeDescription, returnType,
+					dimDescription, GetIDDescription(),
+					hlslBind,
+					BindCount == 0 ? "unbounded" : BindCount.ToString());
+			}
 		}
 	}
 }
