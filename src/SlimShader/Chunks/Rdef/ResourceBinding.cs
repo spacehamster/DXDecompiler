@@ -125,9 +125,12 @@ namespace SlimShader.Chunks.Rdef
 			if (Flags.HasFlag(ShaderInputFlags.ComparisonSampler))
 				typeDescription += "_c";
 			string hlslBindPoint = GetBindPointDescription();
+			string dimDescription = Dimension.GetDescription(Type, ReturnType);
+			dimDescription += (Dimension.IsMultiSampled() && NumSamples > 0 ? 
+					NumSamples.ToString() : string.Empty);
 			return string.Format("// {0,-30} {1,10} {2,7} {3,11} {4,14} {5,6}",
 				Name, typeDescription, returnType,
-				Dimension.GetDescription(Type, ReturnType) + (Dimension.IsMultiSampled() && NumSamples > 0 ? NumSamples.ToString() : string.Empty),
+				dimDescription,
 				hlslBindPoint, BindCount);
 		}
 	}

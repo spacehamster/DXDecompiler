@@ -71,6 +71,9 @@ namespace SlimShader.Chunks.Shex
 					Length = opcodeToken0.DecodeValue(24, 30),
 					IsExtended = (opcodeToken0.DecodeValue(31, 31) == 1)
 				};
+#if DEBUG
+				var rawData = reader.CopyAtCurrentPosition().ReadBytes((int)opcodeHeader.Length * 4);
+#endif
 				var pos = reader.CurrentPosition;
 				OpcodeToken opcodeToken;
 				if (opcodeHeader.OpcodeType == OpcodeType.CustomData)
@@ -79,7 +82,7 @@ namespace SlimShader.Chunks.Shex
 				}
 				else if (opcodeHeader.OpcodeType.IsDeclaration())
 				{
-					opcodeToken = DeclarationToken.Parse(reader, opcodeHeader.OpcodeType);
+					opcodeToken = DeclarationToken.Parse(reader, opcodeHeader.OpcodeType, program.Version);
 				}
 				else // Not custom data or declaration, so must be instruction.
 				{
@@ -88,14 +91,12 @@ namespace SlimShader.Chunks.Shex
 				opcodeToken.Header = opcodeHeader;
 				program.Tokens.Add(opcodeToken);
 
-				//TODO: Fix token parsing for SM5.1
-				if(reader.CurrentPosition < pos + opcodeHeader.Length * 4)
-				{
-					reader.ReadBytes((int)(pos + opcodeHeader.Length * 4 - reader.CurrentPosition));
-				}
+#if DEBUG
+				opcodeToken.Data = rawData;
+#endif
 				Debug.Assert(reader.CurrentPosition == pos + opcodeHeader.Length * 4 
 					|| opcodeHeader.OpcodeType == OpcodeType.CustomData,
-					$"Expected token length of: {opcodeHeader.Length * 4}, read {reader.CurrentPosition - pos}");
+					$"Expected token length of: {opcodeHeader.Length * 4}, read {reader.CurrentPosition - pos} for {opcodeHeader.OpcodeType}");
 			}
 
 			program.LinkControlFlowInstructions();
@@ -174,10 +175,15 @@ namespace SlimShader.Chunks.Shex
 			foreach (var token in Tokens)
 			{
 				if (token.Header.OpcodeType.IsNestedSectionEnd())
+				{
 					indent -= 2;
+				}
 				sb.AppendLine(string.Join(string.Empty, Enumerable.Repeat(" ", indent)) + token);
 				if (token.Header.OpcodeType.IsNestedSectionStart())
+				{
 					indent += 2;
+				}
+
 			}
 
 			return sb.ToString();

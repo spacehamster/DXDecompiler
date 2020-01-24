@@ -193,6 +193,7 @@ namespace SlimShader.Decompiler
 					return "StructuredBuffer";
 				case ShaderInputType.UavRwByteAddress:
 					return "RWByteAddressBuffer";
+				case ShaderInputType.UavRwStructuredWithCounter:
 				case ShaderInputType.UavRwStructured:
 					return "RWStructuredBuffer";
 				case ShaderInputType.UavRwTyped:

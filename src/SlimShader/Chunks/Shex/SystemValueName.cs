@@ -71,6 +71,14 @@
 		FinalLineDetailTessFactor = 21,
 
 		[Description("finalLineDensityTessFactor")]
-		FinalLineDensityTessFactor = 22
+		FinalLineDensityTessFactor = 22,
+
+		// The following are added for D3D12
+
+		[Description("barycentrics")]
+		Barycentrics = 23,
+
+		[Description("shadingrate")]
+		Shadingrate = 24,
 	}
 }

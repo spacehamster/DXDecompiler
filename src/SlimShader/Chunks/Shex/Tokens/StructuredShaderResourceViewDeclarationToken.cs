@@ -1,4 +1,5 @@
-﻿using SlimShader.Util;
+﻿using SlimShader.Chunks.Common;
+using SlimShader.Util;
 
 namespace SlimShader.Chunks.Shex.Tokens
 {
@@ -24,14 +25,23 @@ namespace SlimShader.Chunks.Shex.Tokens
 	{
 		public uint StructByteStride { get; private set; }
 
-		public static StructuredShaderResourceViewDeclarationToken Parse(BytecodeReader reader)
+		public uint SpaceIndex { get; private set; }
+
+		private bool IsSM51 => Operand.IndexDimension == OperandIndexDimension._3D;
+
+		public static StructuredShaderResourceViewDeclarationToken Parse(BytecodeReader reader, ShaderVersion version)
 		{
 			var token0 = reader.ReadUInt32();
-			return new StructuredShaderResourceViewDeclarationToken
+			var result = new StructuredShaderResourceViewDeclarationToken
 			{
 				Operand = Operand.Parse(reader, token0.DecodeValue<OpcodeType>(0, 10)),
 				StructByteStride = reader.ReadUInt32()
 			};
+			if (version.IsSM51)
+			{
+				result.SpaceIndex = reader.ReadUInt32();
+			}
+			return result;
 		}
 
 		public override string ToString()

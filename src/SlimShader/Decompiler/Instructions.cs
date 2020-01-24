@@ -459,20 +459,45 @@ namespace SlimShader.Decompiler
 					}
 				//Resource Operations
 				case OpcodeType.Gather4:
+				case OpcodeType.Gather4S:
+				case OpcodeType.Gather4Po:
+				case OpcodeType.Gather4C:
+				case OpcodeType.Gather4PoC:
+				case OpcodeType.Gather4PoS:
+				case OpcodeType.Gather4CS:
+				case OpcodeType.Gather4PoCS:
 					{
 						TranslateTextureSample(token);
 						break;
 					}
-				case OpcodeType.Gather4PoC:
+				case OpcodeType.SampleLS:
 					{
+						TranslateTextureSample(token);
 						break;
 					}
-				case OpcodeType.Gather4Po:
+				case OpcodeType.SampleDClS:
 					{
+						TranslateTextureSample(token);
 						break;
 					}
-				case OpcodeType.Gather4C:
+				case OpcodeType.SampleCClS:
 					{
+						TranslateTextureSample(token);
+						break;
+					}
+				case OpcodeType.SampleBClS:
+					{
+						TranslateTextureSample(token);
+						break;
+					}
+				case OpcodeType.SampleClS:
+					{
+						TranslateTextureSample(token);
+						break;
+					}
+				case OpcodeType.SampleCLzS:
+					{
+						TranslateTextureSample(token);
 						break;
 					}
 				case OpcodeType.Sample:
@@ -536,30 +561,34 @@ namespace SlimShader.Decompiler
 						AddLoad(token);
 						break;
 					}
+				case OpcodeType.LdS:
+					AddIndent();
+					AddCallInterface("Load", token, 0, 2, 1, 3);
+					break;
+				case OpcodeType.LdMsS:
 				case OpcodeType.LdMs:
 					{
 						AddCallInterface("LoadMs", token, 0, 2, 1);
 						break;
 					}
+				case OpcodeType.LdStructuredS:
 				case OpcodeType.LdStructured:
 					{
 						AddLoadStructured(token);
 						break;
 					}
+				case OpcodeType.LdUavTypedS:
 				case OpcodeType.LdUavTyped:
 					{
 						AddCallInterface("Load", token, 0, 2, 1);
 						break;
 					}
+				case OpcodeType.LdRawS:
 				case OpcodeType.LdRaw:
 					{
 						AddCallInterface("Load", token, 0, 2, 1);
 						break;
 					}
-				case OpcodeType.LdS:
-					AddIndent();
-					AddCallInterface("Load", token, 0, 2, 1, 3);
-					break;
 				case OpcodeType.Lod:
 					{
 						TranslateTextureSample(token);
@@ -1086,29 +1115,54 @@ namespace SlimShader.Decompiler
 				case OpcodeType.Sample:
 					Output.Append(".Sample(");
 					break;
+				case OpcodeType.SampleBClS:
+					Output.Append(".SampleBias(");
+					break;
 				case OpcodeType.SampleB:
 					Output.Append(".SampleBias(");
+					break;
+				case OpcodeType.SampleClS:
+					Output.Append(".SampleCmp(");
 					break;
 				case OpcodeType.SampleC:
 					Output.Append(".SampleCmp(");
 					break;
+				case OpcodeType.SampleCLzS:
+					Output.Append(".SampleCmpLevelZero(");
+					break;
 				case OpcodeType.SampleCLz:
 					Output.Append(".SampleCmpLevelZero(");
+					break;
+				case OpcodeType.SampleDClS:
+					Output.Append(".SampleGrad(");
 					break;
 				case OpcodeType.SampleD:
 					Output.Append(".SampleGrad(");
 					break;
+				case OpcodeType.SampleLS:
+					Output.Append(".SampleLevel(");
+					break;
 				case OpcodeType.SampleL:
 					Output.Append(".SampleLevel(");
+					break;
+				case OpcodeType.SampleCClS:
+					Output.Append(".Unknown(");
+					break;
+				case OpcodeType.Gather4:
+				case OpcodeType.Gather4C:
+				case OpcodeType.Gather4CS:
+				case OpcodeType.Gather4Po:
+				case OpcodeType.Gather4PoC:
+				case OpcodeType.Gather4PoCS:
+				case OpcodeType.Gather4PoS:
+				case OpcodeType.Gather4S:
+					Output.Append(".Gather4(");
 					break;
 				case OpcodeType.Lod:
 					{
 						Output.Append(".CalculateLevelOfDetail(");
 						break;
 					}
-				case OpcodeType.Gather4:
-					Output.Append(".Gather(");
-					break;
 				case OpcodeType.Resinfo:
 					Output.Append(".GetDimensions(");
 					break;
@@ -1128,7 +1182,9 @@ namespace SlimShader.Decompiler
 		{
 			AddIndent();
 			AddAssignToDest(token.Operands[0]);
-			var tex = token.Operands[3];
+			var tex = token.Header.OpcodeType.IsFeedbackResourceAccess() ?
+					token.Operands[4] : 
+					token.Operands[3];
 			// tex.OperandType is Resource for texture reads, OperandType.UnorderedAccessView for UAV reads
 			uint structSize = 16;
 			if (tex.OperandType == OperandType.ThreadGroupSharedMemory)
