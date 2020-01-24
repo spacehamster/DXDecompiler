@@ -192,11 +192,6 @@ namespace SlimShader.Tests
 						var globals = dcl?.Flags ?? 0;
 						flags = (ShaderRequiresFlags)Chunks.Sfi0.Sfi0Chunk.GlobalFlagsToRequireFlags(globals);
 					}
-					// Looks like bug in sharpdx
-					flags &= ~ShaderRequiresFlags.ShaderRequiresTypedUnorderedAccessViewLoadAdditionalFormatS;
-					flags &= ~ShaderRequiresFlags.ShaderRequiresStencilRef;
-					flags &= ~ShaderRequiresFlags.ShaderRequiresInnerCoverage;
-					flags &= ~ShaderRequiresFlags.ShaderRequiresRovs;
 				}
 				Assert.AreEqual(shaderReflection.RequiresFlags, flags);
 
@@ -226,16 +221,12 @@ namespace SlimShader.Tests
 				{
 					featureLevel = SharpDX.Direct3D.FeatureLevel.Level_10_1;
 				}
-				else if (container.Version.MajorVersion == 5 && container.Version.MinorVersion == 0)
+				else if (container.Version.MajorVersion == 5)
 				{
 					featureLevel = SharpDX.Direct3D.FeatureLevel.Level_11_0;
 					if (flags.HasFlag(ShaderRequiresFlags.ShaderRequires64UnorderedAccessViews)){
 						featureLevel = SharpDX.Direct3D.FeatureLevel.Level_11_1;
 					}
-				}
-				else if (container.Version.MajorVersion == 5 && container.Version.MinorVersion == 1)
-				{
-					featureLevel = SharpDX.Direct3D.FeatureLevel.Level_11_1;
 				}
 
 				Assert.AreEqual(shaderReflection.MinFeatureLevel, featureLevel); // TODO
@@ -326,7 +317,7 @@ namespace SlimShader.Tests
 			Assert.AreEqual(expected.Description.Name, actual.Name);
 			Assert.AreEqual(expected.Description.SamplerSize, actual.SamplerSize);
 			Assert.AreEqual(expected.Description.Size, actual.Size);
-			Assert.AreEqual(expected.Description.StartOffset, actual.StartOffset);
+			Assert.AreEqual((uint)expected.Description.StartOffset, actual.StartOffset);
 			if (expected.Description.StartSampler != -1 && actual.StartSampler != 0)
 				Assert.AreEqual(expected.Description.StartSampler, actual.StartSampler);
 			if (expected.Description.StartTexture != -1 && actual.StartTexture != 0)
@@ -345,10 +336,10 @@ namespace SlimShader.Tests
 			Assert.AreEqual(expected.Description.ElementCount, actual.ElementCount);
 			Assert.AreEqual(expected.Description.MemberCount, actual.Members.Count);
 			Assert.AreEqual(expected.Description.Name, actual.BaseTypeName);
-			//Assert.AreEqual(expected.Description.Offset, actual.off); // TODO
+			Assert.AreEqual(expected.Description.Offset, 0); // TODO
 			Assert.AreEqual(expected.Description.RowCount, actual.Rows);
 			Assert.AreEqual((int) expected.Description.Type, (int) actual.VariableType);
-			//Assert.AreEqual(expected.NumInterfaces, 0); // TODO
+			Assert.AreEqual(expected.NumInterfaces, actual.NumberOfInterfaces);
 		}
 
 		private static void CompareParameter(ShaderParameterDescription expected,
@@ -368,7 +359,7 @@ namespace SlimShader.Tests
 		private static void CompareResourceBinding(InputBindingDescription expected,
 			ResourceBinding actual)
 		{
-			Assert.AreEqual(expected.BindCount, actual.BindCount);
+			Assert.AreEqual((uint)expected.BindCount, actual.BindCount);
 			Assert.AreEqual(expected.BindPoint, actual.BindPoint);
 			Assert.AreEqual((int) expected.Dimension, (int) actual.Dimension);
 			Assert.AreEqual((int) expected.Flags, (int) actual.Flags);

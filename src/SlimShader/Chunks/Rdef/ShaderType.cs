@@ -51,6 +51,18 @@ namespace SlimShader.Chunks.Rdef
 		/// </summary>
 		public string BaseTypeName { get; private set; }
 
+		/// <summary>
+		/// The number of interfaces a concrete class variable implements
+		/// </summary>
+		public uint NumberOfInterfaces { get; private set; }
+
+		private uint unknown1;
+		private uint unknown2;
+		private uint unknown3;
+		private uint unknown4;
+		private uint unknown5;
+		private uint unknown6;
+
 		public ShaderType(int indent, bool isFirst)
 		{
 			_indent = indent;
@@ -82,27 +94,28 @@ namespace SlimShader.Chunks.Rdef
 					var parentTypeClass = (ShaderVariableClass) parentTypeReader.ReadUInt16();
 					Debug.Assert(parentTypeClass == ShaderVariableClass.Vector || parentTypeClass == ShaderVariableClass.InterfaceClass);
 
-					var unknown1 = parentTypeReader.ReadUInt16();
+					var unknown1 = result.unknown1 = parentTypeReader.ReadUInt16();
 					Debug.Assert(unknown1 == 0);
 				}
 
-				var unknown2 = typeReader.ReadUInt32();
+				var unknown2 = result.unknown2 = typeReader.ReadUInt32();
 				if (unknown2 != 0)
 				{
 					var unknownReader = reader.CopyAtOffset((int) unknown2);
-					uint unknown3 = unknownReader.ReadUInt32();
+					var unknown3 = result.unknown3 = unknownReader.ReadUInt32();
 					Debug.Assert(unknown3 == 0 || unknown3 == 5);
 				}
 
-				var unknown4 = typeReader.ReadUInt32();
-				Debug.Assert(unknown4 == 0 || unknown4 == 1);
+				result.NumberOfInterfaces = typeReader.ReadUInt32();
 
-				var unknown5 = typeReader.ReadUInt32();
-				if (unknown5 != 0)
+				var unknown4 = result.unknown5 = typeReader.ReadUInt32();
+				if (unknown4 != 0)
 				{
-					var unknownReader = reader.CopyAtOffset((int) unknown5);
-					var unknown6 = unknownReader.ReadUInt32();
-					Debug.Assert(unknown6 == 580 || unknown6 == 740);
+					var unknownReader = reader.CopyAtOffset((int)unknown4);
+					var unknown5 = result.unknown6 = unknownReader.ReadUInt32();
+					var unknownReader2 = reader.CopyAtOffset((int)unknown5);
+					var unknown6 = result.unknown6 = unknownReader.ReadUInt32();
+					Debug.Assert(unknown6 == 424 || unknown6 == 580 || unknown6 == 740);
 				}
 
 				var parentNameOffset = typeReader.ReadUInt32();

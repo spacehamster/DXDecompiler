@@ -25,6 +25,8 @@ CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_PS_5_1 ps_5_1 PSMain ||
 CALL CompileShader.bat Internal ResourceDefinitions.hlsl ResourceDefinitions ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal ResourceDefinitions.hlsl ResourceDefinitions_5_1 ps_5_1 main || GOTO :error
 
+CALL CompileShader.bat Internal InterfacesTest.hlsl InterfacesTest ps_5_0 PSMain || GOTO :error
+
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_VS_9_0 vs_4_0_level_9_0 VSMain || GOTO :error
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_PS_9_1 ps_4_0_level_9_0 PSMain || GOTO :error
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_VS_9_2 vs_4_0_level_9_1 VSMain || GOTO :error
