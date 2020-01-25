@@ -144,14 +144,14 @@ namespace SlimShader.Chunks.Shex.Tokens
 				instructionToken.FunctionIndex = reader.ReadUInt32();
 			}
 
-		    while (reader.CurrentPosition < instructionEnd)
-		    {
-		        var operand = Operand.Parse(reader, header.OpcodeType);
-                if (operand != null)
-		            instructionToken.Operands.Add(operand);
-		    }
+			while (reader.CurrentPosition < instructionEnd)
+			{
+				var operand = Operand.Parse(reader, header.OpcodeType);
+				if (operand != null)
+					instructionToken.Operands.Add(operand);
+			}
 
-		    return instructionToken;
+			return instructionToken;
 		}
 
 		public override string ToString()
@@ -206,10 +206,10 @@ namespace SlimShader.Chunks.Shex.Tokens
 			{
 				for (int i = 0; i < Operands.Count; i++)
 				{
-				    var operandString = Operands[i].ToString();
-                    if (i > 0 && !string.IsNullOrEmpty(operandString))
-                        result += ", ";
-                    result += operandString;
+					var operandString = Operands[i].ToString();
+					if (i > 0 && !string.IsNullOrEmpty(operandString))
+						result += ", ";
+					result += operandString;
 				}
 			}
 

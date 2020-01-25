@@ -166,20 +166,20 @@ namespace SlimShader.Decompiler
 						string returnType = token.Header.OpcodeType == OpcodeType.UBfe ?
 							"uint4" : "int4";
 						string template = @"{0} {1}(uint4 src1, uint4 src2, {0} value){{
-    {0} result = 0;
-    for(uint i = 0; i < 4; i++){{
-        uint width = src1[i] & 0x1f;
-        uint offset =src2[i] & 0x1f;
-        if(width == 0){{
-            result[i] = 0;
-        }} else if(width + offset < 32){{
-            result[i] = value << (32-(width + offset));
-            result[i] = result[i] >> (32 - width);
-        }} else {{
-            result[i] = value >> (32 - width);
-        }}
-    }}
-    return result;
+	{0} result = 0;
+	for(uint i = 0; i < 4; i++){{
+		uint width = src1[i] & 0x1f;
+		uint offset =src2[i] & 0x1f;
+		if(width == 0){{
+			result[i] = 0;
+		}} else if(width + offset < 32){{
+			result[i] = value << (32-(width + offset));
+			result[i] = result[i] >> (32 - width);
+		}} else {{
+			result[i] = value >> (32 - width);
+		}}
+	}}
+	return result;
 }}";
 						AddFunction(name, string.Format(template, returnType, name));
 						CallHelper(name, token, 0, 1, 2, 3);

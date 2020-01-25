@@ -13,25 +13,25 @@ namespace SlimShader
 	{
 		public static Number Abs(Number value, NumberType type)
 		{
-            switch (type)
+			switch (type)
 			{
 				case NumberType.Float:
 					return FromFloat(Math.Abs(value.Float));
 				default:
-                    throw new InvalidOperationException(string.Format("Abs is not a valid operation for number type '{0}'.", type));
+					throw new InvalidOperationException(string.Format("Abs is not a valid operation for number type '{0}'.", type));
 			}
 		}
 
 		public static Number Negate(Number value, NumberType type)
 		{
-            switch (type)
+			switch (type)
 			{
 				case NumberType.Int:
 					return FromInt(-value.Int);
 				case NumberType.Float:
 					return FromFloat(-value.Float);
 				default:
-                    throw new InvalidOperationException(string.Format("Negate is not a valid operation for number type '{0}'.", type));
+					throw new InvalidOperationException(string.Format("Negate is not a valid operation for number type '{0}'.", type));
 			}
 		}
 
@@ -40,19 +40,19 @@ namespace SlimShader
 			return Math.Min(1.0f, Math.Max(0.0f, value));
 		}
 
-        public static Number FromByteArray(byte[] bytes, int startIndex)
-        {
+		public static Number FromByteArray(byte[] bytes, int startIndex)
+		{
 			if (startIndex >= bytes.Length)
 				return new Number();
 
-            return new Number
-            {
-                Byte0 = bytes[startIndex + 0],
-                Byte1 = bytes[startIndex + 1],
-                Byte2 = bytes[startIndex + 2],
-                Byte3 = bytes[startIndex + 3]
-            };
-        }
+			return new Number
+			{
+				Byte0 = bytes[startIndex + 0],
+				Byte1 = bytes[startIndex + 1],
+				Byte2 = bytes[startIndex + 2],
+				Byte3 = bytes[startIndex + 3]
+			};
+		}
 
 		public static Number FromFloat(float value, bool saturate)
 		{
@@ -118,13 +118,13 @@ namespace SlimShader
 		public byte[] RawBytes
 		{
 			get { return new[] { Byte0, Byte1, Byte2, Byte3 }; }
-		    set
-		    {
-		        Byte0 = value[0];
-		        Byte1 = value[1];
-		        Byte2 = value[2];
-		        Byte3 = value[3];
-		    }
+			set
+			{
+				Byte0 = value[0];
+				Byte1 = value[1];
+				Byte2 = value[2];
+				Byte3 = value[3];
+			}
 		}
 
 		public Number(byte[] rawBytes)
@@ -136,10 +136,10 @@ namespace SlimShader
 			Byte3 = rawBytes[3];
 		}
 
-        public override string ToString()
-        {
-            return ToString(NumberType.Unknown);
-        }
+		public override string ToString()
+		{
+			return ToString(NumberType.Unknown);
+		}
 
 		public string ToString(NumberType type)
 		{
@@ -148,7 +148,7 @@ namespace SlimShader
 			const int floatThresholdPos = 0x00700000; // TODO: Work out the actual float threshold.
 			const int floatThresholdNeg = -0x00700000; // TODO: Work out the actual float threshold.
 			const uint uintThresholdPos = 0xfff00000; // TODO: Work out the actual float threshold.
-            switch (type)
+			switch (type)
 			{
 				case NumberType.Int:
 					if (Int > hexThreshold)

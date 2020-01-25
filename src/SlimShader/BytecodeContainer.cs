@@ -85,9 +85,9 @@ namespace SlimShader
 				uint chunkOffset = reader.ReadUInt32();
 				var chunkReader = reader.CopyAtOffset((int)chunkOffset);
 
-                var chunk = BytecodeChunk.ParseChunk(chunkReader, this);
-                if (chunk != null)
-    				Chunks.Add(chunk);
+				var chunk = BytecodeChunk.ParseChunk(chunkReader, this);
+				if (chunk != null)
+					Chunks.Add(chunk);
 			}
 		}
 		internal BytecodeContainer()
