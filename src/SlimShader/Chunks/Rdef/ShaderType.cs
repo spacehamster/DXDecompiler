@@ -61,7 +61,6 @@ namespace SlimShader.Chunks.Rdef
 		private uint unknown3;
 		private uint unknown4;
 		private uint unknown5;
-		private uint unknown6;
 
 		public ShaderType(int indent, bool isFirst)
 		{
@@ -108,14 +107,14 @@ namespace SlimShader.Chunks.Rdef
 
 				result.NumberOfInterfaces = typeReader.ReadUInt32();
 
-				var unknown4 = result.unknown5 = typeReader.ReadUInt32();
+				var unknown4 = result.unknown4 = typeReader.ReadUInt32();
 				if (unknown4 != 0)
 				{
 					var unknownReader = reader.CopyAtOffset((int)unknown4);
-					var unknown5 = result.unknown6 = unknownReader.ReadUInt32();
+					var unknown5 = result.unknown5 = unknownReader.ReadUInt32();
 					var unknownReader2 = reader.CopyAtOffset((int)unknown5);
-					var unknown6 = result.unknown6 = unknownReader.ReadUInt32();
-					Debug.Assert(unknown6 == 424 || unknown6 == 580 || unknown6 == 740);
+					//var unknown6 = result.unknown6 = unknownReader.ReadUInt32();
+					//Debug.Assert(unknown6 == 424 || unknown6 == 580 || unknown6 == 740);
 				}
 
 				var parentNameOffset = typeReader.ReadUInt32();
