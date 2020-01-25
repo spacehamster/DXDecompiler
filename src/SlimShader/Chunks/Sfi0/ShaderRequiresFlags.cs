@@ -49,32 +49,32 @@ namespace SlimShader.Chunks.Sfi0
 		Level9ComparisonFiltering = 0x80,
 
 		/// <summary>
-		/// Unknown
+		/// Shader requires that the graphics driver and hardware support tiled resources.
 		/// </summary>
 		TiledResources = 0x100,
 
 		/// <summary>
-		/// Unknown
+		/// Shader requires a reference value for depth stencil tests.
 		/// </summary>
 		StencilRef = 0x200,
 
 		/// <summary>
-		/// Unknown
+		/// Shader requires that the graphics driver and hardware support inner coverage.
 		/// </summary>
 		InnerCoverage = 0x400,
 
 		/// <summary>
-		/// Unknown
+		/// Shader requires that the graphics driver and hardware support the loading of additional formats for typed unordered-access views (UAVs).
 		/// </summary>
 		TypedUAVLoadAdditionalFormats = 0x800,
 
 		/// <summary>
-		/// Unknown
+		/// Shader requires that the graphics driver and hardware support rasterizer ordered views (ROVs).
 		/// </summary>
 		Rovs = 0x1000,
 
 		/// <summary>
-		/// Unknown
+		/// Shader requires that the graphics driver and hardware support viewport and render target array index values from any shader-feeding rasterizer.
 		/// </summary>
 		SVArrayIndexFromFeedingRasterizer = 0x2000
 	}
