@@ -45,28 +45,34 @@ namespace SlimShader.Chunks.Rdef
 		public List<ShaderTypeMember> Members { get; private set; }
 
 		/// <summary>
+		/// Parent Interface. 
+		/// TODO: This is a guess, confirm that this is the parent interface
+		/// </summary>
+		public ShaderType SubType { get; private set; }
+
+		/// <summary>
+		/// TODO: Find out what this is for
+		/// </summary>
+		public ShaderType BaseClass { get; private set; }
+
+		/// <summary>
+		/// The interface types a concrete class inherits from 
+		/// </summary>
+		public List<ShaderType> Interfaces { get; private set; }
+
+		/// <summary>
 		/// Name of the shader-variable type. This member can be NULL if it isn't used. This member supports 
 		/// dynamic shader linkage interface types, which have names.
 		/// TODO: Is this the right description?
 		/// </summary>
 		public string BaseTypeName { get; private set; }
 
-		/// <summary>
-		/// The number of interfaces a concrete class variable implements
-		/// </summary>
-		public uint NumberOfInterfaces { get; private set; }
-
-		private uint unknown1;
-		private uint unknown2;
-		private uint unknown3;
-		private uint unknown4;
-		private uint unknown5;
-
 		public ShaderType(int indent, bool isFirst)
 		{
 			_indent = indent;
 			_isFirst = isFirst;
 			Members = new List<ShaderTypeMember>();
+			Interfaces = new List<ShaderType>();
 		}
 
 		public static ShaderType Parse(BytecodeReader reader, BytecodeReader typeReader, ShaderVersion target,
@@ -86,35 +92,40 @@ namespace SlimShader.Chunks.Rdef
 
 			if (target.MajorVersion >= 5)
 			{
-				var parentTypeOffset = typeReader.ReadUInt32(); // Guessing
-				if (parentTypeOffset != 0)
+				var subTypeOffset = typeReader.ReadUInt32(); // Guessing
+				if (subTypeOffset != 0)
 				{
-					var parentTypeReader = reader.CopyAtOffset((int) parentTypeOffset);
-					var parentTypeClass = (ShaderVariableClass) parentTypeReader.ReadUInt16();
-					Debug.Assert(parentTypeClass == ShaderVariableClass.Vector || parentTypeClass == ShaderVariableClass.InterfaceClass);
-
-					var unknown1 = result.unknown1 = parentTypeReader.ReadUInt16();
-					Debug.Assert(unknown1 == 0);
+					var parentTypeReader = reader.CopyAtOffset((int)subTypeOffset);
+					result.SubType = ShaderType.Parse(reader, parentTypeReader, target,
+						indent + 4, true, parentOffset);
+					Debug.Assert(
+							result.SubType.VariableClass == ShaderVariableClass.Vector ||
+							result.SubType.VariableClass == ShaderVariableClass.InterfaceClass);
 				}
 
-				var unknown2 = result.unknown2 = typeReader.ReadUInt32();
-				if (unknown2 != 0)
+				var baseClassOffset = typeReader.ReadUInt32();
+				if (baseClassOffset != 0)
 				{
-					var unknownReader = reader.CopyAtOffset((int) unknown2);
-					var unknown3 = result.unknown3 = unknownReader.ReadUInt32();
-					Debug.Assert(unknown3 == 0 || unknown3 == 5);
+					var baseClassReader = reader.CopyAtOffset((int)baseClassOffset);
+					result.BaseClass = ShaderType.Parse(reader, baseClassReader, target,
+						indent + 4, true, parentOffset);
+					Debug.Assert(
+						result.BaseClass.VariableClass == ShaderVariableClass.Scalar ||
+						result.BaseClass.VariableClass == ShaderVariableClass.Struct);
 				}
 
-				result.NumberOfInterfaces = typeReader.ReadUInt32();
-
-				var unknown4 = result.unknown4 = typeReader.ReadUInt32();
-				if (unknown4 != 0)
+				var interfaceCount = typeReader.ReadUInt32();
+				var interfaceSectionOffset = typeReader.ReadUInt32();
+				if (interfaceSectionOffset != 0)
 				{
-					var unknownReader = reader.CopyAtOffset((int)unknown4);
-					var unknown5 = result.unknown5 = unknownReader.ReadUInt32();
-					var unknownReader2 = reader.CopyAtOffset((int)unknown5);
-					//var unknown6 = result.unknown6 = unknownReader.ReadUInt32();
-					//Debug.Assert(unknown6 == 424 || unknown6 == 580 || unknown6 == 740);
+					var interfaceSectionReader = reader.CopyAtOffset((int)interfaceSectionOffset);
+					for (int i = 0; i < interfaceCount; i++)
+					{
+						var interfaceTypeOffset = interfaceSectionReader.ReadUInt32();
+						var interfaceReader = reader.CopyAtOffset((int)interfaceTypeOffset);
+						result.Interfaces.Add(ShaderType.Parse(reader, interfaceReader, target, 
+							indent + 4, i == 0, parentOffset));
+					}
 				}
 
 				var parentNameOffset = typeReader.ReadUInt32();

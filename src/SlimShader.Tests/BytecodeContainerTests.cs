@@ -330,7 +330,16 @@ namespace SlimShader.Tests
 		private static void CompareConstantBufferVariableType(ShaderReflectionType expected,
 			ShaderType actual)
 		{
-			//Assert.AreEqual(expected.BaseClass, actual.BaseTypeName); // TODO
+			Assert.AreEqual(expected.BaseClass?.Description.Name, actual.BaseClass?.BaseTypeName);
+			if(expected.BaseClass != null && actual.BaseClass != null)
+			{
+				CompareConstantBufferVariableType(expected.BaseClass, actual.BaseClass);
+			}
+			Assert.AreEqual(expected.SubType?.Description.Name, actual.SubType?.BaseTypeName);
+			if (expected.SubType != null && actual.SubType != null)
+			{
+				CompareConstantBufferVariableType(expected.SubType, actual.SubType);
+			}
 			Assert.AreEqual((int) expected.Description.Class, (int) actual.VariableClass);
 			Assert.AreEqual(expected.Description.ColumnCount, actual.Columns);
 			Assert.AreEqual(expected.Description.ElementCount, actual.ElementCount);
@@ -339,7 +348,12 @@ namespace SlimShader.Tests
 			Assert.AreEqual(expected.Description.Offset, 0); // TODO
 			Assert.AreEqual(expected.Description.RowCount, actual.Rows);
 			Assert.AreEqual((int) expected.Description.Type, (int) actual.VariableType);
-			Assert.AreEqual(expected.NumInterfaces, actual.NumberOfInterfaces);
+			Assert.AreEqual(expected.NumInterfaces, actual.Interfaces.Count);
+			for(int i = 0; i < expected.NumInterfaces && i < actual.Interfaces.Count; i++)
+			{
+				var expectedInterface = expected.GetInterface(i);
+				CompareConstantBufferVariableType(expectedInterface, actual.Interfaces[i]);
+			}
 		}
 
 		private static void CompareParameter(ShaderParameterDescription expected,
