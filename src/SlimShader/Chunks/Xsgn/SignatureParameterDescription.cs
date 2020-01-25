@@ -154,6 +154,9 @@ namespace SlimShader.Chunks.Xsgn
 						case "SV_DEPTHLESSEQUAL":
 							result.SystemValueType = Name.DepthLessEqual;
 							break;
+						case "SV_STENCILREF":
+							result.SystemValueType = Name.StencilRef;
+							break;
 					}
 				else if (programType == ProgramType.PixelShader)
 					result.SystemValueType = Name.Target;
@@ -185,7 +188,7 @@ namespace SlimShader.Chunks.Xsgn
 					Register, SystemValueType.GetDescription(),
 					GetTypeFormat(), ReadWriteMask.GetDescription());
 			}
-			return string.Format("{0,-20} {1,5}   {2,4} {3,8} {4,8} {5,7}   {6,4}", SemanticName, SemanticIndex,
+			return string.Format("{0,-20} {1,5}   {2,4}    {3,4} {4,8} {5,7}   {6,4}", SemanticName, SemanticIndex,
 				"N/A", SystemValueType.GetRegisterName(), SystemValueType.GetDescription(),
 				GetTypeFormat(), "YES");
 		}

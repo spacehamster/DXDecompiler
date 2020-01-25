@@ -88,6 +88,31 @@ namespace SlimShader.Chunks.Shex
 					return false;
 			}
 		}
+		public static bool IsFeedbackResourceAccess(this OpcodeType type)
+		{
+			switch (type)
+			{
+				case OpcodeType.Gather4S:
+				case OpcodeType.Gather4CS:
+				case OpcodeType.Gather4PoS:
+				case OpcodeType.Gather4PoCS:
+				case OpcodeType.LdS:
+				case OpcodeType.LdMsS:
+				case OpcodeType.LdUavTypedS:
+				case OpcodeType.LdRawS:
+				case OpcodeType.LdStructuredS:
+				case OpcodeType.SampleLS:
+				case OpcodeType.SampleCLzS:
+				case OpcodeType.SampleClS:
+				case OpcodeType.SampleBClS:
+				case OpcodeType.SampleDClS:
+				case OpcodeType.SampleCClS:
+					return true;
+				default:
+					return false;
+			}
+		}
+
 
 		public static bool IsDeclaration(this OpcodeType type)
 		{
@@ -96,6 +121,21 @@ namespace SlimShader.Chunks.Shex
 				|| type == OpcodeType.DclGsInstanceCount;
 				//todo
 				//|| (type >= OpcodeType.HsDecls && type <= OpcodeType.HsJoinPhase);
+		}
+		public static bool OpcodeHasSwizzle(this OpcodeType type)
+		{
+			switch (type)
+			{
+				case OpcodeType.DclConstantBuffer:
+				case OpcodeType.DclUnorderedAccessViewRaw:
+				case OpcodeType.DclUnorderedAccessViewStructured:
+				case OpcodeType.DclUnorderedAccessViewTyped:
+				case OpcodeType.DclResource:
+				case OpcodeType.DclSampler:
+					return false;
+				default:
+					return true;
+			}
 		}
 
 		public static NumberType GetNumberType(this OpcodeType type)

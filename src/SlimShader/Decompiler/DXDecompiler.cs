@@ -45,7 +45,7 @@ namespace SlimShader.Decompiler
 
 			foreach (var rb in Container.ResourceDefinition.ResourceBindings)
 			{
-				m_ResourceBindingLookup.Add(rb.GetBindPointDescription(), rb);
+				m_ResourceBindingLookup.Add(rb.GetIDDescription().ToLower(), rb);
 			}
 
 			//Note that resources can have duplicate name and resources of differenttypes can share names
@@ -82,7 +82,7 @@ namespace SlimShader.Decompiler
 						var cb = bindings[i];
 						var key = $"{type}${cb.Name}${i}";
 						var rb = resourceBindingLookup[key];
-						m_ConstantBufferLookup.Add(rb.GetBindPointDescription(), cb);
+						m_ConstantBufferLookup.Add(rb.GetIDDescription().ToLower(), cb);
 					}
 				}
 			}
@@ -480,13 +480,13 @@ namespace SlimShader.Decompiler
 		// TODO: Use OperandType for lookup instead of ShaderInputType
 		ConstantBuffer GetConstantBuffer(OperandType type, uint id)
 		{
-			var hlslBind = $"{type.GetDescription()}{id}";
-			return m_ConstantBufferLookup[hlslBind];
+			var resourceId = $"{type.GetDescription()}{id}";
+			return m_ConstantBufferLookup[resourceId];
 		}
 		ResourceBinding GetResourceBinding(OperandType type, uint id)
 		{
-			var hlslBind = $"{type.GetDescription()}{id}";
-			return m_ResourceBindingLookup[hlslBind];
+			var resourceId = $"{type.GetDescription()}{id}";
+			return m_ResourceBindingLookup[resourceId];
 		}
 	}
 }

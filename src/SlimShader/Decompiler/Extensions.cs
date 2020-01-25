@@ -192,6 +192,7 @@ namespace SlimShader.Decompiler
 			{
 				case ShaderInputType.Structured:
 				case ShaderInputType.UavRwStructured:
+				case ShaderInputType.UavRwStructuredWithCounter:
 				case ShaderInputType.UavAppendStructured:
 				case ShaderInputType.UavConsumeStructured:
 					return true;

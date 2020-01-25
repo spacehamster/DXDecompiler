@@ -80,6 +80,8 @@ namespace SlimShader.Chunks.Common
 				ProgramType = programType
 			};
 		}
+		public bool IsSM51 => MajorVersion == 5 && MinorVersion == 1;
+
 		public override string ToString()
 		{
 			return $"{ProgramType.GetDescription()}_{MajorVersion}_{MinorVersion}";

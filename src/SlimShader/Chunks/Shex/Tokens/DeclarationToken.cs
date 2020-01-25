@@ -1,4 +1,5 @@
 using System;
+using SlimShader.Chunks.Common;
 using SlimShader.Util;
 
 namespace SlimShader.Chunks.Shex.Tokens
@@ -7,16 +8,16 @@ namespace SlimShader.Chunks.Shex.Tokens
 	{
 		public Operand Operand { get; internal set; }
 
-		public static DeclarationToken Parse(BytecodeReader reader, OpcodeType opcodeType)
+		public static DeclarationToken Parse(BytecodeReader reader, OpcodeType opcodeType, ShaderVersion version)
 		{
 			switch (opcodeType)
 			{
 				case OpcodeType.DclGlobalFlags:
 					return GlobalFlagsDeclarationToken.Parse(reader);
 				case OpcodeType.DclResource:
-					return ResourceDeclarationToken.Parse(reader);
+					return ResourceDeclarationToken.Parse(reader, version);
 				case OpcodeType.DclSampler:
-					return SamplerDeclarationToken.Parse(reader);
+					return SamplerDeclarationToken.Parse(reader, version);
 				case OpcodeType.DclInput:
 				case OpcodeType.DclInputSgv:
 				case OpcodeType.DclInputSiv:
@@ -35,7 +36,7 @@ namespace SlimShader.Chunks.Shex.Tokens
 				case OpcodeType.DclIndexableTemp:
 					return IndexableTempRegisterDeclarationToken.Parse(reader);
 				case OpcodeType.DclConstantBuffer:
-					return ConstantBufferDeclarationToken.Parse(reader);
+					return ConstantBufferDeclarationToken.Parse(reader, version);
 				case OpcodeType.DclGsInputPrimitive:
 					return GeometryShaderInputPrimitiveDeclarationToken.Parse(reader);
 				case OpcodeType.DclGsOutputPrimitiveTopology:
@@ -66,19 +67,19 @@ namespace SlimShader.Chunks.Shex.Tokens
 				case OpcodeType.DclThreadGroup:
 					return ThreadGroupDeclarationToken.Parse(reader);
 				case OpcodeType.DclUnorderedAccessViewTyped :
-					return TypedUnorderedAccessViewDeclarationToken.Parse(reader);
+					return TypedUnorderedAccessViewDeclarationToken.Parse(reader, version);
 				case OpcodeType.DclUnorderedAccessViewRaw :
-					return RawUnorderedAccessViewDeclarationToken.Parse(reader);
+					return RawUnorderedAccessViewDeclarationToken.Parse(reader, version);
 				case OpcodeType.DclUnorderedAccessViewStructured :
-					return StructuredUnorderedAccessViewDeclarationToken.Parse(reader);
+					return StructuredUnorderedAccessViewDeclarationToken.Parse(reader, version);
 				case OpcodeType.DclThreadGroupSharedMemoryRaw :
 					return RawThreadGroupSharedMemoryDeclarationToken.Parse(reader);
 				case OpcodeType.DclThreadGroupSharedMemoryStructured :
 					return StructuredThreadGroupSharedMemoryDeclarationToken.Parse(reader);
 				case OpcodeType.DclResourceRaw :
-					return RawShaderResourceViewDeclarationToken.Parse(reader);
+					return RawShaderResourceViewDeclarationToken.Parse(reader, version);
 				case OpcodeType.DclResourceStructured:
-					return StructuredShaderResourceViewDeclarationToken.Parse(reader);
+					return StructuredShaderResourceViewDeclarationToken.Parse(reader, version);
 				case OpcodeType.DclStream :
 					return StreamDeclarationToken.Parse(reader);
 				default:

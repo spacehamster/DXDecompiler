@@ -1,4 +1,5 @@
-﻿using SlimShader.Util;
+﻿using SlimShader.Chunks.Common;
+using SlimShader.Util;
 
 namespace SlimShader.Chunks.Shex.Tokens
 {
@@ -10,7 +11,8 @@ namespace SlimShader.Chunks.Shex.Tokens
 	/// [10:00] D3D11_SB_OPCODE_DCL_UNORDERED_ACCESS_VIEW_STRUCTURED
 	/// [15:11] Ignored, 0
 	/// [16:16] D3D11_SB_GLOBALLY_COHERENT_ACCESS or 0 (LOCALLY_COHERENT)
-	/// [22:17] Ignored, 0
+	/// [17:17] D3D11_SB_RASTERIZER_ORDERED_ACCESS or 0
+	/// [22:18] Ignored, 0
 	/// [23:23] D3D11_SB_UAV_HAS_ORDER_PRESERVING_COUNTER or 0
 	///
 	///            The presence of this flag means that if a UAV is bound to the
@@ -38,6 +40,22 @@ namespace SlimShader.Chunks.Shex.Tokens
 	///     u# register (D3D11_SB_OPERAND_TYPE_UNORDERED_ACCESS_VIEW) is 
 	///     being declared.
 	/// (2) a DWORD indicating UINT32 byte stride
+	///
+	/// OpcodeToken0 is followed by 3 operands on Shader Model 5.1 and later:
+	/// (1) an operand, starting with OperandToken0, defining which
+	///     u# register (D3D11_SB_OPERAND_TYPE_UNORDERED_ACCESS_VIEW) is being declared.
+	///     The indexing dimension for the register must be D3D10_SB_OPERAND_INDEX_DIMENSION_3D, 
+	///     and the meaning of the index dimensions are as follows: (u<id>[<lbound>:<ubound>])
+	///       1 <id>:     variable ID being declared
+	///       2 <lbound>: the lower bound of the range of UAV's in the space
+	///       3 <ubound>: the upper bound (inclusive) of this range
+	///     As opposed to when the u# is used in shader instructions, where the register
+	///     must be D3D10_SB_OPERAND_INDEX_DIMENSION_2D, and the meaning of the index 
+	///     dimensions are as follows: (u<id>[<idx>]):
+	///       1 <id>:  variable ID being used (matches dcl)
+	///       2 <idx>: absolute index of uav within space (may be dynamically indexed)
+	/// (2) a DWORD indicating UINT32 byte stride
+	/// (3) a DWORD indicating the space index.
 	/// </summary>
 	public class StructuredUnorderedAccessViewDeclarationToken : UnorderedAccessViewDeclarationTokenBase
 	{
@@ -61,25 +79,36 @@ namespace SlimShader.Chunks.Shex.Tokens
 
 		public uint ByteStride { get; private set; }
 
-		public static StructuredUnorderedAccessViewDeclarationToken Parse(BytecodeReader reader)
+		private bool IsSM51 => Operand.IndexDimension == OperandIndexDimension._3D;
+
+		public static StructuredUnorderedAccessViewDeclarationToken Parse(BytecodeReader reader, ShaderVersion version)
 		{
 			var token0 = reader.ReadUInt32();
-			return new StructuredUnorderedAccessViewDeclarationToken
+			var result = new StructuredUnorderedAccessViewDeclarationToken
 			{
 				Coherency = token0.DecodeValue<UnorderedAccessViewCoherency>(16, 16),
-				HasOrderPreservingCounter = (token0.DecodeValue(23, 23) == 0),
+				IsRasterOrderedAccess = token0.DecodeValue<bool>(17, 17),
+				HasOrderPreservingCounter = token0.DecodeValue<bool>(23, 23),
 				Operand = Operand.Parse(reader, token0.DecodeValue<OpcodeType>(0, 10)),
 				ByteStride = reader.ReadUInt32()
 			};
+			if (version.IsSM51)
+			{
+				result.SpaceIndex = reader.ReadUInt32();
+			}
+			return result;
 		}
 
 		public override string ToString()
 		{
-			return string.Format("{0}{1} {2}, {3}", 
+			return string.Format("{0}{1}{2}{3} {4}, {5}{6}", 
 				TypeDescription,
 				Coherency.GetDescription(),
+				HasOrderPreservingCounter ? "_opc" : "",
+				GetRasterOrderedAccessDescription(),
 				Operand, 
-				ByteStride);
+				ByteStride,
+				IsSM51 ? $", space={SpaceIndex}" : "");
 		}
 	}
 }

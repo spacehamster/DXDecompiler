@@ -70,9 +70,8 @@ namespace SlimShader.Chunks.Shex.Tokens
 		public OperandIndex[] Indices { get; private set; }
 		public Number4 ImmediateValues { get; private set; }
 		public OperandMinPrecision MinPrecision { get; private set; }
-#if DEBUG
-		internal uint OperandData;
-#endif
+		// NonUniform SM5.1 or greater
+		public bool NonUniform { get; private set; }
 		public Operand(OpcodeType parentType)
 		{
 			ParentType = parentType;
@@ -93,9 +92,6 @@ namespace SlimShader.Chunks.Shex.Tokens
 				return null;
 
 			var operand = new Operand(parentType);
-#if DEBUG
-			operand.OperandData = token0;
-#endif
 
 			var numComponents = token0.DecodeValue<OperandNumComponents>(0, 1);
 			switch (numComponents)
@@ -227,15 +223,17 @@ namespace SlimShader.Chunks.Shex.Tokens
 		/// operand tokens, if present).
 		///
 		/// [05:00] D3D10_SB_EXTENDED_OPERAND_TYPE
-		/// [30:06] if([05:00] == D3D10_SB_EXTENDED_OPERAND_MODIFIER)
+		/// [16:06] if([05:00] == D3D10_SB_EXTENDED_OPERAND_MODIFIER)
 		///         {
 		///              [13:06] D3D10_SB_OPERAND_MODIFIER
-		///              [30:14] Ignored, 0.
+		///              [16:14] Min Precision: D3D11_SB_OPERAND_MIN_PRECISION
+		///              [17:17] Non-uniform: D3D12_SB_OPERAND_NON_UNIFORM
 		///         }
 		///         else
 		///         {
-		///              [30:06] Ignored, 0.
+		///              [17:06] Ignored, 0.
 		///         }
+		/// [30:18] Ignored, 0.
 		/// [31]    0 normally. 1 if second order extended operand definition,
 		///         meaning next DWORD contains yet ANOTHER extended operand
 		///         description. Currently no second order extensions defined.
@@ -246,13 +244,16 @@ namespace SlimShader.Chunks.Shex.Tokens
 		private static void ReadExtendedOperand(Operand operand, BytecodeReader reader)
 		{
 			uint token1 = reader.ReadUInt32();
-
-			switch (token1.DecodeValue<ExtendedOperandType>(0, 5))
+			var type = token1.DecodeValue<ExtendedOperandType>(0, 5);
+			switch (type)
 			{
 				case ExtendedOperandType.Modifier:
 					operand.Modifier = token1.DecodeValue<OperandModifier>(6, 13);
 					operand.MinPrecision = token1.DecodeValue<OperandMinPrecision>(14, 16);
+					operand.NonUniform = token1.DecodeValue<bool>(17, 17);
 					break;
+				default:
+					throw new Exception($"Unknown Extended modifier {type}");
 			}
 		}
 
@@ -307,11 +308,16 @@ namespace SlimShader.Chunks.Shex.Tokens
 									: string.Format("{0}[{1}]", Indices[0], Indices[1]);
 								break;
 							case OperandIndexDimension._3D:
+								index = (Indices[0].Representation == OperandIndexRepresentation.Relative
+										|| Indices[0].Representation == OperandIndexRepresentation.Immediate32PlusRelative
+										|| !ParentType.IsDeclaration())
+										? string.Format("[{0}:{1}][{2}]", Indices[0], Indices[1], Indices[2])
+										: string.Format("{0}[{1}:{2}]", Indices[0], Indices[1], Indices[2]);
 								break;
 						}
 
 						string components = string.Empty;
-						if (ParentType != OpcodeType.DclConstantBuffer)
+						if (ParentType.OpcodeHasSwizzle())
 						{
 							switch (SelectionMode)
 							{

@@ -753,52 +753,62 @@
 		[Description("utod")]
 		Utod,
 
+		/// <summary>
+		/// This marks the end of D3D11.1 opcodes
+		/// </summary>
+		D3D11_1Count,
+
 		[Description("gather4_s")]
-		Gather4S = 219,
+		Gather4S,
 
 		[Description("gather4_c_s")]
-		Gather4CS = 220,
+		Gather4CS,
 
 		[Description("gather4_po_s")]
-		Gather4PoS = 221,
+		Gather4PoS,
 
 		[Description("gather4_po_c_s")]
-		Gather4PoCS = 222,
+		Gather4PoCS,
 
 		[Description("ld_s")]
-		LdS = 223,
+		LdS,
 
 		[Description("ldms_s")]
-		LdMsS = 224,
+		LdMsS,
 
 		[Description("ld_uav_typed_s")]
-		LdUavTypedS = 225,
+		LdUavTypedS,
 
 		[Description("ld_raw_s")]
-		LdRawS = 226,
+		LdRawS,
 
 		[Description("ld_structured_s")]
-		LdStructuredS = 227,
+		LdStructuredS,
 
 		[Description("sample_l_s")]
-		SampleLS = 228,
+		SampleLS,
 
 		[Description("sample_c_lz_s")]
-		SampleCLzS = 229,
+		SampleCLzS,
 
 		[Description("sample_cl_s")]
-		SampleClS = 230,
+		SampleClS,
 
 		[Description("sample_b_cl_s")]
-		SampleBClS = 231,
+		SampleBClS,
 
 		[Description("sample_d_cl_s")]
-		SampleDClS = 232,
+		SampleDClS,
 
 		[Description("sample_c_cl_s")]
-		SampleCClS = 233,
+		SampleCClS,
 
 		[Description("check_access_fully_mapped")]
-		CheckAccessFullyMapped = 234,
+		CheckAccessFullyMapped,
+
+		/// <summary>
+		/// This marks the end of WDDM 1.3 opcodes
+		/// </summary>
+		D3DWDDM1_3Count,
 	}
 }

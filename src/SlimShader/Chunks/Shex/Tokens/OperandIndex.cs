@@ -11,7 +11,14 @@ namespace SlimShader.Chunks.Shex.Tokens
 			string result = string.Empty;
 			if (Register != null)
 				result += Register + " + ";
-			result += Value;
+			if (Value == uint.MaxValue)
+			{
+				result += "*";
+			}
+			else
+			{
+				result += Value;
+			}
 			return result;
 		}
 	}

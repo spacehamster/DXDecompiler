@@ -8,6 +8,20 @@
 // {
 //
 //   float4 g1;                         // Offset:    0 Size:    16
+//   
+//   struct cClass6
+//   {
+//       
+//       float4 foo;                    // Offset:   16
+//
+//   } gAbstractInterface3;             // Offset:   16 Size:    16
+//   
+//   struct cClass7
+//   {
+//       
+//       float4 foo;                    // Offset:   32
+//
+//   } gAbstractInterface4;             // Offset:   32 Size:    16
 //
 // }
 //
@@ -64,7 +78,7 @@
 // +----------+---------+---------------------------------------
 ps_5_0
 dcl_globalFlags refactoringAllowed
-dcl_constantbuffer CB0[1], immediateIndexed
+dcl_constantbuffer CB0[3], immediateIndexed
 dcl_function_body fb0
 dcl_function_body fb1
 dcl_function_body fb2
@@ -102,7 +116,9 @@ add r0.xyzw, r0.xyzw, r1.xyzw
 fcall fp0[0][5]
 add r0.xyzw, r0.xyzw, r1.xyzw
 fcall fp1[0][0]
-add o0.xyzw, r0.xyzw, r1.xyzw
+add r0.xyzw, r0.xyzw, r1.xyzw
+add r0.xyzw, r0.xyzw, cb0[1].xyzw
+add o0.xyzw, r0.xyzw, cb0[2].xyzw
 ret 
 label fb0
 mov r1.xy, this[0].yxyy
@@ -164,4 +180,4 @@ ret
 label fb14
 add r1.xyzw, v0.xyzw, cb0[0].xyzw
 ret 
-// Approximately 59 instruction slots used
+// Approximately 61 instruction slots used

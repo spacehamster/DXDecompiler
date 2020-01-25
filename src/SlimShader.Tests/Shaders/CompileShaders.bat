@@ -25,6 +25,8 @@ CALL CompileShader.bat Internal BasicHLSL.hlsl BasicHLSL_PS_5_1 ps_5_1 PSMain ||
 CALL CompileShader.bat Internal ResourceDefinitions.hlsl ResourceDefinitions ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal ResourceDefinitions.hlsl ResourceDefinitions_5_1 ps_5_1 main || GOTO :error
 
+CALL CompileShader.bat Internal InterfacesTest.hlsl InterfacesTest ps_5_0 PSMain || GOTO :error
+
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_VS_9_0 vs_4_0_level_9_0 VSMain || GOTO :error
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_PS_9_1 ps_4_0_level_9_0 PSMain || GOTO :error
 CALL CompileShader.bat Internal Level9_Test.hlsl Level9_Test_VS_9_2 vs_4_0_level_9_1 VSMain || GOTO :error
@@ -37,6 +39,7 @@ CALL CompileShader.bat Internal DynamicIndexing.hlsl DynamicIndexing ps_5_0 main
 CALL CompileShader.bat Internal TiledResources.hlsl TiledResources ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal DuplicateNames.hlsl DuplicateNames ps_5_0 main || GOTO :error
 CALL CompileShader.bat Internal RasterOrderViews.hlsl RasterOrderViews ps_5_1 main || GOTO :error
+CALL CompileShader.bat Internal SM51_test.hlsl SM51_test ps_5_1 main /enable_unbounded_descriptor_tables  || GOTO :error
 
 CALL CompileShader.bat Internal/Operations Texture_Buffer.hlsl Texture_Buffer ps_5_0 main /Od || GOTO :error
 CALL CompileShader.bat Internal/Operations Texture_ByteAddressBuffer.hlsl Texture_ByteAddressBuffer ps_5_0 main /Od || GOTO :error

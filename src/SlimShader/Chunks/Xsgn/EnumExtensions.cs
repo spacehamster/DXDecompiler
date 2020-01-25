@@ -24,8 +24,10 @@ namespace SlimShader.Chunks.Xsgn
 			{
 				case Name.Coverage:
 				case Name.Depth:
-				case Name.DepthGreaterEqual :
-				case Name.DepthLessEqual :
+				case Name.DepthGreaterEqual:
+				case Name.DepthLessEqual:
+				case Name.StencilRef:
+					return false;
 				default :
 					return true;
 			}
@@ -43,6 +45,8 @@ namespace SlimShader.Chunks.Xsgn
 					return OperandType.OutputCoverageMask.GetDescription();
 				case Name.Depth:
 					return OperandType.OutputDepth.GetDescription();
+				case Name.StencilRef:
+					return OperandType.StencilRef.GetDescription();
 				case Name.PrimitiveID:
 					return "primID";
 				default:
