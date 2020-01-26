@@ -47,9 +47,6 @@ namespace SlimShader.Chunks.Shex.Tokens
 		public ResourceDimension ResourceTarget { get; set; }
 		public ushort ResourceStride { get; private set; }
 		public ResourceReturnType[] ResourceReturnTypes { get; private set; }
-#if DEBUG
-		private uint TokenData;
-#endif
 
 		/// <summary>
 		/// Not stored in the shader bytecode; derived from a post-parsing pass.
@@ -79,9 +76,6 @@ namespace SlimShader.Chunks.Shex.Tokens
 			// Advance to next token.
 			var instructionEnd = reader.CurrentPosition + (header.Length * sizeof(uint));
 			var token0 = reader.ReadUInt32();
-#if DEBUG
-			instructionToken.TokenData = token0;
-#endif
 			if (header.OpcodeType == OpcodeType.Sync)
 			{
 				instructionToken.SyncFlags = token0.DecodeValue<SyncFlags>(11, 14);
@@ -150,7 +144,6 @@ namespace SlimShader.Chunks.Shex.Tokens
 				if (operand != null)
 					instructionToken.Operands.Add(operand);
 			}
-
 			return instructionToken;
 		}
 

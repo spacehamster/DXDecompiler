@@ -257,6 +257,48 @@ namespace SlimShader.Chunks.Shex.Tokens
 			}
 		}
 
+		private string GetOperandDescription()
+		{
+			switch (OperandType)
+			{
+				case OperandType.UnorderedAccessView:
+				case OperandType.Sampler:
+				case OperandType.Resource:
+					if (ParentType.IsDeclaration())
+					{
+						if (IndexDimension == OperandIndexDimension._3D)
+						{
+							return OperandType.GetDescription().ToUpper();
+						}
+						else
+						{
+							return OperandType.GetDescription();
+						}
+					}
+					else
+					{
+						if (IndexDimension == OperandIndexDimension._2D)
+						{
+							return OperandType.GetDescription().ToUpper();
+						}
+						else
+						{
+							return OperandType.GetDescription();
+						}
+					}
+				case OperandType.ConstantBuffer:
+					if(IndexDimension == OperandIndexDimension._3D)
+					{
+						return OperandType.GetDescription().ToUpper();
+					} else
+					{
+						return OperandType.GetDescription();
+					}
+				default:
+					return OperandType.GetDescription();
+			}
+		}
+
 		public override string ToString()
 		{
 			switch (OperandType)
@@ -308,11 +350,9 @@ namespace SlimShader.Chunks.Shex.Tokens
 									: string.Format("{0}[{1}]", Indices[0], Indices[1]);
 								break;
 							case OperandIndexDimension._3D:
-								index = (Indices[0].Representation == OperandIndexRepresentation.Relative
-										|| Indices[0].Representation == OperandIndexRepresentation.Immediate32PlusRelative
-										|| !ParentType.IsDeclaration())
-										? string.Format("[{0}:{1}][{2}]", Indices[0], Indices[1], Indices[2])
-										: string.Format("{0}[{1}:{2}]", Indices[0], Indices[1], Indices[2]);
+								index = ParentType.IsDeclaration()
+										? string.Format("{0}[{1}:{2}]", Indices[0], Indices[1], Indices[2])
+										: string.Format("{0}[{1}][{2}]", Indices[0], Indices[1], Indices[2]);
 								break;
 						}
 
@@ -341,7 +381,7 @@ namespace SlimShader.Chunks.Shex.Tokens
 						}
 						string minPrecision = MinPrecision == OperandMinPrecision.Default ?
 							string.Empty : $" {MinPrecision.GetDescription()}";
-						return Modifier.Wrap(string.Format("{0}{1}{2}{3}", OperandType.GetDescription(), index, components, minPrecision));
+						return Modifier.Wrap(string.Format("{0}{1}{2}{3}", GetOperandDescription(), index, components, minPrecision));
 					}
 			}
 		}

@@ -160,8 +160,11 @@ namespace SlimShader
 			if (Shader != null)
 				sb.Append(Shader);
 
-			if(Statistics != null) 
+			if (Statistics != null)
+			{
 				sb.AppendFormat("// Approximately {0} instruction slots used", Statistics.InstructionCount);
+				sb.AppendLine();
+			}
 
 			return sb.ToString();
 		}

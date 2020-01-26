@@ -130,6 +130,8 @@ namespace SlimShader.Chunks.Shex
 				case OpcodeType.DclUnorderedAccessViewRaw:
 				case OpcodeType.DclUnorderedAccessViewStructured:
 				case OpcodeType.DclUnorderedAccessViewTyped:
+				case OpcodeType.DclResourceRaw:
+				case OpcodeType.DclResourceStructured:
 				case OpcodeType.DclResource:
 				case OpcodeType.DclSampler:
 					return false;
