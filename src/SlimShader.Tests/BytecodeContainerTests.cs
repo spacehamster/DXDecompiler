@@ -8,6 +8,7 @@ using SlimShader.Chunks;
 using SlimShader.Chunks.Rdef;
 using SlimShader.Chunks.Shex;
 using SlimShader.Chunks.Shex.Tokens;
+using SlimShader.Chunks.Spdb;
 using SlimShader.Chunks.Xsgn;
 using SlimShader.Decompiler;
 using SlimShader.Tests.Util;
@@ -74,7 +75,14 @@ namespace SlimShader.Tests
 			asmFileText = TestUtils.NormalizeAssembly(asmFileText);
 
 			// Assert.
-			Assert.That(decompiledAsmText, Is.EqualTo(asmFileText));
+			if (container.Chunks.OfType<DebuggingChunk>().Any())
+			{
+				Warn.If(true, "Debugging information is ignored during dissasembly");
+			}
+			else
+			{
+				Assert.That(decompiledAsmText, Is.EqualTo(asmFileText));
+			}
 		}
 		public static string GetSourceNameFromObject(string path)
 		{
@@ -92,7 +100,7 @@ namespace SlimShader.Tests
 			return Path.GetFileName(path);
 		}
 		/// <summary>
-		/// Compare ASM output produced by fxc.exe and SlimShader.
+		/// Sanity check for exceptions while decompling.
 		/// </summary>
 		[TestCaseSource("TestShaders")]
 		public void DecompileShaders(string relPath)
@@ -103,10 +111,6 @@ namespace SlimShader.Tests
 			Directory.CreateDirectory($"{OutputDir}/{relDir}");
 			var sourceName = GetSourceNameFromObject($"{ShaderDirectory}/{relPath}.o");
 			if(ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relDir}/{sourceName}", $"{OutputDir}/{relDir}/{sourceName}", true);
-			if (ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relPath}.asm", $"{OutputDir}/{relPath}.asm", true);
-
-			var asmFileText = string.Join(Environment.NewLine,
-				File.ReadAllLines(file + ".asm").Select(x => x.Trim()));
 
 			// Act.
 			var shaderCode = DXDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
