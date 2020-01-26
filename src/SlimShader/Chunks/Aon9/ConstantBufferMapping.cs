@@ -8,11 +8,17 @@ namespace SlimShader.Chunks.Aon9
 {
 	public class ConstantBufferMapping
 	{
-		public ushort TargetReg;
-		public ushort Buffer;
-		public ushort StartReg;
-		public ushort RegCount;
-		public DataConversionType[] DataConversion = new DataConversionType[4];
+		public ushort TargetReg { get; private set; }
+		public ushort Buffer { get; private set; }
+		public ushort StartReg { get; private set; }
+		public ushort RegCount { get; private set; }
+		public DataConversionType[] DataConversion { get; private set; }
+
+		ConstantBufferMapping()
+		{
+			DataConversion = new DataConversionType[4];
+		}
+
 		public static ConstantBufferMapping Parse(BytecodeReader reader)
 		{
 			var result = new ConstantBufferMapping();

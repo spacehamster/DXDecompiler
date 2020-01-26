@@ -10,6 +10,7 @@ namespace SlimShader.Chunks.Aon9
 			var result = new Unknown1Mapping();
 			return result;
 		}
+
 		public override string ToString()
 		{
 			return string.Format("// Unknown1Mapping mappings:");

@@ -7,8 +7,9 @@ namespace SlimShader.Chunks.Aon9
 {
 	public class RuntimeConstantMapping
 	{
-		public ushort TargetReg;
-		public RuntimeConstantDescription ConstantDescription;
+		public ushort TargetReg { get; private set; }
+		public RuntimeConstantDescription ConstantDescription { get; private set; }
+
 		public static RuntimeConstantMapping Parse(BytecodeReader reader)
 		{
 			var result = new RuntimeConstantMapping();
@@ -19,6 +20,7 @@ namespace SlimShader.Chunks.Aon9
 				$"Unknown RuntimeConstantDescription {result.ConstantDescription}");
 			return result;
 		}
+
 		public override string ToString()
 		{
 			return string.Format("// c{0, -9} {1, 50}",

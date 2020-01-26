@@ -11,13 +11,22 @@ namespace SlimShader.Chunks.Aon9
 {
 	public class Level9ShaderChunk : BytecodeChunk
 	{
-		public DX9Shader.ShaderModel ShaderModel;
-		public List<ConstantBufferMapping> ConstantBufferMappings = new List<ConstantBufferMapping>();
-		public List<LoopRegisterMapping> LoopRegisterMappings = new List<LoopRegisterMapping>();
-		public List<Unknown1Mapping> Unknown0Mappings = new List<Unknown1Mapping>();
-		public List<SamplerMapping> SamplerMappings = new List<SamplerMapping>();
-		public List<RuntimeConstantMapping> RuntimeConstantMappings = new List<RuntimeConstantMapping>();
-		public ShaderVersion Version;
+		public DX9Shader.ShaderModel ShaderModel { get; private set; }
+		public List<ConstantBufferMapping> ConstantBufferMappings { get; private set; }
+		public List<LoopRegisterMapping> LoopRegisterMappings { get; private set; }
+		public List<Unknown1Mapping> Unknown0Mappings { get; private set; }
+		public List<SamplerMapping> SamplerMappings { get; private set; }
+		public List<RuntimeConstantMapping> RuntimeConstantMappings { get; private set; }
+		public ShaderVersion Version { get; private set; }
+
+		public Level9ShaderChunk()
+		{
+			ConstantBufferMappings = new List<ConstantBufferMapping>();
+			LoopRegisterMappings = new List<LoopRegisterMapping>();
+			Unknown0Mappings = new List<Unknown1Mapping>();
+			SamplerMappings = new List<SamplerMapping>();
+			RuntimeConstantMappings = new List<RuntimeConstantMapping>();
+	}
 		internal static BytecodeChunk Parse(BytecodeReader chunkContentReader, uint chunkSize)
 		{
 			var result = new Level9ShaderChunk();

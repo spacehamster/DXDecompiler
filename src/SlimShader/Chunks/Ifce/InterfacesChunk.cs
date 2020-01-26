@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using SlimShader.Util;
@@ -33,13 +33,22 @@ namespace SlimShader.Chunks.Ifce
 			// Will be same as interfaceSlotRecordCount unless there are interface arrays.
 			result.InterfaceSlotCount = headerReader.ReadUInt32();
 
-			headerReader.ReadUInt32(); // Think this is offset to start of interface slot info, but we don't need it.
+			// Think this is offset to start of interface slot info, but we
+			// don't need it because it is also contained in the InterfaceSlot class
+			var typeIDsOffset = headerReader.ReadUInt32(); 
 
 			var classTypeOffset = headerReader.ReadUInt32();
 			var availableClassReader = reader.CopyAtOffset((int) classTypeOffset);
 
 			var interfaceSlotOffset = headerReader.ReadUInt32();
 			var interfaceSlotReader = reader.CopyAtOffset((int) interfaceSlotOffset);
+
+			var unknown1 = headerReader.ReadUInt32();
+			Debug.Assert(unknown1.ToFourCcString() == "OSGN");
+			var unknown2 = headerReader.ReadUInt16();
+			Debug.Assert(unknown2 == 32);
+			var unknown3 = headerReader.ReadUInt16();
+			Debug.Assert(unknown3 == 16);
 
 			for (uint i = 0; i < classTypeCount; i++)
 			{

@@ -19,13 +19,19 @@ namespace SlimShader.Chunks.Sfi0
 	{
 		public ShaderRequiresFlags Flags;
 		private ShaderVersion _version;
-		public static Sfi0Chunk Parse(BytecodeReader reader, ShaderVersion version)
+		public static Sfi0Chunk Parse(BytecodeReader reader, ShaderVersion version, uint chunkSize)
 		{
 			var flags = (ShaderRequiresFlags)reader.ReadInt32();
 			var result = new Sfi0Chunk();
 			result.Flags = flags;
+			Debug.Assert(chunkSize == 8,
+				$"Unexpected Sfi0 Chunk Size");
 			Debug.Assert((flags & (ShaderRequiresFlags.UavsAtEveryStage)) == 0,
 				$"Unexpected SfiFlags {Convert.ToString((int)flags, 2)} {flags.ToString()}");
+			Debug.Assert(!int.TryParse(flags.ToString(), out _),
+				$"Unexpected SfiFlags {Convert.ToString((int)flags, 2)} {flags.ToString()}");
+			var unknown0 = reader.ReadUInt32();
+			Debug.Assert(unknown0 == 0, "Sfi0 unknown value");
 			result._version = version;
 			return result;
 		}

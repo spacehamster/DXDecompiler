@@ -6,10 +6,11 @@ namespace SlimShader.Chunks.Aon9
 {
 	public class LoopRegisterMapping
 	{
-		public ushort TargetReg;
-		public ushort Buffer;
-		public ushort SourceReg;
-		public ushort Component;
+		public ushort TargetReg { get; private set; }
+		public ushort Buffer { get; private set; }
+		public ushort SourceReg { get; private set; }
+		public ushort Component { get; private set; }
+
 		public static LoopRegisterMapping Parse(BytecodeReader reader)
 		{
 			var result = new LoopRegisterMapping();

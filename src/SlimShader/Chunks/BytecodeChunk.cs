@@ -85,7 +85,7 @@ namespace SlimShader.Chunks
 					chunk = DebuggingChunk.Parse(chunkContentReader, chunkType, chunkSize);
 					break;
 				case ChunkType.Sfi0:
-					chunk = Sfi0Chunk.Parse(chunkContentReader, container.Shader.Version);
+					chunk = Sfi0Chunk.Parse(chunkContentReader, container.Shader.Version, chunkSize);
 					break;
 				case ChunkType.Shdr:
 				case ChunkType.Shex:
