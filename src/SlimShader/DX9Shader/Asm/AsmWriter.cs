@@ -19,6 +19,26 @@ namespace SlimShader.DX9Shader
 			constantTable = shader.ParseConstantTable();
 		}
 
+		public static string Disassemble(byte[] bytecode)
+		{
+			var shaderModel = ShaderReader.ReadShader(bytecode);
+			return Disassemble(shaderModel);
+		}
+
+		public static string Disassemble(ShaderModel shaderModel)
+		{
+			var asmWriter = new AsmWriter(shaderModel);
+			using (var stream = new MemoryStream())
+			{
+				asmWriter.Write(stream);
+				stream.Position = 0;
+				using (var reader = new StreamReader(stream, Encoding.UTF8))
+				{
+					return reader.ReadToEnd();
+				}
+			}
+		}
+
 		void WriteLine()
 		{
 			asmWriter.WriteLine();

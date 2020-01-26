@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace SlimShader.DX9Shader
 {
@@ -19,6 +20,25 @@ namespace SlimShader.DX9Shader
 		{
 			_shader = shader;
 			_doAstAnalysis = doAstAnalysis;
+		}
+
+		public static string Decompile(byte[] bytecode)
+		{
+			var shaderModel = ShaderReader.ReadShader(bytecode);
+			return Decompile(shaderModel);
+		}
+		public static string Decompile(ShaderModel shaderModel)
+		{
+			var hlslWriter = new HlslWriter(shaderModel);
+			using (var stream = new MemoryStream())
+			{
+				hlslWriter.Write(stream);
+				stream.Position = 0;
+				using (var reader = new StreamReader(stream, Encoding.UTF8))
+				{
+					return reader.ReadToEnd();
+				}
+			}
 		}
 
 		void WriteLine()
