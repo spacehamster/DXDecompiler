@@ -88,5 +88,10 @@ namespace SlimShader.Chunks
 		/// Level 9 XNA Shader Chunk
 		/// </summary>
 		Xnas,
+
+		/// <summary>
+		/// User Specified Private Data Chunk
+		/// </summary>
+		Priv,
 	}
 }

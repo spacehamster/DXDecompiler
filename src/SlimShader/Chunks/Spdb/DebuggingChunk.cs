@@ -12,14 +12,14 @@ namespace SlimShader.Chunks.Spdb
  		/// </summary>
 		public byte[] PdbBytes { get; private set; }
 
-		public static DebuggingChunk Parse(BytecodeReader reader, ChunkType chunkType, int chunkSize)
+		public static DebuggingChunk Parse(BytecodeReader reader, ChunkType chunkType, uint chunkSize)
 		{
 			var result = new DebuggingChunk();
 
 			if (chunkType == ChunkType.Sdbg) // SDGB is not supported.
 				return result;
 
-			result.PdbBytes = reader.ReadBytes(chunkSize);
+			result.PdbBytes = reader.ReadBytes((int)chunkSize);
 			return result;
 		}
 	}

@@ -61,6 +61,8 @@ CALL CompileShader.bat Internal/Operations UAV_RWTexture2D.hlsl UAV_RWTexture2D 
 CALL CompileShader.bat Internal/Operations UAV_RWTexture2DArray.hlsl UAV_RWTexture2DArray ps_5_0 main /Od || GOTO :error
 CALL CompileShader.bat Internal/Operations UAV_RWTexture3D.hlsl UAV_RWTexture3D ps_5_0 main /Od || GOTO :error
 
+CALL CompileShader.bat Internal/Misc PrivateDataTest.hlsl PrivateDataTest ps_5_0 PSMain /setprivate Internal/Misc/PrivateData.txt  || GOTO :error
+
 Set UNITY_INCLUDES="%cd%\Unity\CGIncludes"
 CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_VS_25 vs_5_0 vert "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=25" "/DUNITY_REVERSED_Z=1" || GOTO :error
 CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_PS_25 ps_5_0 frag "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=25" "/DUNITY_REVERSED_Z=1" || GOTO :error
