@@ -156,8 +156,9 @@ namespace SlimShader.Decompiler
 		private string Decompile()
 		{
 #if DEBUG
-			Output.AppendLine(RegisterState.Dump());
+			//Output.AppendLine(RegisterState.Dump());
 #endif
+			RootSignature.WriteRootSignature(Container, Output);
 			if (Container.Shader.Version.ProgramType == ProgramType.HullShader)
 			{
 				DecompileHullShader();

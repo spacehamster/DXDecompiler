@@ -1,5 +1,6 @@
 ﻿using SlimShader.Chunks.Common;
 using SlimShader.Chunks.Rdef;
+using SlimShader.Chunks.RTS0;
 using SlimShader.Chunks.Shex;
 using SlimShader.Chunks.Shex.Tokens;
 using SlimShader.Chunks.Xsgn;
@@ -277,6 +278,37 @@ namespace SlimShader.Decompiler
 					return ConstantBufferType.TextureBuffer;
 				default:
 					return ConstantBufferType.ResourceBindInformation;
+			}
+		}
+		public static string GetRegisterName(this RootParameterType type)
+		{
+			switch (type)
+			{
+				case RootParameterType._32BitConstants:
+				case RootParameterType.Cbv:
+					return "b";
+				case RootParameterType.Srv:
+					return "t";
+				case RootParameterType.Uav:
+					return "u";
+				default:
+					throw new InvalidOperationException($"Register name not supported for Root Parameter Type {type}");
+			}
+		}
+		public static string GetRegisterName(this DescriptorRangeType type)
+		{
+			switch (type)
+			{
+				case DescriptorRangeType.Sampler:
+					return "s";
+				case DescriptorRangeType.Cbv:
+					return "b";
+				case DescriptorRangeType.Srv:
+					return "t";
+				case DescriptorRangeType.Uav:
+					return "u";
+				default:
+					throw new InvalidOperationException($"Register name not supported for Descriptor Range Type {type}");
 			}
 		}
 	}
