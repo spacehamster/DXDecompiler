@@ -46,6 +46,11 @@ itof r2.w, v0.x
 itof r3.xyzw, v0.xxxx
 itof r4.xyzw, v0.xxxx
 itof r5.x, v0.x
+itof r5.yzw, v0.xxxx
+lod r6.x, r5.yzwy, t8.x, s0
+add r0.xyzw, r0.xyzw, r6.xxxx
+lod r5.y, r5.yzwy, t8.y, s0
+add r0.xyzw, r0.xyzw, r5.yyyy
 gather4_indexable(texturecubearray)(float,float,float,float) r6.xyzw, r1.xyzw, t8.xyzw, s0.x
 add r0.xyzw, r0.xyzw, r6.xyzw
 gather4_s_indexable(texturecubearray)(float,float,float,float) r6.xyzw, r7.x, r1.xyzw, t8.xyzw, s0.x
@@ -183,4 +188,4 @@ and r1.xyzw, r2.xxxx, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r1.xyzw
 mov o0.xyzw, r0.xyzw
 ret 
-// Approximately 146 instruction slots used
+// Approximately 151 instruction slots used

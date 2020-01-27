@@ -26,6 +26,9 @@ float4 main(int index : POSITION) : SV_Target
 	uint ou1NumberOfLevels;
 	uint ou1Elements;
 	//Texture1DArray
+	result += tex.CalculateLevelOfDetail(samp0, if1LOD);
+	result += tex.CalculateLevelOfDetailUnclamped(samp0, if1LOD);
+
 	tex.GetDimensions(iu1MipLevel, ou1Width, ou1Elements, ou1NumberOfLevels);
 	result += ou1Width;
 	result += ou1Elements;

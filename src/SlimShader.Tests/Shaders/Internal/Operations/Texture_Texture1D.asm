@@ -55,6 +55,10 @@ itof r5.y, v0.x
 itof r5.z, v0.x
 itof r5.w, v0.x
 itof r6.x, v0.x
+lod r6.y, r6.x, t0.x, s0
+add r0.xyzw, r0.xyzw, r6.yyyy
+lod r6.y, r6.x, t0.y, s0
+add r0.xyzw, r0.xyzw, r6.yyyy
 resinfo_indexable(texture1d)(float,float,float,float)_uint r6.yz, r1.z, t0.yxwz
 mov r6.y, r6.y
 mov r6.z, r6.z
@@ -205,4 +209,4 @@ and r1.xyzw, r2.xxxx, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r1.xyzw
 mov o0.xyzw, r0.xyzw
 ret 
-// Approximately 164 instruction slots used
+// Approximately 168 instruction slots used

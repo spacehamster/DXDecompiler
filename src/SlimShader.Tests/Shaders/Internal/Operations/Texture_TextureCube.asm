@@ -12,7 +12,7 @@
 // ------------------------------ ---------- ------- ----------- -------------- ------
 // samp0                             sampler      NA          NA             s0      1 
 // samp1                           sampler_c      NA          NA             s1      1 
-// tex8                              texture  float4        cube             t8      1 
+// tex                               texture  float4        cube             t8      1 
 //
 //
 //
@@ -46,6 +46,11 @@ itof r2.z, v0.x
 itof r3.xyz, v0.xxxx
 itof r4.xyz, v0.xxxx
 itof r2.w, v0.x
+itof r5.xyz, v0.xxxx
+lod r3.w, r5.xyzx, t8.x, s0
+add r0.xyzw, r0.xyzw, r3.wwww
+lod r3.w, r5.xyzx, t8.y, s0
+add r0.xyzw, r0.xyzw, r3.wwww
 gather4_indexable(texturecube)(float,float,float,float) r5.xyzw, r1.xyzx, t8.xyzw, s0.x
 add r0.xyzw, r0.xyzw, r5.xyzw
 gather4_s_indexable(texturecube)(float,float,float,float) r5.xyzw, r6.x, r1.xyzx, t8.xyzw, s0.x
@@ -180,4 +185,4 @@ and r1.xyzw, r2.xxxx, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r1.xyzw
 mov o0.xyzw, r0.xyzw
 ret 
-// Approximately 143 instruction slots used
+// Approximately 148 instruction slots used

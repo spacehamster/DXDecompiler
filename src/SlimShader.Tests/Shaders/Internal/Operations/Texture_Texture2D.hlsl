@@ -20,6 +20,7 @@ float4 main(int index : POSITION) : SV_Target
 	float2 if2DDX = index;
 	float2 if2DDY = index;
 	float if1LOD = index;
+	float2 if2LOD = index;
 	int2 ii2Offset1 = index;
 	int2 ii2Offset2 = index;
 	int2 ii2Offset3 = index;
@@ -29,8 +30,11 @@ float4 main(int index : POSITION) : SV_Target
 	uint ou1Width;
 	uint ou1NumberOfLevels;
 	uint ou1Height;
-	
+
 	//Texture2D
+	result += tex.CalculateLevelOfDetail(samp0, if2LOD);
+	result += tex.CalculateLevelOfDetailUnclamped(samp0, if2LOD);
+
 	result += tex.Gather(samp0, if2Location);
 	result += tex.Gather(samp0, if2Location, ii2OffsetZero);
 	result += tex.Gather(samp0, if2Location, ii2OffsetZero, ou1Status);
@@ -38,7 +42,7 @@ float4 main(int index : POSITION) : SV_Target
 	result += tex.Gather(samp0, if2Location, ii2OffsetOne);
 	result += tex.Gather(samp0, if2Location, ii2OffsetOne, ou1Status);
 	result += CheckAccessFullyMapped(ou1Status);
-	
+
 	result += tex.GatherRed(samp0, if2Location);
 	result += tex.GatherRed(samp0, if2Location, ii2OffsetZero);
 	result += tex.GatherRed(samp0, if2Location, ii2OffsetZero, ou1Status);
@@ -162,14 +166,14 @@ float4 main(int index : POSITION) : SV_Target
 	result += tex.Sample(samp0, if2Location, ii2OffsetOne, if1Clamp, ou1Status);
 	result += CheckAccessFullyMapped(ou1Status);
 
-	result += tex.SampleBias (samp0, if2Location, if1Bias);
-	result += tex.SampleBias (samp0, if2Location, if1Bias, ii2OffsetZero);
-	result += tex.SampleBias (samp0, if2Location, if1Bias, ii2OffsetZero, if1Clamp);
-	result += tex.SampleBias (samp0, if2Location, if1Bias, ii2OffsetZero, if1Clamp, ou1Status);
+	result += tex.SampleBias(samp0, if2Location, if1Bias);
+	result += tex.SampleBias(samp0, if2Location, if1Bias, ii2OffsetZero);
+	result += tex.SampleBias(samp0, if2Location, if1Bias, ii2OffsetZero, if1Clamp);
+	result += tex.SampleBias(samp0, if2Location, if1Bias, ii2OffsetZero, if1Clamp, ou1Status);
 	result += CheckAccessFullyMapped(ou1Status);
-	result += tex.SampleBias (samp0, if2Location, if1Bias, ii2OffsetOne);
-	result += tex.SampleBias (samp0, if2Location, if1Bias, ii2OffsetOne, if1Clamp);
-	result += tex.SampleBias (samp0, if2Location, if1Bias, ii2OffsetOne, if1Clamp, ou1Status);
+	result += tex.SampleBias(samp0, if2Location, if1Bias, ii2OffsetOne);
+	result += tex.SampleBias(samp0, if2Location, if1Bias, ii2OffsetOne, if1Clamp);
+	result += tex.SampleBias(samp0, if2Location, if1Bias, ii2OffsetOne, if1Clamp, ou1Status);
 	result += CheckAccessFullyMapped(ou1Status);
 
 

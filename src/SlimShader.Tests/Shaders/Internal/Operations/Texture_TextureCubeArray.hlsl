@@ -15,6 +15,7 @@ float4 main(int index : POSITION) : SV_Target
 	float3 if3DDX = index;
 	float3 if3DDY = index;
 	float if1LOD = index;
+	float3 if3LOD = index;
 	//Out Vars
 	uint ou1Status;
 	uint ou1Width;
@@ -23,6 +24,9 @@ float4 main(int index : POSITION) : SV_Target
 	uint ou1NumberOfLevels;
 	
 	//TextureCube
+	result += tex.CalculateLevelOfDetail(samp0, if3LOD);
+	result += tex.CalculateLevelOfDetailUnclamped(samp0, if3LOD);
+
 	result += tex.Gather(samp0, if4Location);
 	result += tex.Gather(samp0, if4Location, ou1Status);
 	result += CheckAccessFullyMapped(ou1Status);

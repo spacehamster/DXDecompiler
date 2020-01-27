@@ -75,7 +75,8 @@ CALL CompileShader.bat Internal/HullShaders HullShader_PartitioningFractionalEve
 CALL CompileShader.bat Internal/HullShaders HullShader_PartitioningPow2.hlsl HullShader_PartitioningPow2 hs_5_0 main  || GOTO :error
 
 CALL CompileShader.bat Internal/Misc PrivateDataTest.hlsl PrivateDataTest ps_5_0 PSMain /setprivate Internal/Misc/PrivateData.txt  || GOTO :error
-CALL CompileShader.bat Internal/Misc DebugTest.hlsl DebugTest ps_5_0 PSMain /Zi  || GOTO :error
+rem Debug information is not deterministic
+rem CALL CompileShader.bat Internal/Misc DebugTest.hlsl DebugTest ps_5_0 PSMain /Zi  || GOTO :error
 CALL CompileShader.bat Internal/Misc ShaderWithRootSignature.hlsl ShaderWithRootSignature ps_5_0 main || GOTO :error
 
 Set UNITY_INCLUDES="%cd%\Unity\CGIncludes"

@@ -1,7 +1,7 @@
 SamplerState samp0;
 SamplerComparisonState samp1;
 
-Texture3D<float4> tex : register(t5);
+Texture3D<float4> tex;
 
 float4 main(int index : POSITION) : SV_Target
 {
@@ -19,6 +19,7 @@ float4 main(int index : POSITION) : SV_Target
 	float3 if3DDX = index;
 	float3 if3DDY = index;
 	float if1LOD = index;
+	float4 if3LOD = index;
 	//Out Vars
 	uint ou1Status;
 	uint ou1Width;
@@ -28,6 +29,9 @@ float4 main(int index : POSITION) : SV_Target
 	uint ou1Elements;
 
 	//Texture3D
+	result += tex.CalculateLevelOfDetail(samp0, if3LOD);
+	result += tex.CalculateLevelOfDetailUnclamped(samp0, if3LOD);
+
 	tex.GetDimensions(iu1MipLevel, ou1Width, ou1Height, ou1Depth, ou1NumberOfLevels);
 	result += ou1Width;
 	result += ou1Height;

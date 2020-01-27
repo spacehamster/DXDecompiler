@@ -51,317 +51,322 @@ itof r6.x, v0.x
 itof r6.yzw, v0.xxxx
 itof r7.xyz, v0.xxxx
 itof r7.w, v0.x
-mov r8.xyz, v0.xxxx
+itof r8.xy, v0.xxxx
 mov r9.xyz, v0.xxxx
 mov r10.xyz, v0.xxxx
 mov r11.xyz, v0.xxxx
-gather4_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_s_indexable(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_s_indexable(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.x, r1.xyzx, r8.zyzz, t0.xyzw, s0.x
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.y, r1.xyzx, r9.zyzz, t0.xyzw, s0.x
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.z, r1.xyzx, r10.zyzz, t0.xyzw, s0.x
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.w, r1.xyzx, r11.zyzz, t0.xyzw, s0.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.x, r13.x, r1.xyzx, r8.zyzz, t0.xyzw, s0.x
-check_access_fully_mapped r8.w, r13.x
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.y, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.x
+mov r12.xyz, v0.xxxx
+lod r8.z, r8.xyxx, t0.x, s0
+add r0.xyzw, r0.xyzw, r8.zzzz
+lod r8.x, r8.xyxx, t0.y, s0
+add r0.xyzw, r0.xyzw, r8.xxxx
+gather4_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_s_indexable(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.z, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s0.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.w, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s0.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_s_indexable(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.y
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.y
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_s_indexable(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.y
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.y
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.y
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.x, r1.xyzx, r8.zyzz, t0.xyzw, s0.y
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.y, r1.xyzx, r9.zyzz, t0.xyzw, s0.y
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.z, r1.xyzx, r10.zyzz, t0.xyzw, s0.y
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.w, r1.xyzx, r11.zyzz, t0.xyzw, s0.y
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.x, r13.x, r1.xyzx, r8.zyzz, t0.xyzw, s0.y
-check_access_fully_mapped r8.w, r13.x
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.y, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.y
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.z, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s0.y
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.x
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.y, r1.xyzx, r10.zyzz, t0.xyzw, s0.x
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.z, r1.xyzx, r11.zyzz, t0.xyzw, s0.x
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.w, r1.xyzx, r12.zyzz, t0.xyzw, s0.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.x, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.w, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s0.y
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.y, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s0.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.z, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s0.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.w, r13.x, r1.xyzx, r12.zyzz, t0.xyzw, s0.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.y
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.y
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_s_indexable(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.y
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.z
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.z
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_s_indexable(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.z
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.z
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.z
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.x, r1.xyzx, r8.zyzz, t0.xyzw, s0.z
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.y, r1.xyzx, r9.zyzz, t0.xyzw, s0.z
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.z, r1.xyzx, r10.zyzz, t0.xyzw, s0.z
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.w, r1.xyzx, r11.zyzz, t0.xyzw, s0.z
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.x, r13.x, r1.xyzx, r8.zyzz, t0.xyzw, s0.z
-check_access_fully_mapped r8.w, r13.x
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.y, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.z
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.y
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.y
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.z, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s0.z
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.y
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.y, r1.xyzx, r10.zyzz, t0.xyzw, s0.y
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.z, r1.xyzx, r11.zyzz, t0.xyzw, s0.y
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.w, r1.xyzx, r12.zyzz, t0.xyzw, s0.y
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.x, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.y
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.w, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s0.z
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.y, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s0.y
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.z, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s0.y
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.w, r13.x, r1.xyzx, r12.zyzz, t0.xyzw, s0.y
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.z
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.z
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_s_indexable(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.z
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_s_indexable(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.w
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s0.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.w
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.x, r1.xyzx, r8.zyzz, t0.xyzw, s0.w
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.y, r1.xyzx, r9.zyzz, t0.xyzw, s0.w
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.z, r1.xyzx, r10.zyzz, t0.xyzw, s0.w
-gather4_po_indexable(texture2darray)(float,float,float,float) r12.w, r1.xyzx, r11.zyzz, t0.xyzw, s0.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.x, r13.x, r1.xyzx, r8.zyzz, t0.xyzw, s0.w
-check_access_fully_mapped r8.w, r13.x
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.y, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.z
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.z
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.z, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s0.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.z
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.y, r1.xyzx, r10.zyzz, t0.xyzw, s0.z
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.z, r1.xyzx, r11.zyzz, t0.xyzw, s0.z
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.w, r1.xyzx, r12.zyzz, t0.xyzw, s0.z
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.x, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.z
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_s_indexable(texture2darray)(float,float,float,float) r12.w, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s0.w
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.y, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s0.z
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.z, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s0.z
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.w, r13.x, r1.xyzx, r12.zyzz, t0.xyzw, s0.z
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_s_indexable(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.w
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_s_indexable(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.x, r6.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.x, r6.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_s_indexable(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.x, r6.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.x, r6.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.x, r1.xyzx, r8.zyzz, t0.xyzw, s1.x, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.y, r1.xyzx, r9.zyzz, t0.xyzw, s1.x, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.z, r1.xyzx, r10.zyzz, t0.xyzw, s1.x, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.w, r1.xyzx, r11.zyzz, t0.xyzw, s1.x, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.x, r13.x, r1.xyzx, r8.zyzz, t0.xyzw, s1.x, r6.x
-check_access_fully_mapped r8.w, r13.x
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.y, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s1.x, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s0.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s0.w
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.z, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s1.x, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.w
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.y, r1.xyzx, r10.zyzz, t0.xyzw, s0.w
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.z, r1.xyzx, r11.zyzz, t0.xyzw, s0.w
+gather4_po_indexable(texture2darray)(float,float,float,float) r8.w, r1.xyzx, r12.zyzz, t0.xyzw, s0.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.x, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s0.w
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.w, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s1.x, r6.x
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.y, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s0.w
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.z, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s0.w
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_s_indexable(texture2darray)(float,float,float,float) r8.w, r13.x, r1.xyzx, r12.zyzz, t0.xyzw, s0.w
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_s_indexable(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.x, r6.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.y, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.y, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_s_indexable(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.y, r6.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.y, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.y, r6.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.x, r1.xyzx, r8.zyzz, t0.xyzw, s1.y, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.y, r1.xyzx, r9.zyzz, t0.xyzw, s1.y, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.z, r1.xyzx, r10.zyzz, t0.xyzw, s1.y, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.w, r1.xyzx, r11.zyzz, t0.xyzw, s1.y, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.x, r13.x, r1.xyzx, r8.zyzz, t0.xyzw, s1.y, r6.x
-check_access_fully_mapped r8.w, r13.x
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.y, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s1.y, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.x, r6.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.z, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s1.y, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_s_indexable(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.x, r6.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.w, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s1.y, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.x, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.x, r6.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.z, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.z, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_s_indexable(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.z, r6.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.z, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.z, r6.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.x, r1.xyzx, r8.zyzz, t0.xyzw, s1.z, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.y, r1.xyzx, r9.zyzz, t0.xyzw, s1.z, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.z, r1.xyzx, r10.zyzz, t0.xyzw, s1.z, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.w, r1.xyzx, r11.zyzz, t0.xyzw, s1.z, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.x, r13.x, r1.xyzx, r8.zyzz, t0.xyzw, s1.z, r6.x
-check_access_fully_mapped r8.w, r13.x
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.y, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s1.z, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.x, r1.xyzx, r9.zyzz, t0.xyzw, s1.x, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.y, r1.xyzx, r10.zyzz, t0.xyzw, s1.x, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.z, r1.xyzx, r11.zyzz, t0.xyzw, s1.x, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.w, r1.xyzx, r12.zyzz, t0.xyzw, s1.x, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.x, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s1.x, r6.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.z, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s1.z, r6.x
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.y, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s1.x, r6.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.z, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s1.x, r6.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.w, r13.x, r1.xyzx, r12.zyzz, t0.xyzw, s1.x, r6.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.y, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.y, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_s_indexable(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.y, r6.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r12.w, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s1.z, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.y, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.y, r6.x
 check_access_fully_mapped r9.w, r13.x
-and r8.w, r8.w, r9.w
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.w, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_indexable(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.w, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_s_indexable(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.w, r6.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r1.xyzx, t0.xyzw, s1.w, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_c_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r12.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.w, r6.x
-check_access_fully_mapped r8.w, r13.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-and r12.xyzw, r8.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.x, r1.xyzx, r8.zyzz, t0.xyzw, s1.w, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.y, r1.xyzx, r9.zyzz, t0.xyzw, s1.w, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.z, r1.xyzx, r10.zyzz, t0.xyzw, s1.w, r6.x
-gather4_po_c_indexable(texture2darray)(float,float,float,float) r12.w, r1.xyzx, r11.zyzz, t0.xyzw, s1.w, r6.x
-add r0.xyzw, r0.xyzw, r12.xyzw
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.x, r12.x, r1.xyzx, r8.xyxx, t0.xyzw, s1.w, r6.x
-check_access_fully_mapped r9.w, r12.x
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.y, r9.x, r1.xyzx, r9.xyxx, t0.xyzw, s1.w, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.x, r1.xyzx, r9.zyzz, t0.xyzw, s1.y, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.y, r1.xyzx, r10.zyzz, t0.xyzw, s1.y, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.z, r1.xyzx, r11.zyzz, t0.xyzw, s1.y, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.w, r1.xyzx, r12.zyzz, t0.xyzw, s1.y, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.x, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s1.y, r6.x
+check_access_fully_mapped r9.w, r13.x
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.y, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s1.y, r6.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.z, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s1.y, r6.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.w, r13.x, r1.xyzx, r12.zyzz, t0.xyzw, s1.y, r6.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.z, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.z, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_s_indexable(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.z, r6.x
+check_access_fully_mapped r9.w, r13.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.z, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.z, r6.x
+check_access_fully_mapped r9.w, r13.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.x, r1.xyzx, r9.zyzz, t0.xyzw, s1.z, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.y, r1.xyzx, r10.zyzz, t0.xyzw, s1.z, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.z, r1.xyzx, r11.zyzz, t0.xyzw, s1.z, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.w, r1.xyzx, r12.zyzz, t0.xyzw, s1.z, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.x, r13.x, r1.xyzx, r9.zyzz, t0.xyzw, s1.z, r6.x
+check_access_fully_mapped r9.w, r13.x
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.y, r13.x, r1.xyzx, r10.zyzz, t0.xyzw, s1.z, r6.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.z, r13.x, r1.xyzx, r11.zyzz, t0.xyzw, s1.z, r6.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.w, r13.x, r1.xyzx, r12.zyzz, t0.xyzw, s1.z, r6.x
+check_access_fully_mapped r10.w, r13.x
+and r9.w, r9.w, r10.w
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.w, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_indexable(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.w, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_s_indexable(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.w, r6.x
+check_access_fully_mapped r9.w, r13.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r1.xyzx, t0.xyzw, s1.w, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_c_s_aoffimmi_indexable(1,1,0)(texture2darray)(float,float,float,float) r8.xyzw, r13.x, r1.xyzx, t0.xyzw, s1.w, r6.x
+check_access_fully_mapped r9.w, r13.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+and r8.xyzw, r9.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.x, r1.xyzx, r9.zyzz, t0.xyzw, s1.w, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.y, r1.xyzx, r10.zyzz, t0.xyzw, s1.w, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.z, r1.xyzx, r11.zyzz, t0.xyzw, s1.w, r6.x
+gather4_po_c_indexable(texture2darray)(float,float,float,float) r8.w, r1.xyzx, r12.zyzz, t0.xyzw, s1.w, r6.x
+add r0.xyzw, r0.xyzw, r8.xyzw
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.x, r9.x, r1.xyzx, r9.xyxx, t0.xyzw, s1.w, r6.x
 check_access_fully_mapped r9.x, r9.x
-and r9.x, r9.x, r9.w
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.z, r10.x, r1.xyzx, r10.xyxx, t0.xyzw, s1.w, r6.x
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.y, r10.x, r1.xyzx, r10.xyxx, t0.xyzw, s1.w, r6.x
 check_access_fully_mapped r9.y, r10.x
 and r9.x, r9.y, r9.x
-gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.w, r10.x, r1.xyzx, r11.xyxx, t0.xyzw, s1.w, r6.x
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.z, r10.x, r1.xyzx, r11.xyxx, t0.xyzw, s1.w, r6.x
+check_access_fully_mapped r9.y, r10.x
+and r9.x, r9.y, r9.x
+gather4_po_c_s_indexable(texture2darray)(float,float,float,float) r8.w, r10.x, r1.xyzx, r12.xyxx, t0.xyzw, s1.w, r6.x
 check_access_fully_mapped r9.y, r10.x
 and r9.x, r9.y, r9.x
 add r0.xyzw, r0.xyzw, r8.xyzw
@@ -517,4 +522,4 @@ and r1.xyzw, r2.xxxx, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r1.xyzw
 mov o0.xyzw, r0.xyzw
 ret 
-// Approximately 480 instruction slots used
+// Approximately 485 instruction slots used

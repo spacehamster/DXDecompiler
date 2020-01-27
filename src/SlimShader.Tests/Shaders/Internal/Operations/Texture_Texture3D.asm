@@ -11,7 +11,7 @@
 // Name                                 Type  Format         Dim      HLSL Bind  Count
 // ------------------------------ ---------- ------- ----------- -------------- ------
 // samp0                             sampler      NA          NA             s0      1 
-// tex                               texture  float4          3d             t5      1 
+// tex                               texture  float4          3d             t0      1 
 //
 //
 //
@@ -31,7 +31,7 @@
 ps_5_0
 dcl_globalFlags refactoringAllowed | skipOptimization
 dcl_sampler s0, mode_default
-dcl_resource_texture3d (float,float,float,float) t5
+dcl_resource_texture3d (float,float,float,float) t0
 dcl_input_ps constant v0.x
 dcl_output o0.xyzw
 dcl_temps 11
@@ -48,7 +48,12 @@ itof r6.y, v0.x
 itof r7.xyz, v0.xxxx
 itof r8.xyz, v0.xxxx
 itof r6.z, v0.x
-resinfo_indexable(texture3d)(float,float,float,float)_uint r9.xyzw, r1.w, t5.xyzw
+itof r9.xyz, v0.xxxx
+lod r6.w, r9.xyzx, t0.x, s0
+add r0.xyzw, r0.xyzw, r6.wwww
+lod r6.w, r9.xyzx, t0.y, s0
+add r0.xyzw, r0.xyzw, r6.wwww
+resinfo_indexable(texture3d)(float,float,float,float)_uint r9.xyzw, r1.w, t0.xyzw
 mov r9.x, r9.x
 mov r9.y, r9.y
 mov r9.z, r9.z
@@ -61,105 +66,105 @@ utof r10.xyzw, r9.zzzz
 add r0.xyzw, r0.xyzw, r10.xyzw
 utof r9.xyzw, r9.wwww
 add r0.xyzw, r0.xyzw, r9.xyzw
-ld_indexable(texture3d)(float,float,float,float) r9.xyzw, r4.xyzw, t5.xyzw
+ld_indexable(texture3d)(float,float,float,float) r9.xyzw, r4.xyzw, t0.xyzw
 add r0.xyzw, r0.xyzw, r9.xyzw
 mov r2.w, l(0)
-ld_indexable(texture3d)(float,float,float,float) r9.xyzw, r4.xyzw, t5.xyzw
+ld_indexable(texture3d)(float,float,float,float) r9.xyzw, r4.xyzw, t0.xyzw
 add r0.xyzw, r0.xyzw, r9.xyzw
-ld_s_indexable(texture3d)(float,float,float,float) r9.xyzw, r10.x, r4.xyzw, t5.xyzw
+ld_s_indexable(texture3d)(float,float,float,float) r9.xyzw, r10.x, r4.xyzw, t0.xyzw
 check_access_fully_mapped r1.w, r10.x
 add r0.xyzw, r0.xyzw, r9.xyzw
 and r9.xyzw, r1.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r9.xyzw
 mov r3.w, l(0)
-ld_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r9.xyzw, r4.xyzw, t5.xyzw
+ld_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r9.xyzw, r4.xyzw, t0.xyzw
 add r0.xyzw, r0.xyzw, r9.xyzw
-ld_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r9.x, r4.xyzw, t5.xyzw
+ld_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r9.x, r4.xyzw, t0.xyzw
 check_access_fully_mapped r1.w, r9.x
 add r0.xyzw, r0.xyzw, r4.xyzw
 and r4.xyzw, r1.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r4.xyzw
-ld_indexable(texture3d)(float,float,float,float) r4.xyzw, r5.xyzw, t5.xyzw
+ld_indexable(texture3d)(float,float,float,float) r4.xyzw, r5.xyzw, t0.xyzw
 add r0.xyzw, r0.xyzw, r4.xyzw
 mov r5.w, l(0)
-ld_indexable(texture3d)(float,float,float,float) r4.xyzw, r5.xyzw, t5.xyzw
+ld_indexable(texture3d)(float,float,float,float) r4.xyzw, r5.xyzw, t0.xyzw
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_indexable(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0
+sample_indexable(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_aoffimmi_indexable(0,0,0)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0
+sample_aoffimmi_indexable(0,0,0)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t5.xyzw, s0, r6.x
+sample_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t0.xyzw, s0, r6.x
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t5.xyzw, s0, r6.x
+sample_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t0.xyzw, s0, r6.x
 check_access_fully_mapped r1.w, r5.x
 add r0.xyzw, r0.xyzw, r4.xyzw
 and r4.xyzw, r1.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0
+sample_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t5.xyzw, s0, r6.x
+sample_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t0.xyzw, s0, r6.x
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t5.xyzw, s0, r6.x
+sample_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t0.xyzw, s0, r6.x
 check_access_fully_mapped r1.w, r5.x
 add r0.xyzw, r0.xyzw, r4.xyzw
 and r4.xyzw, r1.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_b_indexable(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0, r6.y
+sample_b_indexable(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0, r6.y
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_b_aoffimmi_indexable(0,0,0)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0, r6.y
+sample_b_aoffimmi_indexable(0,0,0)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0, r6.y
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_b_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t5.xyzw, s0, r6.y, r6.x
+sample_b_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t0.xyzw, s0, r6.y, r6.x
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_b_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t5.xyzw, s0, r6.y, r6.x
+sample_b_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t0.xyzw, s0, r6.y, r6.x
 check_access_fully_mapped r1.w, r5.x
 add r0.xyzw, r0.xyzw, r4.xyzw
 and r4.xyzw, r1.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_b_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0, r6.y
+sample_b_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0, r6.y
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_b_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t5.xyzw, s0, r6.y, r6.x
+sample_b_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t0.xyzw, s0, r6.y, r6.x
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_b_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t5.xyzw, s0, r6.y, r6.x
+sample_b_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t0.xyzw, s0, r6.y, r6.x
 check_access_fully_mapped r1.w, r5.x
 add r0.xyzw, r0.xyzw, r4.xyzw
 and r4.xyzw, r1.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_d_indexable(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0, r7.xyzx, r8.xyzx
+sample_d_indexable(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0, r7.xyzx, r8.xyzx
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_d_aoffimmi_indexable(0,0,0)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0, r7.xyzx, r8.xyzx
+sample_d_aoffimmi_indexable(0,0,0)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0, r7.xyzx, r8.xyzx
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_d_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t5.xyzw, s0, r7.xyzx, r8.xyzx, r6.x
+sample_d_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t0.xyzw, s0, r7.xyzx, r8.xyzx, r6.x
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_d_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t5.xyzw, s0, r7.xyzx, r8.xyzx, r6.x
+sample_d_cl_s_indexable(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t0.xyzw, s0, r7.xyzx, r8.xyzx, r6.x
 check_access_fully_mapped r1.w, r5.x
 add r0.xyzw, r0.xyzw, r4.xyzw
 and r4.xyzw, r1.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_d_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0, r7.xyzx, r8.xyzx
+sample_d_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0, r7.xyzx, r8.xyzx
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_d_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t5.xyzw, s0, r7.xyzx, r8.xyzx, r6.x
+sample_d_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, null, r1.xyzx, t0.xyzw, s0, r7.xyzx, r8.xyzx, r6.x
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_d_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t5.xyzw, s0, r7.xyzx, r8.xyzx, r6.x
+sample_d_cl_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r4.xyzw, r5.x, r1.xyzx, t0.xyzw, s0, r7.xyzx, r8.xyzx, r6.x
 check_access_fully_mapped r1.w, r5.x
 add r0.xyzw, r0.xyzw, r4.xyzw
 and r4.xyzw, r1.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_l_indexable(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0, r6.z
+sample_l_indexable(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0, r6.z
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_l_aoffimmi_indexable(0,0,0)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t5.xyzw, s0, r6.z
+sample_l_aoffimmi_indexable(0,0,0)(texture3d)(float,float,float,float) r4.xyzw, r1.xyzx, t0.xyzw, s0, r6.z
 add r0.xyzw, r0.xyzw, r4.xyzw
-sample_l_s_indexable(texture3d)(float,float,float,float) r2.xyzw, r4.x, r1.xyzx, t5.xyzw, s0, r6.z
+sample_l_s_indexable(texture3d)(float,float,float,float) r2.xyzw, r4.x, r1.xyzx, t0.xyzw, s0, r6.z
 check_access_fully_mapped r1.w, r4.x
 add r0.xyzw, r0.xyzw, r2.xyzw
 and r2.xyzw, r1.wwww, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r2.xyzw
-sample_l_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r2.xyzw, r1.xyzx, t5.xyzw, s0, r6.z
+sample_l_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r2.xyzw, r1.xyzx, t0.xyzw, s0, r6.z
 add r0.xyzw, r0.xyzw, r2.xyzw
-sample_l_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r1.xyzw, r2.x, r1.xyzx, t5.xyzw, s0, r6.z
+sample_l_s_aoffimmi_indexable(1,1,1)(texture3d)(float,float,float,float) r1.xyzw, r2.x, r1.xyzx, t0.xyzw, s0, r6.z
 check_access_fully_mapped r2.x, r2.x
 add r0.xyzw, r0.xyzw, r1.xyzw
 and r1.xyzw, r2.xxxx, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r1.xyzw
 mov o0.xyzw, r0.xyzw
 ret 
-// Approximately 127 instruction slots used
+// Approximately 132 instruction slots used

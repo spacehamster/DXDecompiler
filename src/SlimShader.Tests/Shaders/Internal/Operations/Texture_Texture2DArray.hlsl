@@ -19,7 +19,8 @@ float4 main(int index : POSITION) : SV_Target
 	float if1CompareValue = index;
 	float2 if2DDX = index;
 	float2 if2DDY = index;
-	float1 if1LOD = index;
+	float if1LOD = index;
+	float2 if2LOD = index;
 	int2 ii2Offset1 = index;
 	int2 ii2Offset2 = index;
 	int2 ii2Offset3 = index;
@@ -33,6 +34,9 @@ float4 main(int index : POSITION) : SV_Target
 	uint ou1Height;
 	
 	//Texture2DArray
+	result += tex.CalculateLevelOfDetail(samp0, if2LOD);
+	result += tex.CalculateLevelOfDetailUnclamped(samp0, if2LOD);
+
 	result += tex.Gather(samp0, if3Location);
 	result += tex.Gather(samp0, if3Location, ii2OffsetZero);
 	result += tex.Gather(samp0, if3Location, ii2OffsetZero, ou1Status);

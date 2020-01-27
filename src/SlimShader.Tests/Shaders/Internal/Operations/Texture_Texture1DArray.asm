@@ -51,6 +51,10 @@ itof r2.w, v0.x
 itof r3.z, v0.x
 itof r3.w, v0.x
 itof r5.x, v0.x
+lod r5.y, r5.x, t0.x, s0
+add r0.xyzw, r0.xyzw, r5.yyyy
+lod r5.y, r5.x, t0.y, s0
+add r0.xyzw, r0.xyzw, r5.yyyy
 resinfo_indexable(texture1darray)(float,float,float,float)_uint r5.yzw, r1.w, t0.zxyw
 mov r5.y, r5.y
 mov r5.z, r5.z
@@ -195,4 +199,4 @@ and r1.xyzw, r2.xxxx, l(0x3f800000, 0x3f800000, 0x3f800000, 0x3f800000)
 add r0.xyzw, r0.xyzw, r1.xyzw
 mov o0.xyzw, r0.xyzw
 ret 
-// Approximately 158 instruction slots used
+// Approximately 162 instruction slots used
