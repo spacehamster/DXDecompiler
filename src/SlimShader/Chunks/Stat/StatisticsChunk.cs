@@ -166,6 +166,11 @@ namespace SlimShader.Chunks.Stat
 		/// </summary>
 		public uint TextureStoreInstructions { get; private set; }
 
+		/// <summary>
+		/// Number of texture gather instructions
+		/// </summary>
+		public uint TextureGatherInstructions { get; private set; }
+
 		public uint MovInstructionCount { get; private set; }
 		public uint MovCInstructionCount { get; private set; }
 		public uint ConversionInstructionCount { get; private set; }
@@ -209,11 +214,7 @@ namespace SlimShader.Chunks.Stat
 			result.GeometryShaderOutputTopology = (PrimitiveTopology) reader.ReadUInt32();
 			result.GeometryShaderMaxOutputVertexCount = reader.ReadUInt32();
 
-			var unknown1 = reader.ReadUInt32();
-			//if (unknown1 == 0 || unknown1 == 1 || unknown1 == 3) throw new System.Exception($"unknown1 is {unknown1}");
-			//TODO: CheckAccessFullyMapped textures have large unknown1
-			//Texture_Texture2D, Texture_Texture2DArray, Texture_TextureCube, Texture_TextureCubeArray
-			Debug.Assert(unknown1 == 0 || unknown1 == 1 || unknown1 == 3 || unknown1 == 15 || unknown1 == 83, $"Statistics unknown1 is {unknown1}");
+			result.TextureGatherInstructions = reader.ReadUInt32();
 
 			var unknown2 = reader.ReadUInt32();
 			//if (unknown2 != 0 && unknown2 != 2) throw new System.Exception($"unknown2 is {unknown2}");
