@@ -171,6 +171,11 @@ namespace SlimShader.Chunks.Stat
 		/// </summary>
 		public uint TextureGatherInstructions { get; private set; }
 
+		/// <summary>
+		/// Number of texture level of detail instructions
+		/// </summary>
+		public uint TextureLevelOfDetailInstructions { get; private set; }
+
 		public uint MovInstructionCount { get; private set; }
 		public uint MovCInstructionCount { get; private set; }
 		public uint ConversionInstructionCount { get; private set; }
@@ -207,7 +212,6 @@ namespace SlimShader.Chunks.Stat
 
 			//TODO
 			var unknown0 = reader.ReadUInt32();
-			//if (unknown0 != 0) throw new System.Exception($"unknown0 is {unknown0}");
 			Debug.Assert(unknown0 == 0, $"Statistics unknown1 is {unknown0}");
 
 			result.InputPrimitive = (Primitive) reader.ReadUInt32();
@@ -215,10 +219,7 @@ namespace SlimShader.Chunks.Stat
 			result.GeometryShaderMaxOutputVertexCount = reader.ReadUInt32();
 
 			result.TextureGatherInstructions = reader.ReadUInt32();
-
-			var unknown2 = reader.ReadUInt32();
-			//if (unknown2 != 0 && unknown2 != 2) throw new System.Exception($"unknown2 is {unknown2}");
-			Debug.Assert(unknown2 == 0 || unknown2 == 2, $"Statistics unknown1 is {unknown2}"); // TODO
+			result.TextureLevelOfDetailInstructions = reader.ReadUInt32();
 
 			result.IsSampleFrequencyShader = (reader.ReadUInt32() == 1);
 
