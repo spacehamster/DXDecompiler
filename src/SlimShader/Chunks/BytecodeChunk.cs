@@ -3,6 +3,7 @@ using SlimShader.Chunks.Aon9;
 using SlimShader.Chunks.Ifce;
 using SlimShader.Chunks.Priv;
 using SlimShader.Chunks.Rdef;
+using SlimShader.Chunks.RTS0;
 using SlimShader.Chunks.Sfi0;
 using SlimShader.Chunks.Shex;
 using SlimShader.Chunks.Spdb;
@@ -34,6 +35,7 @@ namespace SlimShader.Chunks
 			{ "XNAS".ToFourCc(), ChunkType.Xnas },
 			{ "XNAP".ToFourCc(), ChunkType.Xnap },
 			{ "PRIV".ToFourCc(), ChunkType.Priv },
+			{ "RTS0".ToFourCc(), ChunkType.Rts0 },
 		};
 
 		public BytecodeContainer Container { get; private set; }
@@ -101,6 +103,9 @@ namespace SlimShader.Chunks
 					break;
 				case ChunkType.Priv:
 					chunk = PrivateChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Rts0:
+					chunk = RootSignatureChunk.Parse(chunkContentReader, chunkSize);
 					break;
 				default :
 					throw new ParseException("Invalid chunk type: " + chunkType);

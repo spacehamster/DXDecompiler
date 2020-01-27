@@ -353,6 +353,11 @@ namespace SlimShader.Decompiler
 						// TODO
 						break;
 					}
+				case OperandType.OutputControlPoint:
+					{
+						// TODO
+						break;
+					}
 				case OperandType.InputPatchConstant:
 					{
 						// TODO

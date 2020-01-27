@@ -93,5 +93,10 @@ namespace SlimShader.Chunks
 		/// User Specified Private Data Chunk
 		/// </summary>
 		Priv,
+
+		/// <summary>
+		/// Root Signature Chunk
+		/// </summary>
+		Rts0,
 	}
 }
