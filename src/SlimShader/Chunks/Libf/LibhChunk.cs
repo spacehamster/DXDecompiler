@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
+using SlimShader.Util;
 
-namespace SlimShader.Tests
+namespace SlimShader.Chunks.Libf
 {
-	public class FileUtil
+	public class LibhChunk : BytecodeChunk
 	{
-		public static string GetRelativePath(string filespec, string folder)
+		public byte[] Data;
+		public static LibhChunk Parse(BytecodeReader reader, uint chunkSize)
 		{
-			Uri pathUri = new Uri(filespec);
-			// Folders must end in a slash
-			if (!folder.EndsWith(Path.DirectorySeparatorChar.ToString()))
-			{
-				folder += Path.DirectorySeparatorChar;
-			}
-			Uri folderUri = new Uri(folder);
-			return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
+			var result = new LibhChunk();
+			result.Data = reader.ReadBytes((int)chunkSize);
+			return result;
 		}
 		public static string FormatReadable(byte[] data)
 		{
@@ -29,8 +25,7 @@ namespace SlimShader.Tests
 					if (j < data.Length)
 					{
 						sb.Append(data[j].ToString("X2"));
-					}
-					else
+					} else
 					{
 						sb.Append("  ");
 					}
@@ -46,14 +41,20 @@ namespace SlimShader.Tests
 					if (!char.IsControl(c))
 					{
 						sb.Append(c);
-					}
-					else
+					} else
 					{
 						sb.Append('.');
 					}
 				}
 				sb.AppendLine();
 			}
+			return sb.ToString();
+		}
+		public override string ToString()
+		{
+			var sb = new StringBuilder();
+			sb.AppendLine("LibhChunk");
+			sb.Append(FormatReadable(Data));
 			return sb.ToString();
 		}
 	}

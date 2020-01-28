@@ -52,7 +52,10 @@ namespace SlimShader.Tests.Util
 				{
 					return $"{match.Groups[1].Value}-0";
 				}
-				var value = float.Parse(match.Groups[2].Value);
+				if(!float.TryParse(match.Groups[2].Value, out float value))
+				{
+					return match.Groups[0].Value;
+				}
 				if(value < 1E-07)
 				{
 					value = 0;

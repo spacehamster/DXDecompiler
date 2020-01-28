@@ -47,6 +47,8 @@
     <Compile Include="Chunks\Aon9\Unknown1Mapping.cs" />
     <Compile Include="Chunks\Aon9\ConstantBufferMapping.cs" />
     <Compile Include="Chunks\Aon9\SamplerMapping.cs" />
+    <Compile Include="Chunks\Libf\LibfChunk.cs" />
+    <Compile Include="Chunks\Libf\LibhChunk.cs" />
     <Compile Include="Chunks\Priv\PrivateChunk.cs" />
     <Compile Include="Chunks\RTS0\ComparisonFunc.cs" />
     <Compile Include="Chunks\RTS0\RootConstants.cs" />

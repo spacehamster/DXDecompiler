@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using SlimShader.Chunks.Aon9;
 using SlimShader.Chunks.Ifce;
+using SlimShader.Chunks.Libf;
 using SlimShader.Chunks.Priv;
 using SlimShader.Chunks.Rdef;
 using SlimShader.Chunks.RTS0;
@@ -36,6 +37,8 @@ namespace SlimShader.Chunks
 			{ "XNAP".ToFourCc(), ChunkType.Xnap },
 			{ "PRIV".ToFourCc(), ChunkType.Priv },
 			{ "RTS0".ToFourCc(), ChunkType.Rts0 },
+			{ "LIBF".ToFourCc(), ChunkType.Libf },
+			{ "LIBH".ToFourCc(), ChunkType.Libh },
 		};
 
 		public BytecodeContainer Container { get; private set; }
@@ -106,6 +109,12 @@ namespace SlimShader.Chunks
 					break;
 				case ChunkType.Rts0:
 					chunk = RootSignatureChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Libf:
+					chunk = LibfChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Libh:
+					chunk = LibhChunk.Parse(chunkContentReader, chunkSize);
 					break;
 				default :
 					throw new ParseException("Invalid chunk type: " + chunkType);

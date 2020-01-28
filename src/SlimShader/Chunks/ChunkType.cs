@@ -98,5 +98,16 @@ namespace SlimShader.Chunks
 		/// Root Signature Chunk
 		/// </summary>
 		Rts0,
+
+		/// <summary>
+		/// Library chunk
+		/// </summary>
+		Libf,
+
+		/// <summary>
+		/// Library chunk
+		/// </summary>
+		Libh,
+
 	}
 }
