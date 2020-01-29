@@ -109,5 +109,9 @@ namespace SlimShader.Chunks
 		/// </summary>
 		Libh,
 
+		/// <summary>
+		/// Library chunk
+		/// </summary>
+		Lfs0,
 	}
 }

@@ -1,4 +1,4 @@
-#define RS1 "RootFlags( ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT  |DENY_VERTEX_SHADER_ROOT_ACCESS " \
+#define RS1 "RootFlags( ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | DENY_VERTEX_SHADER_ROOT_ACCESS " \
                          "), " \
               "CBV(b13, space=4095), " \
               "CBV(b27, space=3567, visibility=SHADER_VISIBILITY_VERTEX, flags=DATA_VOLATILE), " \
@@ -9,7 +9,7 @@
                                "SRV(t1, numDescriptors=unbounded)), " \
               "DescriptorTable(Sampler(s0, numDescriptors = 2)), " \
               "DescriptorTable(UAV(u1, space=50, numDescriptors = 2, flags = DATA_STATIC_WHILE_SET_AT_EXECUTE)), " \
-              "RootConstants(num32BitConstants=7, b9, space=15,  visibility=SHADER_VISIBILITY_GEOMETRY ), " \
+              "RootConstants(num32BitConstants=7, b9, space=15, visibility=SHADER_VISIBILITY_GEOMETRY ), " \
               "RootConstants(num32BitConstants=51, b12, space=23,  visibility=SHADER_VISIBILITY_PIXEL ), " \
               "DescriptorTable( UAV(u3), " \
                                "UAV(u4), " \
@@ -22,9 +22,9 @@
                             "mipLODBias = -10.5, " \
                             "maxAnisotropy = 14, " \
                             "comparisonFunc = COMPARISON_GREATER_EQUAL, " \
-                            "borderColor   = STATIC_BORDER_COLOR_TRANSPARENT_BLACK, " \
-                            "minLOD  = -2, " \
-                            "maxLOD  = -50, " \
+                            "borderColor = STATIC_BORDER_COLOR_TRANSPARENT_BLACK, " \
+                            "minLOD = -2, " \
+                            "maxLOD = -50, " \
                             "space = 52, " \
                             "filter = FILTER_MIN_MAG_MIP_LINEAR )"
 

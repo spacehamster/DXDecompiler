@@ -20,6 +20,9 @@ namespace SlimShader.Chunks.Common
 		DomainShader = 4,
 
 		[Description("cs")]
-		ComputeShader = 5
+		ComputeShader = 5,
+
+		[Description("lib")]
+		LibraryShader = 0xFFF0
 	}
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpDX.D3DCompiler;
 using SlimShader.Chunks;
+using SlimShader.Chunks.Libf;
 using SlimShader.Chunks.Rdef;
 using SlimShader.Chunks.Shex;
 using SlimShader.Chunks.Shex.Tokens;
@@ -166,13 +167,18 @@ namespace SlimShader.Tests
 			// Arrange.
 			var file = $"{ShaderDirectory}/{relPath}";
 			var binaryFileBytes = File.ReadAllBytes(file + ".o");
+
+			// Act.
+			var container = BytecodeContainer.Parse(binaryFileBytes);
+			if (container.Chunks.OfType<LibHeaderChunk>().Any())
+			{
+				CompareLibrary(container, binaryFileBytes);
+				return;
+			}
 			using (var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
 			using (var shaderReflection = new ShaderReflection(shaderBytecode))
 			{
 				var desc = shaderReflection.Description;
-
-				// Act.
-				var container = BytecodeContainer.Parse(binaryFileBytes);
 
 				// Assert.
 				Assert.AreEqual(shaderReflection.BitwiseInstructionCount, 0); // TODO
@@ -297,8 +303,16 @@ namespace SlimShader.Tests
 				for (int i = 0; i < shaderReflection.Description.PatchConstantParameters; i++)
 					CompareParameter(shaderReflection.GetPatchConstantParameterDescription(i),
 						container.PatchConstantSignature.Parameters[i]);
-
 			}
+		}
+		private static void CompareLibrary(BytecodeContainer container, byte[] shaderBytecode)
+		{
+			var libReflection = new LibraryReflection(shaderBytecode);
+			var libHeader = container.Chunks.OfType<LibHeaderChunk>().First();
+			var desc = libReflection.Description;
+			Assert.AreEqual(desc.Creator, libHeader.CreatorString);
+			Assert.AreEqual(desc.FunctionCount, libHeader.FunctionDescs.Count);
+			Assert.AreEqual(desc.Flags, 0);
 		}
 
 		private static void CompareConstantBuffer(SharpDX.D3DCompiler.ConstantBuffer expected, Chunks.Rdef.ConstantBuffer actual)

@@ -127,7 +127,7 @@ namespace SlimShader.Chunks.Rdef
 				Flags = flags
 			};
 
-			if (target.MajorVersion >= 5)
+			if (target.MajorVersion >= 5 || target.ProgramType == ProgramType.LibraryShader)
 			{
 				result.StartTexture = variableReader.ReadInt32();
 				result.TextureSize = variableReader.ReadInt32();

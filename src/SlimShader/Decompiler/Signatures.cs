@@ -12,8 +12,14 @@ namespace SlimShader.Decompiler
 	{
 		void WriteSignatures()
 		{
-			WriteInputSignature();
-			WriteOutputSignature();
+			if (Container.InputSignature != null)
+			{
+				WriteInputSignature();
+			}
+			if (Container.OutputSignature != null)
+			{
+				WriteOutputSignature();
+			}
 			WritePatchConstant();
 		}
 		void WriteInputSignature()

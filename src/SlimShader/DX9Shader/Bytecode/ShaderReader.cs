@@ -34,7 +34,11 @@ namespace SlimShader.DX9Shader
 			byte minorVersion = ReadByte();
 			byte majorVersion = ReadByte();
 			ShaderType shaderType = (ShaderType)ReadUInt16();
-			Debug.Assert(shaderType == ShaderType.Pixel || shaderType == ShaderType.Vertex, 
+			if(shaderType == ShaderType.Fx)
+			{
+				throw new Exception("FX shaders currently not supported");
+			}
+			Debug.Assert(shaderType == ShaderType.Pixel || shaderType == ShaderType.Vertex || shaderType == ShaderType.Fx,
 				$"Shader does not contain a valid shader type {shaderType}");
 			var shader = new ShaderModel(majorVersion, minorVersion, shaderType);
 

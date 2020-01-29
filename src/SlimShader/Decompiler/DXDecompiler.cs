@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SlimShader.Chunks;
+using SlimShader.Chunks.Libf;
 
 namespace SlimShader.Decompiler
 {
@@ -22,9 +23,20 @@ namespace SlimShader.Decompiler
 		public Dictionary<string, ConstantBuffer> m_ConstantBufferLookup;
 		public Dictionary<string, ResourceBinding> m_ResourceBindingLookup;
 		int indent = 0;
+
 		public static string Decompile(byte[] data)
 		{
 			var container = new BytecodeContainer(data);
+			if (container.Chunks.OfType<LibfChunk>().Any())
+			{
+				var sb = new StringBuilder();
+				foreach(var lib in container.Chunks.OfType<LibfChunk>())
+				{
+					var libDecompiler = new DXDecompiler(lib.LibraryContainer);
+					sb.AppendLine(libDecompiler.Decompile());
+				}
+				return sb.ToString();
+			}
 			var decompiler = new DXDecompiler(container);
 			return decompiler.Decompile();
 		}
@@ -140,6 +152,21 @@ namespace SlimShader.Decompiler
 				indent++;
 				AddIndent();
 				Output.AppendLine("ShaderOutput output;");
+			}
+			else if (Container.Shader.Version.ProgramType == ProgramType.LibraryShader)
+			{
+				var libSignature = Container.LibrarySignature;
+				var functionParam = libSignature.Parameters[0];
+				Output.AppendFormat("{0} {1}(", functionParam.TypeName, functionParam.Name);
+				WriteLibraryParams();
+				Output.AppendLine(")");
+				Output.AppendLine("{");
+				indent++;
+				if (functionParam.VariableType != ShaderVariableType.Void)
+				{
+					AddIndent();
+					Output.AppendLine($"{functionParam.TypeName} output;");
+				}
 			}
 			else
 			{
@@ -363,6 +390,27 @@ namespace SlimShader.Decompiler
 				}
 			}
 			Output.Append(" ");
+		}
+		void WriteLibraryParams()
+		{
+			var libSignature = Container.LibrarySignature;
+			for(int i = 1; i < libSignature.Parameters.Count; i++)
+			{
+				var param = libSignature.Parameters[i];
+				if (param.InterpolationMode != Chunks.Libf.InterpolationMode.Undefined)
+				{
+					Output.AppendFormat("{0} ", param.InterpolationMode);
+				}
+				Output.AppendFormat("{0} {1}", param.TypeName, param.Name);
+				if (!string.IsNullOrEmpty(param.SemanticName))
+				{
+					Output.AppendFormat(": {0}", param.SemanticName);
+				}
+				if(i < libSignature.Parameters.Count - 1)
+				{
+					Output.AppendLine(", ");
+				}
+			}
 		}
 		void WriteGeometryParams()
 		{

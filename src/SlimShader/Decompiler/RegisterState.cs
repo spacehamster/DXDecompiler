@@ -25,7 +25,14 @@ namespace SlimShader.Decompiler
 			InitContantBuffers();
 			InitResources();
 			InitDeclarations();
-			InitInputAndOutput();
+			if (Container.LibrarySignature != null)
+			{
+				InitLibraryParams();
+			}
+			else
+			{
+				InitInputAndOutput();
+			}
 			InitResourceBindings();
 		}
 		public void AddRegister(string key, Register register)
@@ -105,6 +112,33 @@ namespace SlimShader.Decompiler
 			{
 				var key = $"{rb.GetBindPointDescription()}";
 				AddRegister(key, new Register($"{rb.Name}"));
+			}
+		}
+		void InitLibraryParams()
+		{
+			foreach (var param in Container.LibrarySignature
+				.Parameters
+				.Where(p => p.FirstInRegister != uint.MaxValue))
+			{
+				string key;
+				string name;
+				key = $"v{param.FirstInRegister}";
+				name = $"{param.Name}";
+				var register = new Register(name);
+				AddRegister(key, register);
+				InputRegisters.Add(register);
+			}
+			foreach (var param in Container.LibrarySignature
+				.Parameters
+				.Where(p => p.FirstOutRegister != uint.MaxValue))
+			{
+				string key;
+				string name;
+				key = $"o{param.FirstOutRegister}";
+				name = $"{param.Name}";
+				var register = new Register(name);
+				AddRegister(key, register);
+				InputRegisters.Add(register);
 			}
 		}
 		void InitInputAndOutput()

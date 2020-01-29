@@ -52,6 +52,11 @@ namespace SlimShader
 			get { return Chunks.OfType<Sfi0Chunk>().SingleOrDefault(); }
 		}
 
+		public LibraryParameterSignatureChunk LibrarySignature
+		{
+			get { return Chunks.OfType<LibraryParameterSignatureChunk>().SingleOrDefault(); }
+		}
+
 		public ShaderProgramChunk Shader
 		{
 			get { return Chunks.OfType<ShaderProgramChunk>().SingleOrDefault(); }
@@ -66,10 +71,27 @@ namespace SlimShader
 		{
 			get { return Chunks.OfType<InterfacesChunk>().SingleOrDefault(); }
 		}
+		/// <summary>
+		/// Version is stored in both Resource Definition and Shader chunks.
+		/// Generally the resource definition chunk is the first chunk in the container
+		/// but in the case of library linked functions, it can be near the end. 
+		/// Version is needed for parsing certain chunks, such as input/output
+		/// </summary>
 
 		public ShaderVersion Version
 		{
-			get { return Shader.Version; }
+			get 
+			{ 
+				if(ResourceDefinition != null)
+				{
+					return ResourceDefinition.Target;
+				}
+				if(Shader != null)
+				{
+					return Shader.Version;
+				}
+				return null;
+			}
 		}
 
 		public BytecodeContainer(byte[] rawBytes)
@@ -101,18 +123,10 @@ namespace SlimShader
 		}
 		private void WriteLibShader(StringBuilder sb)
 		{
-			sb.AppendLine("Chunks");
-			foreach(var chunk in Chunks)
-			{
-				sb.AppendLine($"{chunk.ChunkType} {chunk.GetType()}");
-			}
-			if (Chunks.OfType<LibhChunk>().Any())
-			{
-				foreach (var chunk in Chunks.OfType<LibhChunk>())
-				{
-					sb.Append(chunk.ToString());
-				}
-			}
+			sb.AppendLine("//");
+			var libHeader = Chunks.OfType<LibHeaderChunk>().Single();
+			sb.Append(libHeader.ToString());
+			sb.AppendLine("//");
 			if (Chunks.OfType<LibfChunk>().Any())
 			{
 				foreach (var chunk in Chunks.OfType<LibfChunk>())
@@ -170,6 +184,12 @@ namespace SlimShader
 			sb.AppendLine(@"//");
 
 			sb.Append(OutputSignature);
+
+			if(LibrarySignature != null)
+			{
+				sb.Append(LibrarySignature);
+				sb.AppendLine(@"//");
+			}
 
 			sb.Append(Statistics);
 

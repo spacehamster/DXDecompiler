@@ -50,8 +50,18 @@ CALL CompileShader.bat HLSLDecompiler vs_vector2_matrix22_multiply.fx vs_vector2
 CALL CompileShader.bat HLSLDecompiler vs_vector3_matrix33_multiply.fx vs_vector3_matrix33_multiply vs_3_0 main || GOTO :error
 CALL CompileShader.bat HLSLDecompiler vs_vector4_matrix44_multiply.fx vs_vector4_matrix44_multiply vs_3_0 main || GOTO :error
 
-CALL CompileShader.bat Sdk/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_VS vs_2_0 RenderSceneVS || GOTO :error
-CALL CompileShader.bat Sdk/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_PS ps_2_0 RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_VS_2 vs_2_0 RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_PS_2 ps_2_0 RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_VS_2a vs_2_a RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_VS_2sw vs_2_sw RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_VS_3 vs_3_0 RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_VS_3sw vs_3_sw RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_PS_2a ps_2_a RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_PS_2b ps_2_b RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_PS_2sw ps_2_sw RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_PS_3 ps_3_0 RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_PS_3sw ps_3_sw RenderScenePS || GOTO :error
+CALL CompileShader2.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_FX fx_2_0 || GOTO :error
 
 CALL CompileShader.bat SDK/Direct3D/AntiAlias AntiAlias.fx AntiAlias_ColorVS vs_2_0 ColorVS || GOTO :error
 CALL CompileShader.bat SDK/Direct3D/AntiAlias AntiAlias.fx AntiAlias_ColorPS ps_2_0 ColorPS || GOTO :error
@@ -208,8 +218,18 @@ CALL CompileShader.bat SDK/Direct3D/ShadowVolume ShadowVolume.fx ShadowVolume_Sc
 CALL CompileShader.bat SDK/Direct3D/ShadowVolume ShadowVolume.fx ShadowVolume_ShowDirtyStencilPS ps_2_0 ShowDirtyStencil || GOTO :error
 CALL CompileShader.bat SDK/Direct3D/ShadowVolume ShadowVolume.fx ShadowVolume_PixComplexityPS ps_2_0 PixComplexity || GOTO :error
 
-CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_VS vs_2_0 RenderSceneVS || GOTO :error
-CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_PS ps_2_0 RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_VS_2 vs_2_0 RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_PS_2 ps_2_0 RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_VS_2a vs_2_a RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_VS_2sw vs_2_sw RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_VS_3 vs_3_0 RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_VS_3sw vs_3_sw RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_PS_2a ps_2_a RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_PS_2b ps_2_b RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_PS_2sw ps_2_sw RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_PS_3 ps_3_0 RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_PS_3sw ps_3_sw RenderScenePS || GOTO :error
+CALL CompileShader2.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_FX fx_2_0 || GOTO :error
 
 CALL CompileShader.bat SDK/Direct3D/SkinnedMesh SkinnedMesh.fx SkinnedMesh_VS vs_2_0 VShade || GOTO :error
 
@@ -223,6 +243,7 @@ CALL CompileShader.bat SDK/Direct3D/StateManager snow.fx snow_VS vs_2_0 VS || GO
 CALL CompileShader.bat SDK/Direct3D/StateManager snow.fx snow_PS ps_2_0 PS || GOTO :error
 CALL CompileShader.bat SDK/Direct3D/StateManager textbump.fx textbump_VS vs_2_0 VS || GOTO :error
 CALL CompileShader.bat SDK/Direct3D/StateManager textbump.fx textbump_PS ps_2_0 PS || GOTO :error
+
 GOTO :EOF
 
 :error

@@ -46,7 +46,7 @@ namespace SlimShader.Chunks.Rdef
 				Creator = creator
 			};
 
-			if (target.MajorVersion == 5)
+			if (target.MajorVersion == 5 || target.ProgramType == ProgramType.LibraryShader)
 			{
 				if (target.MinorVersion == 0)
 				{

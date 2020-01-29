@@ -13,7 +13,8 @@ namespace SlimShader.DX9Shader
 	public enum ShaderType
 	{
 		Vertex = 0xFFFE,
-		Pixel = 0xFFFF
+		Pixel = 0xFFFF,
+		Fx = 0xFEFF,
 	}
 
 	public class ShaderModel

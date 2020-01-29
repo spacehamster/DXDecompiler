@@ -18,6 +18,12 @@ namespace SlimShader.Tests
 	{
 		private static string OutputDir => $@"{TestContext.CurrentContext.TestDirectory}/ShadersDX9";
 		private static string ShaderDirectory => $"{TestContext.CurrentContext.TestDirectory}/ShadersDX9";
+		[SetUp]
+		public void SetUp()
+		{
+			Directory.CreateDirectory(OutputDir);
+			AssertTraceListener.Init();
+		}
 		private static IEnumerable<string> TestShaders
 		{
 			get
@@ -63,6 +69,35 @@ namespace SlimShader.Tests
 
 			// Assert.
 			Assert.That(decompiledAsmText, Is.EqualTo(asmFileText));
+		}
+
+		/// <summary>
+		/// Compare ASM output produced by fxc.exe and SlimShader.
+		/// </summary>
+		[TestCaseSource("TestShaders")]
+		public void Decompile(string relPath)
+		{
+			string file = $"{ShaderDirectory}/{relPath}";
+			// Arrange.
+			// Act.
+			var bytecode = File.ReadAllBytes(file + ".o");
+			var shader = ShaderReader.ReadShader(bytecode);
+
+			var hlslWriter = new HlslWriter(shader);
+			string decompiledHlsl = "";
+			using (var stream = new MemoryStream())
+			{
+				hlslWriter.Write(stream);
+				stream.Position = 0;
+				using (var reader = new StreamReader(stream, Encoding.UTF8))
+				{
+					decompiledHlsl = reader.ReadToEnd();
+				}
+			}
+
+			File.WriteAllText($"{file}.d.hlsl", decompiledHlsl);
+
+			// Assert.
 		}
 		public static string GetSourceNameFromObject(string path)
 		{
