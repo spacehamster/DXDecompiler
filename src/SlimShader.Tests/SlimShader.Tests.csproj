@@ -135,6 +135,9 @@
     <Content Include="ShadersDX9\Sdk\Direct3D\SimpleSample\SimpleSample_VS_3sw.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ShadersDX9\Sdk\Direct3D\SimpleSample\SimpleSample_FX.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\Internal\BasicHLSL_PS_5_1.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -391,6 +394,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="ShadersDX9\CompileShader2.bat" />
+    <Content Include="ShadersDX9\CompileShader2.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="ShadersDX9\HlslCrossCompiler\ps2\tex2d.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -600,6 +606,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ShadersDX9\Sdk\Direct3D\BasicHLSL\BasicHLSL_VS_3.o">
+    <None Include="ShadersDX9\Sdk\Direct3D\BasicHLSL\BasicHLSL_PS.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ShadersDX9\Sdk\Direct3D\BasicHLSL\BasicHLSL_VS_3sw.o">
@@ -966,6 +973,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ShadersDX9\Sdk\Direct3D\SimpleSample\SimpleSample_PS_2sw.o">
+    <None Include="ShadersDX9\Sdk\Direct3D\SimpleSample\SimpleSample_PS.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ShadersDX9\Sdk\Direct3D\SimpleSample\SimpleSample_PS_3.o">
@@ -2252,6 +2260,15 @@
     <Content Include="Shaders\Internal\Misc\EarlyDepthStencil.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Shaders\Internal\Misc\EffectsVersions.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Internal\Misc\EffectsVersions_4.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Internal\Misc\EffectsVersions_5.asm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\Internal\Misc\LibraryTest.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -2473,6 +2490,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Sdk\Direct3D10\BasicHLSL10\BasicHLSL10.fx">
+    <Content Include="Shaders\Sdk\Direct3D10\BasicHLSL\BasicHLSL.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Sdk\Direct3D10\BasicHLSL\BasicHLSL_FX.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Sdk\Direct3D10\CubeMapGS\CubeMapGS_GS.o">
@@ -2482,6 +2503,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Sdk\Direct3D10\CubeMapGS\CubeMapGS_VS.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Sdk\Direct3D10\SimpleSample\SimpleSample.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Sdk\Direct3D10\SimpleSample\SimpleSample_FX.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Sdk\Direct3D10\TransparencyAA10.1\Sprite.fx">
@@ -2549,6 +2576,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Sdk\Direct3D11\BasicHLSL11\BasicHLSL11_VS.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Sdk\Direct3D11\BasicHLSLFX11\BasicFX11.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Sdk\Direct3D11\BasicHLSLFX11\BasicFX11_FX.asm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Sdk\Direct3D11\BC6HBC7EncoderDecoder11\BC6HDecode.o">
@@ -3020,6 +3053,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Internal\Misc\LibraryTest2_5_0.o">
+    <None Include="Shaders\Internal\Misc\EffectsVersions_4.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Internal\Misc\EffectsVersions_5.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Internal\Misc\LibraryTest_4_0.o">
@@ -3131,6 +3168,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Sdk\Direct3D10\BasicHLSL10\BasicHLSL10.o">
+    <None Include="Shaders\Sdk\Direct3D10\BasicHLSL\BasicHLSL_FX.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Sdk\Direct3D10\SimpleSample\SimpleSample_FX.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Sdk\Direct3D10\TransparencyAA10.1\Sprite_FX.o">
@@ -3155,6 +3196,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Sdk\Direct3D11\BasicHLSL11\BasicHLSL11_VS.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Sdk\Direct3D11\BasicHLSLFX11\BasicFX11_FX.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Sdk\Direct3D11\SimpleSample11\SimpleSample_PS.o">
