@@ -4,7 +4,7 @@ namespace SlimShader.Chunks.Rdef
 {
 	/// <summary>
 	/// Values that identify information about a shader variable.
-	/// Based on D3D10_SHADER_VARIABLE_FLAGS.
+	/// Based on D3D_SHADER_VARIABLE_FLAGS.
 	/// </summary>
 	[Flags]
 	public enum ShaderVariableFlags

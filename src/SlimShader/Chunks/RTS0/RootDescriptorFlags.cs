@@ -3,7 +3,7 @@
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// RootDescriptorFlags
+	/// Flags the CBV, SRV and UAV entries in the root signature
 	/// Based on D3D12_ROOT_DESCRIPTOR_FLAGS.
 	/// </summary>
 	[Flags]

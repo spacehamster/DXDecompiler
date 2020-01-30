@@ -1,7 +1,7 @@
 ﻿namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// DescriptorRangeType
+	/// Describes the type of root descritor range
 	/// Based on D3D12_DESCRIPTOR_RANGE_TYPE.
 	/// </summary>
 	public enum DescriptorRangeType

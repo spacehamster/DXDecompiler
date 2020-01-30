@@ -2,6 +2,9 @@
 
 namespace SlimShader.Chunks.Rdef
 {
+	/// <summary>
+	/// Based on _D3D_SHADER_INPUT_FLAGS
+	/// </summary>
 	[Flags]
 	public enum ShaderInputFlags
 	{

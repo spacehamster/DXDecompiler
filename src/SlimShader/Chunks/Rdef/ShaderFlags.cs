@@ -1,5 +1,9 @@
 namespace SlimShader.Chunks.Rdef
 {
+	/// <summary>
+	/// Global shader flags
+	/// Based on D3D10SHADER flags
+	/// </summary>
 	public enum ShaderFlags
 	{
 		None = 0,

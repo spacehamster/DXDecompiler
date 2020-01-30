@@ -6,7 +6,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// RootParamterType
+	/// Describes the type of Root Parameter
 	/// Based on D3D12_ROOT_PARAMETER_TYPE.
 	/// </summary>
 	public enum RootParameterType

@@ -3,7 +3,7 @@
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// DescriptorRangeType
+	/// Flags for descriptor ranges
 	/// Based on D3D12_DESCRIPTOR_RANGE_FLAGS.
 	/// </summary>
 	[Flags]

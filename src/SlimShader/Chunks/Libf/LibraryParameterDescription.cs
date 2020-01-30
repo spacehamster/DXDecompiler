@@ -8,23 +8,71 @@ using System.Text;
 namespace SlimShader.Chunks.Libf
 {
 	/// <summary>
-	/// LibraryParameterDescription
+	/// Describes a library function's input/output parameter
 	/// Based on D3D12_PARAMETER_DESC
 	/// </summary>
 	public class LibraryParameterDescription
 	{
+		/// <summary>
+		/// Parameter name.
+		/// </summary>
 		public string Name { get; private set; }
+
+		/// <summary>
+		/// Parameter semantic name (+index).
+		/// </summary>
 		public string SemanticName { get; private set; }
+
+		/// <summary>
+		/// Element type.
+		/// </summary>
 		public ShaderVariableType VariableType { get; private set; }
+
+		/// <summary>
+		/// Scalar/Vector/Matrix.
+		/// </summary>
 		public ShaderVariableClass VariableClass { get; private set; }
+
+		/// <summary>
+		/// Rows are for matrix parameters.
+		/// </summary>
 		public uint Rows { get; private set; }
+
+		/// <summary>
+		/// Components or Columns in matrix.
+		/// </summary>
 		public uint Column { get; private set; }
+
+		/// <summary>
+		/// Interpolation mode.
+		/// </summary>
 		public InterpolationMode InterpolationMode { get; private set; }
+
+		/// <summary>
+		/// Parameter modifiers.
+		/// </summary>
 		public ParameterFlags Flags { get; private set; }
+
+		/// <summary>
+		/// The first input register for this parameter.
+		/// </summary>
 		public uint FirstInRegister { get; private set; }
+
+		/// <summary>
+		/// The first input register component for this parameter.
+		/// </summary>
 		public uint FirstInComponent { get; private set; }
+
+		/// <summary>
+		/// The first output register for this parameter.
+		/// </summary>
 		public uint FirstOutRegister { get; private set; }
+
+		/// <summary>
+		/// The first output register component for this parameter.
+		/// </summary>
 		public uint FirstOutComponent { get; private set; }
+		
 		public string InputDescription
 		{
 			get

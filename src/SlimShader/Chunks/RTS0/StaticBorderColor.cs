@@ -6,7 +6,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// StaticBorderColor
+	/// Root Signature static sampler border color.
 	/// Based on D3D12_STATIC_BORDER_COLOR.
 	/// </summary>
 	public enum StaticBorderColor

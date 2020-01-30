@@ -8,7 +8,7 @@ namespace SlimShader.Chunks.Rdef
 {
 	/// <summary>
 	/// Describes a shader constant-buffer.
-	/// Based on D3D11_SHADER_BUFFER_DESC.
+	/// Based on D3D12_SHADER_BUFFER_DESC.
 	/// </summary>
 	public class ConstantBuffer
 	{

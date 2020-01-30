@@ -6,7 +6,7 @@ namespace SlimShader.Chunks.Xsgn
 {
 	/// <summary>
 	/// Describes a shader signature.
-	/// Based on D3D11_SIGNATURE_PARAMETER_DESC.
+	/// Based on D3D12_SIGNATURE_PARAMETER_DESC.
 	/// </summary>
 	public class SignatureParameterDescription
 	{

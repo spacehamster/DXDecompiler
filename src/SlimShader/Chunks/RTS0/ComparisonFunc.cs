@@ -6,7 +6,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// ComparisonFunc
+	/// The comparison function used by a root descriptor sampler.
 	/// Based on D3D12_COMPARISON_FUNC.
 	/// </summary>
 	public enum ComparisonFunc

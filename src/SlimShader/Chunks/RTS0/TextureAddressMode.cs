@@ -6,7 +6,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// TextureAddressMode
+	/// Root Signature Static Sampler Texture Address Mode
 	/// Based on D3D12_TEXTURE_ADDRESS_MODE.
 	/// </summary>
 	public enum TextureAddressMode

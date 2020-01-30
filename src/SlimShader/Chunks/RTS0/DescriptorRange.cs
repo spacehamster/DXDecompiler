@@ -5,7 +5,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// DescriptorRangeType
+	/// Describes a descriptor table entry for the root signature
 	/// Based on D3D12_DESCRIPTOR_RANGE and D3D12_DESCRIPTOR_RANGE1.
 	/// </summary>
 	public class DescriptorRange

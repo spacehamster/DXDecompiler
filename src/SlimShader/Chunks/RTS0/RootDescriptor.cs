@@ -7,7 +7,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// RootDescriptor
+	/// Describes a CBV, SRV or UAV entry in the root signature
 	/// Based on D3D12_ROOT_DESCRIPTOR and D3D12_ROOT_DESCRIPTOR1.
 	/// </summary>
 	public class RootDescriptor : RootParameter

@@ -10,7 +10,7 @@ namespace SlimShader.Chunks.Rdef
 {
 	/// <summary>
 	/// Describes a shader-variable type.
-	/// Based on D3D11_SHADER_TYPE_DESC.
+	/// Based on D3D12_SHADER_TYPE_DESC.
 	/// </summary>
 	public class ShaderType
 	{

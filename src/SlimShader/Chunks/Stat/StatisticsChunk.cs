@@ -7,7 +7,7 @@ namespace SlimShader.Chunks.Stat
 {
 	/// <summary>
 	/// Statistics chunk
-	/// Based on D3D11_SHADER_DESC.
+	/// Based on D3D12_SHADER_DESC.
 	/// </summary>
 	public class StatisticsChunk : BytecodeChunk
 	{

@@ -7,7 +7,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// Root Parameter
+	/// A general entry in the root signature.
 	/// Based on D3D12_ROOT_PARAMETER and D3D12_ROOT_PARAMETER1.
 	/// </summary>
 	public class RootParameter

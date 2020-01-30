@@ -3,6 +3,7 @@ namespace SlimShader.Chunks.Rdef
 	/// <summary>
 	/// Very similar to Shader.ResourceDimension, but this one is used within the RDEF (Resource Definition) chunk.
 	/// The multi-sampled values are different from ResourceDimension.
+	/// Based on D3D_SRV_DIMENSION
 	/// </summary>
 	public enum ShaderResourceViewDimension
 	{

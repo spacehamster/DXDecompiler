@@ -7,7 +7,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// Root Parameter
+	/// Describes a Root Constants entry in the root signature
 	/// Based on D3D12_ROOT_CONSTANTS.
 	/// </summary>
 	public class RootConstants : RootParameter

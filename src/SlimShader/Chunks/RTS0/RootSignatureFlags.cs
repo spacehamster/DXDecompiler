@@ -6,7 +6,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// RootSignatureFlags
+	/// Flags for the main root signature
 	/// Based on D3D12_ROOT_SIGNATURE_FLAGS.
 	/// </summary>
 	[Flags]

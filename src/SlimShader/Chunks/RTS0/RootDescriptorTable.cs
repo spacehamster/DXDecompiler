@@ -7,7 +7,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// DescriptorTable
+	/// Decribes an Descripter Table entry in the root signature
 	/// Based on D3D12_ROOT_DESCRIPTOR_TABLE and D3D12_ROOT_DESCRIPTOR_TABLE1.
 	/// </summary>
 	public class RootDescriptorTable : RootParameter

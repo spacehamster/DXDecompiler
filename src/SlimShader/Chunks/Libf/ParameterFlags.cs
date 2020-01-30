@@ -6,7 +6,7 @@ using System.Text;
 namespace SlimShader.Chunks.Libf
 {
 	/// <summary>
-	/// ParameterFlags
+	/// Indicates wether a library parameter is an input or output
 	/// Based on D3D_PARAMETER_FLAGS
 	/// </summary>
 	[Flags]
@@ -14,7 +14,6 @@ namespace SlimShader.Chunks.Libf
 	{
 		None = 0,
 		In = 0x1,
-		Out = 0x2,
-		ForceDWord = 0x7fffffff
+		Out = 0x2
 	}
 }

@@ -1,5 +1,8 @@
 namespace SlimShader.Chunks.Rdef
 {
+	/// <summary>
+	/// Based on _D3D_SHADER_INPUT_TYPE
+	/// </summary>
 	public enum ShaderInputType
 	{
 		[Description("cbuffer")]

@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace SlimShader.Chunks.Rdef
 {
 	/// <summary>
-	/// Roughly corresponds to the D3D11_SHADER_INPUT_BIND_DESC structure.
+	/// Based on D3D11_SHADER_INPUT_BIND_DESC and D3D12_SHADER_INPUT_BIND_DESC.
 	/// </summary>
 	public class ResourceBinding
 	{
@@ -30,24 +30,19 @@ namespace SlimShader.Chunks.Rdef
 		public uint BindCount { get; private set; }
 
 		/// <summary>
-		/// Bindpoint for SM <= 5.0, ID for SM5.1.
-		/// </summary>
-		public uint ID { get; private set; }
-
-		/// <summary>
 		/// Shader input-parameter options.
 		/// </summary>
 		public ShaderInputFlags Flags { get; private set; }
 
 		/// <summary>
-		/// Identifies the dimensions of the bound resource.
-		/// </summary>
-		public ShaderResourceViewDimension Dimension { get; private set; }
-
-		/// <summary>
 		/// If the input is a texture, the return type.
 		/// </summary>
 		public ResourceReturnType ReturnType { get; private set; }
+
+		/// <summary>
+		/// Identifies the dimensions of the bound resource.
+		/// </summary>
+		public ShaderResourceViewDimension Dimension { get; private set; }
 
 		/// <summary>
 		/// Denotes the register space of the resource. SM5.1 and higher only.
@@ -58,6 +53,11 @@ namespace SlimShader.Chunks.Rdef
 		/// The number of samples for a multisampled texture; otherwise 0.
 		/// </summary>
 		public uint SpaceIndex { get; private set; }
+
+		/// <summary>
+		/// Bindpoint for SM <= 5.0, ID for SM5.1.
+		/// </summary>
+		public uint ID { get; private set; }
 
 		private bool m_IsSM51;
 

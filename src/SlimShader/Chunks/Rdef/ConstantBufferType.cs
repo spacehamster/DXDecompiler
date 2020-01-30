@@ -4,7 +4,7 @@ namespace SlimShader.Chunks.Rdef
 {
 	/// <summary>
 	/// Indicates a constant buffer's type.
-	/// Based on D3D11_CBUFFER_TYPE.
+	/// Based on D3D_CBUFFER_TYPE.
 	/// </summary>
 	public enum ConstantBufferType
 	{

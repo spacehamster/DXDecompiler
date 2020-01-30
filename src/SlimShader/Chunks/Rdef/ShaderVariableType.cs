@@ -4,7 +4,7 @@ namespace SlimShader.Chunks.Rdef
 {
 	/// <summary>
 	/// These flags identify various data, texture, and buffer types that can be assigned to a shader variable.
-	/// Based on D3D10_SHADER_VARIABLE_TYPE .
+	/// Based on SHADER_VARIABLE_TYPE .
 	/// </summary>
 	public enum ShaderVariableType
 	{
@@ -26,8 +26,14 @@ namespace SlimShader.Chunks.Rdef
 		Texture3D = 8,
 		TextureCube = 9,
 		Sampler = 10,
+		Sampler1D = 11,
+		Sampler2D = 12,
+		Sampler3D = 13,
+		SamplerCube = 14,
 		PixelShader = 15,
 		VertexShader = 16,
+		PixelFragment = 17,
+		VertexFragment = 18,
 
 		[Description("uint")]
 		UInt = 19,
@@ -61,17 +67,23 @@ namespace SlimShader.Chunks.Rdef
 		[Description("double")]
 		Double = 39,
 
-		ReadWriteTexture1D,
-		ReadWriteTexture1DArray,
-		ReadWriteTexture2D,
-		ReadWriteTexture2DArray,
-		ReadWriteTexture3D,
-		ReadWriteBuffer,
-		ByteAddressBuffer,
-		ReadWriteByteAddressBuffer,
-		StructuredBuffer,
-		ReadWriteStructuredBuffer,
-		AppendStructuredBuffer,
-		ConsumeStructuredBuffer,
+		ReadWriteTexture1D = 40,
+		ReadWriteTexture1DArray = 41,
+		ReadWriteTexture2D = 42,
+		ReadWriteTexture2DArray = 43,
+		ReadWriteTexture3D = 44,
+		ReadWriteBuffer = 45,
+		ByteAddressBuffer = 46,
+		ReadWriteByteAddressBuffer = 47,
+		StructuredBuffer = 48,
+		ReadWriteStructuredBuffer = 49,
+		AppendStructuredBuffer = 50,
+		ConsumeStructuredBuffer = 51,
+		Min8Float = 52,
+		Min10Float = 53,
+		Min16Float = 54,
+		Min12Int = 55,
+		Min16Int = 56,
+		Min16Uint = 57,
 	}
 }

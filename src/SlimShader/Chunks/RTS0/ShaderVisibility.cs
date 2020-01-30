@@ -1,7 +1,7 @@
 ﻿namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// ShaderVisibility
+	/// Root Signature parameter visibility to shader types.
 	/// Based on D3D12_SHADER_VISIBILITY.
 	/// </summary>
 	public enum ShaderVisibility

@@ -7,7 +7,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// Root Parameter
+	/// Root Signature Parameter
 	/// Based on D3D12_STATIC_SAMPLER_DESC.
 	/// </summary>
 	public class StaticSampler

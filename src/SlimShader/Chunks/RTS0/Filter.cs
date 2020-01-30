@@ -6,7 +6,7 @@ using System.Text;
 namespace SlimShader.Chunks.RTS0
 {
 	/// <summary>
-	/// Filter
+	/// Sampler filter type
 	/// Based on D3D12_FILTER.
 	/// </summary>
 	public enum Filter
