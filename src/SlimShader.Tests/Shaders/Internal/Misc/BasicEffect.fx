@@ -76,7 +76,26 @@ void CSMain(uint3 DTid : SV_DispatchThreadID)
 	BufferOut.Store(DTid.x * 8 + 4, asuint(f0 + f1));
 }
 
-technique11 RenderSceneWithTexture1Light
+
+technique10 RenderSceneWithTexture1Light10_1
+{
+	pass P0
+	{
+		SetVertexShader(CompileShader(vs_4_0, RenderSceneVS(1, true, true)));
+		SetPixelShader(CompileShader(ps_4_0, RenderScenePS(true)));
+	}
+}
+
+technique10 RenderSceneWithTexture1Light10_2
+{
+	pass P0
+	{
+		SetVertexShader(CompileShader(vs_4_0, RenderSceneVS(2, true, true)));
+		SetPixelShader(CompileShader(ps_4_0, RenderScenePS(false)));
+	}
+}
+
+technique11 RenderSceneWithTexture1Light11_1
 {
 	pass P0
 	{
@@ -85,20 +104,15 @@ technique11 RenderSceneWithTexture1Light
 		SetPixelShader(CompileShader(ps_5_0, RenderScenePS(true)));
 	}
 }
-
-fxgroup g1
+technique11 RenderSceneWithTexture1Light11_2
 {
-	technique10 RenderSceneWithTexture1Light10
+	pass P0
 	{
-		pass P0
-		{
-			SetVertexShader(CompileShader(vs_4_0, RenderSceneVS(1, true, true)));
-			SetGeometryShader(NULL);
-			SetPixelShader(CompileShader(ps_4_0, RenderScenePS(true)));
-		}
+		SetVertexShader(CompileShader(vs_5_0, RenderSceneVS(1, true, true)));
+		SetGeometryShader(NULL);
+		SetPixelShader(CompileShader(ps_5_0, RenderScenePS(false)));
 	}
 }
-
 fxgroup g0
 {
 	technique11 RunComputeShader

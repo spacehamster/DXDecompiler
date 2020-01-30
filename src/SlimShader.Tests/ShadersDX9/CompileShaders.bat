@@ -50,8 +50,9 @@ CALL CompileShader.bat HLSLDecompiler vs_vector2_matrix22_multiply.fx vs_vector2
 CALL CompileShader.bat HLSLDecompiler vs_vector3_matrix33_multiply.fx vs_vector3_matrix33_multiply vs_3_0 main || GOTO :error
 CALL CompileShader.bat HLSLDecompiler vs_vector4_matrix44_multiply.fx vs_vector4_matrix44_multiply vs_3_0 main || GOTO :error
 
-CALL CompileShader.bat Sdk/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_VS vs_2_0 RenderSceneVS || GOTO :error
-CALL CompileShader.bat Sdk/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_PS ps_2_0 RenderScenePS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_VS vs_2_0 RenderSceneVS || GOTO :error
+CALL CompileShader.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_PS ps_2_0 RenderScenePS || GOTO :error
+CALL CompileShader2.bat SDK/Direct3D/BasicHLSL BasicHLSL.fx BasicHLSL_FX fx_2_0 || GOTO :error
 
 CALL CompileShader.bat SDK/Direct3D/AntiAlias AntiAlias.fx AntiAlias_ColorVS vs_2_0 ColorVS || GOTO :error
 CALL CompileShader.bat SDK/Direct3D/AntiAlias AntiAlias.fx AntiAlias_ColorPS ps_2_0 ColorPS || GOTO :error
@@ -210,6 +211,7 @@ CALL CompileShader.bat SDK/Direct3D/ShadowVolume ShadowVolume.fx ShadowVolume_Pi
 
 CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_VS vs_2_0 RenderSceneVS || GOTO :error
 CALL CompileShader.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_PS ps_2_0 RenderScenePS || GOTO :error
+CALL CompileShader2.bat SDK/Direct3D/SimpleSample SimpleSample.fx SimpleSample_FX fx_2_0 || GOTO :error
 
 CALL CompileShader.bat SDK/Direct3D/SkinnedMesh SkinnedMesh.fx SkinnedMesh_VS vs_2_0 VShade || GOTO :error
 

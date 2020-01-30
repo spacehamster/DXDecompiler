@@ -87,6 +87,9 @@ CALL CompileShader2.bat Internal/Misc BasicEffect.fx BasicEffect_5_0 fx_5_0 || G
 CALL CompileShader2.bat Internal/Misc BasicEffect.fx BasicEffect_4_0 fx_4_0 || GOTO :error
 CALL CompileShader2.bat Internal/Misc BasicEffect.fx BasicEffect_4_1 fx_4_1 || GOTO :error
 
+CALL CompileShader2.bat Internal/Misc EffectsVersions.fx EffectsVersions_4 fx_4_0 || GOTO :error
+CALL CompileShader2.bat Internal/Misc EffectsVersions.fx EffectsVersions_5 fx_5_0 || GOTO :error
+
 Set UNITY_INCLUDES="%cd%\Unity\CGIncludes"
 CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_VS_25 vs_5_0 vert "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=25" "/DUNITY_REVERSED_Z=1" || GOTO :error
 CALL CompileShader.bat Unity fog_test.hlsl fog_test_Exp2_PS_25 ps_5_0 frag "/I%UNITY_INCLUDES%" /Gec "/DFOG_EXP2=1" "/DSHADER_TARGET=25" "/DUNITY_REVERSED_Z=1" || GOTO :error
@@ -163,6 +166,9 @@ CALL CompileShader.bat Sdk/Direct3D10/TransparencyAA10.1 TransparencyAA10_1.fx T
 CALL CompileShader2.bat Sdk/Direct3D10/TransparencyAA10.1 Sprite.fx Sprite_FX fx_4_0 || GOTO :error
 CALL CompileShader2.bat Sdk/Direct3D10/TransparencyAA10.1 TransparencyAA10_1.fx TransparencyAA10_1_FX fx_4_1 "/DDX10_1_ENABLED=1" "/DMSAA_SAMPLES=4" || GOTO :error
 
+CALL CompileShader2.bat Sdk/Direct3D10/BasicHLSL BasicHLSL.fx BasicHLSL_FX fx_4_0 || GOTO :error
+
+CALL CompileShader2.bat Sdk/Direct3D10/SimpleSample SimpleSample.fx SimpleSample_FX fx_4_0 || GOTO :error
 
 CALL CompileShader.bat Sdk/Direct3D11/AdaptiveTessellationCS40 TessellatorCS40_EdgeFactorCS.hlsl TessellatorCS40_EdgeFactorCS cs_4_0 CSEdgeFactor || GOTO :error
 CALL CompileShader.bat Sdk/Direct3D11/AdaptiveTessellationCS40 TessellatorCS40_NumVerticesIndicesCS.hlsl TessellatorCS40_NumVerticesIndicesCS cs_4_0 CSNumVerticesIndices || GOTO :error
@@ -178,6 +184,8 @@ CALL CompileShader.bat Sdk/Direct3D11/BasicCompute11 BasicCompute11.hlsl BasicCo
 
 CALL CompileShader.bat Sdk/Direct3D11/BasicHLSL11 BasicHLSL11_PS.hlsl BasicHLSL11_PS ps_5_0 PSMain || GOTO :error
 CALL CompileShader.bat Sdk/Direct3D11/BasicHLSL11 BasicHLSL11_VS.hlsl BasicHLSL11_VS vs_5_0 VSMain || GOTO :error
+
+CALL CompileShader2.bat Sdk/Direct3D11/BasicHLSLFX11 BasicFX11.fx BasicFX11_FX fx_5_0 || GOTO :error
 
 CALL CompileShader.bat Sdk/Direct3D11/SimpleSample11 SimpleSample.hlsl SimpleSample_PS ps_5_0 RenderScenePS || GOTO :error
 CALL CompileShader.bat Sdk/Direct3D11/SimpleSample11 SimpleSample.hlsl SimpleSample_VS vs_5_0 RenderSceneVS || GOTO :error
