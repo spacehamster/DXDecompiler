@@ -606,7 +606,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ShadersDX9\Sdk\Direct3D\BasicHLSL\BasicHLSL_VS_3.o">
-    <None Include="ShadersDX9\Sdk\Direct3D\BasicHLSL\BasicHLSL_PS.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ShadersDX9\Sdk\Direct3D\BasicHLSL\BasicHLSL_VS_3sw.o">
@@ -973,7 +972,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ShadersDX9\Sdk\Direct3D\SimpleSample\SimpleSample_PS_2sw.o">
-    <None Include="ShadersDX9\Sdk\Direct3D\SimpleSample\SimpleSample_PS.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ShadersDX9\Sdk\Direct3D\SimpleSample\SimpleSample_PS_3.o">
@@ -2490,6 +2488,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Sdk\Direct3D10\BasicHLSL10\BasicHLSL10.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\Sdk\Direct3D10\BasicHLSL\BasicHLSL.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -3053,6 +3053,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Internal\Misc\LibraryTest2_5_0.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Shaders\Internal\Misc\EffectsVersions_4.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -3168,6 +3170,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\Sdk\Direct3D10\BasicHLSL10\BasicHLSL10.o">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Shaders\Sdk\Direct3D10\BasicHLSL\BasicHLSL_FX.o">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
