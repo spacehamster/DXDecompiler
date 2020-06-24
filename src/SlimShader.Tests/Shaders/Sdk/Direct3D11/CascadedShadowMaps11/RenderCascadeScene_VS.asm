@@ -61,7 +61,8 @@
 // SV_POSITION              0   xyzw        3      POS   float   xyzw
 // TEXCOORD                 2   xyzw        4     NONE   float   xyzw
 //
-vs_4_0
+vs_5_0
+dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB0[16], immediateIndexed
 dcl_input v0.xyzw
 dcl_input v1.xyz

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SlimShader.Util;
+using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace SlimShader.DX9Shader
@@ -13,44 +12,20 @@ namespace SlimShader.DX9Shader
 			: base(input, new UTF8Encoding(false, true))
 		{
 		}
-		static public ShaderModel ReadShader(Stream stream)
-		{
-			using (var ss = new ShaderReader(stream))
-			{
-				return ss.ReadShader();
-			}
-		}
 		static public ShaderModel ReadShader(byte[] data)
 		{
-			using(var ms = new MemoryStream(data))
-			using (var ss = new ShaderReader(ms))
+			byte minorVersion = data[0];
+			byte majorVersion = data[1];
+			ShaderType shaderType = (ShaderType)BitConverter.ToUInt16(data, 2);
+			if (shaderType == ShaderType.Effect)
 			{
-				return ss.ReadShader();
+				var _shader = new ShaderModel(majorVersion, minorVersion, shaderType);
+				var bytecodeReader = new BytecodeReader(data, 4, data.Length - 4);
+				_shader.EffectChunk = FX9.EffectContainer.Parse(bytecodeReader, (uint)(data.Length - 4));
+				return _shader;
 			}
-		}
-		virtual public ShaderModel ReadShader()
-		{
-			// Version token
-			byte minorVersion = ReadByte();
-			byte majorVersion = ReadByte();
-			ShaderType shaderType = (ShaderType)ReadUInt16();
-			if(shaderType == ShaderType.Fx)
-			{
-				throw new Exception("FX shaders currently not supported");
-			}
-			Debug.Assert(shaderType == ShaderType.Pixel || shaderType == ShaderType.Vertex || shaderType == ShaderType.Fx,
-				$"Shader does not contain a valid shader type {shaderType}");
-			var shader = new ShaderModel(majorVersion, minorVersion, shaderType);
-
-			while (true)
-			{
-				Token instruction = ReadInstruction(shader);
-				InstructionVerifier.Verify(instruction);
-				shader.Tokens.Add(instruction);
-				if (instruction.Opcode == Opcode.End) break;
-			}
-			shader.ParseConstantTable();
-			return shader;
+			var reader = new BytecodeReader(data, 0, data.Length);
+			return ShaderModel.Parse(reader);
 		}
 
 		private Token ReadInstruction(ShaderModel shaderModel)
@@ -109,7 +84,6 @@ namespace SlimShader.DX9Shader
 					{
 						inst.Operands.Add(new SourceOperand(token.Data[i]));
 					}
-					
 				}
 			}
 

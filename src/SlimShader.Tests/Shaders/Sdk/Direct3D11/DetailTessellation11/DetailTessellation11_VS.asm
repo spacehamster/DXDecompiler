@@ -74,7 +74,8 @@
 // TEXCOORD                 0   xy          2     NONE   float   xy  
 // LIGHTVECTORTS            0   xyz         3     NONE   float   xyz 
 //
-vs_4_0
+vs_5_0
+dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB0[3], immediateIndexed
 dcl_constantbuffer CB1[9], immediateIndexed
 dcl_input v0.xyz

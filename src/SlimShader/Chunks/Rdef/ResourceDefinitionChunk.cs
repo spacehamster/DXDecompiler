@@ -45,15 +45,17 @@ namespace SlimShader.Chunks.Rdef
 
 			if (target.MajorVersion == 5 || target.ProgramType == ProgramType.LibraryShader)
 			{
-				if (target.MinorVersion == 0)
+				var isVersion5_1 = target.MajorVersion == 5 && target.MinorVersion == 1;
+				if (isVersion5_1)
+				{
+					var unknown0 = headerReader.ReadUInt32();
+					Debug.Assert(unknown0 == 625218323, $"Unexpected RDef Header identifier {unknown0}");
+				}
+				else
 				{
 					string rd11 = headerReader.ReadUInt32().ToFourCcString();
 					if (rd11 != "RD11")
 						throw new ParseException("Expected RD11.");
-				} else
-				{
-					var unknown0 = headerReader.ReadUInt32();
-					Debug.Assert(unknown0 == 625218323);
 				}
 
 				var unknown1 = headerReader.ReadUInt32(); // TODO
@@ -63,7 +65,8 @@ namespace SlimShader.Chunks.Rdef
 				Debug.Assert(constantBufferStride == 24);
 
 				var resourceBindingStride = headerReader.ReadUInt32();
-				Debug.Assert(resourceBindingStride == (target.MinorVersion == 0 ? 32 : 40));
+				Debug.Assert(resourceBindingStride == (isVersion5_1 ? 40 : 32),
+					$"Unexpected resource binding stride {resourceBindingStride}");
 
 				//Shader Variable Stride?
 				var unknown4 = headerReader.ReadUInt32();

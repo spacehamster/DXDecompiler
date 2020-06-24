@@ -11,21 +11,29 @@ namespace SlimShader.Chunks.RTS0
 	/// </summary>
 	public enum ComparisonFunc
 	{
-		[Description("COMPARISON_NEVER")]
+		[Description("COMPARISON_NEVER", ChunkType.Rts0)]
+		[Description("NEVER")]
 		Never = 1,
-		[Description("COMPARISON_LESS")]
+		[Description("COMPARISON_LESS", ChunkType.Rts0)]
+		[Description("LESS")]
 		Less = 2,
-		[Description("COMPARISON_EQUAL")]
+		[Description("COMPARISON_EQUAL", ChunkType.Rts0)]
+		[Description("EQUAL")]
 		Equal = 3,
-		[Description("COMPARISON_LESS_EQUAL")]
+		[Description("COMPARISON_LESS_EQUAL", ChunkType.Rts0)]
+		[Description("LESS_EQUAL")]
 		LessEqual = 4,
-		[Description("COMPARISON_GREATER")]
+		[Description("COMPARISON_GREATER", ChunkType.Rts0)]
+		[Description("GREATER")]
 		Greater = 5,
-		[Description("COMPARISON_NOT_EQUAL")]
+		[Description("COMPARISON_NOT_EQUAL", ChunkType.Rts0)]
+		[Description("NOT_EQUAL")]
 		NotEqual = 6,
-		[Description("COMPARISON_GREATER_EQUAL")]
+		[Description("COMPARISON_GREATER_EQUAL", ChunkType.Rts0)]
+		[Description("GREATER_EQUAL")]
 		GreaterEqual = 7,
-		[Description("COMPARISON_ALWAYS")]
+		[Description("COMPARISON_ALWAYS", ChunkType.Rts0)]
+		[Description("ALWAYS")]
 		Always = 8
 	}
 }

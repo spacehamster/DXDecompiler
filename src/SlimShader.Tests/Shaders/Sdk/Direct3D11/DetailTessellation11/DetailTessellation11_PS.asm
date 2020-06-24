@@ -49,7 +49,8 @@
 // -------------------- ----- ------ -------- -------- ------- ------
 // SV_TARGET                0   xyzw        0   TARGET   float   xyzw
 //
-ps_4_0
+ps_5_0
+dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB1[2], immediateIndexed
 dcl_sampler s0, mode_default
 dcl_resource_texture2d (float,float,float,float) t0
@@ -58,7 +59,7 @@ dcl_input_ps linear v0.xy
 dcl_input_ps linear v1.xyz
 dcl_output o0.xyzw
 dcl_temps 2
-sample r0.xyzw, v0.xyxx, t1.xyzw, s0
+sample_indexable(texture2d)(float,float,float,float) r0.xyzw, v0.xyxx, t1.xyzw, s0
 mad r0.xyzw, r0.xyzw, l(2.000000, 2.000000, 2.000000, 2.000000), l(-1.000000, -1.000000, -1.000000, -1.000000)
 dp4 r0.w, r0.xyzw, r0.xyzw
 rsq r0.w, r0.w
@@ -68,7 +69,7 @@ rsq r0.w, r0.w
 mul r1.xyz, r0.wwww, v1.xyzx
 dp3_sat r0.x, r0.xyzx, r1.xyzx
 mad r0.xyzw, r0.xxxx, cb1[1].xyzw, cb1[0].xyzw
-sample r1.xyzw, v0.xyxx, t0.xyzw, s0
+sample_indexable(texture2d)(float,float,float,float) r1.xyzw, v0.xyxx, t0.xyzw, s0
 mul o0.xyzw, r0.xyzw, r1.xyzw
 ret 
 // Approximately 13 instruction slots used

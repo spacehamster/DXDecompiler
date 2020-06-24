@@ -15,7 +15,7 @@
 // Resource bind info for oldPosVelo
 // {
 //
-//   struct
+//   struct PosVelo
 //   {
 //       
 //       float4 pos;                    // Offset:    0
@@ -28,7 +28,7 @@
 // Resource bind info for newPosVelo
 // {
 //
-//   struct
+//   struct PosVelo
 //   {
 //       
 //       float4 pos;                    // Offset:    0
@@ -60,7 +60,7 @@
 // Name                 Index   Mask Register SysValue  Format   Used
 // -------------------- ----- ------ -------- -------- ------- ------
 // no Output
-cs_4_0
+cs_5_0
 dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB0[2], immediateIndexed
 dcl_resource_structured t0, 32
@@ -70,14 +70,13 @@ dcl_input vThreadID.x
 dcl_temps 4
 dcl_tgsm_structured g0, 16, 128
 dcl_thread_group 128, 1, 1
-ld_structured r0.xyzw, vThreadID.x, l(0), t0.xyzw
+ld_structured_indexable(structured_buffer, stride=32)(mixed,mixed,mixed,mixed) r0.xyzw, vThreadID.x, l(0), t0.xyzw
 mov r1.xyzw, l(0,0,0,0)
 loop 
   uge r2.x, r1.w, cb0[0].y
   breakc_nz r2.x
-  ishl r2.x, r1.w, l(7)
-  iadd r2.x, r2.x, vThreadIDInGroupFlattened.x
-  ld_structured r2.xyz, r2.x, l(0), t0.xyzx
+  bfi r2.x, l(25), l(7), r1.w, vThreadIDInGroupFlattened.x
+  ld_structured_indexable(structured_buffer, stride=32)(mixed,mixed,mixed,mixed) r2.xyz, r2.x, l(0), t0.xyzx
   store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(0), r2.xyzx
   sync_g_t
   ld_structured r2.xyz, l(0), l(0), g0.xyzx
@@ -1365,7 +1364,7 @@ loop
 endloop 
 ult r1.w, vThreadID.x, cb0[0].x
 if_nz r1.w
-  ld_structured r2.xyz, vThreadID.x, l(16), t0.xyzx
+  ld_structured_indexable(structured_buffer, stride=32)(mixed,mixed,mixed,mixed) r2.xyz, vThreadID.x, l(16), t0.xyzx
   ishl r1.w, cb0[0].y, l(7)
   iadd r1.w, -r1.w, cb0[0].x
   dp3 r2.w, -r0.xyzx, -r0.xyzx
@@ -1387,4 +1386,4 @@ if_nz r1.w
   store_structured u0.xyzw, vThreadID.x, l(16), r2.xyzw
 endif 
 ret 
-// Approximately 1317 instruction slots used
+// Approximately 1316 instruction slots used

@@ -150,6 +150,8 @@ namespace SlimShader
 			const uint uintThresholdPos = 0xfff00000; // TODO: Work out the actual float threshold.
 			switch (type)
 			{
+				case NumberType.Hex:
+					return "0x" + Int.ToString("x8");
 				case NumberType.Int:
 					if (Int > hexThreshold)
 						return "0x" + Int.ToString("x8");
@@ -161,15 +163,19 @@ namespace SlimShader
 						return "0x" + UInt.ToString("x8");
 					return UInt.ToString();
 				case NumberType.Float:
-					if (RawBytes[0] == 0 && RawBytes[1] == 0 && RawBytes[2] == 0 && RawBytes[3] == 128)
-						return "-0.000000"; // "Negative" zero
-					if (Math.Abs(Float) > 10000000000000000.0) // TODO: Threshold is guessed
-						return Float.ToString("G7");
-					//	return DoubleConverter.ToExactString(Float);
-					var result = ((double) Float).ToString("G7");
+					var result = ((double)Float).ToString("g7");
 					if (!result.StartsWith("-") && Float < 0.0f)
 						result = "-" + result;
 					return result;
+				case NumberType.Double:
+					if (RawBytes[0] == 0 && RawBytes[1] == 0 && RawBytes[2] == 0 && RawBytes[3] == 128)
+						return "-0.000000"; // "Negative" zero
+					//TODO: Some instructions expect 0 to be 0 and others expect 0 to be 0.000000
+					//if(RawBytes[0] == 0 && RawBytes[1] == 0 && RawBytes[2] == 0 && RawBytes[3] == 0)
+					//{
+					//	return "0.000000";
+					//}
+					return DoubleConverter.ToExactString(Float);
 				case NumberType.Unknown:
 					// fxc.exe has some strange rules for formatting output of numbers of 
 					// unknown type - for example, as operands to the mov op. It only matters for string output -
@@ -182,6 +188,8 @@ namespace SlimShader
 					if (Int < floatThresholdNeg || Int > floatThresholdPos)
 						goto case NumberType.Float;
 					goto case NumberType.Int;
+				case NumberType.Bool:
+					return UInt == 0 ? "false" : "true";
 				default:
 					throw new InvalidOperationException(string.Format("Type '{0}' is not supported.", type));
 			}

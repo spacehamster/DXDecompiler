@@ -272,7 +272,6 @@ namespace SlimShader.DX9Shader
 		public int GetDestinationParamIndex()
 		{
 			if (Opcode == Opcode.Dcl) return 1;
-
 			return 0;
 		}
 
@@ -288,10 +287,10 @@ namespace SlimShader.DX9Shader
 			return (ComponentFlags)((Data[destIndex] >> 16) & 0xF);
 		}
 
-		public string GetDestinationWriteMaskName(int destinationLength, bool hlsl)
+		public string GetDestinationWriteMaskName(uint destinationLength, bool hlsl)
 		{
 			ComponentFlags writeMask = GetDestinationWriteMask();
-			int writeMaskLength = GetDestinationMaskLength();
+			var writeMaskLength = GetDestinationMaskLength();
 
 			if (!hlsl)
 			{

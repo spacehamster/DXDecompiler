@@ -175,22 +175,31 @@ namespace SlimShader.Chunks.Xsgn
 				return MinPrecision.GetDescription();
 			}
 		}
-		public override string ToString()
+		public string ToString(bool includeStreams)
 		{
 			// For example:
 			// Name                 Index   Mask Register SysValue  Format   Used
 			// TEXCOORD                 0   xyzw        0     NONE   float   xyzw
 			// SV_DepthGreaterEqual     0    N/A oDepthGE  DEPTHGE   float    YES
+			string name = SemanticName;
+			if (includeStreams)
+			{
+				name = string.Format("m{0}:{1}", Stream, SemanticName);
+			}
 			if (SystemValueType.RequiresMask())
 			{
-				return string.Format("{0,-20} {1,5}   {2,-4} {3,8} {4,8} {5,7}   {6,-4}", SemanticName, SemanticIndex,
+				return string.Format("{0,-20} {1,5}   {2,-4} {3,8} {4,8} {5,7}   {6,-4}", name, SemanticIndex,
 					Mask.GetDescription(),
 					Register, SystemValueType.GetDescription(),
 					GetTypeFormat(), ReadWriteMask.GetDescription());
 			}
-			return string.Format("{0,-20} {1,5}   {2,4}    {3,4} {4,8} {5,7}   {6,4}", SemanticName, SemanticIndex,
+			return string.Format("{0,-20} {1,5}   {2,4}    {3,4} {4,8} {5,7}   {6,4}", name, SemanticIndex,
 				"N/A", SystemValueType.GetRegisterName(), SystemValueType.GetDescription(),
 				GetTypeFormat(), "YES");
+		}
+		public override string ToString()
+		{
+			return ToString(false);
 		}
 	}
 }

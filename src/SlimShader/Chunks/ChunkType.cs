@@ -113,5 +113,25 @@ namespace SlimShader.Chunks
 		/// Library chunk
 		/// </summary>
 		Lfs0,
+
+		/// <summary>
+		/// Effects chunk
+		/// </summary>
+		Fx10,
+
+		/// <summary>
+		/// Effects expression chunk
+		/// </summary>
+		Ctab,
+
+		/// <summary>
+		/// Effects expression chunk
+		/// </summary>
+		Cli4,
+
+		/// <summary>
+		/// Effects expression chunk
+		/// </summary>
+		Fxlc
 	}
 }

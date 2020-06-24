@@ -207,6 +207,18 @@ ret
 //
 //   float4 TestGlobal;                 // Offset:    0 Size:    16
 //      = 0x40a00000 0x40a00000 0x40a00000 0x40a00000 
+//   int4 TestGlobal2;                  // Offset:   16 Size:    16
+//      = 0x00000006 0x00000006 0x00000006 0x00000006 
+//
+// }
+//
+// cbuffer Foo
+// {
+//
+//   float3 TestBuffer1;                // Offset:    0 Size:    12
+//      = 0x40e00000 0x40e00000 0x40e00000 
+//   int3 TestBuffer2;                  // Offset:   16 Size:    12
+//      = 0x00000008 0x00000008 0x00000008 
 //
 // }
 //
@@ -216,6 +228,7 @@ ret
 // Name                                 Type  Format         Dim      HLSL Bind  Count
 // ------------------------------ ---------- ------- ----------- -------------- ------
 // $Globals                          cbuffer      NA          NA            cb0      1 
+// Foo                               cbuffer      NA          NA            cb1      1 
 //
 //
 //
@@ -232,23 +245,35 @@ ret
 // Target Reg Buffer  Start Reg # of Regs        Data Conversion
 // ---------- ------- --------- --------- ----------------------
 // c0         cb0             0         1  ( FLT, FLT, FLT, FLT)
+// c1         cb0             1         1  ( INT, INT, INT, INT)
+// c2         cb1             0         1  ( FLT, FLT, FLT, FLT)
+// c3         cb1             1         1  ( INT, INT, INT, FLT)
 //
 //
 // Level9 shader bytecode:
 //
     lib_4_0_vs_2_0
-    def c1, 2, 0, 0, 0
+    def c4, 2, 0, 0, 0
     dcl_texcoord v0
-    mov r0.x, c1.x
-    mad oT0, v0.x, r0.x, c0
+    mov r0.x, c4.x
+    mad r0, v0.x, r0.x, c0
+    add r0, r0, c1
+    add r0, r0, c2.xyzx
+    add oT0, r0, c3.xyzx
 
-// approximately 2 instruction slots used
+// approximately 5 instruction slots used
 lib_4_0
-dcl_constantbuffer CB0[1], immediateIndexed
+dcl_constantbuffer CB0[2], immediateIndexed
+dcl_constantbuffer CB1[2], immediateIndexed
 dcl_input v0.x
 dcl_output o0.xyzw
-dcl_temps 1
+dcl_temps 2
 utof r0.x, v0.x
-mad o0.xyzw, r0.xxxx, l(2.000000, 2.000000, 2.000000, 2.000000), cb0[0].xyzw
+mad r0.xyzw, r0.xxxx, l(2.000000, 2.000000, 2.000000, 2.000000), cb0[0].xyzw
+itof r1.xyzw, cb0[1].xyzw
+add r0.xyzw, r0.xyzw, r1.xyzw
+add r0.xyzw, r0.xyzw, cb1[0].xyzx
+itof r1.xyzw, cb1[1].xyzx
+add o0.xyzw, r0.xyzw, r1.xyzw
 ret 
-// Approximately 3 instruction slots used
+// Approximately 8 instruction slots used

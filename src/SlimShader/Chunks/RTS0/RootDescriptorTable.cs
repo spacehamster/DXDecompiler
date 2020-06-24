@@ -18,7 +18,7 @@ namespace SlimShader.Chunks.RTS0
 			DescriptorRanges = new List<DescriptorRange>();
 		}
 
-		public static RootDescriptorTable Parse(BytecodeReader reader, BytecodeReader tableReader, RootSignatureVersion version)
+		public new static RootDescriptorTable Parse(BytecodeReader reader, BytecodeReader tableReader, RootSignatureVersion version)
 		{
 			var result = new RootDescriptorTable();
 			var numDescriptorRanges = tableReader.ReadUInt32();

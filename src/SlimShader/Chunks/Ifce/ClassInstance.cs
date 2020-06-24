@@ -11,25 +11,22 @@ namespace SlimShader.Chunks.Ifce
 		public ushort ConstantBufferOffset { get; private set; }
 		public ushort Texture { get; private set; }
 		public ushort Sampler { get; private set; }
+		public ushort ElementCount { get; private set; }
 
 		public static ClassInstance Parse(BytecodeReader reader, BytecodeReader classInstanceReader)
 		{
 			var nameOffset = classInstanceReader.ReadUInt32();
 			var nameReader = reader.CopyAtOffset((int) nameOffset);
 			var name = nameReader.ReadString();
-
-			var type = classInstanceReader.ReadUInt16();
-			var unknown = classInstanceReader.ReadUInt16();
-			Debug.Assert(unknown == 1); // Unknown, perhaps the class instance type?
-
 			return new ClassInstance
 			{
 				Name = name,
-				Type = type,
+				Type = classInstanceReader.ReadUInt16(),
+				ElementCount = classInstanceReader.ReadUInt16(),
 				ConstantBuffer = classInstanceReader.ReadUInt16(),
 				ConstantBufferOffset = classInstanceReader.ReadUInt16(),
 				Texture = classInstanceReader.ReadUInt16(),
-				Sampler = classInstanceReader.ReadUInt16()
+				Sampler = classInstanceReader.ReadUInt16(),
 			};
 		}
 
@@ -39,9 +36,14 @@ namespace SlimShader.Chunks.Ifce
 			// Name                        Type CB CB Offset Texture Sampler
 			// --------------------------- ---- -- --------- ------- -------
 			// g_ambientLight                12  0         0       -       -
-
+			var arrayFormat = "";
+			if(ElementCount > 1)
+			{
+				arrayFormat = string.Format("[{0}]", ElementCount);
+			}
+			string name = string.Format("{0}{1}", Name, arrayFormat);
 			return string.Format("{0,-27} {1,4} {2,2} {3,9} {4,7} {5,7}",
-				Name, Type, ConstantBuffer, ConstantBufferOffset,
+				name, Type, ConstantBuffer, ConstantBufferOffset,
 				(Texture == 0xFFFF) ? "-" : Texture.ToString(),
 				(Sampler == 0xFFFF) ? "-" : Sampler.ToString());
 		}

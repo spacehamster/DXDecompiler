@@ -48,7 +48,8 @@
 // VIEWVECTORTS             0   xyz         6     NONE   float   xyz 
 // VIEWVECTORWS             0   xyz         7     NONE   float   xyz 
 //
-vs_4_0
+vs_5_0
+dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB1[16], immediateIndexed
 dcl_input v0.xyz
 dcl_input v1.xyz

@@ -42,44 +42,74 @@ namespace SlimShader.Chunks.Common
 				ProgramType = shaderType == 0xFFFF ? ProgramType.PixelShader : ProgramType.VertexShader
 			};
 		}
-
-		public static ShaderVersion ParseRdef(BytecodeReader reader)
+		private static ProgramType ParseProgramType(ushort programTypeValue)
 		{
-			uint target = reader.ReadUInt32();
-
-			var programTypeValue = target.DecodeValue<ushort>(16, 31);
-			ProgramType programType;
 			switch (programTypeValue)
 			{
 				case 0xFFFF:
-					programType = ProgramType.PixelShader;
-					break;
+					return ProgramType.PixelShader;
 				case 0xFFFE:
-					programType = ProgramType.VertexShader;
-					break;
+					return ProgramType.VertexShader;
 				case 0x4853:
-					programType = ProgramType.HullShader;
-					break;
+					return ProgramType.HullShader;
 				case 0x4753:
-					programType = ProgramType.GeometryShader;
-					break;
+					return ProgramType.GeometryShader;
 				case 0x4453:
-					programType = ProgramType.DomainShader;
-					break;
+					return ProgramType.DomainShader;
 				case 0x4353:
-					programType = ProgramType.ComputeShader;
-					break;
-				case 0x4c46:
-					programType = ProgramType.LibraryShader;
-					break;
+					return ProgramType.ComputeShader;
+				case 0x4C46:
+					return ProgramType.LibraryShader;
+				case 0xFEFF:
+					return ProgramType.EffectsShader;
 				default:
 					throw new ParseException(string.Format("Unknown program type: 0x{0:X}", programTypeValue));
 			}
-
+		}
+		public static ShaderVersion ParseRdef(BytecodeReader reader)
+		{
+			uint target = reader.ReadUInt32();
+			var programTypeValue = target.DecodeValue<ushort>(16, 31);
+			ProgramType programType = ParseProgramType(programTypeValue);
 			return new ShaderVersion
 			{
 				MajorVersion = target.DecodeValue<byte>(8, 15),
 				MinorVersion = target.DecodeValue<byte>(0, 7),
+				ProgramType = programType
+			};
+		}
+		public static ShaderVersion ParseFX(BytecodeReader reader)
+		{
+			uint target = reader.ReadUInt16();
+			var programTypeValue = reader.ReadUInt16();
+			ProgramType programType = ParseProgramType(programTypeValue);
+			byte majorVersion;
+			byte minorVersion;
+			switch (target)
+			{
+				case 0x1001:
+					majorVersion = 4;
+					minorVersion = 0;
+					break;
+				case 0x1011:
+					majorVersion = 4;
+					minorVersion = 1;
+					break;
+				case 0x2001:
+					majorVersion = 5;
+					minorVersion = 0;
+					break;
+				case 0x0901:
+					majorVersion = 2;
+					minorVersion = 0;
+					break;
+				default:
+					throw new ParseException(string.Format("Unknown program version: 0x{0:X}", target));
+			}
+			return new ShaderVersion
+			{
+				MajorVersion = majorVersion,
+				MinorVersion = minorVersion,
 				ProgramType = programType
 			};
 		}

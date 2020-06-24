@@ -91,10 +91,7 @@ namespace SlimShader.Chunks.Aon9
 			}
 			var shaderChunkReader = chunkContentReader.CopyAtOffset((int)shaderOffset);
 			var byteCode = shaderChunkReader.ReadBytes((int)shaderSize);
-			using (var memoryStream = new MemoryStream(byteCode))
-			{
-				result.ShaderModel = DX9Shader.ShaderReader.ReadShader(memoryStream);
-			}
+			result.ShaderModel = DX9Shader.ShaderReader.ReadShader(byteCode);
 			return result;
 		}
 		public override string ToString()
@@ -181,17 +178,11 @@ namespace SlimShader.Chunks.Aon9
 			sb.AppendLine($"//");
 			using (var stream = new MemoryStream())
 			{
-				var asmWriter = new DX9Shader.AsmWriter(ShaderModel);
-				asmWriter.Write(stream);
-				stream.Position = 0;
-				using (var reader = new StreamReader(stream, Encoding.UTF8))
-				{
-					var decompiledAssmembly = reader.ReadToEnd();
-					decompiledAssmembly = decompiledAssmembly
-						.Replace("ps_2_1", "ps_2_x")
-						.Replace("vs_2_1", "vs_2_x");
-					sb.AppendLine(decompiledAssmembly);
-				}
+				var decompiledAssmembly = DX9Shader.AsmWriter.Disassemble(ShaderModel);
+				decompiledAssmembly = decompiledAssmembly
+					.Replace("ps_2_1", "ps_2_x")
+					.Replace("vs_2_1", "vs_2_x");
+				sb.AppendLine(decompiledAssmembly);
 			}
 			return sb.ToString();
 		}

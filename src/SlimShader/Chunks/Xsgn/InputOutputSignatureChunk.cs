@@ -73,9 +73,9 @@ namespace SlimShader.Chunks.Xsgn
 
 			sb.AppendLine("// Name                 Index   Mask Register SysValue  Format   Used");
 			sb.AppendLine("// -------------------- ----- ------ -------- -------- ------- ------");
-
+			bool includeStreams = Parameters.Any(p => p.Stream > 0);
 			foreach (var parameter in Parameters)
-				sb.AppendLine("// " + parameter);
+				sb.AppendLine("// " + parameter.ToString(includeStreams));
 
 			if (Parameters.Any())
 				sb.AppendLine("//");

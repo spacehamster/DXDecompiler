@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace SlimShader.Chunks
 {
-	internal static class EnumExtensions
+	public static class EnumExtensions
 	{
 		private static readonly Dictionary<Type, Dictionary<Type, Dictionary<Enum, Attribute[]>>> AttributeValues;
 

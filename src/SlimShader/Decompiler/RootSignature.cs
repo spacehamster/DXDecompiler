@@ -164,19 +164,19 @@ namespace SlimShader.Decompiler
 				sampler.ShaderRegister);
 			if (sampler.Filter != Filter.Anisotropic)
 			{
-				sb.AppendFormat(", filter={0}", sampler.Filter.GetDescription());
+				sb.AppendFormat(", filter={0}", sampler.Filter.GetDescription(ChunkType.Rts0));
 			}
 			if (sampler.AddressU != TextureAddressMode.Wrap)
 			{
-				sb.AppendFormat(", addressU={0}", sampler.AddressU.GetDescription());
+				sb.AppendFormat(", addressU={0}", sampler.AddressU.GetDescription(ChunkType.Rts0));
 			}
 			if (sampler.AddressV != TextureAddressMode.Wrap)
 			{
-				sb.AppendFormat(", addressV={0}", sampler.AddressV.GetDescription());
+				sb.AppendFormat(", addressV={0}", sampler.AddressV.GetDescription(ChunkType.Rts0));
 			}
 			if (sampler.AddressW != TextureAddressMode.Wrap)
 			{
-				sb.AppendFormat(", addressW={0}", sampler.AddressW.GetDescription());
+				sb.AppendFormat(", addressW={0}", sampler.AddressW.GetDescription(ChunkType.Rts0));
 			}
 			if (sampler.MipLODBias != 0)
 			{
@@ -188,7 +188,7 @@ namespace SlimShader.Decompiler
 			}
 			if (sampler.ComparisonFunc != ComparisonFunc.LessEqual)
 			{
-				sb.AppendFormat(", comparisonFunc={0}", sampler.ComparisonFunc.GetDescription());
+				sb.AppendFormat(", comparisonFunc={0}", sampler.ComparisonFunc.GetDescription(ChunkType.Rts0));
 			}
 			if (sampler.BorderColor != StaticBorderColor.OpaqueWhite)
 			{

@@ -16,7 +16,8 @@
 // -------------------- ----- ------ -------- -------- ------- ------
 // POSITION                 0   xyz         0     NONE   float   xyz 
 //
-vs_4_0
+vs_5_0
+dcl_globalFlags refactoringAllowed
 dcl_input v0.xyz
 dcl_output o0.xyz
 mov o0.xyz, v0.xyzx

@@ -53,7 +53,8 @@
 // -------------------- ----- ------ -------- -------- ------- ------
 // SV_TARGET                0   xyzw        0   TARGET   float   xyzw
 //
-ps_4_0
+ps_5_0
+dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB1[12], immediateIndexed
 dcl_sampler s0, mode_default
 dcl_resource_texture2d (float,float,float,float) t0
@@ -64,7 +65,7 @@ dcl_input_ps linear v1.xyz
 dcl_input_ps linear v3.xyz
 dcl_input_ps linear v4.xyz
 dcl_output o0.xyzw
-dcl_temps 7
+dcl_temps 6
 dp3 r0.x, v4.xyzx, v4.xyzx
 rsq r0.x, r0.x
 mul r0.xyz, r0.xxxx, v4.xyzx
@@ -74,8 +75,8 @@ mul r1.xyz, r0.wwww, v1.xyzx
 dp3 r0.w, v3.xyzx, v3.xyzx
 rsq r0.w, r0.w
 mul r2.xyz, r0.wwww, v3.xyzx
-deriv_rtx r3.xy, v0.xyxx
-deriv_rty r3.zw, v0.xxxy
+deriv_rtx_coarse r3.xy, v0.xyxx
+deriv_rty_coarse r3.zw, v0.xxxy
 itof r4.xy, cb1[11].yxyy
 dp3 r0.x, r0.xyzx, r2.xyzx
 add r0.y, -r4.x, r4.y
@@ -92,13 +93,12 @@ loop
   ige r1.w, r0.w, r0.y
   breakc_nz r1.w
   mad r2.xy, -r0.xxxx, v0.zwzz, r2.xyxx
-  sample_d r6.xyzw, r2.xyxx, t1.xyzw, s0, r3.xyxx, r3.zwzz
+  sample_d_indexable(texture2d)(float,float,float,float) r4.y, r2.xyxx, t1.xwyz, s0, r3.xyxx, r3.zwzz
   add r4.x, -r0.x, r4.z
-  lt r1.w, r4.x, r6.w
+  lt r1.w, r4.x, r4.y
   iadd r2.z, r0.w, l(1)
-  movc r2.w, r1.w, r4.w, r6.w
+  movc r2.w, r1.w, r4.w, r4.y
   movc r0.w, r1.w, r0.z, r2.z
-  mov r4.y, r6.w
   movc r5.xyzw, r1.wwww, r4.xyzw, r5.xyzw
   mov r4.w, r2.w
   mov r4.z, r4.x
@@ -112,14 +112,14 @@ div r0.x, r0.x, r0.z
 add r0.x, -r0.x, l(1.000000)
 movc r0.x, r0.w, l(1.000000), r0.x
 mad r0.xy, -v0.zwzz, r0.xxxx, v0.xyxx
-sample r2.xyzw, r0.xyxx, t1.xyzw, s0
+sample_indexable(texture2d)(float,float,float,float) r2.xyzw, r0.xyxx, t1.xyzw, s0
 mad r2.xyzw, r2.xyzw, l(2.000000, 2.000000, 2.000000, 2.000000), l(-1.000000, -1.000000, -1.000000, -1.000000)
 dp4 r0.z, r2.xyzw, r2.xyzw
 rsq r0.z, r0.z
 mul r2.xyz, r0.zzzz, r2.xyzx
-sample r0.xyzw, r0.xyxx, t0.xyzw, s0
+sample_indexable(texture2d)(float,float,float,float) r0.xyzw, r0.xyxx, t0.xyzw, s0
 dp3_sat r1.x, r2.xyzx, r1.xyzx
 mad r1.xyzw, r1.xxxx, cb1[1].xyzw, cb1[0].xyzw
 mul o0.xyzw, r0.xyzw, r1.xyzw
 ret 
-// Approximately 57 instruction slots used
+// Approximately 56 instruction slots used

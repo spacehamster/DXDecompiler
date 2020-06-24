@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
+using SlimShader.DX9Shader.FX9;
+using SlimShader.Util;
+using SlimShader.DX9Shader.Bytecode;
+using SlimShader.DX9Shader.Bytecode.Declaration;
+using SlimShader.DX9Shader.Bytecode.Fxlvm;
+using System.Diagnostics;
+
 namespace SlimShader.DX9Shader
 {
 
@@ -14,17 +16,34 @@ namespace SlimShader.DX9Shader
 	{
 		Vertex = 0xFFFE,
 		Pixel = 0xFFFF,
-		Fx = 0xFEFF,
+		Effect = 0xFEFF,
+		/// <summary>
+		/// Represents a Fxlc expression chunk that contains FXLVM tokens
+		/// </summary>
+		Expression = 0x4658
 	}
 
 	public class ShaderModel
 	{
+		private static readonly Dictionary<uint, CommentType> KnownCommentTypes = 
+			new Dictionary<uint, CommentType>
+		{
+			{ "CTAB".ToFourCc(), CommentType.CTAB },
+			{ "CLIT".ToFourCc(), CommentType.CLIT },
+			{ "FXLC".ToFourCc(), CommentType.FXLC },
+			{ "PRES".ToFourCc(), CommentType.PRES },
+			{ "PRSI".ToFourCc(), CommentType.PRSI }
+		};
 		public int MajorVersion { get; private set; }
 		public int MinorVersion { get; private set; }
 		public ShaderType Type { get; private set; }
-
+		public EffectContainer EffectChunk { get; set; }
 		public IList<Token> Tokens { get; private set; }
 		public ConstantTable ConstantTable { get; private set; }
+		public FxlcBlock Fxlc { get; set; }
+		public CliToken Cli { get; set; }
+		public Preshader Preshader { get; set; }
+		public PrsiToken Prsi { get; set; }
 		public IEnumerable<InstructionToken> Instructions => Tokens.OfType<InstructionToken>();
 
 		public ShaderModel(int majorVersion, int minorVersion, ShaderType type)
@@ -35,131 +54,120 @@ namespace SlimShader.DX9Shader
 
 			Tokens = new List<Token>();
 		}
-
-		static string ReadStringNullTerminated(Stream stream)
+		private ShaderModel()
 		{
-			StringBuilder builder = new StringBuilder();
-			char b;
-			while ((b = (char)stream.ReadByte()) != 0)
-			{
-				builder.Append(b.ToString());
-			}
-			return builder.ToString();
+			Tokens = new List<Token>();
 		}
-
-		internal ConstantTable ParseConstantTable()
+		public static ShaderModel Parse(BytecodeReader reader)
 		{
-			var constantDeclarations = new List<ConstantDeclaration>();
-
-			byte[] constantTable = GetConstantTableData();
-			if (constantTable == null)
+			var result = new ShaderModel();
+			result.MinorVersion = reader.ReadByte();
+			result.MajorVersion = reader.ReadByte();
+			result.Type = (ShaderType)reader.ReadUInt16();
+			while (true)
 			{
-				return null;
+				var instruction = result.ReadInstruction(reader);
+				if (instruction == null) continue;
+				result.Tokens.Add(instruction);
+				if (instruction.Opcode == Opcode.End) break;
 			}
-
-			var ctabStream = new MemoryStream(constantTable);
-			using (var ctabReader = new BinaryReader(ctabStream))
+			return result;
+		}
+		Token ReadInstruction(BytecodeReader reader)
+		{
+			uint instructionToken = reader.ReadUInt32();
+			Opcode opcode = (Opcode)(instructionToken & 0xffff);
+			int size;
+			if (opcode == Opcode.Comment)
 			{
-				int ctabSize = ctabReader.ReadInt32();
-				System.Diagnostics.Debug.Assert(ctabSize == 0x1C);
-				long creatorPosition = ctabReader.ReadInt32();
-
-				int minorVersion = ctabReader.ReadByte();
-				int majorVersion = ctabReader.ReadByte();
-				System.Diagnostics.Debug.Assert(majorVersion == MajorVersion);
-				System.Diagnostics.Debug.Assert(minorVersion == MinorVersion);
-
-				var shaderType = (ShaderType)ctabReader.ReadUInt16();
-				System.Diagnostics.Debug.Assert(shaderType == Type);
-
-				int numConstants = ctabReader.ReadInt32();
-				long constantInfoPosition = ctabReader.ReadInt32();
-				ShaderFlags shaderFlags = (ShaderFlags)ctabReader.ReadInt32();
-
-				long shaderModelPosition = ctabReader.ReadInt32();
-				//Console.WriteLine("ctabStart = {0}, shaderModelPosition = {1}", ctabStart, shaderModelPosition);
-
-
-				ctabStream.Position = creatorPosition;
-				string compilerInfo = ReadStringNullTerminated(ctabStream);
-
-				ctabStream.Position = shaderModelPosition;
-				string shaderModel = ReadStringNullTerminated(ctabStream);
-
-
-				for (int i = 0; i < numConstants; i++)
+				size = (int)((instructionToken >> 16) & 0x7FFF);
+			}
+			else
+			{
+				size = (int)((instructionToken >> 24) & 0x0f);
+			}
+			Token token = null;
+			if (opcode == Opcode.Comment)
+			{
+				var fourCC = reader.ReadUInt32();
+				if (KnownCommentTypes.ContainsKey(fourCC))
 				{
-					ctabStream.Position = constantInfoPosition + i * 20;
-					ConstantDeclaration declaration = ReadConstantDeclaration(ctabReader);
-					constantDeclarations.Add(declaration);
+					var commentReader = reader.CopyAtCurrentPosition();
+					reader.ReadBytes(size * 4 - 4);
+					switch (KnownCommentTypes[fourCC])
+					{
+						case CommentType.CTAB:
+							ConstantTable = ConstantTable.Parse(commentReader);
+							return null;
+						case CommentType.CLIT:
+							Cli = CliToken.Parse(commentReader);
+							return null;
+						case CommentType.FXLC:
+							Fxlc = FxlcBlock.Parse(commentReader);
+							return null;
+						case CommentType.PRES:
+							Preshader = Preshader.Parse(commentReader);
+							return null;
+						case CommentType.PRSI:
+							Prsi = PrsiToken.Parse(commentReader);
+							return null;
+					}
 				}
-				var ct = new ConstantTable(compilerInfo, shaderModel, majorVersion, minorVersion, constantDeclarations);
-				ConstantTable = ct;
-				return ConstantTable;
-			}
-		}
-
-		private byte[] GetConstantTableData()
-		{
-			int ctabToken = FourCC.Make("CTAB");
-			var ctabComment = Tokens.FirstOrDefault(x => x.Opcode == Opcode.Comment && x.Data[0] == ctabToken);
-			if (ctabComment == null)
-			{
-				return null;
-			}
-
-			byte[] constantTable = new byte[ctabComment.Data.Length * 4];
-			for (int i = 1; i < ctabComment.Data.Length; i++)
-			{
-				constantTable[i * 4 - 4] = (byte)(ctabComment.Data[i] & 0xFF);
-				constantTable[i * 4 - 3] = (byte)((ctabComment.Data[i] >> 8) & 0xFF);
-				constantTable[i * 4 - 2] = (byte)((ctabComment.Data[i] >> 16) & 0xFF);
-				constantTable[i * 4 - 1] = (byte)((ctabComment.Data[i] >> 24) & 0xFF);
-			}
-
-			return constantTable;
-		}
-
-		private ConstantDeclaration ReadConstantDeclaration(BinaryReader ctabReader)
-		{
-			var ctabStream = ctabReader.BaseStream;
-
-			// D3DXSHADER_CONSTANTINFO
-			int nameOffset = ctabReader.ReadInt32();
-			RegisterSet registerSet = (RegisterSet)ctabReader.ReadInt16();
-			short registerIndex = ctabReader.ReadInt16();
-			short registerCount = ctabReader.ReadInt16();
-			ctabStream.Position += sizeof(short); // Reserved
-			int typeInfoOffset = ctabReader.ReadInt32();
-			int defaultValueOffset = ctabReader.ReadInt32();
-			List<float> defaultValue = new List<float>(); ;
-
-			ctabStream.Position = nameOffset;
-			string name = ReadStringNullTerminated(ctabStream);
-			
-			if(defaultValueOffset != 0)
-			{
-				//Note: thre are corrisponding def instructions. TODO: check that they are the same
-				ctabStream.Position = defaultValueOffset;
-				for(int i = 0; i < 4; i++)
+				token = new CommentToken(opcode, size, this);
+				token.Data[0] = fourCC;
+				for (int i = 1; i < size; i++)
 				{
-					defaultValue.Add(ctabReader.ReadSingle());
+					token.Data[i] = reader.ReadUInt32();
 				}
 			}
+			else
+			{
+				token = new InstructionToken(opcode, size, this);
+				var inst = token as InstructionToken;
 
-			// D3DXSHADER_TYPEINFO
-			ctabStream.Position = typeInfoOffset;
-			ParameterClass cl = (ParameterClass)ctabReader.ReadInt16();
-			ParameterType type = (ParameterType)ctabReader.ReadInt16();
-			short rows = ctabReader.ReadInt16();
-			short columns = ctabReader.ReadInt16();
-			short numElements = ctabReader.ReadInt16();
-			short numStructMembers = ctabReader.ReadInt16();
-			int structMemberInfoOffset = ctabReader.ReadInt32();
-			//System.Diagnostics.Debug.Assert(numElements == 1);
-			System.Diagnostics.Debug.Assert(structMemberInfoOffset == 0);
+				for (int i = 0; i < size; i++)
+				{
+					token.Data[i] = reader.ReadUInt32();
+					if (opcode == Opcode.Def || opcode == Opcode.DefB || opcode == Opcode.DefI)
+					{
 
-			return new ConstantDeclaration(name, registerSet, registerIndex, registerCount, cl, type, rows, columns, numElements, defaultValue);
+					}
+					else if (opcode == Opcode.Dcl)
+					{
+						if (i == 0)
+						{
+							inst.Operands.Add(new DeclarationOperand(token.Data[i]));
+						}
+						else
+						{
+							inst.Operands.Add(new DestinationOperand(token.Data[i]));
+						}
+					}
+					else if (i == 0 && opcode != Opcode.BreakC && opcode != Opcode.IfC && opcode != Opcode.If)
+					{
+						inst.Operands.Add(new DestinationOperand(token.Data[i]));
+					}
+					else if ((token.Data[i] & (1 << 13)) != 0)
+					{
+						//Relative Address mode
+						token.Data[i + 1] = reader.ReadUInt32();
+						inst.Operands.Add(new SourceOperand(token.Data[i], token.Data[i + 1]));
+						i++;
+					}
+					else
+					{
+						inst.Operands.Add(new SourceOperand(token.Data[i]));
+					}
+				}
+				if (opcode != Opcode.Comment)
+				{
+					token.Modifier = (int)((instructionToken >> 16) & 0xff);
+					token.Predicated = (instructionToken & 0x10000000) != 0;
+					token.CoIssue = (instructionToken & 0x40000000) != 0;
+					Debug.Assert((instructionToken & 0xA0000000) == 0, $"Instruction has unexpected bits set {instructionToken & 0xE0000000}");
+				}
+			}
+			return token;
 		}
 	}
 }

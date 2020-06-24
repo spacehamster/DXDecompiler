@@ -10,14 +10,18 @@
 //
 //   Name         Reg   Size
 //   ------------ ----- ----
-//   LOOP_COUNT   c0       1
+//   LOOP_COUNT   b0       1
 //
 
     vs_2_0
-    def c1, 0, -0.5, 2, 1
+    def c0, 2, 1, 0.5, 0
     dcl_position v0
-    mul r0, v0, c0.x
-    mul r0, r0, c1.xxyx
-    mad oPos, v0, c1.zwww, r0
+    mov r0, v0
+    if b0
+      mul r1, r0, c0.xyzy
+    else
+      mul r1, r0, c0.xyyy
+    endif
+    mov oPos, r1
 
-// approximately 3 instruction slots used
+// approximately 9 instruction slots used

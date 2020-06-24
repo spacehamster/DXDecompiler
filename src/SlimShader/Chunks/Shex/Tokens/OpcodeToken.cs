@@ -3,10 +3,6 @@
 	public abstract class OpcodeToken
 	{
 		public OpcodeHeader Header { get; internal set; }
-#if DEBUG
-		internal string readLengthError { get; set; } = "";
-		internal byte[] Data { get; set; }
-#endif
 		protected string TypeDescription
 		{
 			get { return Header.OpcodeType.GetDescription(); }

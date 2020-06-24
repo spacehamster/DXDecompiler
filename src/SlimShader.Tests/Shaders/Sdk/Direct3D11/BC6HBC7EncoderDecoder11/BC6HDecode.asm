@@ -51,7 +51,7 @@
 // Name                 Index   Mask Register SysValue  Format   Used
 // -------------------- ----- ------ -------- -------- ------- ------
 // no Output
-cs_4_0
+cs_5_0
 dcl_globalFlags refactoringAllowed
 dcl_immediateConstantBuffer { { 10, 5, 5, 5},
                               { 7, 6, 6, 6},
@@ -110,53 +110,53 @@ dcl_thread_group 64, 1, 1
 ushr r0.x, vThreadIDInGroupFlattened.x, l(4)
 ishl r0.y, vThreadGroupID.x, l(2)
 iadd r0.y, r0.y, cb0[1].x
-iadd r0.x, r0.x, r0.y
-and r0.y, vThreadIDInGroupFlattened.x, l(48)
-iadd r0.z, -r0.y, vThreadIDInGroupFlattened.x
-ieq r0.w, r0.z, l(4)
-if_nz r0.w
-  ld_structured r1.xyzw, r0.x, l(0), t0.xyzw
+iadd r0.y, r0.x, r0.y
+and r0.z, vThreadIDInGroupFlattened.x, l(48)
+iadd r0.w, -r0.z, vThreadIDInGroupFlattened.x
+ieq r1.x, r0.w, l(4)
+if_nz r1.x
+  ld_structured_indexable(structured_buffer, stride=16)(mixed,mixed,mixed,mixed) r1.xyzw, r0.y, l(0), t0.xyzw
   store_structured g0.xyzw, vThreadIDInGroupFlattened.x, l(0), r1.xyzw
 endif 
-iadd r0.w, r0.y, l(4)
-ld_structured r1.xyzw, r0.w, l(0), g0.xyzw
-and r0.w, r1.x, l(3)
-if_z r0.w
+imad r0.x, r0.x, l(16), l(4)
+ld_structured r1.xyzw, r0.x, l(0), g0.xyzw
+and r0.x, r1.x, l(3)
+if_z r0.x
   mov r2.x, l(0)
 else 
-  ieq r0.w, r0.w, l(1)
-  if_nz r0.w
+  ieq r0.x, r0.x, l(1)
+  if_nz r0.x
     mov r2.x, l(1)
   else 
-    and r0.w, r1.x, l(31)
-    ieq r2.y, r0.w, l(2)
+    and r0.x, r1.x, l(31)
+    ieq r2.y, r0.x, l(2)
     if_nz r2.y
       mov r2.x, l(2)
     else 
-      ieq r2.y, r0.w, l(6)
+      ieq r2.y, r0.x, l(6)
       if_nz r2.y
         mov r2.x, l(3)
       else 
-        ieq r2.y, r0.w, l(10)
+        ieq r2.y, r0.x, l(10)
         if_nz r2.y
           mov r2.x, l(4)
         else 
-          ieq r2.y, r0.w, l(14)
+          ieq r2.y, r0.x, l(14)
           if_nz r2.y
             mov r2.x, l(5)
           else 
-            ieq r2.y, r0.w, l(18)
+            ieq r2.y, r0.x, l(18)
             if_nz r2.y
               mov r2.x, l(6)
             else 
-              ieq r3.xyzw, r0.wwww, l(22, 26, 30, 3)
-              ieq r2.yz, r0.wwww, l(0, 7, 11, 0)
-              movc r0.w, r2.z, l(12), l(13)
-              movc r0.w, r2.y, l(11), r0.w
-              movc r0.w, r3.w, l(10), r0.w
-              movc r0.w, r3.z, l(9), r0.w
-              movc r0.w, r3.y, l(8), r0.w
-              movc r2.x, r3.x, l(7), r0.w
+              ieq r3.xyzw, r0.xxxx, l(22, 26, 30, 3)
+              ieq r2.yz, r0.xxxx, l(0, 7, 11, 0)
+              movc r0.x, r2.z, l(12), l(13)
+              movc r0.x, r2.y, l(11), r0.x
+              movc r0.x, r3.w, l(10), r0.x
+              movc r0.x, r3.z, l(9), r0.x
+              movc r0.x, r3.y, l(8), r0.x
+              movc r2.x, r3.x, l(7), r0.x
             endif 
           endif 
         endif 
@@ -164,137 +164,93 @@ else
     endif 
   endif 
 endif 
-iadd r0.w, r2.x, l(1)
-if_z r0.z
-  ult r2.y, l(10), r0.w
+iadd r0.x, r2.x, l(1)
+if_z r0.w
+  ult r2.y, l(10), r0.x
   if_nz r2.y
-    ieq r2.y, r0.w, l(11)
+    ieq r2.y, r0.x, l(11)
     if_nz r2.y
-      ushr r3.x, r1.x, l(5)
-      ushr r3.y, r1.x, l(15)
-      ushr r3.z, r1.x, l(25)
-      and r3.xyw, r3.xyxz, l(1023, 1023, 0, 127)
-      ishl r2.y, r1.y, l(7)
-      and r2.y, r2.y, l(896)
+      ubfe r3.xyw, l(10, 10, 0, 7), l(5, 15, 0, 25), r1.xxxx
+      bfi r2.y, l(3), l(7), r1.y, l(0)
       iadd r3.z, r2.y, r3.w
     else 
-      ushr r4.x, r1.x, l(5)
-      ushr r4.y, r1.x, l(15)
-      ushr r4.z, r1.x, l(25)
-      and r4.xyz, r4.xyzx, l(1023, 1023, 127, 0)
-      ushr r5.x, r1.y, l(2)
-      ushr r5.y, r1.y, l(12)
-      ushr r5.z, r1.y, l(7)
-      ushr r5.w, r1.y, l(17)
+      ubfe r4.xyz, l(10, 10, 7, 0), l(5, 15, 25, 0), r1.xxxx
+      ushr r5.xyzw, r1.yyyy, l(2, 12, 7, 17)
       and r5.xyzw, r5.xyzw, l(1024, 1024, 0x0000fc00, 0x00007c00)
       iadd r6.xy, r4.xyxx, r5.xyxx
-      ishl r7.x, r1.z, l(10)
-      ishl r7.yw, r1.yyyy, l(7)
-      ishl r7.z, r1.y, l(3)
-      and r7.xyzw, r7.xyzw, l(1024, 896, 0x0000fc00, 896)
-      iadd r2.y, r7.y, r7.x
+      bfi r2.yzw, l(0, 1, 3, 1), l(0, 10, 7, 15), r1.zzyz, l(0, 0, 0, 0)
+      iadd r2.y, r2.y, r2.z
       iadd r6.z, r2.y, r4.z
-      ieq r2.zw, r0.wwww, l(0, 0, 12, 13)
+      ieq r7.xy, r0.xxxx, l(12, 13, 0, 0)
       and r8.xyz, r1.yyyy, l(2048, 0x00200000, 0x80000000, 0)
-      ushr r8.y, r8.y, l(10)
-      ushr r8.z, r8.z, l(20)
+      ushr r8.yz, r8.yyzy, l(0, 10, 20, 0)
       iadd r8.xyz, r4.xyzx, r8.xyzx
       iadd r9.xy, r5.xyxx, r8.xyxx
       iadd r9.z, r2.y, r8.z
-      iadd r4.xw, r4.xxxz, r7.zzzw
-      iadd r5.xy, r4.ywyy, r5.zwzz
-      ishl r2.y, r1.z, l(15)
-      and r2.y, r2.y, l(0x00008000)
-      iadd r4.y, r2.y, r5.y
-      mov r4.z, r5.x
-      movc r4.xyz, r2.wwww, r9.xyzx, r4.xzyx
-      movc r3.xyz, r2.zzzz, r6.xyzx, r4.xyzx
+      ishl r2.yz, r1.yyyy, l(0, 3, 7, 0)
+      and r2.yz, r2.yyzy, l(0, 0x0000fc00, 896, 0)
+      iadd r4.xw, r2.yyyz, r4.xxxz
+      iadd r2.yz, r4.yywy, r5.zzwz
+      iadd r4.y, r2.w, r2.z
+      mov r4.z, r2.y
+      movc r2.yzw, r7.yyyy, r9.xxyz, r4.xxzy
+      movc r3.xyz, r7.xxxx, r6.xyzx, r2.yzwy
     endif 
   else 
-    ieq r2.y, r0.w, l(1)
+    ieq r2.y, r0.x, l(1)
     if_nz r2.y
-      ushr r4.x, r1.x, l(5)
-      ushr r4.y, r1.x, l(15)
-      ushr r4.z, r1.x, l(25)
-      and r3.xyw, r4.xyxz, l(1023, 1023, 0, 127)
-      ishl r2.y, r1.y, l(7)
-      and r2.y, r2.y, l(896)
+      ubfe r3.xyw, l(10, 10, 0, 7), l(5, 15, 0, 25), r1.xxxx
+      bfi r2.y, l(3), l(7), r1.y, l(0)
       iadd r3.z, r2.y, r3.w
     else 
-      ieq r2.y, r0.w, l(2)
+      ieq r2.y, r0.x, l(2)
       if_nz r2.y
-        ushr r4.x, r1.x, l(5)
-        ushr r4.y, r1.x, l(15)
-        ushr r4.z, r1.x, l(25)
-        and r3.xyz, r4.xyzx, l(127, 127, 127, 0)
+        ubfe r3.xyz, l(7, 7, 7, 0), l(5, 15, 25, 0), r1.xxxx
       else 
-        ieq r2.y, r0.w, l(3)
+        ieq r2.y, r0.x, l(3)
         if_nz r2.y
-          ushr r4.x, r1.x, l(5)
-          ushr r4.y, r1.x, l(15)
-          ushr r4.z, r1.x, l(25)
-          and r3.xyz, r4.xyzx, l(1023, 1023, 127, 0)
-          ishl r4.x, r1.y, l(1)
-          ishl r4.y, r1.y, l(7)
-          and r2.yz, r4.xxyx, l(0, 512, 896, 0)
+          ubfe r3.xyz, l(10, 10, 7, 0), l(5, 15, 25, 0), r1.xxxx
+          ishl r2.yz, r1.yyyy, l(0, 1, 7, 0)
+          and r2.yz, r2.yyzy, l(0, 512, 896, 0)
           or r3.xw, r2.yyyz, r3.xxxz
-          ushr r2.z, r1.y, l(8)
-          ushr r2.w, r1.y, l(18)
-          and r2.yz, r2.zzwz, l(0, 512, 512, 0)
+          ushr r2.yz, r1.yyyy, l(0, 8, 18, 0)
+          and r2.yz, r2.yyzy, l(0, 512, 512, 0)
           or r3.yz, r2.yyzy, r3.yywy
         else 
-          ieq r2.y, r0.w, l(4)
+          ieq r2.y, r0.x, l(4)
           if_nz r2.y
-            ushr r4.x, r1.x, l(5)
-            ushr r4.y, r1.x, l(15)
-            ushr r4.z, r1.x, l(25)
-            and r3.xyz, r4.xyzx, l(1023, 1023, 127, 0)
-            ishl r4.x, r1.y, l(2)
-            ishl r4.y, r1.y, l(7)
-            and r2.yz, r4.xxyx, l(0, 512, 896, 0)
+            ubfe r3.xyz, l(10, 10, 7, 0), l(5, 15, 25, 0), r1.xxxx
+            ishl r2.yz, r1.yyyy, l(0, 2, 7, 0)
+            and r2.yz, r2.yyzy, l(0, 512, 896, 0)
             or r3.xw, r2.yyyz, r3.xxxz
-            ushr r2.z, r1.y, l(9)
-            ushr r2.w, r1.y, l(18)
-            and r2.yz, r2.zzwz, l(0, 512, 512, 0)
+            ushr r2.yz, r1.yyyy, l(0, 9, 18, 0)
+            and r2.yz, r2.yyzy, l(0, 512, 512, 0)
             or r3.yz, r2.yyzy, r3.yywy
           else 
-            ieq r2.y, r0.w, l(5)
+            ieq r2.y, r0.x, l(5)
             if_nz r2.y
-              ushr r4.x, r1.x, l(5)
-              ushr r4.y, r1.x, l(15)
-              ushr r4.z, r1.x, l(25)
-              and r3.xyz, r4.xyzx, l(1023, 1023, 127, 0)
-              ishl r4.x, r1.y, l(2)
-              ishl r4.y, r1.y, l(7)
-              and r2.yz, r4.xxyx, l(0, 512, 896, 0)
+              ubfe r3.xyz, l(10, 10, 7, 0), l(5, 15, 25, 0), r1.xxxx
+              ishl r2.yz, r1.yyyy, l(0, 2, 7, 0)
+              and r2.yz, r2.yyzy, l(0, 512, 896, 0)
               or r3.xw, r2.yyyz, r3.xxxz
-              ushr r2.z, r1.y, l(8)
-              ushr r2.w, r1.y, l(19)
-              and r2.yz, r2.zzwz, l(0, 512, 512, 0)
+              ushr r2.yz, r1.yyyy, l(0, 8, 19, 0)
+              and r2.yz, r2.yyzy, l(0, 512, 512, 0)
               or r3.yz, r2.yyzy, r3.yywy
             else 
-              ieq r2.y, r0.w, l(6)
+              ieq r2.y, r0.x, l(6)
               if_nz r2.y
-                ushr r4.x, r1.x, l(5)
-                ushr r4.y, r1.x, l(15)
-                ushr r4.z, r1.x, l(25)
-                and r3.xyw, r4.xyxz, l(511, 511, 0, 127)
-                ishl r2.y, r1.y, l(7)
-                and r2.y, r2.y, l(384)
+                ubfe r3.xyw, l(9, 9, 0, 7), l(5, 15, 0, 25), r1.xxxx
+                bfi r2.y, l(2), l(7), r1.y, l(0)
                 iadd r3.z, r2.y, r3.w
               else 
-                ushr r4.x, r1.x, l(5)
-                ushr r4.y, r1.x, l(15)
-                ushr r4.z, r1.x, l(25)
-                and r5.xyz, r4.xyzx, l(255, 255, 127, 0)
-                ishl r2.y, r1.y, l(7)
-                and r2.y, r2.y, l(128)
-                iadd r5.w, r2.y, r5.z
-                ieq r2.yzw, r0.wwww, l(0, 7, 8, 9)
-                and r4.xyz, r4.xyzx, l(63, 63, 63, 0)
+                ubfe r4.xyz, l(8, 8, 7, 0), l(5, 15, 25, 0), r1.xxxx
+                bfi r2.y, l(1), l(7), r1.y, l(0)
+                iadd r4.w, r2.y, r4.z
+                ieq r2.yzw, r0.xxxx, l(0, 7, 8, 9)
+                ubfe r5.xyz, l(6, 6, 6, 0), l(5, 15, 25, 0), r1.xxxx
                 or r2.z, r2.z, r2.w
                 or r2.y, r2.y, r2.z
-                movc r3.xyz, r2.yyyy, r5.xywx, r4.xyzx
+                movc r3.xyz, r2.yyyy, r4.xywx, r5.xyzx
               endif 
             endif 
           endif 
@@ -304,50 +260,45 @@ if_z r0.z
   endif 
   ieq r2.y, cb0[0].z, l(96)
   iadd r2.z, l(-1), icb[r2.x + 0].x
-  ishl r2.z, l(1), r2.z
-  and r4.xyz, r2.zzzz, r3.xyzx
-  iadd r2.w, r2.z, l(-1)
-  and r5.xyz, r2.wwww, r3.xyzx
-  iadd r5.xyz, -r2.zzzz, r5.xyzx
+  ishl r2.w, l(1), r2.z
+  and r4.xyz, r2.wwww, r3.xyzx
+  ubfe r5.xyz, r2.zzzz, l(0, 0, 0, 0), r3.xyzx
+  iadd r5.xyz, -r2.wwww, r5.xyzx
   movc r4.xyz, r4.xyzx, r5.xyzx, r3.xyzx
   movc r3.xyz, r2.yyyy, r4.xyzx, r3.xyzx
   store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(0), r3.xyzx
 else 
-  ult r2.y, r0.z, l(4)
+  ult r2.y, r0.w, l(4)
   if_nz r2.y
-    ieq r2.y, r0.z, l(1)
+    ieq r2.y, r0.w, l(1)
     if_nz r2.y
-      ult r2.y, l(10), r0.w
+      ult r2.y, l(10), r0.x
       if_nz r2.y
-        ushr r4.x, r1.y, l(3)
-        ushr r4.y, r1.y, l(13)
-        ushr r4.z, r1.y, l(23)
-        and r5.xyz, r4.xyzx, l(1023, 1023, 511, 0)
-        ishl r2.y, r1.z, l(9)
-        and r2.y, r2.y, l(512)
-        iadd r5.w, r2.y, r5.z
-        and r2.yzw, r4.xxyz, l(0, 511, 511, 511)
-        ieq r6.xyz, r0.wwww, l(11, 12, 13, 0)
-        and r7.xyz, r4.xyzx, l(255, 255, 255, 0)
-        and r4.xyz, r4.xyzx, l(15, 15, 15, 0)
-        movc r4.xyz, r6.zzzz, r7.xyzx, r4.xyzx
-        movc r2.yzw, r6.yyyy, r2.yyzw, r4.xxyz
-        movc r3.xyz, r6.xxxx, r5.xywx, r2.yzwy
+        ubfe r4.xyz, l(10, 10, 9, 0), l(3, 13, 23, 0), r1.yyyy
+        bfi r2.y, l(1), l(9), r1.z, l(0)
+        iadd r4.w, r2.y, r4.z
+        ubfe r2.yzw, l(0, 9, 9, 9), l(0, 3, 13, 23), r1.yyyy
+        ieq r5.xyz, r0.xxxx, l(11, 12, 13, 0)
+        ubfe r6.xyz, l(8, 8, 8, 0), l(3, 13, 23, 0), r1.yyyy
+        ubfe r7.xyz, l(4, 4, 4, 0), l(3, 13, 23, 0), r1.yyyy
+        movc r6.xyz, r5.zzzz, r6.xyzx, r7.xyzx
+        movc r2.yzw, r5.yyyy, r2.yyzw, r6.xxyz
+        movc r3.xyz, r5.xxxx, r4.xywx, r2.yzwy
       else 
-        ieq r2.y, r0.w, l(1)
+        ieq r2.y, r0.x, l(1)
         if_nz r2.y
           mov r2.yzw, l(0,248,0x0003e000,0.000000)
         else 
-          ieq r4.x, r0.w, l(2)
+          ieq r4.x, r0.x, l(2)
           if_nz r4.x
             mov r2.yzw, l(0,504,0x0007e000,0.000000)
           else 
-            ieq r4.x, r0.w, l(3)
+            ieq r4.x, r0.x, l(3)
             if_nz r4.x
               mov r2.yzw, l(0,248,0x0001e000,0.000000)
             else 
-              ieq r4.xyzw, r0.wwww, l(4, 5, 6, 7)
-              ieq r5.xy, r0.wwww, l(8, 9, 0, 0)
+              ieq r4.xyzw, r0.xxxx, l(4, 5, 6, 7)
+              ieq r5.xy, r0.xxxx, l(8, 9, 0, 0)
               movc r5.yzw, r5.yyyy, l(0,248,0x0003e000,0.000000), l(0,504,0x0007e000,0.000000)
               movc r5.xyz, r5.xxxx, l(248,0x0007e000,0.000000,0), r5.yzwy
               movc r5.xyz, r4.wwww, l(504,0x0003e000,0.000000,0), r5.xyzx
@@ -358,131 +309,91 @@ else
           endif 
         endif 
         and r2.yzw, r1.yyyy, r2.yyzw
-        ushr r3.x, r2.y, l(3)
-        ushr r3.y, r2.z, l(13)
-        ushr r3.z, r2.w, l(23)
+        ushr r3.xyz, r2.yzwy, l(3, 13, 23, 0)
       endif 
     else 
-      uge r2.y, l(10), r0.w
+      uge r2.y, l(10), r0.x
       if_nz r2.y
-        ieq r2.y, r0.z, l(2)
+        ieq r2.y, r0.w, l(2)
         if_nz r2.y
-          ieq r2.y, r0.w, l(1)
+          ieq r2.y, r0.x, l(1)
           if_nz r2.y
-            ushr r4.x, r1.z, l(1)
-            ushr r4.y, r1.y, l(9)
-            ushr r4.z, r1.y, l(29)
-            and r3.xyw, r4.xyxz, l(31, 15, 0, 7)
-            ishl r4.x, r1.x, l(2)
-            ishl r4.y, r1.x, l(1)
-            ishl r4.z, r1.z, l(3)
-            and r2.yzw, r4.xxyz, l(0, 16, 16, 8)
+            ubfe r3.xyw, l(5, 4, 0, 3), l(1, 9, 0, 29), r1.zyzy
+            ishl r2.yz, r1.xxxx, l(0, 2, 1, 0)
+            and r2.yz, r2.yyzy, l(0, 16, 16, 0)
             iadd r3.yw, r2.yyyz, r3.yyyw
-            iadd r3.z, r2.w, r3.w
+            bfi r3.z, l(1), l(3), r1.z, r3.w
           else 
-            ieq r2.y, r0.w, l(2)
+            ieq r2.y, r0.x, l(2)
             if_nz r2.y
-              ushr r4.x, r1.z, l(1)
-              ushr r4.y, r1.y, l(9)
-              ushr r4.z, r1.y, l(29)
-              ushr r4.w, r1.x, l(17)
-              and r3.xyzw, r4.xywz, l(63, 15, 32, 7)
-              ushr r4.x, r1.x, l(20)
-              ushr r4.y, r1.x, l(10)
-              and r2.yz, r4.xxyx, l(0, 16, 16, 0)
-              ishl r4.xy, r1.xzxx, l(3)
+              ubfe r3.xyw, l(6, 4, 0, 3), l(1, 9, 0, 29), r1.zyzy
+              ushr r2.yzw, r1.xxxx, l(0, 20, 10, 17)
+              and r2.yzw, r2.yyzw, l(0, 16, 16, 32)
+              ishl r4.xy, r1.xzxx, l(3, 3, 0, 0)
               and r4.xy, r4.xyxx, l(32, 8, 0, 0)
               iadd r2.yz, r2.yyzy, r4.xxyx
               iadd r3.yw, r2.yyyz, r3.yyyw
-              iadd r3.z, r3.z, r3.w
+              iadd r3.z, r2.w, r3.w
             else 
-              ieq r2.y, r0.w, l(3)
+              ieq r2.y, r0.x, l(3)
               if_nz r2.y
-                ushr r4.x, r1.z, l(1)
-                ushr r4.y, r1.y, l(9)
-                ushr r4.z, r1.y, l(29)
-                and r3.xyw, r4.xyxz, l(31, 15, 0, 7)
-                ishl r2.y, r1.z, l(3)
-                and r2.y, r2.y, l(8)
+                ubfe r3.xyw, l(5, 4, 0, 3), l(1, 9, 0, 29), r1.zyzy
+                bfi r2.y, l(1), l(3), r1.z, l(0)
                 iadd r3.z, r2.y, r3.w
               else 
-                ieq r2.y, r0.w, l(4)
+                ieq r2.y, r0.x, l(4)
                 if_nz r2.y
-                  ushr r4.x, r1.z, l(1)
-                  ushr r4.y, r1.z, l(7)
-                  ushr r4.z, r1.y, l(29)
-                  ushr r4.w, r1.y, l(9)
-                  and r3.xyzw, r4.xyzw, l(15, 16, 7, 15)
-                  iadd r3.y, r3.w, r3.y
-                  ishl r2.y, r1.z, l(3)
-                  and r2.y, r2.y, l(8)
-                  iadd r3.z, r2.y, r3.z
+                  ushr r2.yzw, r1.zzzy, l(0, 1, 7, 29)
+                  and r3.xw, r2.yyyz, l(15, 0, 0, 16)
+                  ubfe r2.y, l(4), l(9), r1.y
+                  iadd r3.y, r3.w, r2.y
+                  bfi r2.y, l(1), l(3), r1.z, l(0)
+                  iadd r3.z, r2.y, r2.w
                 else 
-                  ieq r2.y, r0.w, l(5)
+                  ieq r2.y, r0.x, l(5)
                   if_nz r2.y
-                    ushr r4.x, r1.z, l(1)
-                    ushr r4.y, r1.y, l(9)
-                    ushr r4.z, r1.y, l(29)
-                    ushr r4.w, r1.y, l(4)
-                    and r3.xyzw, r4.xyzw, l(15, 15, 7, 16)
-                    ishl r2.y, r1.z, l(3)
-                    and r2.y, r2.y, l(8)
-                    iadd r2.y, r2.y, r3.w
-                    iadd r3.z, r2.y, r3.z
+                    ubfe r3.xyw, l(4, 4, 0, 3), l(1, 9, 0, 29), r1.zyzy
+                    ushr r2.y, r1.y, l(4)
+                    and r2.y, r2.y, l(16)
+                    bfi r2.z, l(1), l(3), r1.z, l(0)
+                    iadd r2.y, r2.y, r2.z
+                    iadd r3.z, r2.y, r3.w
                   else 
-                    ieq r2.y, r0.w, l(6)
+                    ieq r2.y, r0.x, l(6)
                     if_nz r2.y
-                      ushr r4.x, r1.z, l(1)
-                      ushr r4.y, r1.y, l(9)
-                      ushr r4.z, r1.y, l(29)
-                      and r3.xyw, r4.xyxz, l(31, 15, 0, 7)
-                      ushr r4.x, r1.x, l(20)
-                      ushr r4.y, r1.x, l(10)
-                      and r2.yz, r4.xxyx, l(0, 16, 16, 0)
+                      ubfe r3.xyw, l(5, 4, 0, 3), l(1, 9, 0, 29), r1.zyzy
+                      ushr r2.yz, r1.xxxx, l(0, 20, 10, 0)
+                      and r2.yz, r2.yyzy, l(0, 16, 16, 0)
                       iadd r3.yw, r2.yyyz, r3.yyyw
-                      ishl r2.y, r1.z, l(3)
-                      and r2.y, r2.y, l(8)
-                      iadd r3.z, r2.y, r3.w
+                      bfi r3.z, l(1), l(3), r1.z, r3.w
                     else 
-                      ieq r2.y, r0.w, l(7)
+                      ieq r2.y, r0.x, l(7)
                       if_nz r2.y
-                        ushr r4.x, r1.z, l(1)
-                        ushr r4.y, r1.y, l(9)
-                        ushr r4.z, r1.y, l(29)
-                        and r3.xyw, r4.xyxz, l(63, 15, 0, 7)
-                        ushr r4.x, r1.x, l(20)
-                        ushr r4.y, r1.x, l(10)
-                        and r2.yz, r4.xxyx, l(0, 16, 16, 0)
+                        ubfe r3.xyw, l(6, 4, 0, 3), l(1, 9, 0, 29), r1.zyzy
+                        ushr r2.yz, r1.xxxx, l(0, 20, 10, 0)
+                        and r2.yz, r2.yyzy, l(0, 16, 16, 0)
                         iadd r3.yw, r2.yyyz, r3.yyyw
-                        ishl r2.y, r1.z, l(3)
-                        and r2.y, r2.y, l(8)
-                        iadd r3.z, r2.y, r3.w
+                        bfi r3.z, l(1), l(3), r1.z, r3.w
                       else 
-                        ushr r4.x, r1.z, l(1)
-                        ushr r4.y, r1.y, l(9)
-                        ushr r4.z, r1.y, l(29)
-                        ushr r4.w, r1.x, l(18)
-                        and r5.xyzw, r4.yzwx, l(15, 7, 32, 31)
-                        ushr r6.x, r1.x, l(20)
-                        ushr r6.y, r1.x, l(10)
-                        ushr r6.z, r1.x, l(16)
-                        ushr r6.w, r1.x, l(17)
-                        and r6.xyzw, r6.xyzw, l(16, 16, 32, 32)
-                        iadd r5.xy, r5.xyxx, r6.xyxx
-                        iadd r7.y, r5.z, r5.x
-                        ishl r2.y, r1.z, l(3)
-                        and r2.y, r2.y, l(8)
-                        iadd r7.z, r2.y, r5.y
-                        ieq r2.zw, r0.wwww, l(0, 0, 8, 9)
-                        iadd r4.w, r2.y, r5.z
-                        iadd r5.z, r4.w, r5.y
-                        and r4.xyw, r4.yzyx, l(15, 7, 0, 63)
-                        iadd r6.xy, r6.zwzz, r6.xyxx
-                        iadd r4.xy, r4.xyxx, r6.xyxx
-                        iadd r4.z, r2.y, r4.y
-                        movc r4.xyz, r2.wwww, r5.wxzw, r4.wxzw
-                        mov r7.x, r5.w
-                        movc r3.xyz, r2.zzzz, r7.xyzx, r4.xyzx
+                        ubfe r4.xyw, l(4, 3, 0, 5), l(9, 29, 0, 1), r1.yyyz
+                        ushr r2.yzw, r1.xxxx, l(0, 20, 10, 18)
+                        and r2.yzw, r2.yyzw, l(0, 16, 16, 32)
+                        iadd r4.xy, r2.yzyy, r4.xyxx
+                        iadd r5.y, r2.w, r4.x
+                        bfi r5.w, l(1), l(3), r1.z, l(0)
+                        bfi r5.z, l(1), l(3), r1.z, r4.y
+                        ieq r6.xy, r0.xxxx, l(8, 9, 0, 0)
+                        iadd r2.w, r2.w, r5.w
+                        iadd r4.z, r2.w, r4.y
+                        ubfe r7.xyw, l(4, 3, 0, 6), l(9, 29, 0, 1), r1.yyyz
+                        ushr r6.zw, r1.xxxx, l(0, 0, 16, 17)
+                        and r6.zw, r6.zzzw, l(0, 0, 32, 32)
+                        iadd r2.yz, r2.yyzy, r6.zzwz
+                        iadd r7.xy, r2.yzyy, r7.xyxx
+                        bfi r7.z, l(1), l(3), r1.z, r7.y
+                        movc r2.yzw, r6.yyyy, r4.wwxz, r7.wwxz
+                        mov r5.x, r4.w
+                        movc r3.xyz, r6.xxxx, r5.xyzx, r2.yzwy
                       endif 
                     endif 
                   endif 
@@ -491,164 +402,125 @@ else
             endif 
           endif 
         else 
-          ieq r2.y, r0.w, l(1)
+          ieq r2.y, r0.x, l(1)
           if_nz r2.y
-            ushr r4.x, r1.z, l(7)
-            ushr r4.y, r1.y, l(19)
-            ushr r4.z, r1.z, l(9)
-            ushr r4.w, r1.y, l(27)
+            ushr r4.xyzw, r1.zyzy, l(7, 19, 9, 27)
             and r3.xyzw, r4.xywz, l(31, 15, 2, 8)
-            ushr r4.xz, r1.yyzy, l(4)
-            ushr r4.y, r1.y, l(18)
-            and r2.yzw, r4.xxyz, l(0, 16, 1, 4)
+            ushr r2.yzw, r1.yyyz, l(0, 4, 18, 4)
+            and r2.yzw, r2.yyzw, l(0, 16, 1, 4)
             iadd r3.yw, r2.yyyz, r3.yyyw
             and r2.y, r1.x, l(16)
-            iadd r2.y, r3.z, r2.y
+            iadd r2.y, r2.y, r3.z
             iadd r2.y, r2.w, r2.y
             iadd r3.z, r2.y, r3.w
           else 
-            ieq r2.y, r0.w, l(2)
+            ieq r2.y, r0.x, l(2)
             if_nz r2.y
-              ushr r4.x, r1.z, l(7)
-              ushr r4.y, r1.y, l(19)
-              ushr r4.z, r1.x, l(21)
-              ushr r4.w, r1.x, l(12)
-              and r3.xyzw, r4.xywz, l(63, 15, 3, 4)
-              ishl r4.x, r1.x, l(1)
-              ishl r4.y, r1.y, l(4)
-              ishl r4.z, r1.y, l(2)
-              ishl r4.w, r1.y, l(3)
-              and r4.xyzw, r4.xyzw, l(48, 32, 16, 8)
-              iadd r3.yw, r3.yyyw, r4.xxxy
-              iadd r2.y, r4.w, r4.z
-              iadd r2.y, r3.z, r2.y
+              ushr r2.yzw, r1.zzyx, l(0, 7, 19, 21)
+              and r3.xyw, r2.yzyw, l(63, 15, 0, 4)
+              ishl r2.yzw, r1.xxyy, l(0, 1, 4, 2)
+              and r2.yzw, r2.yyzw, l(0, 48, 32, 16)
+              iadd r3.yw, r2.yyyz, r3.yyyw
+              bfi r2.y, l(1), l(3), r1.y, l(0)
+              iadd r2.y, r2.w, r2.y
+              ubfe r2.z, l(2), l(12), r1.x
+              iadd r2.y, r2.y, r2.z
               iadd r3.z, r2.y, r3.w
             else 
-              ieq r2.y, r0.w, l(3)
+              ieq r2.y, r0.x, l(3)
               if_nz r2.y
-                ushr r4.x, r1.z, l(7)
-                ushr r4.y, r1.y, l(19)
-                ushr r4.z, r1.z, l(9)
-                ushr r4.w, r1.y, l(18)
-                and r3.xyzw, r4.xyzw, l(31, 15, 8, 1)
-                ushr r4.x, r1.z, l(4)
-                ushr r4.y, r1.y, l(27)
-                and r2.yz, r4.xxyx, l(0, 4, 2, 0)
+                ushr r4.xyzw, r1.zyzz, l(7, 19, 9, 4)
+                ubfe r2.y, l(1), l(18), r1.y
+                and r3.xyzw, r4.xyzw, l(31, 15, 8, 4)
                 iadd r2.y, r2.y, r3.w
+                ushr r2.z, r1.y, l(27)
+                and r2.z, r2.z, l(2)
                 iadd r2.y, r2.z, r2.y
-                iadd r3.z, r2.y, r3.z
+                iadd r3.z, r3.z, r2.y
               else 
-                ieq r2.y, r0.w, l(4)
+                ieq r2.y, r0.x, l(4)
                 if_nz r2.y
-                  ushr r4.x, r1.z, l(7)
-                  ushr r4.y, r1.y, l(19)
-                  ushr r4.z, r1.z, l(9)
-                  ushr r4.w, r1.z, l(5)
-                  and r4.xyzw, r4.xyzw, l(15, 15, 8, 1)
-                  ushr r5.xy, r1.yzyy, l(4)
-                  ushr r5.z, r1.y, l(27)
-                  and r2.yzw, r5.xxyz, l(0, 16, 4, 2)
-                  iadd r3.xyz, r2.zywz, r4.zywz
-                  iadd r3.z, r3.z, r3.x
-                  mov r3.x, r4.x
+                  ushr r4.xyzw, r1.zyzy, l(7, 19, 9, 27)
+                  and r3.xyzw, r4.xywz, l(15, 15, 2, 8)
+                  ushr r2.yz, r1.yyzy, l(0, 4, 4, 0)
+                  and r2.yz, r2.yyzy, l(0, 16, 4, 0)
+                  iadd r3.yw, r2.yyyz, r3.yyyw
+                  ubfe r2.y, l(1), l(5), r1.z
+                  iadd r2.y, r3.z, r2.y
+                  iadd r3.z, r3.w, r2.y
                 else 
-                  ieq r2.y, r0.w, l(5)
+                  ieq r2.y, r0.x, l(5)
                   if_nz r2.y
-                    ushr r4.x, r1.z, l(7)
-                    ushr r4.y, r1.y, l(19)
-                    ushr r4.z, r1.z, l(9)
-                    ushr r2.y, r1.y, l(18)
-                    and r2.y, r2.y, l(1)
+                    ushr r4.xyzw, r1.zyzz, l(7, 19, 9, 4)
+                    ubfe r2.y, l(1), l(18), r1.y
                     and r3.xyzw, r4.xyzx, l(15, 15, 8, 16)
                     iadd r2.y, r2.y, r3.w
-                    ushr r2.z, r1.z, l(4)
-                    and r2.z, r2.z, l(6)
+                    and r2.z, r4.w, l(6)
                     iadd r2.y, r2.z, r2.y
                     iadd r3.z, r2.y, r3.z
                   else 
-                    ieq r2.y, r0.w, l(6)
+                    ieq r2.y, r0.x, l(6)
                     if_nz r2.y
-                      ushr r4.x, r1.z, l(7)
-                      ushr r4.y, r1.y, l(19)
-                      ushr r4.z, r1.z, l(9)
-                      ushr r4.w, r1.y, l(18)
-                      and r3.xyzw, r4.xywz, l(31, 15, 1, 8)
-                      ushr r4.xz, r1.yyzy, l(4)
-                      ushr r4.y, r1.y, l(27)
-                      and r2.yzw, r4.xxyz, l(0, 16, 2, 4)
+                      ushr r4.xyzw, r1.zyzz, l(7, 19, 9, 4)
+                      and r3.xyzw, r4.xywz, l(31, 15, 4, 8)
+                      ushr r2.yz, r1.yyyy, l(0, 4, 27, 0)
+                      and r2.yz, r2.yyzy, l(0, 16, 2, 0)
                       iadd r3.yw, r2.yyyz, r3.yyyw
-                      ishl r2.y, r1.y, l(2)
-                      and r2.y, r2.y, l(16)
-                      iadd r2.y, r2.y, r3.z
-                      iadd r2.y, r2.w, r2.y
+                      ubfe r2.y, l(1), l(18), r1.y
+                      ishl r2.z, r1.y, l(2)
+                      and r2.z, r2.z, l(16)
+                      iadd r2.y, r2.z, r2.y
+                      iadd r2.y, r3.z, r2.y
                       iadd r3.z, r2.y, r3.w
                     else 
-                      ieq r2.y, r0.w, l(7)
+                      ieq r2.y, r0.x, l(7)
                       if_nz r2.y
-                        ushr r4.x, r1.z, l(7)
-                        ushr r4.y, r1.y, l(19)
-                        ushr r4.z, r1.x, l(21)
-                        ushr r4.w, r1.y, l(27)
+                        ushr r4.xyzw, r1.zyxy, l(7, 19, 21, 27)
                         and r3.xyzw, r4.xywz, l(63, 15, 2, 4)
-                        ushr r4.x, r1.x, l(9)
-                        ushr r4.y, r1.y, l(18)
-                        and r2.yz, r4.xxyx, l(0, 16, 1, 0)
+                        ushr r2.yz, r1.xxyx, l(0, 9, 18, 0)
+                        and r2.yz, r2.yyzy, l(0, 16, 1, 0)
                         iadd r3.yw, r2.yyyz, r3.yyyw
                         ishl r2.y, r1.y, l(2)
                         and r2.y, r2.y, l(24)
                         iadd r2.y, r2.y, r3.z
                         iadd r3.z, r2.y, r3.w
                       else 
-                        ieq r2.y, r0.w, l(8)
+                        ieq r2.y, r0.x, l(8)
                         if_nz r2.y
-                          ushr r4.x, r1.z, l(7)
-                          ushr r4.y, r1.y, l(19)
-                          ushr r4.z, r1.z, l(9)
-                          ushr r4.w, r1.y, l(27)
+                          ushr r4.xyzw, r1.zyzy, l(7, 19, 9, 27)
                           and r3.xyzw, r4.xywz, l(31, 15, 2, 8)
-                          ishl r4.x, r1.y, l(4)
-                          ishl r4.y, r1.y, l(2)
-                          and r2.yz, r4.xxyx, l(0, 32, 16, 0)
-                          ushr r4.xy, r1.yzyy, l(4)
-                          ushr r4.z, r1.x, l(13)
-                          and r4.xyz, r4.xyzx, l(16, 4, 1, 0)
+                          ishl r2.yz, r1.yyyy, l(0, 4, 2, 0)
+                          and r2.yz, r2.yyzy, l(0, 32, 16, 0)
+                          ushr r4.xy, r1.yzyy, l(4, 4, 0, 0)
+                          and r4.xy, r4.xyxx, l(16, 4, 0, 0)
                           iadd r2.yz, r2.yyzy, r4.xxyx
                           iadd r3.yw, r2.yyyz, r3.yyyw
-                          iadd r2.y, r3.z, r4.z
-                          iadd r3.z, r2.y, r3.w
+                          ubfe r2.y, l(1), l(13), r1.x
+                          iadd r2.y, r3.z, r2.y
+                          iadd r3.z, r3.w, r2.y
                         else 
-                          ieq r2.y, r0.w, l(9)
-                          ushr r4.x, r1.z, l(7)
-                          ushr r4.y, r1.y, l(19)
-                          ushr r4.z, r1.z, l(9)
-                          ushr r4.w, r1.z, l(4)
+                          ieq r2.y, r0.x, l(9)
+                          ushr r4.xyzw, r1.zyzz, l(7, 19, 9, 4)
                           and r4.xyzw, r4.yzwx, l(15, 8, 4, 31)
-                          ushr r5.x, r1.y, l(4)
-                          ushr r5.y, r1.y, l(18)
-                          ushr r5.z, r1.x, l(12)
-                          ushr r5.w, r1.x, l(26)
-                          and r5.xyzw, r5.xyzw, l(16, 1, 2, 32)
+                          ushr r5.xyzw, r1.yyxx, l(4, 18, 12, 26)
+                          and r5.xyz, r5.xyzx, l(16, 1, 2, 0)
                           iadd r4.xy, r4.xyxx, r5.xyxx
-                          ishl r6.x, r1.y, l(4)
-                          ishl r6.y, r1.y, l(2)
-                          ishl r6.z, r1.y, l(3)
-                          and r6.xyz, r6.xyzx, l(32, 16, 8, 0)
-                          iadd r2.z, r4.z, r6.x
-                          iadd r2.z, r6.y, r2.z
-                          iadd r2.z, r5.z, r2.z
-                          iadd r4.z, r2.z, r4.y
-                          ushr r5.x, r1.z, l(7)
-                          ushr r5.y, r1.y, l(19)
-                          ushr r5.z, r1.x, l(21)
+                          ishl r2.zw, r1.yyyy, l(0, 0, 4, 2)
+                          and r2.zw, r2.zzzw, l(0, 0, 32, 16)
+                          iadd r3.w, r2.z, r4.z
+                          iadd r3.w, r2.w, r3.w
+                          iadd r3.w, r3.w, r5.z
+                          iadd r4.z, r3.w, r4.y
+                          ushr r5.xyz, r1.zyxz, l(7, 19, 21, 0)
                           and r5.xyz, r5.xyzx, l(63, 15, 4, 0)
-                          ushr r7.x, r1.x, l(7)
-                          ushr r7.y, r1.x, l(12)
-                          and r1.xy, r7.xyxx, l(16, 3, 0, 0)
-                          iadd r1.xy, r1.xyxx, r5.yzyy
-                          iadd r5.y, r5.w, r1.x
-                          iadd r1.x, r6.y, r6.x
-                          iadd r1.x, r6.z, r1.x
-                          iadd r5.z, r1.x, r1.y
+                          ushr r6.xy, r1.xxxx, l(7, 12, 0, 0)
+                          and r6.xy, r6.xyxx, l(16, 3, 0, 0)
+                          iadd r6.xy, r5.yzyy, r6.xyxx
+                          bfi r5.y, l(5), l(0), r6.x, r5.w
+                          iadd r1.x, r2.z, r2.w
+                          bfi r1.y, l(1), l(3), r1.y, l(0)
+                          iadd r1.x, r1.x, r1.y
+                          iadd r5.z, r1.x, r6.y
                           movc r3.xyz, r2.yyyy, r4.wxzw, r5.xyzx
                         endif 
                       endif 
@@ -667,11 +539,11 @@ else
     mov r3.xyz, l(0,0,0,0)
   endif 
 endif 
-ult r1.x, r0.z, l(4)
+ult r1.x, r0.w, l(4)
 if_nz r1.x
-  ieq r1.x, r0.z, l(1)
-  ult r1.y, l(1), r0.z
-  uge r2.y, l(10), r0.w
+  ieq r1.x, r0.w, l(1)
+  ult r1.y, l(1), r0.w
+  uge r2.y, l(10), r0.x
   and r1.y, r1.y, r2.y
   or r1.x, r1.y, r1.x
   if_nz r1.x
@@ -681,18 +553,15 @@ if_nz r1.x
     ieq r2.y, cb0[0].z, l(96)
     or r1.y, r1.y, r2.y
     iadd r2.yzw, l(0, -1, -1, -1), icb[r2.x + 0].yyzw
-    ishl r4.x, l(1), r2.y
-    ishl r4.y, l(1), r2.z
-    ishl r4.z, l(1), r2.w
-    and r2.yzw, r3.xxyz, r4.xxyz
-    iadd r5.xyz, r4.xyzx, l(-1, -1, -1, 0)
-    and r5.xyz, r3.xyzx, r5.xyzx
-    iadd r4.xyz, -r4.xyzx, r5.xyzx
-    movc r2.yzw, r2.yyzw, r4.xxyz, r3.xxyz
+    ishl r4.xyz, l(1, 1, 1, 0), r2.yzwy
+    and r5.xyz, r3.xyzx, r4.xyzx
+    ubfe r2.yzw, r2.yyzw, l(0, 0, 0, 0), r3.xxyz
+    iadd r2.yzw, -r4.xxyz, r2.yyzw
+    movc r2.yzw, r5.xxyz, r2.yyzw, r3.xxyz
     movc r3.xyz, r1.yyyy, r2.yzwy, r3.xyzx
     if_z r1.x
-      ld_structured r4.xyz, r0.y, l(0), g0.xyzx
-      iadd r3.xyz, r3.xyzx, r4.xyzx
+      ld_structured r2.yzw, r0.z, l(0), g0.xxyz
+      iadd r3.xyz, r2.yzwy, r3.xyzx
     endif 
   endif 
   ieq r1.x, cb0[0].z, l(95)
@@ -700,9 +569,8 @@ if_nz r1.x
   ishl r1.y, l(1), icb[r2.x + 0].x
   iadd r1.y, r1.y, l(-1)
   ieq r4.xyz, r1.yyyy, r3.xyzx
-  ishl r5.xyz, r3.xyzx, l(16)
-  iadd r5.xyz, r5.xyzx, l(0x00008000, 0x00008000, 0x00008000, 0)
-  ushr r5.xyz, r5.xyzx, icb[r2.x + 0].x
+  bfi r5.xyz, l(16, 16, 16, 0), l(16, 16, 16, 0), r3.xyzx, l(0x00008000, 0x00008000, 0x00008000, 0)
+  ushr r5.xyz, r5.xyzx, icb[r2.x + 0].xxxx
   movc r4.xyz, r4.xyzx, l(0x0000ffff,0x0000ffff,0x0000ffff,0), r5.xyzx
   movc r4.xyz, r3.xyzx, r4.xyzx, l(0,0,0,0)
   movc r4.xyz, r2.yyyy, r4.xyzx, r3.xyzx
@@ -712,9 +580,8 @@ if_nz r1.x
   ishl r2.x, l(1), r1.y
   iadd r2.x, r2.x, l(-1)
   ige r2.xyw, r6.xyxz, r2.xxxx
-  ishl r7.xyz, r6.xyzx, l(15)
-  iadd r7.xyz, r7.xyzx, l(0x00004000, 0x00004000, 0x00004000, 0)
-  ushr r7.xyz, r7.xyzx, r1.y
+  bfi r7.xyz, l(17, 17, 17, 0), l(15, 15, 15, 0), r6.xyzx, l(0x00004000, 0x00004000, 0x00004000, 0)
+  ushr r7.xyz, r7.xyzx, r1.yyyy
   movc r2.xyw, r2.xyxw, l(0x00007fff,0x00007fff,0,0x00007fff), r7.xyxz
   movc r2.xyw, r6.xyxz, r2.xyxw, l(0,0,0,0)
   ineg r6.xyz, r2.xywx
@@ -723,100 +590,93 @@ if_nz r1.x
   movc r2.xyz, r1.xxxx, r4.xyzx, r2.xyzx
   store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(0), r2.xyzx
 endif 
-ushr r1.x, r0.z, l(2)
-and r1.y, r0.z, l(-4)
-iadd r1.y, r0.z, -r1.y
-udiv r2.x, null, r0.x, cb0[0].y
-imad r0.x, -r2.x, cb0[0].y, r0.x
+ushr r1.x, r0.w, l(2)
+and r1.y, r0.w, l(-4)
+iadd r1.y, r0.w, -r1.y
+udiv r2.x, null, r0.y, cb0[0].y
+imad r0.y, -r2.x, cb0[0].y, r0.y
 ishl r2.x, r2.x, l(2)
 iadd r2.x, r1.x, r2.x
-ishl r0.x, r0.x, l(2)
-imad r0.x, r2.x, cb0[0].x, r0.x
-iadd r0.x, r1.y, r0.x
-ult r2.x, r0.x, cb0[0].w
+ishl r0.y, r0.y, l(2)
+imad r0.y, r2.x, cb0[0].x, r0.y
+iadd r0.y, r1.y, r0.y
+ult r2.x, r0.y, cb0[0].w
 if_nz r2.x
-  ult r0.w, l(10), r0.w
-  if_nz r0.w
-    ieq r0.w, r1.y, l(0)
+  ult r0.x, l(10), r0.x
+  if_nz r0.x
+    ieq r0.x, r1.y, l(0)
     ieq r2.x, r1.x, l(0)
-    and r0.w, r0.w, r2.x
-    ushr r2.x, r1.z, l(1)
+    and r0.x, r0.x, r2.x
+    ubfe r2.x, l(3), l(1), r1.z
     ult r2.y, r1.x, l(2)
-    ishl r2.z, r1.x, l(4)
-    ishl r2.w, r1.y, l(2)
+    ishl r2.zw, r1.xxxy, l(0, 0, 4, 2)
     iadd r2.z, r2.w, r2.z
     ushr r2.w, r1.z, r2.z
     iadd r2.z, r2.z, l(-32)
     ushr r2.z, r1.w, r2.z
-    and r2.xzw, r2.xxzw, l(7, 0, 15, 15)
+    and r2.zw, r2.zzzw, l(0, 0, 15, 15)
     movc r2.y, r2.y, r2.w, r2.z
-    movc r0.w, r0.w, r2.x, r2.y
-    mov r0.w, icb[r0.w + 14].x
+    movc r0.x, r0.x, r2.x, r2.y
+    mov r0.x, icb[r0.x + 14].x
   else 
-    ushr r2.x, r1.z, l(13)
-    and r2.x, r2.x, l(31)
-    ushr r2.y, icb[r2.x + 14].y, r0.z
-    ishl r2.y, r2.y, l(1)
-    and r2.y, r2.y, l(2)
-    iadd r0.y, r0.y, r2.y
+    ubfe r2.x, l(5), l(13), r1.z
+    ushr r2.y, icb[r2.x + 14].y, r0.w
+    bfi r2.y, l(1), l(1), r2.y, l(0)
+    bfi r0.z, l(4), l(0), r2.y, vThreadIDInGroupFlattened.x
     ieq r1.xy, r1.xyxx, l(0, 0, 0, 0)
     and r1.x, r1.x, r1.y
     if_z r1.x
-      ult r1.x, r0.z, l(5)
-      imad r2.yz, r0.zzzz, l(0, 3, 3, 0), l(0, 17, -15, 0)
-      ushr r3.x, r1.z, r2.y
-      ushr r3.y, r1.w, r2.z
-      uge r1.y, r0.z, icb[r2.x + 14].z
+      ult r1.x, r0.w, l(5)
+      imad r2.yz, r0.wwww, l(0, 3, 3, 0), l(0, 17, -15, 0)
+      ushr r2.yz, r1.zzwz, r2.yyzy
+      uge r1.y, r0.w, icb[r2.x + 14].z
       if_nz r1.y
-        ieq r1.y, r0.z, icb[r2.x + 14].z
-        and r2.xy, r3.xyxx, l(3, 3, 0, 0)
-        movc r2.x, r1.x, r2.x, r2.y
-        imad r2.yz, r0.zzzz, l(0, 3, 3, 0), l(0, 16, -16, 0)
-        ushr r4.x, r1.z, r2.y
-        ushr r4.y, r1.w, r2.z
-        ult r0.z, l(5), r0.z
-        and r2.yz, r4.xxyx, l(0, 7, 7, 0)
+        ieq r1.y, r0.w, icb[r2.x + 14].z
+        and r2.xw, r2.yyyz, l(3, 0, 0, 3)
+        movc r2.x, r1.x, r2.x, r2.w
+        imad r3.xy, r0.wwww, l(3, 3, 0, 0), l(16, -16, 0, 0)
+        ushr r3.xy, r1.zwzz, r3.xyxx
+        ult r0.w, l(5), r0.w
+        and r3.xy, r3.xyxx, l(7, 7, 0, 0)
         ushr r2.w, r1.z, l(31)
-        ishl r1.w, r1.w, l(1)
-        and r1.w, r1.w, l(6)
+        bfi r1.w, l(2), l(1), r1.w, l(0)
         iadd r1.w, r1.w, r2.w
-        movc r0.z, r0.z, r2.z, r1.w
-        movc r0.z, r1.x, r2.y, r0.z
-        movc r0.z, r1.y, r2.x, r0.z
+        movc r0.w, r0.w, r3.y, r1.w
+        movc r0.w, r1.x, r3.x, r0.w
+        movc r0.w, r1.y, r2.x, r0.w
       else 
-        and r1.yw, r3.xxxy, l(0, 7, 0, 7)
-        movc r0.z, r1.x, r1.y, r1.w
+        and r1.yw, r2.yyyz, l(0, 7, 0, 7)
+        movc r0.w, r1.x, r1.y, r1.w
       endif 
     else 
-      ushr r1.x, r1.z, l(18)
-      and r0.z, r1.x, l(3)
+      ubfe r0.w, l(2), l(18), r1.z
     endif 
-    mov r0.w, icb[r0.z + 14].w
+    mov r0.x, icb[r0.w + 14].w
   endif 
-  ld_structured r1.xyz, r0.y, l(0), g0.xyzx
-  iadd r0.y, r0.y, l(1)
-  ld_structured r2.xyz, r0.y, l(0), g0.xyzx
-  ishl r3.xyz, r1.xyzx, l(6)
+  ld_structured r1.xyz, r0.z, l(0), g0.xyzx
+  iadd r0.z, r0.z, l(1)
+  ld_structured r2.xyz, r0.z, l(0), g0.xyzx
+  ishl r3.xyz, r1.xyzx, l(6, 6, 6, 0)
   iadd r1.xyz, -r1.xyzx, r2.xyzx
-  imad r0.yzw, r1.xxyz, r0.wwww, r3.xxyz
-  iadd r0.yzw, r0.yyzw, l(0, 32, 32, 32)
-  ishr r0.yzw, r0.yyzw, l(6)
+  imad r0.xzw, r1.xxyz, r0.xxxx, r3.xxyz
+  iadd r0.xzw, r0.xxzw, l(32, 0, 32, 32)
+  ishr r0.xzw, r0.xxzw, l(6, 0, 6, 6)
   ieq r1.x, cb0[0].z, l(95)
-  imul null, r1.yzw, r0.yyzw, l(0, 31, 31, 31)
-  ishr r2.xyz, r1.yzwy, l(6)
-  ilt r3.xyz, r0.yzwy, l(0, 0, 0, 0)
-  imul null, r0.yzw, r0.yyzw, l(0, -31, -31, -31)
-  ishr r0.yzw, r0.yyzw, l(5)
-  ineg r0.yzw, r0.yyzw
-  ishr r1.yzw, r1.yyzw, l(5)
-  movc r0.yzw, r3.xxyz, r0.yyzw, r1.yyzw
-  ilt r1.yzw, r0.yyzw, l(0, 0, 0, 0)
-  ineg r3.xyz, r0.yzwy
+  imul null, r1.yzw, r0.xxzw, l(0, 31, 31, 31)
+  ishr r2.xyz, r1.yzwy, l(6, 6, 6, 0)
+  ilt r3.xyz, r0.xzwx, l(0, 0, 0, 0)
+  imul null, r0.xzw, r0.xxzw, l(-31, 0, -31, -31)
+  ishr r0.xzw, r0.xxzw, l(5, 0, 5, 5)
+  ineg r0.xzw, r0.xxzw
+  ishr r1.yzw, r1.yyzw, l(0, 5, 5, 5)
+  movc r0.xzw, r3.xxyz, r0.xxzw, r1.yyzw
+  ilt r1.yzw, r0.xxzw, l(0, 0, 0, 0)
+  ineg r3.xyz, r0.xzwx
   or r3.xyz, r3.xyzx, l(0x00008000, 0x00008000, 0x00008000, 0)
-  movc r0.yzw, r1.yyzw, r3.xxyz, r0.yyzw
-  movc r1.xyz, r1.xxxx, r2.xyzx, r0.yzwy
+  movc r0.xzw, r1.yyzw, r3.xxyz, r0.xxzw
+  movc r1.xyz, r1.xxxx, r2.xyzx, r0.xzwx
   mov r1.w, l(0x00003c00)
-  store_structured u0.xyzw, r0.x, l(0), r1.xyzw
+  store_structured u0.xyzw, r0.y, l(0), r1.xyzw
 endif 
 ret 
-// Approximately 712 instruction slots used
+// Approximately 572 instruction slots used

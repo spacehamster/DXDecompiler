@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SlimShader.DX9Shader
 {
@@ -76,91 +75,7 @@ namespace SlimShader.DX9Shader
 		Volume = 4
 	}
 
-	public class ConstantTable
-	{
-		public string Creator { get; private set; }
-		public string ShaderModel { get; private set; }
-		public int MajorVersion { get; private set; }
-		public int MinorVersion { get; private set; }
-		public List<ConstantDeclaration> ConstantDeclarations { get; private set; }
-		public ConstantTable(string creator, string shaderModel, int majorVersion, int minorVersion, List<ConstantDeclaration> constantDeclarations)
-		{
-			Creator = creator;
-			ShaderModel = shaderModel;
-			MajorVersion = majorVersion;
-			MinorVersion = minorVersion;
-			ConstantDeclarations = constantDeclarations;
-		}
-	}
 
-	public class ConstantDeclaration
-	{
-		public string Name { get; private set; }
-		public RegisterSet RegisterSet { get; private set; }
-		public short RegisterIndex { get; private set; }
-		public short RegisterCount { get; private set; }
-		public ParameterClass ParameterClass { get; private set; }
-		public ParameterType ParameterType { get; private set; }
-		public int Rows { get; private set; }
-		public int Columns { get; set; }
-		public int Elements { get; private set; }
-		public List<float> DefaultValue { get; set; }
-
-		public ConstantDeclaration(string name, RegisterSet registerSet, short registerIndex, short registerCount,
-			ParameterClass parameterClass, ParameterType parameterType, int rows, int columns, int elements, List<float> defaultValue)
-		{
-			Name = name;
-			RegisterSet = registerSet;
-			RegisterIndex = registerIndex;
-			RegisterCount = registerCount;
-			ParameterClass = parameterClass;
-			ParameterType = parameterType;
-			Rows = rows;
-			Columns = columns;
-			Elements = elements;
-			DefaultValue = defaultValue;
-		}
-
-		public bool ContainsIndex(int index)
-		{
-			return (index >= RegisterIndex) && (index < RegisterIndex + RegisterCount);
-		}
-
-		public override string ToString()
-		{
-			return Name;
-		}
-		public string GetTypeName()
-		{
-			if (ParameterClass == ParameterClass.Vector)
-			{
-				if (Columns > 1)
-				{
-					return $"{ParameterType.GetDescription()}{Columns}";
-				}
-				else
-				{
-					return $"{ParameterType.GetDescription()}";
-				}
-			}
-			else if (ParameterClass == ParameterClass.MatrixColumns)
-			{
-				return $"{ParameterType.GetDescription()}{Rows}x{Columns}";
-			}
-			else if (ParameterClass == ParameterClass.MatrixRows)
-			{
-				return $"{ParameterType.GetDescription()}{Columns}x{Rows}";
-			}
-			else
-			{
-				return ParameterType.GetDescription();
-			}
-		}
-		public string GetRegisterName()
-		{
-			return $"{RegisterSet.GetDescription()}{RegisterIndex}";
-		}
-	}
 
 	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff549176(v=vs.85).aspx
 	public class RegisterDeclaration

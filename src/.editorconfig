@@ -1,5 +1,9 @@
 # To learn more about .editorconfig see https://aka.ms/editorconfigdocs
+root = true
 
 # Cs files
 [*.cs]
+indent_style = tab
+
+[*.js]
 indent_style = tab

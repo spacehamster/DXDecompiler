@@ -63,7 +63,8 @@
 // -------------------- ----- ------ -------- -------- ------- ------
 // SV_TARGET                0   xyzw        0   TARGET   float   xyzw
 //
-ps_4_0
+ps_5_0
+dcl_globalFlags refactoringAllowed
 dcl_immediateConstantBuffer { { 1.500000, 0, 0, 1.000000},
                               { 0, 1.500000, 0, 1.000000},
                               { 0, 0, 5.500000, 1.000000},
@@ -82,7 +83,7 @@ dcl_input_ps linear v1.xy
 dcl_input_ps linear v2.xyz
 dcl_output o0.xyzw
 dcl_temps 5
-sample r0.xyzw, v1.xyxx, t0.xyzw, s0
+sample_indexable(texture2d)(float,float,float,float) r0.xyzw, v1.xyxx, t0.xyzw, s0
 iadd r1.x, -cb0[32].z, cb0[32].w
 imul null, r1.x, r1.x, r1.x
 itof r1.x, r1.x
@@ -122,7 +123,7 @@ loop
     breakc_nz r3.x
     itof r3.x, r2.w
     mad r4.y, r3.x, cb0[34].y, r1.z
-    sample_c_lz r3.x, r4.xyxx, t5.xxxx, s5, r1.w
+    sample_c_lz_indexable(texture2d)(float,float,float,float) r3.x, r4.xyxx, t5.xxxx, s5, r1.w
     add r2.z, r2.z, r3.x
     iadd r2.w, r2.w, l(1)
   endloop 

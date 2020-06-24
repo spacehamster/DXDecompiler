@@ -31,7 +31,12 @@ export float4x4 TestFunction5(float input, float in2)
 	return input * 2.0f;
 }
 float4 TestGlobal = 5;
+int4 TestGlobal2 = 6;
+cbuffer Foo{
+	float3 TestBuffer1 = 7;
+	int3 TestBuffer2 = 8;
+}
 export float4 TestFunction6(uint input)
 {
-	return input * 2.0f + TestGlobal;
+	return input * 2.0f + TestGlobal + TestGlobal2 + TestBuffer1.xyzx + TestBuffer2.xyzx;
 }

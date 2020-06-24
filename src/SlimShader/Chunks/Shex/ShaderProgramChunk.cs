@@ -71,9 +71,6 @@ namespace SlimShader.Chunks.Shex
 					Length = opcodeToken0.DecodeValue(24, 30),
 					IsExtended = (opcodeToken0.DecodeValue(31, 31) == 1)
 				};
-#if DEBUG
-				var rawData = reader.CopyAtCurrentPosition().ReadBytes((int)opcodeHeader.Length * 4);
-#endif
 				var pos = reader.CurrentPosition;
 				OpcodeToken opcodeToken;
 				if (opcodeHeader.OpcodeType == OpcodeType.CustomData)
@@ -91,9 +88,6 @@ namespace SlimShader.Chunks.Shex
 				opcodeToken.Header = opcodeHeader;
 				program.Tokens.Add(opcodeToken);
 
-#if DEBUG
-				opcodeToken.Data = rawData;
-#endif
 				Debug.Assert(reader.CurrentPosition == pos + opcodeHeader.Length * 4 
 					|| opcodeHeader.OpcodeType == OpcodeType.CustomData,
 					$"Expected token length of: {opcodeHeader.Length * 4}, read {reader.CurrentPosition - pos} for {opcodeHeader.OpcodeType}");

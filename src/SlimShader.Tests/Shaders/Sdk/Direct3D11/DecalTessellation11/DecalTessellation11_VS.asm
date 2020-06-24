@@ -43,7 +43,8 @@
 // TEXCOORD                 0   xy          1     NONE   float   xy  
 // NORMAL                   0   xyz         2     NONE   float   xyz 
 //
-vs_4_0
+vs_5_0
+dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB1[3], immediateIndexed
 dcl_input v0.xyz
 dcl_input v1.xyz

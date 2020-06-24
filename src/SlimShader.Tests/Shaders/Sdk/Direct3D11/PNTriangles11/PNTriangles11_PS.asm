@@ -18,7 +18,8 @@
 // -------------------- ----- ------ -------- -------- ------- ------
 // SV_Target                0   xyzw        0   TARGET   float   xyzw
 //
-ps_4_0
+ps_5_0
+dcl_globalFlags refactoringAllowed
 dcl_input_ps linear v2.xyzw
 dcl_output o0.xyzw
 mov o0.xyzw, v2.xyzw

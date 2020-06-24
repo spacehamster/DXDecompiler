@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SlimShader.Chunks;
 using SlimShader.Chunks.Common;
+using SlimShader.Chunks.Fx10;
 using SlimShader.Chunks.Ifce;
 using SlimShader.Chunks.Libf;
 using SlimShader.Chunks.Rdef;
@@ -62,6 +64,11 @@ namespace SlimShader
 			get { return Chunks.OfType<ShaderProgramChunk>().SingleOrDefault(); }
 		}
 
+		public T GetChunk<T>()
+		{
+			 return Chunks.OfType<T>().SingleOrDefault();
+		}
+
 		public StatisticsChunk Statistics
 		{
 			get { return Chunks.OfType<StatisticsChunk>().SingleOrDefault(); }
@@ -100,7 +107,12 @@ namespace SlimShader
 			Chunks = new List<BytecodeChunk>();
 
 			var reader = new BytecodeReader(rawBytes, 0, rawBytes.Length);
-
+			var magicNumber = BitConverter.ToUInt32(rawBytes, 0);
+			if(magicNumber == 0xFEFF2001)
+			{
+				Chunks.Add(EffectChunk.Parse(reader, (uint)rawBytes.Length));
+				return;
+			}
 			Header = BytecodeContainerHeader.Parse(reader);
 
 			for (uint i = 0; i < Header.ChunkCount; i++)
@@ -141,6 +153,17 @@ namespace SlimShader
 			if (Chunks.OfType<LibfChunk>().Any())
 			{
 				WriteLibShader(sb);
+				return sb.ToString();
+			}
+			if (Chunks.OfType<EffectChunk>().Any())
+			{
+				foreach (var chunk in Chunks.OfType<EffectChunk>()) {
+					sb.AppendLine(chunk.ToString());
+				}
+				foreach(var chunk in Chunks.Where(c => !(c is EffectChunk)))
+				{
+					sb.AppendLine($"{chunk.ChunkType} {chunk.GetType()}");
+				}
 				return sb.ToString();
 			}
 			sb.AppendLine("//");

@@ -7,6 +7,8 @@ using NUnit.Framework;
 using SharpDX.D3DCompiler;
 using SlimShader.Chunks.Rdef;
 using SlimShader.Chunks.Xsgn;
+using SlimShader.DebugParser.DX9;
+using SlimShader.DebugParser.FX9;
 using SlimShader.Decompiler;
 using SlimShader.DX9Shader;
 using SlimShader.Tests.Util;
@@ -45,28 +47,24 @@ namespace SlimShader.Tests
 			// Arrange.
 			var asmFileText = string.Join(Environment.NewLine,
 				File.ReadAllLines(file + ".asm").Select(x => x.Trim()));
+			asmFileText = TestUtils.StripDX9InstructionSlots(asmFileText);
+			asmFileText = TestUtils.TrimLines(asmFileText);
 			asmFileText = TestUtils.NormalizeAssembly(asmFileText);
 			// Act.
 			var bytecode = File.ReadAllBytes(file + ".o");
 			var shader = ShaderReader.ReadShader(bytecode);
 
-			var asmWriter = new AsmWriter(shader);
-			string decompiledAsm = "";
-			using (var stream = new MemoryStream())
-			{
-				asmWriter.Write(stream);
-				stream.Position = 0;
-				using (var reader = new StreamReader(stream, Encoding.UTF8))
-				{
-					decompiledAsm = reader.ReadToEnd();
-				}
-			}
-			var decompiledAsmText = string.Join(Environment.NewLine, decompiledAsm
-				.Split(new[] { Environment.NewLine }, StringSplitOptions.None)
-				.Select(x => x.Trim()));
+			var decompiledAsm = AsmWriter.Disassemble(shader);
 
 			File.WriteAllText($"{file}.d.asm", decompiledAsm);
 
+			var decompiledAsmText = decompiledAsm;
+			decompiledAsmText = TestUtils.StripDX9InstructionSlots(decompiledAsmText);
+			decompiledAsmText = TestUtils.TrimLines(decompiledAsmText);
+			decompiledAsmText = TestUtils.NormalizeAssembly(decompiledAsmText);
+
+			File.WriteAllText($"{file}.d1.asm", asmFileText);
+			File.WriteAllText($"{file}.d2.asm", decompiledAsmText);
 			// Assert.
 			Assert.That(decompiledAsmText, Is.EqualTo(asmFileText));
 		}
@@ -81,24 +79,64 @@ namespace SlimShader.Tests
 			// Arrange.
 			// Act.
 			var bytecode = File.ReadAllBytes(file + ".o");
-			var shader = ShaderReader.ReadShader(bytecode);
 
-			var hlslWriter = new HlslWriter(shader);
-			string decompiledHlsl = "";
-			using (var stream = new MemoryStream())
-			{
-				hlslWriter.Write(stream);
-				stream.Position = 0;
-				using (var reader = new StreamReader(stream, Encoding.UTF8))
-				{
-					decompiledHlsl = reader.ReadToEnd();
-				}
-			}
+			var decompiledHlsl = HlslWriter.Decompile(bytecode);
 
 			File.WriteAllText($"{file}.d.hlsl", decompiledHlsl);
 
 			// Assert.
 		}
+
+		[TestCaseSource("TestShaders")]
+		public void DumpStructure(string relPath)
+		{
+			string file = $"{ShaderDirectory}/{relPath}";
+			// Arrange.
+			// Act.
+			var bytecode = File.ReadAllBytes(file + ".o");
+			
+			var reader = new DebugParser.DebugBytecodeReader(bytecode, 0, bytecode.Length);
+			string error = "";
+			try
+			{
+				if (bytecode[2] == 255 && bytecode[3] == 254)
+				{
+					reader.ReadByte("minorVersion");
+					reader.ReadByte("majorVersion");
+					reader.ReadUInt16("shaderType");
+					DebugEffectChunk.Parse(reader, (uint)(bytecode.Length - 4));
+				} else
+				{
+					var shaderModel = DebugShaderModel.Parse(reader);
+				}
+			} catch(Exception ex)
+			{
+				error = ex.ToString();
+			}
+			var dump = reader.DumpStructure();
+			if (!string.IsNullOrEmpty(error))
+			{
+				dump += "\n" + error;
+			}
+			File.WriteAllText($"{file}.d.txt", dump);
+			var dumpHtml = "";
+			try
+			{
+				dumpHtml = reader.DumpHtml();
+			} catch(Exception ex)
+			{
+
+			}
+			File.WriteAllText($"{file}.d.html", dumpHtml);
+			if (!string.IsNullOrEmpty(error))
+			{
+				Assert.That(false, error);
+			}
+			//Assert.That(!dump.Contains("Unread Memory"), "Unread memory found");
+
+			// Assert.
+		}
+
 		public static string GetSourceNameFromObject(string path)
 		{
 			path = path.Replace(".o", "");
@@ -134,17 +172,7 @@ namespace SlimShader.Tests
 			// Act.
 			var binaryFileBytes = File.ReadAllBytes(file + ".o");
 			var shaderModel = ShaderReader.ReadShader(binaryFileBytes);
-			var hlslWriter = new HlslWriter(shaderModel);
-			string decompiledHLSL = "";
-			using (var stream = new MemoryStream())
-			{
-				hlslWriter.Write(stream);
-				stream.Position = 0;
-				using (var reader = new StreamReader(stream, Encoding.UTF8))
-				{
-					decompiledHLSL = reader.ReadToEnd();
-				}
-			}
+			var decompiledHLSL = HlslWriter.Decompile(shaderModel);
 			File.WriteAllText($"{OutputDir}/{relPath}.d.hlsl", decompiledHLSL);
 
 			using (var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))

@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{43B35C43-BD28-4731-81AA-772EE71C08B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DebugParser</RootNamespace>
+    <AssemblyName>DebugParser</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DebugParser\Aon9\DebugConstantBufferMapping.cs" />
+    <Compile Include="DebugParser\Aon9\DebugLevel9ShaderChunk.cs" />
+    <Compile Include="DebugParser\Aon9\DebugLoopRegisterMapping.cs" />
+    <Compile Include="DebugParser\Aon9\DebugRuntimeConstantMapping.cs" />
+    <Compile Include="DebugParser\Aon9\DebugSamplerMapping.cs" />
+    <Compile Include="DebugParser\Aon9\DebugUnknown1Mapping.cs" />
+    <Compile Include="DebugParser\DebugBytecodeChunk.cs" />
+    <Compile Include="DebugParser\DebugBytecodeContainer.cs" />
+    <Compile Include="DebugParser\DebugBytecodeContainerHeader.cs" />
+    <Compile Include="DebugParser\DebugBytecodeReader.cs" />
+    <Compile Include="DebugParser\DebugEntry.cs" />
+    <Compile Include="DebugParser\DebugHtmlWriter.cs" />
+    <Compile Include="DebugParser\DebugIndent.cs" />
+    <Compile Include="DebugParser\DebugNumber.cs" />
+    <Compile Include="DebugParser\DebugShaderVersion.cs" />
+    <Compile Include="DebugParser\DebugUtil.cs" />
+    <Compile Include="DebugParser\DX9\DebugCliToken.cs" />
+    <Compile Include="DebugParser\DX9\DebugConstantDeclaration.cs" />
+    <Compile Include="DebugParser\DX9\DebugConstantStructMember.cs" />
+    <Compile Include="DebugParser\DX9\DebugConstantType.cs" />
+    <Compile Include="DebugParser\DX9\DebugDestinationOperand.cs" />
+    <Compile Include="DebugParser\DX9\DebugFxlcOperand.cs" />
+    <Compile Include="DebugParser\DX9\DebugFxlcToken.cs" />
+    <Compile Include="DebugParser\DX9\DebugOperandUtil.cs" />
+    <Compile Include="DebugParser\DX9\DebugSourceOperand.cs" />
+    <Compile Include="DebugParser\DX9\IDebugOperand.cs" />
+    <Compile Include="DebugParser\DX9\DebugPreshader.cs" />
+    <Compile Include="DebugParser\DX9\DebugPrsiToken.cs" />
+    <Compile Include="DebugParser\DX9\DebugShaderModel.cs" />
+    <Compile Include="DebugParser\DX9\DebugToken.cs" />
+    <Compile Include="DebugParser\DX9\DebugFxlc.cs" />
+    <Compile Include="DebugParser\DX9\IDebugToken.cs" />
+    <Compile Include="DebugParser\DX9\DebugInstructionToken.cs" />
+    <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectAssignment.cs" />
+    <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectConstantAssignment.cs" />
+    <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectConstantIndexAssignment.cs" />
+    <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectExpressionAssignment.cs" />
+    <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectExpressionIndexAssignment.cs" />
+    <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectInlineShader5Assignment.cs" />
+    <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectInlineShaderAssignment.cs" />
+    <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectVariableAssignment.cs" />
+    <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectVariableIndexAssignment.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectAnnotation.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectBuffer.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectChunk.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectGroup.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectGSSOInitializer.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectHeader.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectInterfaceInitializer.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectInterfaceVariable.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectMember.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectNumericType.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectNumericVariable.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectObjectVariable.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectPass.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectShaderData.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectShaderData5.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectTechnique.cs" />
+    <Compile Include="DebugParser\Fx10\DebugEffectType.cs" />
+    <Compile Include="DebugParser\Fx10\DebugUnknownObject.cs" />
+    <Compile Include="DebugParser\Fx10\IDebugEffectVariable.cs" />
+    <Compile Include="DebugParser\FX9\DataEntry.cs" />
+    <Compile Include="DebugParser\FX9\DebugAnnotation.cs" />
+    <Compile Include="DebugParser\FX9\DebugAssignment.cs" />
+    <Compile Include="DebugParser\FX9\DebugSamplerState.cs" />
+    <Compile Include="DebugParser\FX9\DebugVariableBlob.cs" />
+    <Compile Include="DebugParser\FX9\DebugEffectChunk.cs" />
+    <Compile Include="DebugParser\FX9\DebugStateBlob.cs" />
+    <Compile Include="DebugParser\FX9\DebugParameter.cs" />
+    <Compile Include="DebugParser\FX9\DebugPass.cs" />
+    <Compile Include="DebugParser\FX9\DebugTechnique.cs" />
+    <Compile Include="DebugParser\FX9\DebugUnknownObject.cs" />
+    <Compile Include="DebugParser\FX9\DebugVariable.cs" />
+    <Compile Include="DebugParser\FX9\Extensions.cs" />
+    <Compile Include="DebugParser\Fxlvm\DebugCli4Chunk.cs" />
+    <Compile Include="DebugParser\Fxlvm\DebugCtabChunk.cs" />
+    <Compile Include="DebugParser\Fxlvm\DebugFxlcChunk.cs" />
+    <Compile Include="DebugParser\DX9\DebugConstantTable.cs" />
+    <Compile Include="DebugParser\Icfe\DebugClassInstance.cs" />
+    <Compile Include="DebugParser\Icfe\DebugClassType.cs" />
+    <Compile Include="DebugParser\Icfe\DebugInterfacesChunk.cs" />
+    <Compile Include="DebugParser\Icfe\DebugInterfaceSlot.cs" />
+    <Compile Include="DebugParser\IDumpable.cs" />
+    <Compile Include="DebugParser\Libf\DebugLibfChunk.cs" />
+    <Compile Include="DebugParser\Libf\DebugLibHeaderChunk.cs" />
+    <Compile Include="DebugParser\Libf\DebugLibraryParameterSignatureChunk.cs" />
+    <Compile Include="DebugParser\Libf\LibraryParameterDescription.cs" />
+    <Compile Include="DebugParser\Rdef\DebugConstantBuffer.cs" />
+    <Compile Include="DebugParser\Rdef\DebugResourceBinding.cs" />
+    <Compile Include="DebugParser\Rdef\DebugResourceDefinitionChunk.cs" />
+    <Compile Include="DebugParser\Rdef\DebugShaderType.cs" />
+    <Compile Include="DebugParser\Rdef\DebugShaderTypeMember.cs" />
+    <Compile Include="DebugParser\Rdef\DebugShaderVariable.cs" />
+    <Compile Include="DebugParser\Sfi0\DebugSfi0Chunk.cs" />
+    <Compile Include="DebugParser\Shex\DebugOpcodeHeader.cs" />
+    <Compile Include="DebugParser\Shex\DebugShaderProgramChunk.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugOpcodeToken.cs" />
+    <Compile Include="DebugParser\Stat\DebugStatisticsChunk.cs" />
+    <Compile Include="DebugParser\Xsgn\DebugInputOutputSignatureChunk.cs" />
+    <Compile Include="DebugParser\Xsgn\DebugInputSignatureChunk.cs" />
+    <Compile Include="DebugParser\Xsgn\DebugOutputSignatureChunk.cs" />
+    <Compile Include="DebugParser\Xsgn\DebugPatchConstantSignatureChunk.cs" />
+    <Compile Include="DebugParser\Xsgn\DebugSignatureParameterDescription.cs" />
+    <Compile Include="DebugParser\Xsgn\DebugSignatureParameterDescriptionCollection.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Content Include="Resources\DebugCSS.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SlimShader\SlimShader.csproj">
+      <Project>{d75528f5-54f9-4e31-94f6-03c194f74cf2}</Project>
+      <Name>SlimShader</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\DebugJavascript.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

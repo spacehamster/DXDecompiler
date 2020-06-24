@@ -7,7 +7,7 @@ namespace SlimShader.DX9Shader
 {
 	// D3DXSHADER
 	[Flags]
-	enum ShaderFlags
+	public enum ShaderFlags
 	{
 		Debug = 1,
 		SkipValidation = 2,

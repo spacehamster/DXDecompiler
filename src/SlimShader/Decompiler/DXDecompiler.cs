@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using SlimShader.Chunks;
 using SlimShader.Chunks.Libf;
+using SlimShader.Chunks.Fx10;
 
 namespace SlimShader.Decompiler
 {
@@ -36,6 +37,13 @@ namespace SlimShader.Decompiler
 					sb.AppendLine(libDecompiler.Decompile());
 				}
 				return sb.ToString();
+			}
+			if (container.Chunks.OfType<EffectChunk>().Any())
+			{
+				return container.Chunks
+					.OfType<EffectChunk>()
+					.First()
+					.ToString();
 			}
 			var decompiler = new DXDecompiler(container);
 			return decompiler.Decompile();

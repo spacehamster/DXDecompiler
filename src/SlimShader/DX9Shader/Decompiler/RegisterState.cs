@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SlimShader.DX9Shader.Bytecode.Declaration;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace SlimShader.DX9Shader
 
 		private void Load(ShaderModel shader)
 		{
-			ConstantDeclarations = shader.ParseConstantTable().ConstantDeclarations;
+			ConstantDeclarations = shader.ConstantTable.ConstantDeclarations;
 			foreach (var constantDeclaration in ConstantDeclarations)
 			{
 				RegisterType registerType;
@@ -137,7 +138,7 @@ namespace SlimShader.DX9Shader
 
 			string registerName = GetRegisterName(registerKey);
 			registerName = registerName ?? instruction.GetParamRegisterName(destIndex);
-			int registerLength = GetRegisterFullLength(registerKey);
+			var registerLength = GetRegisterFullLength(registerKey);
 			string writeMaskName = instruction.GetDestinationWriteMaskName(registerLength, true);
 
 			return string.Format("{0}{1}", registerName, writeMaskName);
@@ -185,7 +186,9 @@ namespace SlimShader.DX9Shader
 					if (decl == null)
 					{
 						// Constant register not found in def statements nor the constant table
-						throw new NotImplementedException();
+						//TODO:
+						return $"Error {registerType}{registerNumber}";
+						//throw new NotImplementedException();
 					}
 
 					if (decl.ParameterClass == ParameterClass.MatrixRows)
@@ -208,7 +211,7 @@ namespace SlimShader.DX9Shader
 			return ApplyModifier(instruction.GetSourceModifier(srcIndex), sourceRegisterName);
 		}
 
-		public int GetRegisterFullLength(RegisterKey registerKey)
+		public uint GetRegisterFullLength(RegisterKey registerKey)
 		{
 			if (registerKey.Type == RegisterType.Const)
 			{
@@ -353,8 +356,8 @@ namespace SlimShader.DX9Shader
 								for (int i = 0; i < 4; i++)
 								{
 									constant[i] = -constant[i];
-								}*/
-								break;
+								}
+								break;*/
 							default:
 								throw new NotImplementedException();
 						}

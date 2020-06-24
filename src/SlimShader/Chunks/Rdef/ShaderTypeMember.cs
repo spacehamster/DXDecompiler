@@ -56,11 +56,12 @@ namespace SlimShader.Chunks.Rdef
 			if (Type.ElementCount > 0)
 				declaration += string.Format("[{0}]", Type.ElementCount);
 			declaration += ";";
-
+			var memberOffset = _parentOffset + Offset;
+			string offset = memberOffset == uint.MaxValue ? "N/A" : memberOffset.ToString();
 			// Split declaration into separate lines, so that we can put the "// Offset" comment at the right place.
 			var declarationLines = declaration.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 			declarationLines[declarationLines.Length - 1] = string.Format("{0,-40}// Offset: {1,4}",
-				declarationLines[declarationLines.Length - 1], _parentOffset + Offset);
+				declarationLines[declarationLines.Length - 1], offset);
 
 			return string.Join(Environment.NewLine, declarationLines);
 		}

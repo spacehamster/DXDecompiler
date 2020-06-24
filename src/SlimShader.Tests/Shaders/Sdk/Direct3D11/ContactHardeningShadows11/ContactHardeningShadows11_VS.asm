@@ -43,7 +43,8 @@
 // TEXTURE                  0   xy          2     NONE   float   xy  
 // TEXTURE                  1   xyzw        3     NONE   float   xyzw
 //
-vs_4_0
+vs_5_0
+dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB0[10], immediateIndexed
 dcl_input v0.xyz
 dcl_input v1.xyz

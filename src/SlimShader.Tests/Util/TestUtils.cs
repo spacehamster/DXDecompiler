@@ -44,8 +44,22 @@ namespace SlimShader.Tests.Util
 		{
 			return version.ToString();
   		}
+		public static string StripDX9InstructionSlots(string assembly)
+		{
+			return Regex.Replace(assembly, @" ?\/\/ approximately \d+ instruction slots used.*", "");
+		}
+		public static string TrimLines(string assembly)
+		{
+			var trimmed = assembly
+				.Split(new[] { Environment.NewLine }, StringSplitOptions.None)
+				.Select(x => x.Trim())
+				.Where(x => x != "")
+				.ToList();
+			return string.Join(Environment.NewLine, trimmed);
+		}
 		public static string NormalizeAssembly(string assembly)
 		{
+			assembly = assembly.Trim();
 			assembly = Regex.Replace(assembly, @"([^\w\n]|^)([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?)", match =>
 			{
 				if (match.Groups[2].Value == "-0")

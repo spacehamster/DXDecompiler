@@ -12,6 +12,11 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,6 +58,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DebugParser\DebugParser.csproj">
+      <Project>{43b35c43-bd28-4731-81aa-772ee71c08b2}</Project>
+      <Name>DebugParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SlimShader\SlimShader.csproj">
       <Project>{d75528f5-54f9-4e31-94f6-03c194f74cf2}</Project>
       <Name>SlimShader</Name>

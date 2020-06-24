@@ -73,7 +73,8 @@
 // LIGHTVECTORTS            0   xyz         1     NONE   float   xyz 
 // SV_POSITION              0   xyzw        2      POS   float   xyzw
 //
-vs_4_0
+vs_5_0
+dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB0[16], immediateIndexed
 dcl_constantbuffer CB1[9], immediateIndexed
 dcl_input v0.xyz

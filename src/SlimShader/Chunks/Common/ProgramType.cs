@@ -23,6 +23,9 @@ namespace SlimShader.Chunks.Common
 		ComputeShader = 5,
 
 		[Description("lib")]
-		LibraryShader = 0xFFF0
+		LibraryShader = 0xFFF0,
+
+		[Description("fx")]
+		EffectsShader = 6
 	}
 }

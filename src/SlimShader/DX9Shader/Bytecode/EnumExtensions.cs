@@ -45,5 +45,19 @@ namespace SlimShader.DX9Shader
 					throw new InvalidOperationException();
 			}
 		}
+		public static string GetDescription(this ShaderType value)
+		{
+			switch (value)
+			{
+				case ShaderType.Effect:
+					return "fx";
+				case ShaderType.Pixel:
+					return "ps";
+				case ShaderType.Vertex:
+					return "vs";
+				default:
+					throw new InvalidOperationException();
+			}
+		}
 	}
 }

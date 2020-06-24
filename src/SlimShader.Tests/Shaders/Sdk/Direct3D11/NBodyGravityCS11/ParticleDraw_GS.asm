@@ -37,12 +37,14 @@
 // COLOR                    0   xyzw        1     NONE   float   xyzw
 // SV_POSITION              0   xyzw        2      POS   float   xyzw
 //
-gs_4_0
+gs_5_0
+dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB0[6], immediateIndexed
 dcl_input v[1][0].xyz
 dcl_input v[1][1].xyzw
 dcl_temps 3
 dcl_inputprimitive point 
+dcl_stream m0
 dcl_outputtopology trianglestrip 
 dcl_output o0.xy
 dcl_output o1.xyzw
@@ -60,7 +62,7 @@ mad r2.xyzw, r1.xxxx, cb0[0].xyzw, r2.xyzw
 mad r1.xyzw, r1.zzzz, cb0[2].xyzw, r2.xyzw
 add r1.xyzw, r1.xyzw, cb0[3].xyzw
 mov o2.xyzw, r1.xyzw
-emit 
+emit_stream m0
 mov o0.xy, l(1.000000,0,0,0)
 mov o1.xyzw, v[0][1].xyzw
 mul r1.xyzw, r0.yyyy, cb0[1].xyzw
@@ -68,7 +70,7 @@ mad r1.xyzw, r0.xxxx, cb0[0].xyzw, r1.xyzw
 mad r0.xyzw, r0.zzzz, cb0[2].xyzw, r1.xyzw
 add r0.xyzw, r0.xyzw, cb0[3].xyzw
 mov o2.xyzw, r0.xyzw
-emit 
+emit_stream m0
 mov o0.xy, l(0,1.000000,0,0)
 mov o1.xyzw, v[0][1].xyzw
 mul r0.xyz, cb0[5].xyzx, l(-10.000000, -10.000000, -10.000000, 0.000000)
@@ -81,7 +83,7 @@ mad r2.xyzw, r1.xxxx, cb0[0].xyzw, r2.xyzw
 mad r1.xyzw, r1.zzzz, cb0[2].xyzw, r2.xyzw
 add r1.xyzw, r1.xyzw, cb0[3].xyzw
 mov o2.xyzw, r1.xyzw
-emit 
+emit_stream m0
 mov o0.xy, l(1.000000,1.000000,0,0)
 mov o1.xyzw, v[0][1].xyzw
 mul r1.xyzw, r0.yyyy, cb0[1].xyzw
@@ -89,7 +91,7 @@ mad r1.xyzw, r0.xxxx, cb0[0].xyzw, r1.xyzw
 mad r0.xyzw, r0.zzzz, cb0[2].xyzw, r1.xyzw
 add r0.xyzw, r0.xyzw, cb0[3].xyzw
 mov o2.xyzw, r0.xyzw
-emit 
-cut 
+emit_stream m0
+cut_stream m0
 ret 
 // Approximately 44 instruction slots used

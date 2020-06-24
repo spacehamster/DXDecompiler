@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 
 namespace SlimShader.Util
 {
@@ -8,7 +9,7 @@ namespace SlimShader.Util
 	/// their exact decimal values. The implementation aims for readability over
 	/// efficiency.
 	/// </summary>
-	internal static class DoubleConverter
+	public static class DoubleConverter
 	{
 		/// <summary>
 		/// Converts the given double to a string representation of its
@@ -16,7 +17,7 @@ namespace SlimShader.Util
 		/// </summary>
 		/// <param name="d">The double to convert.</param>
 		/// <returns>A string representation of the double's exact decimal value.</returns>
-		public static string ToExactString(double d)
+		public static string ToExactString(double d, int precision = 6)
 		{
 			if (double.IsPositiveInfinity(d))
 				return "+Infinity";
@@ -29,7 +30,7 @@ namespace SlimShader.Util
 			long bits = BitConverter.DoubleToInt64Bits(d);
 			// Note that the shift is sign-extended, hence the test against -1 not 1
 			bool negative = (bits < 0);
-			int exponent = (int) ((bits >> 52) & 0x7ffL);
+			int exponent = (int)((bits >> 52) & 0x7ffL);
 			long mantissa = bits & 0xfffffffffffffL;
 
 			// Subnormal numbers; exponent is effectively one higher,
@@ -83,46 +84,54 @@ namespace SlimShader.Util
 
 			// Finally, return the string with an appropriate sign
 			if (negative)
-				return "-" + ad.ToString();
+				return "-" + ad.ToString(precision);
 			else
-				return ad.ToString();
+				return ad.ToString(precision);
 		}
 
+
 		/// <summary>Private class used for manipulating
-		class ArbitraryDecimal
+		public class ArbitraryDecimal
 		{
 			/// <summary>Digits in the decimal expansion, one byte per digit
-			byte[] digits;
+			public byte[] digits;
 			/// <summary> 
 			/// How many digits are *after* the decimal point
 			/// </summary>
-			int decimalPoint = 0;
+			public int decimalPoint = 0;
 
 			/// <summary> 
 			/// Constructs an arbitrary decimal expansion from the given long.
 			/// The long must not be negative.
 			/// </summary>
-			internal ArbitraryDecimal(long x)
+			public ArbitraryDecimal(long x)
 			{
 				string tmp = x.ToString(CultureInfo.InvariantCulture);
 				digits = new byte[tmp.Length];
 				for (int i = 0; i < tmp.Length; i++)
-					digits[i] = (byte) (tmp[i] - '0');
+					digits[i] = (byte)(tmp[i] - '0');
 				Normalize();
+			}
+			public ArbitraryDecimal(string tmp, int decimalPoint)
+			{
+				digits = new byte[tmp.Length];
+				for (int i = 0; i < tmp.Length; i++)
+					digits[i] = (byte)(tmp[i] - '0');
+				this.decimalPoint = decimalPoint;
 			}
 
 			/// <summary>
 			/// Multiplies the current expansion by the given amount, which should
 			/// only be 2 or 5.
 			/// </summary>
-			internal void MultiplyBy(int amount)
+			public void MultiplyBy(int amount)
 			{
 				byte[] result = new byte[digits.Length + 1];
 				for (int i = digits.Length - 1; i >= 0; i--)
 				{
 					int resultDigit = digits[i] * amount + result[i + 1];
-					result[i] = (byte) (resultDigit / 10);
-					result[i + 1] = (byte) (resultDigit % 10);
+					result[i] = (byte)(resultDigit / 10);
+					result[i + 1] = (byte)(resultDigit % 10);
 				}
 				if (result[0] != 0)
 				{
@@ -141,7 +150,7 @@ namespace SlimShader.Util
 			/// decimal place) and a positive value makes the decimal
 			/// expansion smaller.
 			/// </summary>
-			internal void Shift(int amount)
+			public void Shift(int amount)
 			{
 				decimalPoint += amount;
 			}
@@ -149,7 +158,7 @@ namespace SlimShader.Util
 			/// <summary>
 			/// Removes leading/trailing zeroes from the expansion.
 			/// </summary>
-			internal void Normalize()
+			public void Normalize()
 			{
 				int first;
 				for (first = 0; first < digits.Length; first++)
@@ -170,21 +179,89 @@ namespace SlimShader.Util
 				decimalPoint -= digits.Length - (last + 1);
 				digits = tmp;
 			}
-
 			/// <summary>
 			/// Converts the value to a proper decimal string representation.
 			/// </summary>
-			public override String ToString()
+			public override string ToString()
 			{
-				char[] digitString = new char[digits.Length];
-				for (int i = 0; i < digits.Length; i++) // Limit to 17 significant digits
-					if (i == 16 && digits.Length > 17)
-						digitString[i] = (char) ((char) (digits[i]) + ((digits[i + 1] >= 5) ? '1' : '0')); // TODO: Proper rounding.
-					else if (i >= 16)
-						digitString[i] = '0';
+				return ToString(-1);
+			}
+			/// <summary>
+			/// Round the digits
+			/// </summary>
+			/// <param name="precision"></param>
+			public void RoundDigits(int precision)
+			{
+				int roundPoint;
+				if (digits.Length - decimalPoint > 0)
+				{
+					// When number > 1 eg 18.09871673583984375 -> 18.098717
+					// RoundPoin
+					roundPoint = digits.Length - decimalPoint + precision;
+				}
+				else if (decimalPoint - digits.Length == precision)
+				{
+					//When significate figures are just behind the rounding point
+					//EG 0.0000004 -> 0
+					var digit = digits[0];
+					digit = (byte)(digit >= 5 ? 1 : 0);
+					if (digit > 0)
+					{
+						decimalPoint -= 1;
+					}
+					digits = new byte[] { digit };
+					return;
+				}
+				else
+				{
+					//For number < 1, EG 0.003508398309350013732910156
+					roundPoint = precision + (digits.Length - decimalPoint);
+				}
+				if (roundPoint >= digits.Length) return;
+				if (roundPoint < 1) return;
+				var result = new byte[roundPoint];
+				bool carry = digits.Length > roundPoint && digits[roundPoint] >= 5;
+				for (var i = roundPoint - 1; i >= 0; i--)
+				{
+					var digit = digits[i];
+					if (carry) digit += 1;
+					carry = digit > 9 ? true : false;
+					if (carry)
+					{
+						result[i] = 0;
+					}
 					else
-						digitString[i] = (char) (digits[i] + '0');
-
+					{
+						result[i] = digit;
+					}
+				}
+				if (carry)
+				{
+					result[0] = 0;
+					result = (new byte[] { 1 }).Concat(result).ToArray();
+					decimalPoint -= 1;
+				}
+				digits = result;
+			}
+			/// <summary>
+			/// Converts the value to a proper decimal string representation.
+			/// </summary>
+			public string ToString(int requestedPrecision = 6)
+			{
+				int precision = requestedPrecision == -1 ? digits.Length : requestedPrecision;
+				char[] digitString = new char[digits.Length];
+				string debugRounded = "";
+				string debug = "";
+				for (int i = 0; i < digits.Length; i++)
+				{
+					debug += (char)(digits[i] + '0');
+				}
+				if (requestedPrecision != -1) RoundDigits(precision);
+				for (int i = 0; i < digits.Length; i++)
+				{
+					debugRounded += (char)(digits[i] + '0');
+					digitString[i] = (char)(digits[i] + '0');
+				}
 				// Simplest case - nothing after the decimal point,
 				// and last real digit is non-zero, eg value=35
 				if (decimalPoint == 0)
@@ -198,7 +275,14 @@ namespace SlimShader.Util
 				{
 					return new string(digitString)
 						+ new string('0', -decimalPoint)
-						+ '.' + new string('0', 6);
+						+ '.' + new string('0', precision);
+				}
+				// Value is just below the rounding point, eg 0.0000006
+				if (decimalPoint - digitString.Length == precision)
+				{
+					return "0." +
+						new string('0', decimalPoint - digitString.Length - 1) +
+						(digits[0] >= 5 ? "1" : "0");
 				}
 
 				// Nothing before the decimal point, eg 0.035
@@ -206,9 +290,9 @@ namespace SlimShader.Util
 				{
 					return "0." +
 						(new string('0', (decimalPoint - digitString.Length)) +
-						new string(digitString)).Substring(0, 6);
+						new string(digitString)).Substring(0, Math.Min(precision, digitString.Length)) +
+						new string('0', Math.Max(precision - digitString.Length, 0));
 				}
-
 				// Most complicated case - part of the string comes
 				// before the decimal point, part comes after it,
 				// eg 3.5
@@ -217,8 +301,10 @@ namespace SlimShader.Util
 					"." +
 					new string(digitString,
 								digitString.Length - decimalPoint,
-								Math.Min(decimalPoint, 6))
-								+ ((decimalPoint <= 5) ? new string('0', 6 - decimalPoint) : string.Empty);
+								Math.Min(decimalPoint, precision))
+								+ ((decimalPoint <= (precision - 1) && requestedPrecision != -1) ?
+								new string('0', precision - decimalPoint) :
+								string.Empty);
 			}
 		}
 	}

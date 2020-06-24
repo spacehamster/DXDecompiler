@@ -14,9 +14,9 @@ namespace SlimShader.Chunks.Aon9
 		public static SamplerMapping Parse(BytecodeReader reader)
 		{
 			var result = new SamplerMapping();
-			result.TargetSampler = reader.ReadByte();
-			result.SourceSampler = reader.ReadByte();
 			result.SourceResource = reader.ReadByte();
+			result.SourceSampler = reader.ReadByte();
+			result.TargetSampler = reader.ReadByte();
 			var padding = reader.ReadByte();
 			Debug.Assert(padding == 0, "Padding is 0");
 			return result;

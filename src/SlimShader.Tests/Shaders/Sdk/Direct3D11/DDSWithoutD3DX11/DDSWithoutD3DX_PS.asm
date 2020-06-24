@@ -26,14 +26,15 @@
 // -------------------- ----- ------ -------- -------- ------- ------
 // SV_TARGET                0   xyzw        0   TARGET   float   xyzw
 //
-ps_4_0
+ps_5_0
+dcl_globalFlags refactoringAllowed
 dcl_sampler s0, mode_default
 dcl_resource_texture2d (float,float,float,float) t0
 dcl_input_ps linear v1.xyzw
 dcl_input_ps linear v2.xy
 dcl_output o0.xyzw
 dcl_temps 1
-sample r0.xyzw, v2.xyxx, t0.xyzw, s0
+sample_indexable(texture2d)(float,float,float,float) r0.xyzw, v2.xyxx, t0.xyzw, s0
 mul o0.xyzw, r0.xyzw, v1.xyzw
 ret 
 // Approximately 3 instruction slots used

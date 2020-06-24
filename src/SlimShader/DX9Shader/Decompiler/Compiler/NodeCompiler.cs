@@ -282,7 +282,7 @@ namespace SlimShader.DX9Shader
 		}
 
 		private static string GetAstSourceSwizzleName(IEnumerable<IHasComponentIndex> inputs,
-			int registerSize, 
+			uint registerSize, 
 			int promoteToVectorSize = PromoteToAnyVectorSize)
 		{
 			string swizzleName = "";
@@ -291,7 +291,7 @@ namespace SlimShader.DX9Shader
 				swizzleName += "xyzw"[swizzle];
 			}
 
-			if (swizzleName.Equals("xyzw".Substring(0, registerSize)))
+			if (swizzleName.Equals("xyzw".Substring(0, (int)registerSize)))
 			{
 				return "";
 			}

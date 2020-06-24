@@ -53,7 +53,7 @@
 // Name                 Index   Mask Register SysValue  Format   Used
 // -------------------- ----- ------ -------- -------- ------- ------
 // no Output
-cs_4_0
+cs_5_0
 dcl_globalFlags refactoringAllowed
 dcl_immediateConstantBuffer { { 0x0000cccc, 15, 0, -649211347377382870840004092887040.000000},
                               { 0x00008888, 15, 0, 10184774488364746447430036226048.000000},
@@ -326,14 +326,12 @@ ult r1.xyzw, vThreadIDInGroupFlattened.xxxx, l(16, 32, 8, 4)
 if_nz r1.x
   udiv r0.y, null, r0.x, cb0[0].y
   imad r0.z, -r0.y, cb0[0].y, r0.x
-  ishl r0.z, r0.z, l(2)
   ishl r0.y, r0.y, l(2)
-  and r0.w, vThreadIDInGroupFlattened.x, l(3)
-  iadd r2.x, r0.w, r0.z
+  bfi r2.x, l(30), l(2), r0.z, vThreadIDInGroupFlattened.x
   ushr r0.z, vThreadIDInGroupFlattened.x, l(2)
   iadd r2.y, r0.z, r0.y
   mov r2.zw, l(0,0,0,0)
-  ld r2.xyzw, r2.xyzw, t0.xyzw
+  ld_indexable(texture2d)(float,float,float,float) r2.xyzw, r2.xyzw, t0.xyzw
   mul r2.xyzw, r2.xyzw, l(255.000000, 255.000000, 255.000000, 255.000000)
   ftou r2.xyzw, r2.xyzw
   umin r2.xyzw, r2.xyzw, l(255, 255, 255, 255)
@@ -442,9 +440,9 @@ if_nz r0.y
   iadd r4.w, r4.w, r6.x
   udiv r4.w, null, r4.w, l(6)
   and r4.xyzw, r4.xyzw, l(252, 252, 252, 2)
-  iadd r6.xzw, r4.wwww, r4.zzxy
+  iadd r6.xzw, r4.zzxy, r4.wwww
   and r4.xyz, r5.xyzx, l(252, 252, 252, 0)
-  iadd r4.xyz, r4.wwww, r4.yxzy
+  iadd r4.xyz, r4.yxzy, r4.wwww
   mov r6.y, r4.z
   mov r4.w, r6.w
   mov r5.xy, r4.wxww
@@ -463,13 +461,13 @@ else
     iadd r5.w, r5.w, r9.x
     and r7.xyz, r7.xyzx, l(254, 254, 254, 0)
     udiv r5.w, null, r5.w, l(3)
-    iadd r2.xzw, r5.wwww, r7.zzxy
+    iadd r2.xzw, r7.zzxy, r5.wwww
     and r7.xyz, r8.xyzx, l(1, 1, 1, 0)
     iadd r5.w, r7.z, r7.y
     iadd r5.w, r5.w, r7.x
     and r7.xyz, r8.xyzx, l(254, 254, 254, 0)
     udiv r5.w, null, r5.w, l(3)
-    iadd r3.xyz, r5.wwww, r7.yxzy
+    iadd r3.xyz, r7.yxzy, r5.wwww
     mov r2.y, r3.z
     mov r3.w, r2.w
     mov r0.yw, r3.wwwx
@@ -490,7 +488,7 @@ else
     and r7.xyzw, r7.xyzw, l(248, 248, 248, 248)
     ushr r2.z, r2.z, l(2)
     and r2.z, r2.z, l(4)
-    iadd r7.xyzw, r2.zzzz, r7.xyzw
+    iadd r7.xyzw, r7.xyzw, r2.zzzz
     and r9.xyzw, r8.xyzw, l(7, 7, 7, 7)
     iadd r2.z, r9.z, r9.y
     iadd r2.z, r9.w, r2.z
@@ -498,7 +496,7 @@ else
     and r8.xyzw, r8.xyzw, l(248, 248, 248, 248)
     ushr r2.z, r2.z, l(2)
     and r2.z, r2.z, l(4)
-    iadd r3.xyzw, r2.zzzz, r8.yxzw
+    iadd r3.xyzw, r8.yxzw, r2.zzzz
     mov x0[3].x, r7.w
     mov x0[3].y, r3.w
     mov r2.x, r7.z
@@ -519,13 +517,13 @@ else
     iadd r2.z, r2.z, r9.x
     and r7.xyz, r7.xyzx, l(254, 254, 254, 0)
     udiv r2.z, null, r2.z, l(3)
-    iadd r6.xzw, r2.zzzz, r7.zzxy
+    iadd r6.xzw, r7.zzxy, r2.zzzz
     and r7.xyz, r8.xyzx, l(1, 1, 1, 0)
     iadd r2.z, r7.z, r7.y
     iadd r2.z, r2.z, r7.x
     and r7.xyz, r8.xyzx, l(254, 254, 254, 0)
     udiv r2.z, null, r2.z, l(3)
-    iadd r4.xyz, r2.zzzz, r7.yxzy
+    iadd r4.xyz, r7.yxzy, r2.zzzz
     mov r6.y, r4.z
     mov r4.w, r6.w
     mov r5.xy, r4.wxww
@@ -546,7 +544,7 @@ else
     and r7.xyzw, r7.xyzw, l(248, 248, 248, 248)
     ushr r2.z, r2.z, l(2)
     and r2.z, r2.z, l(4)
-    iadd r7.xyzw, r2.zzzz, r7.xyzw
+    iadd r7.xyzw, r7.xyzw, r2.zzzz
     and r9.xyzw, r8.xyzw, l(7, 7, 7, 7)
     iadd r2.z, r9.z, r9.y
     iadd r2.z, r9.w, r2.z
@@ -554,7 +552,7 @@ else
     and r8.xyzw, r8.xyzw, l(248, 248, 248, 248)
     ushr r2.z, r2.z, l(2)
     and r2.z, r2.z, l(4)
-    iadd r4.xyzw, r2.zzzz, r8.yxzw
+    iadd r4.xyzw, r8.yxzw, r2.zzzz
     mov x0[7].x, r7.w
     mov x0[7].y, r4.w
     mov r6.x, r7.z
@@ -617,13 +615,12 @@ movc r0.yw, r5.zzzz, r0.wwwy, r0.yyyw
 mov x0[1].x, r0.y
 movc r2.xy, r5.zzzz, r2.yxyy, r2.xyxx
 mov x0[2].x, r2.x
-movc r5.w, r5.z, r7.w, r2.z
-mov x0[3].x, r5.w
+swapc r7.x, r9.x, r5.z, r7.w, r2.z
+mov x0[3].x, r9.x
 mov x0[0].y, r3.y
 mov x0[1].y, r0.w
 mov x0[2].y, r2.y
-movc r0.w, r5.z, r2.z, r7.w
-mov x0[3].y, r0.w
+mov x0[3].y, r7.x
 mov r0.w, vThreadIDInGroupFlattened.x
 mov r2.y, icb[r0.w + 0].y
 ld_structured r7.xyzw, r2.y, l(0), g0.xyzw
@@ -647,174 +644,170 @@ movc r4.xy, r2.yyyy, r4.yxyy, r4.xyxx
 mov x0[4].x, r4.x
 movc r5.xy, r2.yyyy, r5.yxyy, r5.xyxx
 mov x0[5].x, r5.x
-movc r6.xy, r2.yyyy, r6.yxyy, r6.xyxx
-mov x0[6].x, r6.x
-movc r2.z, r2.y, r10.w, r2.w
-mov x0[7].x, r2.z
+movc r5.zw, r2.yyyy, r6.yyyx, r6.xxxy
+mov x0[6].x, r5.z
+swapc r6.x, r10.x, r2.y, r10.w, r2.w
+mov x0[7].x, r10.x
 mov x0[4].y, r4.y
 mov x0[5].y, r5.y
-mov x0[6].y, r6.y
-movc r2.y, r2.y, r2.w, r10.w
-mov x0[7].y, r2.y
-ineg r9.x, r4.x
-ineg r9.y, r5.x
-ineg r9.z, r6.x
-ineg r9.w, r2.z
+mov x0[6].y, r5.w
+mov x0[7].y, r6.x
+ineg r6.x, r4.x
+ineg r6.yz, r5.xxzx
+ineg r6.w, r10.x
 ige r2.y, l(0), r4.w
-ineg r6.x, r3.x
-ineg r6.y, r0.y
-ineg r6.z, r2.x
-ineg r6.w, r5.w
+movc r5.xyz, r3.wwww, l(2,128,3,0), l(1,64,7,0)
+ineg r10.x, r3.x
+ineg r10.y, r0.y
+ineg r10.z, r2.x
+ineg r10.w, r9.x
 ige r0.y, l(0), r4.z
 itof r2.xz, r4.zzwz
-movc r3.xyw, r3.wwww, l(128,3,0,32), l(64,7,0,16)
-mov r5.xy, l(0,0,0,0)
+mov r9.xy, l(0,0,0,0)
 loop 
-  uge r2.w, r5.y, l(16)
+  uge r2.w, r9.y, l(16)
   breakc_nz r2.w
-  ushr r2.w, icb[r0.w + 0].x, r5.y
+  ushr r2.w, icb[r0.w + 0].x, r9.y
   and r2.w, r2.w, l(1)
-  ieq r4.x, r2.w, l(1)
-  if_nz r4.x
-    ld_structured r10.xyzw, r5.y, l(0), g0.xyzw
-    iadd r10.xyzw, r9.xyzw, r10.xyzw
-    imul null, r4.xy, r7.xyxx, r10.xyxx
-    iadd r4.x, r4.y, r4.x
-    imad r4.x, r7.z, r10.z, r4.x
-    imad r4.x, r7.w, r10.w, r4.x
-    ige r4.y, l(0), r4.x
-    or r4.y, r2.y, r4.y
-    ilt r5.w, r4.x, r4.w
-    itof r4.x, r4.x
-    mul r4.x, r4.x, l(63.499989)
-    div r4.x, r4.x, r2.z
-    ftou r4.x, r4.x
-    iadd r4.x, r3.x, r4.x
-    movc r4.x, r5.w, icb[r4.x + 64].x, r3.y
-    movc r4.x, r4.y, l(0), r4.x
+  ieq r3.x, r2.w, l(1)
+  if_nz r3.x
+    ld_structured r11.xyzw, r9.y, l(0), g0.xyzw
+    iadd r11.xyzw, r6.xyzw, r11.xyzw
+    imul null, r3.xy, r7.xyxx, r11.xyxx
+    iadd r3.x, r3.y, r3.x
+    imad r3.x, r7.z, r11.z, r3.x
+    imad r3.x, r7.w, r11.w, r3.x
+    ige r3.y, l(0), r3.x
+    or r3.y, r2.y, r3.y
+    ilt r3.w, r3.x, r4.w
+    itof r3.x, r3.x
+    mul r3.x, r3.x, l(63.499989)
+    div r3.x, r3.x, r2.z
+    ftou r3.x, r3.x
+    iadd r3.x, r3.x, r5.y
+    movc r3.x, r3.w, icb[r3.x + 64].x, r5.z
+    movc r3.x, r3.y, l(0), r3.x
   else 
-    ld_structured r10.xyzw, r5.y, l(0), g0.xyzw
-    iadd r10.xyzw, r6.xyzw, r10.xyzw
-    imul null, r10.xy, r8.xyxx, r10.xyxx
-    iadd r4.y, r10.y, r10.x
-    imad r4.y, r8.z, r10.z, r4.y
-    imad r4.y, r8.w, r10.w, r4.y
-    ige r5.w, l(0), r4.y
-    or r5.w, r0.y, r5.w
-    ilt r10.x, r4.y, r4.z
-    itof r4.y, r4.y
-    mul r4.y, r4.y, l(63.499989)
-    div r4.y, r4.y, r2.x
-    ftou r4.y, r4.y
-    iadd r4.y, r3.x, r4.y
-    movc r4.y, r10.x, icb[r4.y + 64].x, r3.y
-    movc r4.x, r5.w, l(0), r4.y
+    ld_structured r11.xyzw, r9.y, l(0), g0.xyzw
+    iadd r11.xyzw, r10.xyzw, r11.xyzw
+    imul null, r3.yw, r8.xxxy, r11.xxxy
+    iadd r3.y, r3.w, r3.y
+    imad r3.y, r8.z, r11.z, r3.y
+    imad r3.y, r8.w, r11.w, r3.y
+    ige r3.w, l(0), r3.y
+    or r3.w, r0.y, r3.w
+    ilt r4.x, r3.y, r4.z
+    itof r3.y, r3.y
+    mul r3.y, r3.y, l(63.499989)
+    div r3.y, r3.y, r2.x
+    ftou r3.y, r3.y
+    iadd r3.y, r3.y, r5.y
+    movc r3.y, r4.x, icb[r3.y + 64].x, r5.z
+    movc r3.x, r3.w, l(0), r3.y
   endif 
-  iadd r10.yz, r5.yyyy, l(0, 15, 1, 0)
-  ushr r4.y, icb[r0.w + 0].w, r10.y
-  and r4.y, r4.y, l(2)
-  ushr r5.w, icb[r0.w + 0].w, r5.y
-  and r5.w, r5.w, l(1)
-  iadd r4.y, r4.y, r5.w
-  movc r2.w, r0.z, r2.w, r4.y
-  iadd r4.x, r3.w, r4.x
-  iadd r4.y, l(64), -icb[r4.x + 64].w
+  iadd r11.yz, r9.yyyy, l(0, 15, 1, 0)
+  ushr r3.y, icb[r0.w + 0].w, r11.y
+  and r3.y, r3.y, l(2)
+  ushr r3.w, icb[r0.w + 0].w, r9.y
+  bfi r3.y, l(1), l(0), r3.w, r3.y
+  movc r2.w, r0.z, r2.w, r3.y
+  imad r3.x, r5.x, l(16), r3.x
+  iadd r3.y, l(64), -icb[r3.x + 64].w
   ishl r2.w, r2.w, l(2)
-  mov r11.x, x0[r2.w + 0].x
-  mov r11.y, x0[r2.w + 1].x
-  mov r11.z, x0[r2.w + 2].x
-  mov r11.w, x0[r2.w + 3].x
-  mov r12.x, x0[r2.w + 0].y
-  mov r12.y, x0[r2.w + 1].y
-  mov r12.z, x0[r2.w + 2].y
-  mov r12.w, x0[r2.w + 3].y
-  imul null, r12.xyzw, r12.xyzw, icb[r4.x + 64].wwww
-  imad r11.xyzw, r4.yyyy, r11.xyzw, r12.xyzw
-  iadd r11.xyzw, r11.xyzw, l(32, 32, 32, 32)
-  ushr r11.xyzw, r11.xyzw, l(6)
-  ld_structured r12.xyzw, r5.y, l(0), g0.xyzw
-  iadd r11.xyzw, r11.xyzw, -r12.xyzw
-  movc r2.w, r3.z, l(0), r11.w
-  imul null, r4.xy, r11.xyxx, r11.xyxx
-  iadd r4.x, r4.y, r4.x
-  imad r4.x, r11.z, r11.z, r4.x
-  imad r2.w, r2.w, r2.w, r4.x
-  iadd r10.x, r2.w, r5.x
-  mov r5.xy, r10.xzxx
+  mov r12.x, x0[r2.w + 0].x
+  mov r12.y, x0[r2.w + 1].x
+  mov r12.z, x0[r2.w + 2].x
+  mov r12.w, x0[r2.w + 3].x
+  mov r13.x, x0[r2.w + 0].y
+  mov r13.y, x0[r2.w + 1].y
+  mov r13.z, x0[r2.w + 2].y
+  mov r13.w, x0[r2.w + 3].y
+  imul null, r13.xyzw, r13.xyzw, icb[r3.x + 64].wwww
+  imad r12.xyzw, r3.yyyy, r12.xyzw, r13.xyzw
+  iadd r12.xyzw, r12.xyzw, l(32, 32, 32, 32)
+  ushr r12.xyzw, r12.xyzw, l(6, 6, 6, 6)
+  ld_structured r13.xyzw, r9.y, l(0), g0.xyzw
+  iadd r12.xyzw, r12.xyzw, -r13.xyzw
+  movc r2.w, r3.z, l(0), r12.w
+  imul null, r3.xy, r12.xyxx, r12.xyxx
+  iadd r3.x, r3.y, r3.x
+  imad r3.x, r12.z, r12.z, r3.x
+  imad r2.w, r2.w, r2.w, r3.x
+  iadd r11.x, r2.w, r9.x
+  mov r9.xy, r11.xzxx
 endloop 
-mov r5.y, cb0[0].w
-mov r5.z, vThreadIDInGroupFlattened.x
-store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r5.xyzx
+mov r9.y, cb0[0].w
+mov r9.z, vThreadIDInGroupFlattened.x
+store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r9.xyzx
 sync_g_t
 if_nz r1.y
   iadd r0.y, vThreadIDInGroupFlattened.x, l(32)
   ld_structured r2.yzw, r0.y, l(16), g0.xxyz
-  ult r0.z, r2.y, r5.x
+  ult r0.z, r2.y, r9.x
   if_nz r0.z
     ld_structured r2.x, r0.y, l(16), g0.xxxx
     store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r2.xzwx
   endif 
 endif 
 if_nz r1.x
-  ld_structured r2.x, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
-  iadd r0.y, vThreadIDInGroupFlattened.x, l(16)
-  ld_structured r3.yzw, r0.y, l(16), g0.xxyz
-  ult r0.z, r3.y, r2.x
-  if_nz r0.z
-    ld_structured r3.x, r0.y, l(16), g0.xxxx
-    store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r3.xzwx
+  ld_structured r0.y, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
+  iadd r0.z, vThreadIDInGroupFlattened.x, l(16)
+  ld_structured r2.yzw, r0.z, l(16), g0.xxyz
+  ult r0.y, r2.y, r0.y
+  if_nz r0.y
+    ld_structured r2.x, r0.z, l(16), g0.xxxx
+    store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r2.xzwx
   endif 
 endif 
 if_nz r1.z
-  ld_structured r2.x, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
-  iadd r0.y, vThreadIDInGroupFlattened.x, l(8)
-  ld_structured r3.yzw, r0.y, l(16), g0.xxyz
-  ult r0.z, r3.y, r2.x
-  if_nz r0.z
-    ld_structured r3.x, r0.y, l(16), g0.xxxx
-    store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r3.xzwx
+  ld_structured r0.y, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
+  iadd r0.z, vThreadIDInGroupFlattened.x, l(8)
+  ld_structured r2.yzw, r0.z, l(16), g0.xxyz
+  ult r0.y, r2.y, r0.y
+  if_nz r0.y
+    ld_structured r2.x, r0.z, l(16), g0.xxxx
+    store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r2.xzwx
   endif 
 endif 
 if_nz r1.w
-  ld_structured r1.x, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
-  iadd r0.y, vThreadIDInGroupFlattened.x, l(4)
-  ld_structured r2.yzw, r0.y, l(16), g0.xxyz
-  ult r0.z, r2.y, r1.x
-  if_nz r0.z
-    ld_structured r2.x, r0.y, l(16), g0.xxxx
-    store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r2.xzwx
+  ld_structured r0.y, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
+  iadd r0.z, vThreadIDInGroupFlattened.x, l(4)
+  ld_structured r1.yzw, r0.z, l(16), g0.xxyz
+  ult r0.y, r1.y, r0.y
+  if_nz r0.y
+    ld_structured r1.x, r0.z, l(16), g0.xxxx
+    store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r1.xzwx
   endif 
 endif 
 ult r0.yz, vThreadIDInGroupFlattened.xxxx, l(0, 2, 1, 0)
 if_nz r0.y
-  ld_structured r1.x, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
-  iadd r0.y, vThreadIDInGroupFlattened.x, l(2)
-  ld_structured r2.yzw, r0.y, l(16), g0.xxyz
-  ult r0.w, r2.y, r1.x
-  if_nz r0.w
-    ld_structured r2.x, r0.y, l(16), g0.xxxx
-    store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r2.xzwx
+  ld_structured r0.y, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
+  iadd r0.w, vThreadIDInGroupFlattened.x, l(2)
+  ld_structured r1.yzw, r0.w, l(16), g0.xxyz
+  ult r0.y, r1.y, r0.y
+  if_nz r0.y
+    ld_structured r1.x, r0.w, l(16), g0.xxxx
+    store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r1.xzwx
   endif 
 endif 
 if_nz r0.z
-  ld_structured r1.x, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
-  iadd r0.y, vThreadIDInGroupFlattened.x, l(1)
-  ld_structured r2.yzw, r0.y, l(16), g0.xxyz
-  ult r0.z, r2.y, r1.x
-  if_nz r0.z
-    ld_structured r2.x, r0.y, l(16), g0.xxxx
-    store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r2.xzwx
+  ld_structured r0.y, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
+  ld_structured r1.yzw, l(1), l(16), g0.xxyz
+  ult r0.y, r1.y, r0.y
+  if_nz r0.y
+    ld_structured r1.x, l(1), l(16), g0.xxxx
+    store_structured g0.xyz, vThreadIDInGroupFlattened.x, l(16), r1.xzwx
   endif 
-  ld_structured r1.x, r0.x, l(0), t1.xxxx
-  ld_structured r2.x, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
-  ult r0.y, r2.x, r1.x
+  ld_structured_indexable(structured_buffer, stride=16)(mixed,mixed,mixed,mixed) r0.y, r0.x, l(0), t1.xxxx
+  ld_structured r0.z, vThreadIDInGroupFlattened.x, l(16), g0.xxxx
+  ult r0.y, r0.z, r0.y
   if_nz r0.y
     ld_structured r1.xyz, vThreadIDInGroupFlattened.x, l(16), g0.xyzx
     mov r1.w, l(0)
   else 
-    ld_structured r1.xyzw, r0.x, l(0), t1.xyzw
+    ld_structured_indexable(structured_buffer, stride=16)(mixed,mixed,mixed,mixed) r1.xyzw, r0.x, l(0), t1.xyzw
   endif 
   store_structured u0.xyzw, r0.x, l(0), r1.xyzw
 endif 
 ret 
-// Approximately 496 instruction slots used
+// Approximately 489 instruction slots used

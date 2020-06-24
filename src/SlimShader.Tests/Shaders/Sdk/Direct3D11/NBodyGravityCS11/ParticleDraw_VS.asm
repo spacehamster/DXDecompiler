@@ -7,7 +7,7 @@
 // Resource bind info for g_bufPosVelo
 // {
 //
-//   struct
+//   struct PosVelo
 //   {
 //       
 //       float4 pos;                    // Offset:    0
@@ -41,16 +41,16 @@
 // POSITION                 0   xyz         0     NONE   float   xyz 
 // COLOR                    0   xyzw        1     NONE   float   xyzw
 //
-vs_4_0
-dcl_globalFlags refactoringAllowed | enableRawAndStructuredBuffers
+vs_5_0
+dcl_globalFlags refactoringAllowed
 dcl_resource_structured t0, 32
 dcl_input v0.xyzw
 dcl_input_sgv v1.x, vertex_id
 dcl_output o0.xyz
 dcl_output o1.xyzw
 dcl_temps 2
-ld_structured o0.xyz, v1.x, l(0), t0.xyzx
-ld_structured r0.x, v1.x, l(28), t0.xxxx
+ld_structured_indexable(structured_buffer, stride=32)(mixed,mixed,mixed,mixed) o0.xyz, v1.x, l(0), t0.xyzx
+ld_structured_indexable(structured_buffer, stride=32)(mixed,mixed,mixed,mixed) r0.x, v1.x, l(28), t0.xxxx
 mul r0.x, r0.x, l(0.111111)
 add r1.xyzw, v0.xyzw, l(-1.000000, -0.100000, -0.100000, -1.000000)
 mad o1.xyzw, r0.xxxx, r1.xyzw, l(1.000000, 0.100000, 0.100000, 1.000000)

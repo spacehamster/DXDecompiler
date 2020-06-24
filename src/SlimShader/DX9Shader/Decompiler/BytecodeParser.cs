@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SlimShader.DX9Shader.Bytecode.Declaration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -54,7 +55,7 @@ namespace SlimShader.DX9Shader
 
 		private void LoadConstantOutputs(ShaderModel shader)
 		{
-			IList<ConstantDeclaration> constantTable = shader.ParseConstantTable().ConstantDeclarations;
+			IList<ConstantDeclaration> constantTable = shader.ConstantTable.ConstantDeclarations;
 
 			_activeOutputs = new Dictionary<RegisterComponentKey, HlslTreeNode>();
 			_samplers = new Dictionary<RegisterKey, HlslTreeNode>();

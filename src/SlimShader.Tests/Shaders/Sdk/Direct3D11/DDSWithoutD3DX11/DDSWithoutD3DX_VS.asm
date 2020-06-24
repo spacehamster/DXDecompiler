@@ -46,7 +46,8 @@
 // COLOR                    0   xyzw        1     NONE   float   xyzw
 // TEXCOORD                 0   xy          2     NONE   float   xy  
 //
-vs_4_0
+vs_5_0
+dcl_globalFlags refactoringAllowed
 dcl_constantbuffer CB0[7], immediateIndexed
 dcl_constantbuffer CB1[1], immediateIndexed
 dcl_input v0.xyzw

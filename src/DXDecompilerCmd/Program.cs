@@ -1,4 +1,7 @@
 ﻿using SlimShader;
+using SlimShader.DebugParser;
+using SlimShader.DebugParser.DX9;
+using SlimShader.DebugParser.FX9;
 using SlimShader.Decompiler;
 using SlimShader.Util;
 using System;
@@ -30,7 +33,7 @@ namespace DXDecompilerCmd
 			var dx9ShaderType = (SlimShader.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
 			if (dx9ShaderType == SlimShader.DX9Shader.ShaderType.Vertex ||
 				dx9ShaderType == SlimShader.DX9Shader.ShaderType.Pixel || 
-				dx9ShaderType == SlimShader.DX9Shader.ShaderType.Fx)
+				dx9ShaderType == SlimShader.DX9Shader.ShaderType.Effect)
 			{
 				return ProgramType.DX9;
 			}
@@ -58,6 +61,13 @@ namespace DXDecompilerCmd
 		}
 		static void Main(string[] args)
 		{
+			args = new string[]
+			{
+				"-O",
+				"test.html",
+				"-h",
+				@"C:\Files\KM\ShaderStudio\src\UnityTests\bin\Debug\Blob\outer_wilds\Assets\Shader\SpritesDefault\VS_BF58DDF502C51FEB5145F1D0310B4327.o"
+			};
 			var options = new Options();
 			for(int i = 0; i < args.Length; i++)
 			{
@@ -72,8 +82,14 @@ namespace DXDecompilerCmd
 						options.DestPath = args[i + 1];
 						i += 1;
 						break;
-					case "-d":
+					case "-a":
 						options.Mode = DecompileMode.Dissassemble;
+						break;
+					case "-d":
+						options.Mode = DecompileMode.Debug;
+						break;
+					case "-h":
+						options.Mode = DecompileMode.DebugHtml;
 						break;
 					default:
 						options.SourcePath = args[i];
@@ -110,10 +126,23 @@ namespace DXDecompilerCmd
 						var container = new BytecodeContainer(data);
 						sw.Write(container.ToString());
 					}
-					else
+					else if (options.Mode == DecompileMode.Decompile)
 					{
 						var hlsl = DXDecompiler.Decompile(data);
 						sw.Write(hlsl);
+					}
+					else if (options.Mode == DecompileMode.Debug)
+					{
+						sw.WriteLine(string.Join(" ", args));
+						var shaderBytecode = DebugBytecodeContainer.Parse(data);
+						var result = shaderBytecode.Dump();
+						sw.Write(result);
+					}
+					else if (options.Mode == DecompileMode.DebugHtml)
+					{
+						var shaderBytecode = DebugBytecodeContainer.Parse(data);
+						var result = shaderBytecode.DumpHTML();
+						sw.Write(result);
 					}
 				}
 				else if (programType == ProgramType.DX9)
@@ -123,14 +152,104 @@ namespace DXDecompilerCmd
 						var disasm = SlimShader.DX9Shader.AsmWriter.Disassemble(data);
 						sw.Write(disasm);
 					}
-					else
+					else if (options.Mode == DecompileMode.Decompile)
 					{
 						var hlsl = SlimShader.DX9Shader.HlslWriter.Decompile(data);
 						sw.Write(hlsl);
 					}
+					else if (options.Mode == DecompileMode.Debug)
+					{
+						sw.WriteLine(string.Join(" ", args));
+						var shaderType = (SlimShader.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
+						if (shaderType == SlimShader.DX9Shader.ShaderType.Effect)
+						{
+							var reader = new DebugBytecodeReader(data, 0, data.Length);
+							string error = "";
+							try
+							{
+								reader.ReadByte("minorVersion");
+								reader.ReadByte("majorVersion");
+								reader.ReadUInt16("shaderType");
+								DebugEffectChunk.Parse(reader, (uint)(data.Length - 4));
+							}
+							catch (Exception ex)
+							{
+								error = ex.ToString();
+							}
+							var dump = reader.DumpStructure();
+							if (!string.IsNullOrEmpty(error))
+							{
+								dump += "\n" + error;
+							}
+							sw.Write(dump);
+						}
+						else
+						{
+							var reader = new DebugBytecodeReader(data, 0, data.Length);
+							string error = "";
+							try
+							{
+								DebugShaderModel.Parse(reader);
+							}
+							catch (Exception ex)
+							{
+								error = ex.ToString();
+							}
+							var dump = reader.DumpStructure();
+							if (!string.IsNullOrEmpty(error))
+							{
+								dump += "\n" + error;
+							}
+							sw.Write(dump);
+						}
+					}
+					else if (options.Mode == DecompileMode.DebugHtml)
+					{
+						var shaderType = (SlimShader.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
+						if (shaderType == SlimShader.DX9Shader.ShaderType.Effect)
+						{
+							var reader = new DebugBytecodeReader(data, 0, data.Length);
+							string error = "";
+							try
+							{
+								reader.ReadByte("minorVersion");
+								reader.ReadByte("majorVersion");
+								reader.ReadUInt16("shaderType");
+								DebugEffectChunk.Parse(reader, (uint)(data.Length - 4));
+							}
+							catch (Exception ex)
+							{
+								error = ex.ToString();
+							}
+							var dump = reader.DumpHtml();
+							if (!string.IsNullOrEmpty(error))
+							{
+								dump += "\n" + error;
+							}
+							sw.Write(dump);
+						}
+						else
+						{
+							var reader = new DebugBytecodeReader(data, 0, data.Length);
+							string error = "";
+							try
+							{
+								DebugShaderModel.Parse(reader);
+							}
+							catch (Exception ex)
+							{
+								error = ex.ToString();
+							}
+							var dump = reader.DumpHtml();
+							if (!string.IsNullOrEmpty(error))
+							{
+								dump += "\n" + error;
+							}
+							sw.Write(dump);
+						}
+					}
 				}
 			}
-			
 		}
 	}
 }

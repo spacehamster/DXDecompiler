@@ -1,0 +1,125 @@
+﻿html * {
+    font-size: large;
+}
+#treeview {
+    overflow: auto;
+    max-height: 100vh;
+    padding: 0px 20px 0px 10px;
+    flex-shrink: 1;
+}
+#hexview {
+    overflow: auto;
+    max-height: 100vh;
+    padding: 0px 20px 0px 20px;
+    flex-shrink: 0;
+}
+#detailview {
+    overflow: auto;
+    max-height: 100vh;
+    padding: 0px 20px 0px 10px;
+    flex-shrink: 1;
+}
+ul, #myUL {
+    list-style-type: none;
+    padding-left: 20px;
+    font-family: monospace;
+}
+
+/* Remove margins and padding from the parent ul */
+#myUL {
+    margin: 0;
+    padding: 0;
+}
+
+.tree-item {
+    display: flex;
+}
+
+/* Style the caret/arrow */
+.caret {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.caret::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+    transform: rotate(90deg);
+}
+.highlighted {
+    background-color: #cc2c2c;
+    color: white;
+}
+:root {
+    --highlight-count: 6;
+}
+span.highlighted_0, div.highlighted_0 > .hex_byte, div.highlighted_0 > .hex_ascii {
+    background-color: hsl(0,100%,40%);
+    color: white;
+}
+span.highlighted_1, div.highlighted_1 > .hex_byte, div.highlighted_1 > .hex_ascii {
+    background-color: hsl(60,90%,30%);
+    color: white;
+}
+span.highlighted_2, div.highlighted_2 > .hex_byte, div.highlighted_2 > .hex_ascii {
+    background-color: hsl(120,100%,35%);
+    color: white;
+}
+span.highlighted_3, div.highlighted_3 > .hex_byte, div.highlighted_3 > .hex_ascii {
+    background-color: hsl(180, 100%,35%);
+    color: white;
+}
+span.highlighted_4, div.highlighted_4 > .hex_byte, div.highlighted_4 > .hex_ascii {
+    background-color: hsl(240,100%,50%);
+    color: white;
+}
+span.highlighted_5, div.highlighted_5 > .hex_byte, div.highlighted_5 > .hex_ascii {
+    background-color: hsl(300,100%,40%);
+    color: white;
+}
+
+.unused {
+    background-color: darkgray;
+    color: white;
+}
+.tree-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Hide the nested list */
+.nested {
+    display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+    display: block;
+}
+
+.monospace {
+    font-family: monospace;
+}
+
+.monospace > span {
+    display: inline-block;
+}
+
+.panel-row {
+    display: flex;
+}
+
+.panel-column {
+    flex-basis: auto;
+}
+
+.panel-column-fit {
+    flex-basis: auto;
+}

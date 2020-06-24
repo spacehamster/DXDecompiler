@@ -142,7 +142,8 @@ namespace SlimShader.Chunks.Rdef
 		{
 			var sb = new StringBuilder();
 
-			sb.AppendFormat("{0} Size: {1,5}", Member, Size);
+			var size = Size == 0 ? "N/A" : Size.ToString();
+			sb.AppendFormat("{0} Size: {1,5}", Member, size);
 
 			if (!Flags.HasFlag(ShaderVariableFlags.Used))
 				sb.Append(" [unused]");
@@ -152,8 +153,17 @@ namespace SlimShader.Chunks.Rdef
 			if (DefaultValue != null)
 			{
 				sb.Append("//      = ");
-				foreach (Number number in DefaultValue)
+				for (int i = 0; i < DefaultValue.Count; i++)
+				{
+					if (i % 4 == 0 && i != 0)
+					{
+						sb.AppendLine();
+						sb.Append("//        ");
+					}
+					var number = DefaultValue[i];
 					sb.AppendFormat("0x{0:x8} ", number.UInt);
+
+				}
 				sb.AppendLine();
 			}
 

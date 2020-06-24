@@ -157,6 +157,18 @@ ret
 //
 //   float4 TestGlobal;                 // Offset:    0 Size:    16
 //      = 0x40a00000 0x40a00000 0x40a00000 0x40a00000 
+//   int4 TestGlobal2;                  // Offset:   16 Size:    16
+//      = 0x00000006 0x00000006 0x00000006 0x00000006 
+//
+// }
+//
+// cbuffer Foo
+// {
+//
+//   float3 TestBuffer1;                // Offset:    0 Size:    12
+//      = 0x40e00000 0x40e00000 0x40e00000 
+//   int3 TestBuffer2;                  // Offset:   16 Size:    12
+//      = 0x00000008 0x00000008 0x00000008 
 //
 // }
 //
@@ -166,6 +178,7 @@ ret
 // Name                                 Type  Format         Dim      HLSL Bind  Count
 // ------------------------------ ---------- ------- ----------- -------------- ------
 // $Globals                          cbuffer      NA          NA            cb0      1 
+// Foo                               cbuffer      NA          NA            cb1      1 
 //
 //
 //
@@ -178,11 +191,17 @@ ret
 //
 lib_5_0
 dcl_globalFlags refactoringAllowed
-dcl_constantbuffer CB0[1], immediateIndexed
+dcl_constantbuffer CB0[2], immediateIndexed
+dcl_constantbuffer CB1[2], immediateIndexed
 dcl_input v0.x
 dcl_output o0.xyzw
-dcl_temps 1
+dcl_temps 2
 utof r0.x, v0.x
-mad o0.xyzw, r0.xxxx, l(2.000000, 2.000000, 2.000000, 2.000000), cb0[0].xyzw
+mad r0.xyzw, r0.xxxx, l(2.000000, 2.000000, 2.000000, 2.000000), cb0[0].xyzw
+itof r1.xyzw, cb0[1].xyzw
+add r0.xyzw, r0.xyzw, r1.xyzw
+add r0.xyzw, r0.xyzw, cb1[0].xyzx
+itof r1.xyzw, cb1[1].xyzx
+add o0.xyzw, r0.xyzw, r1.xyzw
 ret 
-// Approximately 3 instruction slots used
+// Approximately 8 instruction slots used
