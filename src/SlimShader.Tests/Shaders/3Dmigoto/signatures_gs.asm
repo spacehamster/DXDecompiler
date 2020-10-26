@@ -23,14 +23,12 @@
 // SV_RenderTargetArrayIndex     0    y          3  RTINDEX    uint    y  
 // SV_ViewportArrayIndex     0     z         3  VPINDEX    uint     z 
 //
-gs_5_0
-dcl_globalFlags refactoringAllowed
+gs_4_0
 dcl_input_siv v[3][0].xyzw, position
 dcl_input vGSInstanceID
 dcl_input vPrim
 dcl_temps 1
 dcl_inputprimitive triangle 
-dcl_stream m0
 dcl_outputtopology trianglestrip 
 dcl_output_siv o0.xyzw, position
 dcl_output o1.xyzw
@@ -50,6 +48,6 @@ mov o2.y, l(0)
 mov o3.x, l(0)
 mov o3.y, l(0)
 mov o3.z, l(0)
-emit_stream m0
+emit 
 ret 
 // Approximately 12 instruction slots used

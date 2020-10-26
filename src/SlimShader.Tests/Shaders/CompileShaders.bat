@@ -436,7 +436,7 @@ CALL CompileShader.bat 3Dmigoto resource_types5.hlsl resource_types5 ps_5_0 main
 CALL CompileShader.bat 3Dmigoto samplepos.hlsl samplepos ps_5_0 main || GOTO :error
 CALL CompileShader.bat 3Dmigoto signatures_cs.hlsl signatures_cs cs_5_0 main || GOTO :error
 CALL CompileShader.bat 3Dmigoto signatures_ds.hlsl signatures_ds ds_5_0 main || GOTO :error
-CALL CompileShader.bat 3Dmigoto signatures_gs.hlsl signatures_gs gs_5_0 main || GOTO :error
+CALL CompileShader.bat 3Dmigoto signatures_gs.hlsl signatures_gs gs_4_0 main || GOTO :error
 CALL CompileShader.bat 3Dmigoto signatures_gs5.hlsl signatures_gs5 gs_5_0 main || GOTO :error
 CALL CompileShader.bat 3Dmigoto signatures_hs.hlsl signatures_hs hs_5_0 main || GOTO :error
 CALL CompileShader.bat 3Dmigoto signatures_ps.hlsl signatures_ps_0 ps_5_0 main "/DTEST_DEPTH=0" || GOTO :error
