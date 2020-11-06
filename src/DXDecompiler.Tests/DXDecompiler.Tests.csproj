@@ -4467,9 +4467,9 @@
       <Project>{43b35c43-bd28-4731-81aa-772ee71c08b2}</Project>
       <Name>DebugParser</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SlimShader\SlimShader.csproj">
-      <Project>{0A69A67E-283B-424B-8785-3C81CD2EC34D}</Project>
-      <Name>SlimShader</Name>
+    <ProjectReference Include="..\DXDecompiler\DXDecompiler.csproj">
+      <Project>{D75528F5-54F9-4E31-94F6-03C194F74CF2}</Project>
+      <Name>DXDecompiler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

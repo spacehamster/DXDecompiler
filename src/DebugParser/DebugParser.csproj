@@ -154,9 +154,9 @@
     <Content Include="Resources\DebugCSS.css" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SlimShader\SlimShader.csproj">
+    <ProjectReference Include="..\DXDecompiler\DXDecompiler.csproj">
       <Project>{d75528f5-54f9-4e31-94f6-03c194f74cf2}</Project>
-      <Name>SlimShader</Name>
+      <Name>DXDecompiler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
