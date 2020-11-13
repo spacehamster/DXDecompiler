@@ -602,6 +602,7 @@
 		[Description("atomic_xor")]
 		AtomicXor,
 
+		[NumberType(NumberType.UInt)]
 		[Description("atomic_cmp_store")]
 		AtomicCmpStore,
 
@@ -647,8 +648,11 @@
 		[Description("imm_atomic_xor")]
 		ImmAtomicXor,
 
+		[NumberType(NumberType.UInt)]
 		[Description("imm_atomic_exch")]
 		ImmAtomicExch,
+
+		[NumberType(NumberType.UInt)]
 		[Description("imm_atomic_cmp_exch")]
 		ImmAtomicCmpExch,
 
