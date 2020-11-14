@@ -12,6 +12,7 @@ namespace SlimShader.DebugParser
 		public byte MajorVersion { get; private set; }
 		public byte MinorVersion { get; private set; }
 		public ProgramType ProgramType { get; private set; }
+		public bool IsSM51 => MajorVersion == 5 && MinorVersion == 1;
 
 		internal static DebugShaderVersion ParseRdef(DebugBytecodeReader reader)
 		{

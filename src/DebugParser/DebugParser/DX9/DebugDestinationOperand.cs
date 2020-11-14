@@ -26,12 +26,11 @@ namespace DebugParser.DebugParser.DX9
 			result.DestinationWriteMask = (ComponentFlags)((token >> 16) & 0xF);
 			result.ResultModifier = (ResultModifier)((token >> 20) & 0xF);
 
-			var debugEntry = reader.Members.Last();
-			debugEntry.AddNote("RegisterNumber", result.RegisterNumber.ToString());
-			debugEntry.AddNote("RegisterType", result.RegisterType.ToString());
-			debugEntry.AddNote("MinPrecision", result.MinPrecision.ToString());
-			debugEntry.AddNote("DestinationWriteMask", result.DestinationWriteMask.ToString());
-			debugEntry.AddNote("ResultModifier", result.ResultModifier.ToString());
+			reader.AddNote("RegisterNumber", result.RegisterNumber);
+			reader.AddNote("RegisterType", result.RegisterType);
+			reader.AddNote("MinPrecision", result.MinPrecision);
+			reader.AddNote("DestinationWriteMask", result.DestinationWriteMask);
+			reader.AddNote("ResultModifier", result.ResultModifier);
 			return result;
 		}
 		public override string ToString()

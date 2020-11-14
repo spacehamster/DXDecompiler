@@ -54,6 +54,7 @@
     <Compile Include="DebugParser\DebugEntry.cs" />
     <Compile Include="DebugParser\DebugHtmlWriter.cs" />
     <Compile Include="DebugParser\DebugIndent.cs" />
+    <Compile Include="DebugParser\DebugNumber4.cs" />
     <Compile Include="DebugParser\DebugNumber.cs" />
     <Compile Include="DebugParser\DebugShaderVersion.cs" />
     <Compile Include="DebugParser\DebugUtil.cs" />
@@ -137,7 +138,50 @@
     <Compile Include="DebugParser\Sfi0\DebugSfi0Chunk.cs" />
     <Compile Include="DebugParser\Shex\DebugOpcodeHeader.cs" />
     <Compile Include="DebugParser\Shex\DebugShaderProgramChunk.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugFunctionTableDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugConstantBufferDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugControlPointCountDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugCustomDataToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugFunctionBodyDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugGeometryShaderInputPrimitiveDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugGeometryShaderInstanceCountDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugGeometryShaderMaxOutputVertexCountDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugGeometryShaderOutputPrimitiveTopologyDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugGlobalFlagsDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugHullShaderForkPhaseInstanceCountDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugHullShaderMaxTessFactorDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugImmediateConstantBufferDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugImmediateDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugIndexableTempRegisterDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugIndexingRangeDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugInputRegisterDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugInstructionToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugInterfaceDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugNameToken.cs" />
     <Compile Include="DebugParser\Shex\Tokens\DebugOpcodeToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugOperand.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugOperandIndex.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugOutputRegisterDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugPixelShaderInputRegisterDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugRawThreadGroupSharedMemoryDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugRawUnorderedAccessViewDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugResourceDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugResourceReturnTypeToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugSamplerDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugShaderMessageDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugStreamDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugStructuredThreadGroupSharedMemoryDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugStructuredUnorderedAccessViewDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugTempRegisterDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugTessellatorDomainDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugTessellatorOutputPrimitiveDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugTessellatorPartitioningDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugThreadGroupDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugTypedUnorderedAccessViewDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugUnorderedAccessViewDeclarationTokenBase.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\DebugRawShaderResourceViewDeclarationToken.cs" />
+    <Compile Include="DebugParser\Shex\Tokens\StructuredShaderResourceViewDeclarationToken.cs" />
     <Compile Include="DebugParser\Stat\DebugStatisticsChunk.cs" />
     <Compile Include="DebugParser\Xsgn\DebugInputOutputSignatureChunk.cs" />
     <Compile Include="DebugParser\Xsgn\DebugInputSignatureChunk.cs" />
@@ -167,6 +211,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\DebugJavascript.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Shex\Tokens\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

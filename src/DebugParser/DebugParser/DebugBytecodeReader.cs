@@ -45,6 +45,10 @@ namespace SlimShader.DebugParser
 		{
 			get { return _reader.BaseStream.Position >= _reader.BaseStream.Length; }
 		}
+		public long CurrentPosition
+		{
+			get { return _reader.BaseStream.Position; }
+		}
 		public DebugBytecodeReader(byte[] buffer, int index, int count)
 		{
 			_buffer = buffer;
@@ -144,6 +148,22 @@ namespace SlimShader.DebugParser
 			var result = _reader.ReadInt32();
 			var entry = AddEntry(name, 4);
 			entry.Type = "Int32";
+			entry.Value = result.ToString();
+			return result;
+		}
+		public ulong ReadUInt64(string name)
+		{
+			var result = _reader.ReadUInt64();
+			var entry = AddEntry(name, 8);
+			entry.Type = "UInt64";
+			entry.Value = result.ToString();
+			return result;
+		}
+		public long ReadInt64(string name)
+		{
+			var result = _reader.ReadInt64();
+			var entry = AddEntry(name, 8);
+			entry.Type = "Int64";
 			entry.Value = result.ToString();
 			return result;
 		}
@@ -389,9 +409,10 @@ namespace SlimShader.DebugParser
 			return result;
 		}
 
-		public void AddNote(string key, string value)
+		public void AddNote(string key, object value)
 		{
-			throw new NotImplementedException();
+			var debugEntry = Members.Last();
+			debugEntry.AddNote(key, value);
 		}
 	}
 }

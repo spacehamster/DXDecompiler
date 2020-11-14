@@ -33,31 +33,26 @@ namespace SlimShader.DebugParser.Shex
 					Length = opcodeToken0.DecodeValue(24, 30),
 					IsExtended = (opcodeToken0.DecodeValue(31, 31) == 1)
 				};
-				DebugOpcodeToken opcodeToken = null;
+				reader.AddIndent(opcodeHeader.OpcodeType.ToString());
 				if(opcodeHeader.Length == 0 && opcodeHeader.OpcodeType != OpcodeType.CustomData)
 				{
 					throw new Exception("Error parsing shader");
 				}
+				DebugOpcodeToken opcodeToken;
 				if (opcodeHeader.OpcodeType == OpcodeType.CustomData)
 				{
-					//opcodeToken = DebugCustomDataToken.Parse(reader, opcodeToken0);
-					var customDataClass = opcodeToken0.DecodeValue<CustomDataClass>(11, 31);
-					var length = reader.PeakUInt32Ahead(4);
-					if (length == 0)
-					{
-						throw new Exception("Error parsing shader");
-					}
-					var data = reader.ReadBytes($"Opcode{opcodeIndex}({opcodeHeader.OpcodeType}-{customDataClass})", (int)length * 4);
+					opcodeToken = DebugCustomDataToken.Parse(reader, opcodeToken0);
 				}
 				else if (opcodeHeader.OpcodeType.IsDeclaration())
 				{
-					var data = reader.ReadBytes($"Opcode{opcodeIndex}({opcodeHeader.OpcodeType})", (int)opcodeHeader.Length * 4);
+					opcodeToken = DebugDeclarationToken.Parse(reader, opcodeHeader.OpcodeType, program.Version);
 				}
 				else // Not custom data or declaration, so must be instruction.
 				{
-					var data = reader.ReadBytes($"Opcode{opcodeIndex}({opcodeHeader.OpcodeType})", (int)opcodeHeader.Length * 4);
+					opcodeToken = DebugInstructionToken.Parse(reader, opcodeHeader);
 				}
 				program.Tokens.Add(opcodeToken);
+				reader.RemoveIndent();
 			}
 			return program;
 		}

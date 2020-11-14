@@ -14,6 +14,6 @@ namespace SlimShader.DebugParser
 		uint Size { get; }
 		string Type { get;  }
 		string Value { get; }
-		void AddNote(string key, string value);
+		void AddNote(string key, object value);
 	}
 }

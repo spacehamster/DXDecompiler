@@ -24,9 +24,9 @@ namespace SlimShader.DebugParser.Chunks.Fxlvm
 				var info = chunkReader.Members.Last();
 				var number = DebugNumber.Parse(chunkReader);
 				result.Numbers.Add(number);
-				info.AddNote("Int", number.Int.ToString());
-				info.AddNote("Uint", number.UInt.ToString());
-				info.AddNote("Float", number.Float.ToString());
+				info.AddNote("Int", number.Int);
+				info.AddNote("Uint", number.UInt);
+				info.AddNote("Float", number.Float);
 				chunkReader.RemoveIndent();
 			}
 			return result;

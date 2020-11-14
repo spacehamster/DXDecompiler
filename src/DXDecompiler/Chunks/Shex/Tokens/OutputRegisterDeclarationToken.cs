@@ -67,9 +67,7 @@ namespace SlimShader.Chunks.Shex.Tokens
 		/// Only applicable for SGV and SIV declarations.
 		/// </summary>
 		public SystemValueName SystemValueName { get; internal set; }
-#if DEBUG
-		uint TokenData;
-#endif
+
 		public static OutputRegisterDeclarationToken Parse(BytecodeReader reader)
 		{
 			uint token0 = reader.ReadUInt32();
@@ -79,9 +77,6 @@ namespace SlimShader.Chunks.Shex.Tokens
 			{
 				Operand = Operand.Parse(reader, opcodeType)
 			};
-#if DEBUG
-			result.TokenData = token0;
-#endif
 			switch (opcodeType)
 			{
 				case OpcodeType.DclOutputSgv:

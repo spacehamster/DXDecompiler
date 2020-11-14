@@ -28,13 +28,12 @@ namespace DebugParser.DebugParser.DX9
 			result.SwizzleComponents = ((token >> 16) & 0xFF);
 			result.SourceModifier = (SourceModifier)((token >> 24) & 0xF);
 
-			var debugEntry = reader.Members.Last();
-			debugEntry.AddNote("RegisterNumber", result.RegisterNumber.ToString());
-			debugEntry.AddNote("RegisterType", result.RegisterType.ToString());
-			debugEntry.AddNote("IsRelativeAddressMode", result.IsRelativeAddressMode.ToString());
-			debugEntry.AddNote("MinPrecision", result.MinPrecision.ToString());
-			debugEntry.AddNote("SwizzleComponents", result.SwizzleComponents.ToString());
-			debugEntry.AddNote("SourceModifier", result.SourceModifier.ToString());
+			reader.AddNote("RegisterNumber", result.RegisterNumber);
+			reader.AddNote("RegisterType", result.RegisterType);
+			reader.AddNote("IsRelativeAddressMode", result.IsRelativeAddressMode);
+			reader.AddNote("MinPrecision", result.MinPrecision);
+			reader.AddNote("SwizzleComponents", result.SwizzleComponents);
+			reader.AddNote("SourceModifier", result.SourceModifier);
 			return result;
 		}
 		public override string ToString()

@@ -35,10 +35,9 @@ namespace SlimShader.DebugParser.DX9
 			Debug.Assert(token.DecodeValue(3, 19) == 0,
 				$"Unexpected data in FxlcToken bits 3-19 {token.DecodeValue(3, 19)}");
 
-			var info = reader.Members.Last();
-			info.AddNote("Token", result.Type.ToString());
-			info.AddNote("TokenComponentCount", tokenComponentCount.ToString());
-			info.AddNote("SingleFirstComponent", singleFirstComponent.ToString());
+			reader.AddNote("Token", result.Type);
+			reader.AddNote("TokenComponentCount", tokenComponentCount);
+			reader.AddNote("SingleFirstComponent", singleFirstComponent);
 
 			var operandCount = result.OperandCount = reader.ReadUInt32("OperandCount");
 			for(int i = 0; i < operandCount; i++)

@@ -21,7 +21,7 @@ namespace SlimShader.DebugParser
 		{
 			this.formatHex = formatHex;
 		}
-		public void AddNote(string key, string value)
+		public void AddNote(string key, object value)
 		{
 			ExtraNotes.Add($"{key}: {value}");
 		}

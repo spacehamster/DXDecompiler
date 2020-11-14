@@ -63,11 +63,10 @@ namespace SlimShader.DebugParser.DX9
 			}
 			var instructionToken = reader.ReadUInt32("Token");
 			var startPosition = reader._reader.BaseStream.Position;
-			var entry = reader.Members.Last();
 			Opcode opcode = (Opcode)(instructionToken & 0xffff);
-			entry.AddNote("TokenOpcode", opcode.ToString());
+			reader.AddNote("TokenOpcode", opcode);
 			var size = (int)((instructionToken >> 16) & 0x7FFF);
-			entry.AddNote("TokenSize", size.ToString());
+			reader.AddNote("TokenSize", size);
 			reader.ReadBytes("FourCC", 4);
 
 			switch (KnownCommentTypes[fourCC])
@@ -128,9 +127,9 @@ namespace SlimShader.DebugParser.DX9
 				token.Modifier = (int)((instructionToken >> 16) & 0xff);
 				token.Predicated = (instructionToken & 0x10000000) != 0;
 				token.CoIssue = (instructionToken & 0x40000000) != 0;
-				entry.AddNote("Modifer", token.Modifier.ToString());
-				entry.AddNote("Predicated", token.Predicated.ToString());
-				entry.AddNote("CoIssue", token.CoIssue.ToString());
+				entry.AddNote("Modifer", token.Modifier);
+				entry.AddNote("Predicated", token.Predicated);
+				entry.AddNote("CoIssue", token.CoIssue);
 			}
 			return result;
 		}

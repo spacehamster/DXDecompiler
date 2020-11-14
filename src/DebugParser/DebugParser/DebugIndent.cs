@@ -41,7 +41,7 @@ namespace SlimShader.DebugParser
 			return sb.ToString();
 		}
 
-		public void AddNote(string key, string value)
+		public void AddNote(string key, object value)
 		{
 			ExtraNotes.Add($"{key}: {value}");
 		}
