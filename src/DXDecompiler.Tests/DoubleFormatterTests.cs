@@ -110,10 +110,10 @@ namespace SlimShader.Tests
 		/// "G9 - Works
 		/// "F9" - Doesn't work for small values
 		/// </summary>
-		/// <param name="value"></param>
-		public static void TestRoundTrip(int value)
+		/// <param name="expected"></param>
+		public static void TestRoundTrip(int expected)
 		{
-			var data = BitConverter.GetBytes(value);
+			var data = BitConverter.GetBytes(expected);
 			float original = BitConverter.ToSingle(data, 0);
 			if (float.IsNaN(original))
 			{
@@ -121,8 +121,8 @@ namespace SlimShader.Tests
 			}
 			var floatText = original.ToString("G7");
 			var roundTripped = float.Parse(floatText);
-			var result = BitConverter.ToInt32(BitConverter.GetBytes(roundTripped), 0);
-			Assert.AreEqual(value, result);
+			var actual = BitConverter.ToInt32(BitConverter.GetBytes(roundTripped), 0);
+			Assert.AreEqual(expected, actual);
 		}
 		[Test]
 		public void TestRounding()
