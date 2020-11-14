@@ -61,27 +61,6 @@ namespace DXDecompilerCmd
 		}
 		static void Main(string[] args)
 		{
-			args = new string[]
-			{
-				"-O",
-				"test.txt",
-				"-a",
-				@"C:\Files\Export\WorldTest\ExportDXBytecodeRestored\Assets\Shader\GPUParticlesGPUParticlesStretch2\GS_5D7CB43F7B34A36A6C217A3E900178C3.bin"
-			};
-			args = new string[]
-			{
-				"-O",
-				"test.html",
-				"-h",
-				@"C:\Files\Export\WorldTest\ExportDXBytecodeRestored\Assets\Shader\GPUParticlesGPUParticlesStretch2\GS_5D7CB43F7B34A36A6C217A3E900178C3.bin"
-			};
-			args = new string[]
-{
-				"-O",
-				"test.asm",
-				"-a",
-				@"C:\Files\Export\WorldTest\ExportDXBytecodeRestored\Assets\Shader\GPUParticlesGPUParticlesStretch2\GS_5D7CB43F7B34A36A6C217A3E900178C3.bin"
-};
 			var options = new Options();
 			for(int i = 0; i < args.Length; i++)
 			{
