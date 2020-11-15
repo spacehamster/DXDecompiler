@@ -311,10 +311,6 @@ namespace SlimShader.Chunks.Shex.Tokens
 						for (int i = 0; i < NumComponents; i++)
 						{
 							var parentType = ParentType.GetNumberType();
-							if(parentType == NumberType.Unknown || parentType == NumberType.Float)
-							{
-								parentType = NumberType.Double;
-							}
 							result += (OperandType == OperandType.Immediate64)
 								? ImmediateValues.GetDouble(i).ToString()
 								: ImmediateValues.GetNumber(i).ToString(parentType);
