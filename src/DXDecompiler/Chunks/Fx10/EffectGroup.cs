@@ -20,7 +20,9 @@ namespace SlimShader.Chunks.Fx10
 		{
 			var result = new EffectGroup();
 			var nameOffset = groupReader.ReadUInt32();
-			if(nameOffset != 0)
+			var techniqueCount = groupReader.ReadUInt32();
+			var annotationCount = groupReader.ReadUInt32();
+			if (nameOffset != 0)
 			{
 				var nameReader = reader.CopyAtOffset((int)nameOffset);
 				result.Name = nameReader.ReadString();
@@ -28,12 +30,10 @@ namespace SlimShader.Chunks.Fx10
 			{
 				result.Name = "";
 			}
-			var techniqueCount = groupReader.ReadUInt32();
 			for (int i = 0; i < techniqueCount; i++)
 			{
 				result.Techniques.Add(EffectTechnique.Parse(reader, groupReader, version));
 			}
-			var annotationCount = groupReader.ReadUInt32();
 			for (int i = 0; i < annotationCount; i++)
 			{
 				result.Annotations.Add(EffectAnnotation.Parse(reader, groupReader, version));
