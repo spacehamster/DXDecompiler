@@ -1,9 +1,4 @@
-﻿using DXDecompiler.Chunks.Fxlvm;
-using DXDecompiler.Util;
-using System;
-using System.Text;
-
-namespace DXDecompiler.DebugParser.Chunks.Fx10
+﻿namespace DXDecompiler.DebugParser.Chunks.Fx10
 {
 	public class DebugEffectExpressionIndexAssignment : DebugEffectAssignment
 	{

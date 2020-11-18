@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DXDecompiler.Chunks;
 using DXDecompiler.Chunks.Common;
 using DXDecompiler.Chunks.Fx10;
@@ -14,6 +10,10 @@ using DXDecompiler.Chunks.Shex.Tokens;
 using DXDecompiler.Chunks.Stat;
 using DXDecompiler.Chunks.Xsgn;
 using DXDecompiler.Util;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace DXDecompiler
 {

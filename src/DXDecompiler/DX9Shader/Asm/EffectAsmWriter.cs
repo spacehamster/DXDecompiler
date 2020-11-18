@@ -1,7 +1,5 @@
 ﻿using DXDecompiler.DX9Shader.FX9;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace DXDecompiler.DX9Shader
 {

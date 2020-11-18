@@ -1,12 +1,10 @@
 ﻿using DXDecompiler.Util;
-using System;
-using System.Text;
 
 namespace DXDecompiler.DX9Shader.FX9
 {
 	/*
 	 * 
-	 */ 
+	 */
 	public class StateBlob
 	{
 		public uint TechniqueIndex { get; private set; }

@@ -1,6 +1,5 @@
 ﻿using DXDecompiler.DX9Shader;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DXDecompiler.DebugParser.DX9
 {

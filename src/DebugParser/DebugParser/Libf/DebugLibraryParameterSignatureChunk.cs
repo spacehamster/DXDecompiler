@@ -1,7 +1,4 @@
-﻿using DXDecompiler.Chunks.Rdef;
-using DXDecompiler.Util;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DXDecompiler.DebugParser.Chunks.Libf
 {

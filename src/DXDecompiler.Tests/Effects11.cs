@@ -1,10 +1,10 @@
-﻿using SharpDX.D3DCompiler;
-using SharpDX.Direct3D11;
-using SharpDX.Direct3D;
-using DXDecompiler.Chunks.Fx10;
+﻿using DXDecompiler.Chunks.Fx10;
 using NUnit.Framework;
-using System.Linq;
+using SharpDX.D3DCompiler;
+using SharpDX.Direct3D;
+using SharpDX.Direct3D11;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DXDecompiler.Tests
 {

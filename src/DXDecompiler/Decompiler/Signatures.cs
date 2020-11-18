@@ -1,10 +1,8 @@
-﻿using DXDecompiler.Chunks.Xsgn;
-using DXDecompiler.Chunks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using DXDecompiler.Chunks;
 using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Xsgn;
+using System;
+using System.Linq;
 
 namespace DXDecompiler.Decompiler
 {

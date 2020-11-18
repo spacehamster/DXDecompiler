@@ -1,7 +1,5 @@
-﻿using System;
+﻿using DXDecompiler.Util;
 using System.Collections.Generic;
-using System.Text;
-using DXDecompiler.Util;
 
 namespace DXDecompiler.DX9Shader.Bytecode
 {

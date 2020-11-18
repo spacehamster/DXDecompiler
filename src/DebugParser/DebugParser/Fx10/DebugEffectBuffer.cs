@@ -1,8 +1,5 @@
-﻿using DXDecompiler.Chunks;
-using DXDecompiler.Chunks.Rdef;
-using DXDecompiler.Util;
+﻿using DXDecompiler.Chunks.Rdef;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DXDecompiler.DebugParser.Chunks.Fx10
 {

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using DXDecompiler.Util;
 using System.Text;
-using DXDecompiler.Util;
 
 namespace DXDecompiler.Chunks.Libf
 {

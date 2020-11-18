@@ -2,9 +2,7 @@
 using DXDecompiler.DX9Shader.FX9;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace DXDecompiler.DX9Shader
 {

@@ -1,5 +1,4 @@
-﻿using DXDecompiler.Chunks.Fx10;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DXDecompiler.DebugParser.Chunks.Fx10
 {

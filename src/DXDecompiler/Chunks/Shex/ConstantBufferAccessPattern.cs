@@ -1,6 +1,4 @@
-﻿using DXDecompiler.Util;
-
-namespace DXDecompiler.Chunks.Shex
+﻿namespace DXDecompiler.Chunks.Shex
 {
 	public enum ConstantBufferAccessPattern
 	{

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DXDecompiler.Chunks.Aon9;
 using DXDecompiler.Chunks.Fx10;
 using DXDecompiler.Chunks.Fxlvm;
@@ -13,6 +12,7 @@ using DXDecompiler.Chunks.Spdb;
 using DXDecompiler.Chunks.Stat;
 using DXDecompiler.Chunks.Xsgn;
 using DXDecompiler.Util;
+using System.Collections.Generic;
 
 namespace DXDecompiler.Chunks
 {

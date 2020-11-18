@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DXDecompiler.DebugParser.Icfe
+﻿namespace DXDecompiler.DebugParser.Icfe
 {
 	public class DebugClassType
 	{

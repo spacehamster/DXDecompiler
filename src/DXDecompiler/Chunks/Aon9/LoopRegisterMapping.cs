@@ -1,6 +1,4 @@
 ﻿using DXDecompiler.Util;
-using System.Linq;
-using System.Text;
 
 namespace DXDecompiler.Chunks.Aon9
 {

@@ -1,8 +1,7 @@
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 using System.Collections.Generic;
 using System.Text;
-using DXDecompiler.Chunks.Common;
-using DXDecompiler.Chunks.Shex;
-using DXDecompiler.Util;
 
 namespace DXDecompiler.Chunks.Rdef
 {

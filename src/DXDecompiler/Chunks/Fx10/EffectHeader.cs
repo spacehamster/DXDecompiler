@@ -1,6 +1,5 @@
 ﻿using DXDecompiler.Chunks.Common;
 using DXDecompiler.Util;
-using System.Text;
 
 namespace DXDecompiler.Chunks.Fx10
 {

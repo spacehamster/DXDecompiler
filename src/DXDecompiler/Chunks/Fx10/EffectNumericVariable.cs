@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using DXDecompiler.Chunks.Common;
+﻿using DXDecompiler.Chunks.Common;
 using DXDecompiler.Chunks.Shex;
 using DXDecompiler.Util;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DXDecompiler.Chunks.Fx10
 {

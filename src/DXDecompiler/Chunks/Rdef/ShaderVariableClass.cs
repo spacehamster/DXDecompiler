@@ -1,6 +1,4 @@
-﻿using DXDecompiler.Util;
-
-namespace DXDecompiler.Chunks.Rdef
+﻿namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// These flags identify the shader-variable class.

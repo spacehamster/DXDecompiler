@@ -1,7 +1,7 @@
-using System;
-using System.Runtime.InteropServices;
 using DXDecompiler.Chunks.Shex;
 using DXDecompiler.Util;
+using System;
+using System.Runtime.InteropServices;
 
 namespace DXDecompiler
 {

@@ -1,11 +1,10 @@
-﻿using DXDecompiler.Chunks.Common;
-using DXDecompiler.Chunks.Shex.Tokens;
-using DXDecompiler.Chunks;
-using DXDecompiler.Util;
+﻿using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.Common;
 using DXDecompiler.Chunks.Rdef;
 using DXDecompiler.Chunks.Shex;
-using System.Linq;
+using DXDecompiler.Chunks.Shex.Tokens;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace DXDecompiler.Decompiler

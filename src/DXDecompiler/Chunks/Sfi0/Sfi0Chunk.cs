@@ -1,10 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using DXDecompiler.Chunks.Common;
+﻿using DXDecompiler.Chunks.Common;
 using DXDecompiler.Chunks.Shex;
 using DXDecompiler.Util;
+using System;
+using System.Diagnostics;
+using System.Text;
 
 namespace DXDecompiler.Chunks.Sfi0
 {

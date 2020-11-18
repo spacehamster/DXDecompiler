@@ -1,7 +1,7 @@
-using System.Diagnostics;
-using System.Text;
 using DXDecompiler.Chunks.Common;
 using DXDecompiler.Util;
+using System.Diagnostics;
+using System.Text;
 
 namespace DXDecompiler.Chunks.Stat
 {

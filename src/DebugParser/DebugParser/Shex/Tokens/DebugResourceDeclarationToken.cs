@@ -1,7 +1,5 @@
 ﻿using DXDecompiler.Chunks.Shex;
-using DXDecompiler.Chunks.Shex.Tokens;
 using DXDecompiler.Util;
-using System.Linq;
 
 namespace DXDecompiler.DebugParser.Shex.Tokens
 {

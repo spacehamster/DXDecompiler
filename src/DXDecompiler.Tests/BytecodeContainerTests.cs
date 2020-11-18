@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using NUnit.Framework;
-using SharpDX.D3DCompiler;
-using SharpDX.Direct3D11;
-using DXDecompiler.Chunks;
-using DXDecompiler.Chunks.Fx10;
+﻿using DXDecompiler.Chunks.Fx10;
 using DXDecompiler.Chunks.Libf;
 using DXDecompiler.Chunks.Rdef;
-using DXDecompiler.Chunks.Shex;
 using DXDecompiler.Chunks.Shex.Tokens;
 using DXDecompiler.Chunks.Spdb;
 using DXDecompiler.Chunks.Xsgn;
 using DXDecompiler.Decompiler;
 using DXDecompiler.Tests.Util;
-using DXDecompiler.Util;
+using NUnit.Framework;
+using SharpDX.D3DCompiler;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 namespace DXDecompiler.Tests
 {
 	[TestFixture]

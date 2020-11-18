@@ -1,6 +1,4 @@
-﻿using DXDecompiler.Util;
-
-namespace DXDecompiler.Chunks.Rdef
+﻿namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// Indicates a constant buffer's type.

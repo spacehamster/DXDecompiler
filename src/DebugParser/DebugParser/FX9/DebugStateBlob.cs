@@ -1,7 +1,5 @@
 ﻿using DXDecompiler.DebugParser.DX9;
-using DXDecompiler.DX9Shader;
 using DXDecompiler.DX9Shader.FX9;
-using System.Diagnostics;
 using System.Text;
 
 namespace DXDecompiler.DebugParser.FX9

@@ -1,8 +1,8 @@
-﻿using DXDecompiler.Chunks.Rdef;
+﻿using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.Rdef;
 using DXDecompiler.Chunks.Shex;
 using DXDecompiler.Chunks.Shex.Tokens;
 using DXDecompiler.Chunks.Xsgn;
-using DXDecompiler.Chunks;
 using System;
 using System.Collections.Generic;
 using System.Linq;

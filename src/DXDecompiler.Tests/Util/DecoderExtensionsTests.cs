@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
-using DXDecompiler.Chunks.Shex;
+﻿using DXDecompiler.Chunks.Shex;
 using DXDecompiler.Util;
+using NUnit.Framework;
 using System;
 using System.IO;
 

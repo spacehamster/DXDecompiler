@@ -2,9 +2,6 @@
 using DXDecompiler.Chunks.Common;
 using DXDecompiler.Chunks.Xsgn;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DXDecompiler.DebugParser.Xsgn
 {

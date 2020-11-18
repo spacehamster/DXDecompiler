@@ -1,4 +1,3 @@
-using System;
 using DXDecompiler.Util;
 
 namespace DXDecompiler.Chunks.Shex.Tokens

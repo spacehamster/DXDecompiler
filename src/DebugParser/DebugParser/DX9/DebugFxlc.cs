@@ -1,5 +1,4 @@
-﻿using DXDecompiler.DebugParser.Chunks.Fxlvm;
-using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
+﻿using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
 using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;

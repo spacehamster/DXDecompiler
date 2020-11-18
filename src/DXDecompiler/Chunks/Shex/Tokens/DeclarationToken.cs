@@ -1,4 +1,3 @@
-using System;
 using DXDecompiler.Chunks.Common;
 using DXDecompiler.Util;
 

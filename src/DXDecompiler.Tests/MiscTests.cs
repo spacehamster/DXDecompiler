@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using DXDecompiler.Util;
+﻿using DXDecompiler.Util;
+using NUnit.Framework;
 
 namespace DXDecompiler.Tests
 {

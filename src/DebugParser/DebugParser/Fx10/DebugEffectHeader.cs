@@ -1,8 +1,4 @@
-﻿using DXDecompiler.Chunks.Common;
-using DXDecompiler.Util;
-using System.Text;
-
-namespace DXDecompiler.DebugParser.Chunks.Fx10
+﻿namespace DXDecompiler.DebugParser.Chunks.Fx10
 {
 	public class DebugEffectHeader
 	{

@@ -1,8 +1,8 @@
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Shex;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using DXDecompiler.Chunks.Common;
-using DXDecompiler.Chunks.Shex;
 
 namespace DXDecompiler
 {

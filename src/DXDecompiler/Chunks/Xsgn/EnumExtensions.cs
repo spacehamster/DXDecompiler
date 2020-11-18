@@ -1,6 +1,6 @@
-﻿using System;
-using DXDecompiler.Chunks.Common;
+﻿using DXDecompiler.Chunks.Common;
 using DXDecompiler.Chunks.Shex;
+using System;
 
 namespace DXDecompiler.Chunks.Xsgn
 {

@@ -1,6 +1,5 @@
 ﻿using DXDecompiler.Chunks.Common;
 using DXDecompiler.Chunks.Rdef;
-using System;
 using System.Collections.Generic;
 
 namespace DXDecompiler.DebugParser.Rdef

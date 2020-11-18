@@ -1,8 +1,6 @@
-﻿using System;
+﻿using DXDecompiler.Chunks.Common;
+using System;
 using System.Linq;
-using DXDecompiler.Chunks.Common;
-using DXDecompiler.Chunks.Fx10;
-using DXDecompiler.Chunks.Fx10.Assignemnt;
 
 namespace DXDecompiler.Chunks.Shex
 {

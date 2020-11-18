@@ -5,9 +5,7 @@ using DXDecompiler.Chunks.Shex;
 using DXDecompiler.Chunks.Shex.Tokens;
 using DXDecompiler.Chunks.Xsgn;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DXDecompiler.Decompiler
 {

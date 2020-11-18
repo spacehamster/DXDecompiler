@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using DXDecompiler.DX9Shader.FX9;
-using DXDecompiler.Util;
-using DXDecompiler.DX9Shader.Bytecode;
+﻿using DXDecompiler.DX9Shader.Bytecode;
 using DXDecompiler.DX9Shader.Bytecode.Declaration;
 using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
+using DXDecompiler.DX9Shader.FX9;
+using DXDecompiler.Util;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DXDecompiler.DX9Shader
 {

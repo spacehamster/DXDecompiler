@@ -2,7 +2,6 @@
 using DXDecompiler.Chunks.Rdef;
 using DXDecompiler.Util;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 
 namespace DXDecompiler.Chunks.Fx10

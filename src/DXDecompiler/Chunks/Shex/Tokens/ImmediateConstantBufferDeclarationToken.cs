@@ -1,5 +1,5 @@
-using System;
 using DXDecompiler.Util;
+using System;
 
 namespace DXDecompiler.Chunks.Shex.Tokens
 {

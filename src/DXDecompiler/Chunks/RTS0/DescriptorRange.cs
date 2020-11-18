@@ -1,5 +1,4 @@
 ﻿using DXDecompiler.Util;
-using System.Diagnostics;
 using System.Text;
 
 namespace DXDecompiler.Chunks.RTS0

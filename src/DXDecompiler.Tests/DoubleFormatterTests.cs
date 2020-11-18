@@ -1,15 +1,12 @@
-﻿using NUnit.Framework;
-using SharpDX.D3DCompiler;
-using DXDecompiler.Tests.Util;
+﻿using DXDecompiler.Tests.Util;
 using DXDecompiler.Util;
+using NUnit.Framework;
+using SharpDX.D3DCompiler;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using static DXDecompiler.Util.DoubleConverter;
 
 namespace DXDecompiler.Tests
 {

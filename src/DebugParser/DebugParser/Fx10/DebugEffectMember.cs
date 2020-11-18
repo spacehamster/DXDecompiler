@@ -1,10 +1,4 @@
-﻿using DXDecompiler.Chunks.Rdef;
-using DXDecompiler.Util;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DXDecompiler.DebugParser.Chunks.Fx10
 {

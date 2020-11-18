@@ -1,8 +1,8 @@
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 using System;
 using System.Linq;
 using System.Text;
-using DXDecompiler.Chunks.Common;
-using DXDecompiler.Util;
 
 namespace DXDecompiler.Chunks.Xsgn
 {

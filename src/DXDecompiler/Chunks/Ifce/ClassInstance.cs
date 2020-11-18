@@ -1,5 +1,4 @@
 using DXDecompiler.Util;
-using System.Diagnostics;
 
 namespace DXDecompiler.Chunks.Ifce
 {

@@ -1,10 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpDX.D3DCompiler;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace DXDecompiler.Tests
 {

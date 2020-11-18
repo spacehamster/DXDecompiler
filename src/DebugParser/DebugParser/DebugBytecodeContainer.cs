@@ -1,5 +1,4 @@
-﻿using DXDecompiler.Chunks;
-using DXDecompiler.DebugParser.Chunks.Fx10;
+﻿using DXDecompiler.DebugParser.Chunks.Fx10;
 using DXDecompiler.DebugParser.Rdef;
 using DXDecompiler.Util;
 using System;

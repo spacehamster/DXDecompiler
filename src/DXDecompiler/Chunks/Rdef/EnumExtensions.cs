@@ -1,5 +1,5 @@
-﻿using System;
-using DXDecompiler.Chunks.Common;
+﻿using DXDecompiler.Chunks.Common;
+using System;
 
 namespace DXDecompiler.Chunks.Rdef
 {

@@ -1,11 +1,6 @@
-﻿using DXDecompiler.Chunks.Fxlvm;
-using DXDecompiler.DebugParser.DX9;
-using DXDecompiler.DX9Shader;
-using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
-using DXDecompiler.Util;
+﻿using DXDecompiler.DebugParser.DX9;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace DXDecompiler.DebugParser.Chunks.Fxlvm
 {

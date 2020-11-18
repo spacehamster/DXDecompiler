@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-
-namespace DXDecompiler.DebugParser.Icfe
+﻿namespace DXDecompiler.DebugParser.Icfe
 {
 	public class DebugClassInstance
 	{

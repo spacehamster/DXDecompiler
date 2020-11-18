@@ -1,9 +1,7 @@
 ﻿using DXDecompiler.DX9Shader.Asm;
 using DXDecompiler.DX9Shader.Bytecode.Declaration;
 using System;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace DXDecompiler.DX9Shader
 {

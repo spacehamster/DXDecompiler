@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using DXDecompiler.Chunks.Shex;
-using System.IO;
-using System.Text;
-using System.Linq;
-using DXDecompiler.Chunks.Shex.Tokens;
+﻿using DXDecompiler.Chunks;
 using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Chunks.Shex.Tokens;
 using System;
-using DXDecompiler.Chunks;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace DXDecompiler.Decompiler
 {

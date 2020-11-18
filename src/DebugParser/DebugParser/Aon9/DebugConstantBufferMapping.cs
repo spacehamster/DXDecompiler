@@ -1,6 +1,4 @@
 ﻿using DXDecompiler.Chunks.Aon9;
-using System;
-using System.Diagnostics;
 
 namespace DXDecompiler.DebugParser.Aon9
 {

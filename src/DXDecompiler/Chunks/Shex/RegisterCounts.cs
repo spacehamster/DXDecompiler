@@ -1,6 +1,6 @@
+using DXDecompiler.Chunks.Shex.Tokens;
 using System.Collections.Generic;
 using System.Linq;
-using DXDecompiler.Chunks.Shex.Tokens;
 
 namespace DXDecompiler.Chunks.Shex
 {

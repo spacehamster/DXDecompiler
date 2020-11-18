@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using DXDecompiler.Util;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using DXDecompiler.Util;
 
 namespace DXDecompiler.Chunks.Ifce
 {

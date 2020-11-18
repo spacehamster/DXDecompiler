@@ -1,6 +1,4 @@
-﻿using DXDecompiler.DebugParser;
-using DXDecompiler.DebugParser.FX9;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DXDecompiler.DebugParser.FX9
 {

@@ -1,17 +1,13 @@
-﻿using System;
+﻿using DXDecompiler.DebugParser.DX9;
+using DXDecompiler.DebugParser.FX9;
+using DXDecompiler.DX9Shader;
+using DXDecompiler.Tests.Util;
+using NUnit.Framework;
+using SharpDX.D3DCompiler;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using SharpDX.D3DCompiler;
-using DXDecompiler.Chunks.Rdef;
-using DXDecompiler.Chunks.Xsgn;
-using DXDecompiler.DebugParser.DX9;
-using DXDecompiler.DebugParser.FX9;
-using DXDecompiler.Decompiler;
-using DXDecompiler.DX9Shader;
-using DXDecompiler.Tests.Util;
 
 namespace DXDecompiler.Tests
 {

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Shex.Tokens;
+using DXDecompiler.Util;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using DXDecompiler.Chunks.Common;
-using DXDecompiler.Chunks.Shex.Tokens;
-using DXDecompiler.Util;
 
 namespace DXDecompiler.Chunks.Shex
 {

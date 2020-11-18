@@ -1,6 +1,4 @@
-﻿using DXDecompiler.Util;
-
-namespace DXDecompiler.Chunks.Rdef
+﻿namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// These flags identify various data, texture, and buffer types that can be assigned to a shader variable.
