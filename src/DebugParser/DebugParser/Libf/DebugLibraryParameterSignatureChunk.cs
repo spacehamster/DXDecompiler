@@ -17,7 +17,7 @@ namespace DXDecompiler.DebugParser.Chunks.Libf
 			var parameterOffset = chunkReader.ReadUInt32("ParameterOffset");
 			for(int i = 0; i < parameterCount; i++)
 			{
-				var parameterReader = chunkReader.CopyAtOffset($"ParameterReader{i}", chunkReader, (int)parameterOffset + 12*4*i);
+				var parameterReader = chunkReader.CopyAtOffset($"ParameterReader{i}", chunkReader, (int)parameterOffset + 12 * 4 * i);
 				result.Parameters.Add(DebugLibraryParameterDescription.Parse(reader, parameterReader));
 			}
 			return result;

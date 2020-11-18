@@ -26,7 +26,8 @@ namespace DebugParser.DebugParser.DX9
 				if(index == destIndex)
 				{
 					operand = DebugDestinationOperand.Parse(reader, index);
-				} else
+				}
+				else
 				{
 					operand = DebugSourceOperand.Parse(reader, index);
 				}

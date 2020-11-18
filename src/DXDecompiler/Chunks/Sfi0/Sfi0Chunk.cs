@@ -37,58 +37,58 @@ namespace DXDecompiler.Chunks.Sfi0
 		public static string RequireFlagsToString(ShaderRequiresFlags flags)
 		{
 			var sb = new StringBuilder();
-			if (flags != ShaderRequiresFlags.None)
+			if(flags != ShaderRequiresFlags.None)
 			{
 				sb.AppendLine("// Note: shader requires additional functionality:");
-				if (flags.HasFlag(ShaderRequiresFlags.Doubles))
+				if(flags.HasFlag(ShaderRequiresFlags.Doubles))
 				{
 					sb.AppendLine("//       Double-precision floating point");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.EarlyDepthStencil))
+				if(flags.HasFlag(ShaderRequiresFlags.EarlyDepthStencil))
 				{
 					sb.AppendLine("//       Early depth-stencil");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.Requires64Uavs))
+				if(flags.HasFlag(ShaderRequiresFlags.Requires64Uavs))
 				{
 					sb.AppendLine("//       64 UAV slots");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.MinimumPrecision))
+				if(flags.HasFlag(ShaderRequiresFlags.MinimumPrecision))
 				{
 					sb.AppendLine("//       Minimum-precision data types");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.DoubleExtensionsFor11Point1))
+				if(flags.HasFlag(ShaderRequiresFlags.DoubleExtensionsFor11Point1))
 				{
 					sb.AppendLine("//       Double-precision extensions for 11.1");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.ShaderExtensionsFor11Point1))
+				if(flags.HasFlag(ShaderRequiresFlags.ShaderExtensionsFor11Point1))
 				{
 					sb.AppendLine("//       Shader extensions for 11.1");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.Level9ComparisonFiltering))
+				if(flags.HasFlag(ShaderRequiresFlags.Level9ComparisonFiltering))
 				{
 					sb.AppendLine("//       Comparison filtering for feature level 9");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.TiledResources))
+				if(flags.HasFlag(ShaderRequiresFlags.TiledResources))
 				{
 					sb.AppendLine("//       Tiled resources");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.StencilRef))
+				if(flags.HasFlag(ShaderRequiresFlags.StencilRef))
 				{
 					sb.AppendLine("//       PS Output Stencil Ref");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.InnerCoverage))
+				if(flags.HasFlag(ShaderRequiresFlags.InnerCoverage))
 				{
 					sb.AppendLine("//       PS Inner Coverage");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.TypedUAVLoadAdditionalFormats))
+				if(flags.HasFlag(ShaderRequiresFlags.TypedUAVLoadAdditionalFormats))
 				{
 					sb.AppendLine("//       Typed UAV Load Additional Formats");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.Rovs))
+				if(flags.HasFlag(ShaderRequiresFlags.Rovs))
 				{
 					sb.AppendLine("//       Raster Ordered UAVs");
 				}
-				if (flags.HasFlag(ShaderRequiresFlags.SVArrayIndexFromFeedingRasterizer))
+				if(flags.HasFlag(ShaderRequiresFlags.SVArrayIndexFromFeedingRasterizer))
 				{
 					sb.AppendLine("//       SV_RenderTargetArrayIndex or SV_ViewportArrayIndex from any shader feeding rasterizer");
 				}
@@ -100,7 +100,7 @@ namespace DXDecompiler.Chunks.Sfi0
 		public static ShaderRequiresFlags GlobalFlagsToRequireFlags(GlobalFlags flags)
 		{
 			ShaderRequiresFlags result = ShaderRequiresFlags.None;
-			if (flags.HasFlag(GlobalFlags.ForceEarlyDepthStencilTest))
+			if(flags.HasFlag(GlobalFlags.ForceEarlyDepthStencilTest))
 			{
 				result |= ShaderRequiresFlags.EarlyDepthStencil;
 			}
@@ -113,7 +113,7 @@ namespace DXDecompiler.Chunks.Sfi0
 		}
 		public override string ToString()
 		{
-			if (_version.MajorVersion >= 5)
+			if(_version.MajorVersion >= 5)
 			{
 				return RequireFlagsToString(Flags);
 			}

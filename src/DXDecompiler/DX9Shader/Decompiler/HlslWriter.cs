@@ -18,10 +18,11 @@ namespace DXDecompiler.DX9Shader
 		{
 			_shader = shader;
 			_doAstAnalysis = doAstAnalysis;
-			if (string.IsNullOrEmpty(entryPoint))
+			if(string.IsNullOrEmpty(entryPoint))
 			{
 				_entryPoint = $"{_shader.Type}Main";
-			} else
+			}
+			else
 			{
 				_entryPoint = entryPoint;
 			}
@@ -35,7 +36,7 @@ namespace DXDecompiler.DX9Shader
 		}
 		public static string Decompile(ShaderModel shaderModel, string entryPoint = null)
 		{
-			if (shaderModel.Type == ShaderType.Effect)
+			if(shaderModel.Type == ShaderType.Effect)
 			{
 				return EffectHLSLWriter.Decompile(shaderModel.EffectChunk);
 			}
@@ -55,7 +56,7 @@ namespace DXDecompiler.DX9Shader
 
 		private static string GetConstantTypeName(ConstantType type)
 		{
-			switch (type.ParameterClass)
+			switch(type.ParameterClass)
 			{
 				case ParameterClass.Scalar:
 					return type.ParameterType.GetDescription();
@@ -68,7 +69,7 @@ namespace DXDecompiler.DX9Shader
 				case ParameterClass.MatrixRows:
 					return $"row_major {type.ParameterType.GetDescription()}{type.Rows}x{type.Columns}";
 				case ParameterClass.Object:
-					switch (type.ParameterType)
+					switch(type.ParameterType)
 					{
 						case ParameterType.Sampler1D:
 						case ParameterType.Sampler2D:
@@ -87,7 +88,7 @@ namespace DXDecompiler.DX9Shader
 			WriteIndent();
 			WriteLine($"// {instruction}");
 			WriteIndent();
-			switch (instruction.Opcode)
+			switch(instruction.Opcode)
 			{
 				case Opcode.Abs:
 					WriteLine("{0} = abs({1});", GetDestinationName(instruction),
@@ -134,7 +135,7 @@ namespace DXDecompiler.DX9Shader
 					Indent++;
 					break;
 				case Opcode.IfC:
-					if ((IfComparison)instruction.Modifier == IfComparison.GE &&
+					if((IfComparison)instruction.Modifier == IfComparison.GE &&
 						instruction.GetSourceModifier(0) == SourceModifier.AbsAndNegate &&
 						instruction.GetSourceModifier(1) == SourceModifier.Abs &&
 						instruction.GetParamRegisterName(0) + instruction.GetSourceSwizzleName(0) ==
@@ -142,7 +143,7 @@ namespace DXDecompiler.DX9Shader
 					{
 						WriteLine("if ({0} == 0) {{", instruction.GetParamRegisterName(0) + instruction.GetSourceSwizzleName(0));
 					}
-					else if ((IfComparison)instruction.Modifier == IfComparison.LT &&
+					else if((IfComparison)instruction.Modifier == IfComparison.LT &&
 						instruction.GetSourceModifier(0) == SourceModifier.AbsAndNegate &&
 						instruction.GetSourceModifier(1) == SourceModifier.Abs &&
 						instruction.GetParamRegisterName(0) + instruction.GetSourceSwizzleName(0) ==
@@ -153,7 +154,7 @@ namespace DXDecompiler.DX9Shader
 					else
 					{
 						string ifComparison;
-						switch ((IfComparison)instruction.Modifier)
+						switch((IfComparison)instruction.Modifier)
 						{
 							case IfComparison.GT:
 								ifComparison = ">";
@@ -223,7 +224,7 @@ namespace DXDecompiler.DX9Shader
 					WriteLine("{0} = 1 / sqrt({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
 					break;
 				case Opcode.Sge:
-					if (instruction.GetSourceModifier(1) == SourceModifier.AbsAndNegate &&
+					if(instruction.GetSourceModifier(1) == SourceModifier.AbsAndNegate &&
 						instruction.GetSourceModifier(2) == SourceModifier.Abs &&
 						instruction.GetParamRegisterName(1) + instruction.GetSourceSwizzleName(1) ==
 						instruction.GetParamRegisterName(2) + instruction.GetSourceSwizzleName(2))
@@ -249,7 +250,7 @@ namespace DXDecompiler.DX9Shader
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Tex:
-					if ((_shader.MajorVersion == 1 && _shader.MinorVersion >= 4) || (_shader.MajorVersion > 1))
+					if((_shader.MajorVersion == 1 && _shader.MinorVersion >= 4) || (_shader.MajorVersion > 1))
 					{
 						WriteLine("{0} = tex2D({2}, {1});", GetDestinationName(instruction),
 							GetSourceName(instruction, 1), GetSourceName(instruction, 2));
@@ -288,7 +289,7 @@ namespace DXDecompiler.DX9Shader
 						{
 
 							var registerKey = new RegisterKey(dest.RegisterType, (int)dest.RegisterNumber);
-							if (!tempRegisters.ContainsKey(registerKey))
+							if(!tempRegisters.ContainsKey(registerKey))
 							{
 								var reg = new RegisterDeclaration(registerKey);
 								_registers._registerDeclarations[registerKey] = reg;
@@ -302,13 +303,13 @@ namespace DXDecompiler.DX9Shader
 					}
 				}
 			}
-			if (tempRegisters.Count == 0) return;
+			if(tempRegisters.Count == 0) return;
 			foreach(IGrouping<int, RegisterKey> group in tempRegisters.GroupBy(
 				kv => kv.Value,
 				kv => kv.Key))
 			{
 				int writeMask = group.Key;
-				string writeMaskName; switch (writeMask)
+				string writeMaskName; switch(writeMask)
 				{
 					case 0x1:
 						writeMaskName = "float";
@@ -330,12 +331,12 @@ namespace DXDecompiler.DX9Shader
 				}
 				WriteLine("{0} {1};", writeMaskName, string.Join(", ", group));
 			}
-			
+
 
 		}
 		protected override void Write()
 		{
-			if (_shader.Type == ShaderType.Expression)
+			if(_shader.Type == ShaderType.Expression)
 			{
 				Write($"// Writing expression");
 				WriteExpression(_shader);
@@ -345,16 +346,16 @@ namespace DXDecompiler.DX9Shader
 
 			WriteConstantDeclarations();
 
-			if (_shader.Preshader != null)
+			if(_shader.Preshader != null)
 			{
 				WriteExpression(_shader.Preshader.Shader);
 			}
-			if (_registers.MethodInputRegisters.Count > 1)
+			if(_registers.MethodInputRegisters.Count > 1)
 			{
 				WriteInputStructureDeclaration();
 			}
 
-			if (_registers.MethodOutputRegisters.Count > 1)
+			if(_registers.MethodOutputRegisters.Count > 1)
 			{
 				WriteOutputStructureDeclaration();
 			}
@@ -362,27 +363,28 @@ namespace DXDecompiler.DX9Shader
 			string methodReturnType = GetMethodReturnType();
 			string methodParameters = GetMethodParameters();
 			string methodSemantic = GetMethodSemantic();
-			WriteLine("{0} {1}({2}){3}", 
-				methodReturnType, 
-				_entryPoint, 
+			WriteLine("{0} {1}({2}){3}",
+				methodReturnType,
+				_entryPoint,
 				methodParameters,
 				methodSemantic);
 			WriteLine("{");
 			Indent++;
 
-			if (_registers.MethodOutputRegisters.Count > 1)
+			if(_registers.MethodOutputRegisters.Count > 1)
 			{
 				var outputStructType = _shader.Type == ShaderType.Pixel ? "PS_OUT" : "VS_OUT";
 				WriteIndent();
 				WriteLine($"{outputStructType} o;");
-			} else
+			}
+			else
 			{
 				var output = _registers.MethodOutputRegisters.First().Value;
 				WriteLine("{0} {1};", methodReturnType, _registers.GetRegisterName(output.RegisterKey));
 			}
 			WriteTemps();
 			HlslAst ast = null;
-			if (_doAstAnalysis)
+			if(_doAstAnalysis)
 			{
 				var parser = new BytecodeParser();
 				ast = parser.Parse(_shader);
@@ -394,7 +396,7 @@ namespace DXDecompiler.DX9Shader
 			{
 				WriteInstructionList();
 
-				if (_registers.MethodOutputRegisters.Count > 1)
+				if(_registers.MethodOutputRegisters.Count > 1)
 				{
 					WriteLine($"return o;");
 				}
@@ -403,7 +405,7 @@ namespace DXDecompiler.DX9Shader
 					var output = _registers.MethodOutputRegisters.First().Value;
 					WriteLine($"return {_registers.GetRegisterName(output.RegisterKey)};");
 				}
-				
+
 			}
 			Indent--;
 			WriteLine("}");
@@ -411,9 +413,9 @@ namespace DXDecompiler.DX9Shader
 
 		private void WriteConstantDeclarations()
 		{
-			if (_registers.ConstantDeclarations.Count != 0)
+			if(_registers.ConstantDeclarations.Count != 0)
 			{
-				foreach (ConstantDeclaration declaration in _registers.ConstantDeclarations)
+				foreach(ConstantDeclaration declaration in _registers.ConstantDeclarations)
 				{
 					Write(declaration);
 				}
@@ -422,7 +424,7 @@ namespace DXDecompiler.DX9Shader
 		private void Write(ConstantDeclaration declaration)
 		{
 			Write(declaration.Type, declaration.Name);
-			if (!declaration.DefaultValue.All(v => v == 0))
+			if(!declaration.DefaultValue.All(v => v == 0))
 			{
 				Write(" = {{ {0} }}", string.Join(", ", declaration.DefaultValue));
 			}
@@ -434,12 +436,12 @@ namespace DXDecompiler.DX9Shader
 			string typeName = GetConstantTypeName(type);
 			WriteIndent();
 			Write("{0}", typeName);
-			if (type.ParameterClass == ParameterClass.Struct)
+			if(type.ParameterClass == ParameterClass.Struct)
 			{
 				WriteLine("");
 				WriteLine("{");
 				Indent++;
-				foreach (var member in type.Members)
+				foreach(var member in type.Members)
 				{
 					Write(member.Type, member.Name, true);
 				}
@@ -448,11 +450,11 @@ namespace DXDecompiler.DX9Shader
 				Write("}");
 			}
 			Write(" {0}", name);
-			if (type.Elements > 1)
+			if(type.Elements > 1)
 			{
 				Write("[{0}]", type.Elements);
 			}
-			if (isStructMember)
+			if(isStructMember)
 			{
 				Write(";\n");
 			}
@@ -463,7 +465,7 @@ namespace DXDecompiler.DX9Shader
 			WriteLine($"struct {inputStructType}");
 			WriteLine("{");
 			Indent++;
-			foreach (var input in _registers.MethodInputRegisters.Values)
+			foreach(var input in _registers.MethodInputRegisters.Values)
 			{
 				WriteLine($"{input.TypeName} {input.Name} : {input.Semantic};");
 			}
@@ -478,7 +480,7 @@ namespace DXDecompiler.DX9Shader
 			WriteLine($"struct {outputStructType}");
 			WriteLine("{");
 			Indent++;
-			foreach (var output in _registers.MethodOutputRegisters.Values)
+			foreach(var output in _registers.MethodOutputRegisters.Values)
 			{
 				WriteLine($"// {output.RegisterKey} {Operand.GetParamRegisterName(output.RegisterKey.Type, output.RegisterKey.Number)}");
 				WriteLine($"{output.TypeName} {output.Name} : {output.Semantic};");
@@ -490,7 +492,7 @@ namespace DXDecompiler.DX9Shader
 
 		private string GetMethodReturnType()
 		{
-			switch (_registers.MethodOutputRegisters.Count)
+			switch(_registers.MethodOutputRegisters.Count)
 			{
 				case 0:
 					throw new InvalidOperationException();
@@ -503,7 +505,7 @@ namespace DXDecompiler.DX9Shader
 
 		private string GetMethodSemantic()
 		{
-			switch (_registers.MethodOutputRegisters.Count)
+			switch(_registers.MethodOutputRegisters.Count)
 			{
 				case 0:
 					throw new InvalidOperationException();
@@ -517,11 +519,11 @@ namespace DXDecompiler.DX9Shader
 
 		private string GetMethodParameters()
 		{
-			if (_registers.MethodInputRegisters.Count == 0)
+			if(_registers.MethodInputRegisters.Count == 0)
 			{
 				return string.Empty;
 			}
-			else if (_registers.MethodInputRegisters.Count == 1)
+			else if(_registers.MethodInputRegisters.Count == 1)
 			{
 				var input = _registers.MethodInputRegisters.Values.First();
 				return $"{input.TypeName} {input.Name} : {input.Semantic}";
@@ -537,7 +539,7 @@ namespace DXDecompiler.DX9Shader
 			var compiler = new NodeCompiler(_registers);
 
 			var rootGroups = ast.Roots.GroupBy(r => r.Key.RegisterKey);
-			if (_registers.MethodOutputRegisters.Count == 1)
+			if(_registers.MethodOutputRegisters.Count == 1)
 			{
 				var rootGroup = rootGroups.Single();
 				var registerKey = rootGroup.Key;
@@ -548,7 +550,7 @@ namespace DXDecompiler.DX9Shader
 			}
 			else
 			{
-				foreach (var rootGroup in rootGroups)
+				foreach(var rootGroup in rootGroups)
 				{
 					var registerKey = rootGroup.Key;
 					var roots = rootGroup.OrderBy(r => r.Key.ComponentIndex).Select(r => r.Value).ToList();
@@ -566,7 +568,7 @@ namespace DXDecompiler.DX9Shader
 		private void WriteInstructionList()
 		{
 
-			foreach (Token instruction in _shader.Tokens)
+			foreach(Token instruction in _shader.Tokens)
 			{
 				WriteInstruction(instruction);
 			}
@@ -581,7 +583,7 @@ namespace DXDecompiler.DX9Shader
 			{
 				WriteLine($"// {token.ToString(shader.ConstantTable, shader.Cli)}");
 			}
-			if (shader.Prsi != null)
+			if(shader.Prsi != null)
 			{
 				WriteLine(shader.Prsi.Dump());
 			}

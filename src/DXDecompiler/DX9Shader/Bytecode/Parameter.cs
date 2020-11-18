@@ -9,7 +9,8 @@ namespace DXDecompiler.DX9Shader
 		{
 			p = data;
 		}
-		RegisterType RegisterType  {
+		RegisterType RegisterType
+		{
 			get
 			{
 				return (RegisterType)(((p >> 28) & 0x7) | ((p >> 8) & 0x18));
@@ -53,12 +54,12 @@ namespace DXDecompiler.DX9Shader
 
 		public int DestinationMaskedLength
 		{
-			get 
+			get
 			{
 				int writeMask = (int)DestinationWriteMask;
-				for (int i = 3; i != 0; i--)
+				for(int i = 3; i != 0; i--)
 				{
-					if ((writeMask & (1 << i)) != 0)
+					if((writeMask & (1 << i)) != 0)
 					{
 						return i + 1;
 					}
@@ -72,9 +73,9 @@ namespace DXDecompiler.DX9Shader
 			{
 				int writeMask = (int)DestinationWriteMask;
 				int length = 0;
-				for (int i = 0; i < 4; i++)
+				for(int i = 0; i < 4; i++)
 				{
-					if ((writeMask & (1 << i)) != 0)
+					if((writeMask & (1 << i)) != 0)
 					{
 						length++;
 					}
@@ -95,7 +96,7 @@ namespace DXDecompiler.DX9Shader
 			{
 				int swizzle = SourceSwizzle;
 				byte[] swizzleArray = new byte[4];
-				for (int i = 0; i < 4; i++)
+				for(int i = 0; i < 4; i++)
 				{
 					swizzleArray[i] = (byte)((swizzle >> (i * 2)) & 0x3);
 				}
@@ -140,7 +141,7 @@ namespace DXDecompiler.DX9Shader
 				int writeMaskLength = DestinationMaskLength;
 
 				// Check if mask is the same length and of the form .xyzw
-				if (writeMaskLength == destinationLength && writeMask == (ComponentFlags)((1 << writeMaskLength) - 1))
+				if(writeMaskLength == destinationLength && writeMask == (ComponentFlags)((1 << writeMaskLength) - 1))
 				{
 					return "";
 				}
@@ -162,9 +163,9 @@ namespace DXDecompiler.DX9Shader
 
 				string swizzleName = "";
 				byte[] swizzle = SourceSwizzleComponents;
-				for (int i = 0; i < swizzleLength; i++)
+				for(int i = 0; i < swizzleLength; i++)
 				{
-					switch (swizzle[i])
+					switch(swizzle[i])
 					{
 						case 0:
 							swizzleName += "x";
@@ -180,7 +181,7 @@ namespace DXDecompiler.DX9Shader
 							break;
 					}
 				}
-				switch (swizzleName)
+				switch(swizzleName)
 				{
 					case "xxx":
 						return ".x";

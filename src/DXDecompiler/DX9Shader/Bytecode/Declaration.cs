@@ -92,11 +92,11 @@ namespace DXDecompiler.DX9Shader
 		public RegisterDeclaration(RegisterKey registerKey)
 		{
 			RegisterType type = registerKey.Type;
-			if (type != RegisterType.ColorOut &&
+			if(type != RegisterType.ColorOut &&
 				type != RegisterType.Const &&
 				type != RegisterType.Temp &&
 				type != RegisterType.RastOut &&
-				type != RegisterType.ConstInt && 
+				type != RegisterType.ConstInt &&
 				type != RegisterType.Addr &&
 				type != RegisterType.Output &&
 				type != RegisterType.AttrOut &&
@@ -106,7 +106,7 @@ namespace DXDecompiler.DX9Shader
 			}
 
 			RegisterKey = registerKey;
-			switch (registerKey.Number)
+			switch(registerKey.Number)
 			{
 				case 0:
 					Semantic = "COLOR";
@@ -126,7 +126,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			get
 			{
-				switch (_maskedLength)
+				switch(_maskedLength)
 				{
 					case 1:
 						return "float";

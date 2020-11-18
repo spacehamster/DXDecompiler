@@ -5,7 +5,7 @@
 		public static string GetParamRegisterName(RegisterType registerType, int registerNumber)
 		{
 			string registerTypeName;
-			switch (registerType)
+			switch(registerType)
 			{
 				case RegisterType.Addr:
 					registerTypeName = "a";
@@ -57,11 +57,11 @@
 					registerTypeName = "oD";
 					break;
 				case RegisterType.MiscType:
-					if (registerNumber == 0)
+					if(registerNumber == 0)
 					{
 						return "vFace";
 					}
-					else if (registerNumber == 1)
+					else if(registerNumber == 1)
 					{
 						return "vPos";
 					}

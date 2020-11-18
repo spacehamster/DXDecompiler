@@ -18,11 +18,12 @@ namespace DXDecompiler.DebugParser.FX9
 			var header = blobReader.PeakUint32();
 			var shaderType = (ShaderType)(header >> 16);
 			var paddedSize = result.Size + (result.Size % 4 == 0 ? 0 : 4 - result.Size % 4);
-			if (shaderType == ShaderType.Pixel || shaderType == ShaderType.Vertex || shaderType == ShaderType.Expression)
+			if(shaderType == ShaderType.Pixel || shaderType == ShaderType.Vertex || shaderType == ShaderType.Expression)
 			{
 				var shaderReader = blobReader.CopyAtCurrentPosition("ShaderReader", blobReader);
 				result.Shader = DebugShaderModel.Parse(shaderReader);
-			} else if(result.Size > 0)
+			}
+			else if(result.Size > 0)
 			{
 				blobReader.ReadBytes("Value", (int)paddedSize);
 			}

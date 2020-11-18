@@ -6,7 +6,7 @@ namespace DXDecompiler.DX9Shader
 	{
 		public static int Make(string id)
 		{
-			if (BitConverter.IsLittleEndian)
+			if(BitConverter.IsLittleEndian)
 			{
 				return (id[0]) + (id[1] << 8) + (id[2] << 16) + (id[3] << 24);
 			}

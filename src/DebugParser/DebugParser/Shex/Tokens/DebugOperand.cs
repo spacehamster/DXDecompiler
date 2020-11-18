@@ -37,14 +37,14 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 		public static DebugOperand Parse(DebugBytecodeReader reader, OpcodeType parentType)
 		{
 			uint token0 = reader.ReadUInt32("operandToken");
-			if (token0 == 0)
+			if(token0 == 0)
 				return null;
 			var member = reader.Members.Last();
 			var operand = new DebugOperand(parentType);
 
 			var numComponents = token0.DecodeValue<OperandNumComponents>(0, 1);
 			reader.AddNote("numComponents", numComponents);
-			switch (numComponents)
+			switch(numComponents)
 			{
 				case OperandNumComponents.Zero:
 					{
@@ -61,7 +61,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 						operand.NumComponents = 4;
 						operand.SelectionMode = token0.DecodeValue<Operand4ComponentSelectionMode>(2, 3);
 						member.AddNote("SelectionMode", operand.SelectionMode);
-						switch (operand.SelectionMode)
+						switch(operand.SelectionMode)
 						{
 							case Operand4ComponentSelectionMode.Mask:
 								{
@@ -114,20 +114,20 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 
 			operand.IsExtended = token0.DecodeValue(31, 31) == 1;
 			member.AddNote("IsExtended", operand.IsExtended);
-			if (operand.IsExtended)
+			if(operand.IsExtended)
 				ReadExtendedOperand(operand, reader);
 
 			Func<uint, byte, OperandIndexRepresentation> indexRepresentationDecoder = (t, i) =>
 				(OperandIndexRepresentation)t.DecodeValue((byte)(22 + (i * 3)), (byte)(22 + (i * 3) + 2));
 
-			for (byte i = 0; i < (byte)operand.IndexDimension; i++)
+			for(byte i = 0; i < (byte)operand.IndexDimension; i++)
 			{
 				operand.Indices[i] = new DebugOperandIndex();
 
 				var indexRepresentation = indexRepresentationDecoder(token0, i);
 				operand.Indices[i].Representation = indexRepresentation;
 				member.AddNote($"Indices[{i}].Representation", operand.Indices[i].Representation);
-				switch (indexRepresentation)
+				switch(indexRepresentation)
 				{
 					case OperandIndexRepresentation.Immediate32:
 						operand.Indices[i].Value = reader.ReadUInt32($"Indices[{i}].Value");
@@ -150,12 +150,12 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 			}
 
 			var numberType = parentType.GetNumberType();
-			switch (operand.OperandType)
+			switch(operand.OperandType)
 			{
 				case OperandType.Immediate32:
 					{
 						var immediateValues = new DebugNumber4();
-						for (var i = 0; i < operand.NumComponents; i++)
+						for(var i = 0; i < operand.NumComponents; i++)
 							immediateValues.SetNumber(i, DebugNumber.Parse(reader));
 						operand.ImmediateValues = immediateValues;
 						break;
@@ -163,7 +163,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 				case OperandType.Immediate64:
 					{
 						var immediateValues = new DebugNumber4();
-						for (var i = 0; i < operand.NumComponents; i++)
+						for(var i = 0; i < operand.NumComponents; i++)
 							immediateValues.SetDouble(i, reader.ReadDouble($"ImmediateValues[{i}]"));
 						operand.ImmediateValues = immediateValues;
 						break;
@@ -177,7 +177,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 			uint token1 = reader.ReadUInt32("token1");
 			var type = token1.DecodeValue<ExtendedOperandType>(0, 5);
 			reader.AddNote("type", type);
-			switch (type)
+			switch(type)
 			{
 				case ExtendedOperandType.Modifier:
 					operand.Modifier = token1.DecodeValue<OperandModifier>(6, 13);

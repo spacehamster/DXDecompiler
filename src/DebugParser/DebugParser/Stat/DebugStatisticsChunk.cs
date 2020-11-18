@@ -86,7 +86,7 @@ namespace DXDecompiler.DebugParser.Stat
 			result.IsSampleFrequencyShader = (reader.ReadUInt32("IsSampleFrequencyShader") == 1);
 
 			// DX10 stat size
-			if (size == 29)
+			if(size == 29)
 				return result;
 
 			result.GeometryShaderInstanceCount = reader.ReadUInt32("GeometryShaderInstanceCount");
@@ -100,7 +100,7 @@ namespace DXDecompiler.DebugParser.Stat
 			result.TextureStoreInstructions = reader.ReadUInt32("TextureStoreInstructions");
 
 			// DX11 stat size.
-			if (size == 37)
+			if(size == 37)
 				return result;
 
 			throw new ParseException("Unhandled stat size: " + chunkSize);

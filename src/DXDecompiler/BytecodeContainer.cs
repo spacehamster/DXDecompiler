@@ -66,7 +66,7 @@ namespace DXDecompiler
 
 		public T GetChunk<T>()
 		{
-			 return Chunks.OfType<T>().SingleOrDefault();
+			return Chunks.OfType<T>().SingleOrDefault();
 		}
 
 		public StatisticsChunk Statistics
@@ -87,8 +87,8 @@ namespace DXDecompiler
 
 		public ShaderVersion Version
 		{
-			get 
-			{ 
+			get
+			{
 				if(ResourceDefinition != null)
 				{
 					return ResourceDefinition.Target;
@@ -115,13 +115,13 @@ namespace DXDecompiler
 			}
 			Header = BytecodeContainerHeader.Parse(reader);
 
-			for (uint i = 0; i < Header.ChunkCount; i++)
+			for(uint i = 0; i < Header.ChunkCount; i++)
 			{
 				uint chunkOffset = reader.ReadUInt32();
 				var chunkReader = reader.CopyAtOffset((int)chunkOffset);
 
 				var chunk = BytecodeChunk.ParseChunk(chunkReader, this);
-				if (chunk != null)
+				if(chunk != null)
 					Chunks.Add(chunk);
 			}
 		}
@@ -139,9 +139,9 @@ namespace DXDecompiler
 			var libHeader = Chunks.OfType<LibHeaderChunk>().Single();
 			sb.Append(libHeader.ToString());
 			sb.AppendLine("//");
-			if (Chunks.OfType<LibfChunk>().Any())
+			if(Chunks.OfType<LibfChunk>().Any())
 			{
-				foreach (var chunk in Chunks.OfType<LibfChunk>())
+				foreach(var chunk in Chunks.OfType<LibfChunk>())
 				{
 					sb.Append(chunk.ToString());
 				}
@@ -150,14 +150,15 @@ namespace DXDecompiler
 		public override string ToString()
 		{
 			var sb = new StringBuilder();
-			if (Chunks.OfType<LibfChunk>().Any())
+			if(Chunks.OfType<LibfChunk>().Any())
 			{
 				WriteLibShader(sb);
 				return sb.ToString();
 			}
-			if (Chunks.OfType<EffectChunk>().Any())
+			if(Chunks.OfType<EffectChunk>().Any())
 			{
-				foreach (var chunk in Chunks.OfType<EffectChunk>()) {
+				foreach(var chunk in Chunks.OfType<EffectChunk>())
+				{
 					sb.AppendLine(chunk.ToString());
 				}
 				foreach(var chunk in Chunks.Where(c => !(c is EffectChunk)))
@@ -171,33 +172,34 @@ namespace DXDecompiler
 			sb.AppendLine("//");
 			sb.AppendLine("//");
 
-			if (Shader.Tokens.Any(x => x.Header.OpcodeType == OpcodeType.Abort)) // TODO
+			if(Shader.Tokens.Any(x => x.Header.OpcodeType == OpcodeType.Abort)) // TODO
 			{
 				sb.AppendLine("// Note: SHADER WILL ONLY WORK WITH THE DEBUG SDK LAYER ENABLED.");
 				sb.AppendLine("//");
 				sb.AppendLine("//");
 			}
 
-			if (Sfi0 != null)
+			if(Sfi0 != null)
 			{
 				sb.Append(Sfi0);
-			} else if(Version.MajorVersion >= 5)
+			}
+			else if(Version.MajorVersion >= 5)
 			{
 				var globalFlagsDcl = Shader.DeclarationTokens
 					.OfType<GlobalFlagsDeclarationToken>()
 					.FirstOrDefault();
-				if (globalFlagsDcl != null)
+				if(globalFlagsDcl != null)
 				{
 					sb.Append(Sfi0Chunk.GlobalFlagsToString(globalFlagsDcl?.Flags ?? 0));
 				}
 			}
 
-			if (ResourceDefinition != null)
+			if(ResourceDefinition != null)
 				sb.Append(ResourceDefinition);
 
 			sb.AppendLine(@"//");
 
-			if (PatchConstantSignature != null)
+			if(PatchConstantSignature != null)
 			{
 				sb.Append(PatchConstantSignature);
 				sb.AppendLine(@"//");
@@ -216,7 +218,7 @@ namespace DXDecompiler
 
 			sb.Append(Statistics);
 
-			if (Interfaces != null)
+			if(Interfaces != null)
 				sb.Append(Interfaces);
 
 			foreach(var dx9Shader in Chunks
@@ -227,10 +229,10 @@ namespace DXDecompiler
 				sb.Append(dx9Shader);
 			}
 
-			if (Shader != null)
+			if(Shader != null)
 				sb.Append(Shader);
 
-			if (Statistics != null)
+			if(Statistics != null)
 			{
 				sb.AppendFormat("// Approximately {0} instruction slots used", Statistics.InstructionCount);
 				sb.AppendLine();

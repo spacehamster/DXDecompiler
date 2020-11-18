@@ -92,7 +92,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				Operand = Operand.Parse(reader, token0.DecodeValue<OpcodeType>(0, 10)),
 				ByteStride = reader.ReadUInt32()
 			};
-			if (version.IsSM51)
+			if(version.IsSM51)
 			{
 				result.SpaceIndex = reader.ReadUInt32();
 			}
@@ -101,12 +101,12 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 
 		public override string ToString()
 		{
-			return string.Format("{0}{1}{2}{3} {4}, {5}{6}", 
+			return string.Format("{0}{1}{2}{3} {4}, {5}{6}",
 				TypeDescription,
 				Coherency.GetDescription(),
 				HasOrderPreservingCounter ? "_opc" : "",
 				GetRasterOrderedAccessDescription(),
-				Operand, 
+				Operand,
 				ByteStride,
 				IsSM51 ? $", space={SpaceIndex}" : "");
 		}

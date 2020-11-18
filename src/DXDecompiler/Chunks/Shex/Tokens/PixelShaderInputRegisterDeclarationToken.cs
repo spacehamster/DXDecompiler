@@ -66,12 +66,12 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 		{
 			//TODO: InterpolationMode
 			string result = string.Format("{0} {1}{2}", TypeDescription,
-				(InterpolationMode != InterpolationMode.Constant || Header.OpcodeType == OpcodeType.DclInputPsSiv || Header.OpcodeType == OpcodeType.DclInputPsSgv || true) 
+				(InterpolationMode != InterpolationMode.Constant || Header.OpcodeType == OpcodeType.DclInputPsSiv || Header.OpcodeType == OpcodeType.DclInputPsSgv || true)
 					? InterpolationMode.GetDescription() + " "
 					: string.Empty,
 				Operand);
 
-			if (Header.OpcodeType == OpcodeType.DclInputPsSgv || Header.OpcodeType == OpcodeType.DclInputPsSiv)
+			if(Header.OpcodeType == OpcodeType.DclInputPsSgv || Header.OpcodeType == OpcodeType.DclInputPsSiv)
 				result += ", " + SystemValueName.GetDescription();
 
 			return result;

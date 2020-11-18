@@ -12,13 +12,13 @@ namespace DXDecompiler.DX9Shader
 			//TODO: Why?
 			Debug.Assert(!instruction.Predicated, "Instruction must not be predicated");
 
-			switch (instruction.Opcode)
+			switch(instruction.Opcode)
 			{
 				case Opcode.Dcl:
 					// https://msdn.microsoft.com/en-us/library/windows/hardware/ff549176(v=vs.85).aspx
 					Debug.Assert(instruction.Data.Length == 2, "Dcl expected instruction length to be 2");
 					uint param0 = instruction.Data[0];
-					switch (instruction.GetParamRegisterType(1))
+					switch(instruction.GetParamRegisterType(1))
 					{
 						case RegisterType.Sampler:
 							Debug.Assert((param0 & 0x07FFFFFF) == 0, "Sampler param unexpected bits set");

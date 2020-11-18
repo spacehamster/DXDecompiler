@@ -25,7 +25,7 @@ namespace DXDecompiler.Chunks.Aon9
 			Unknown0Mappings = new List<Unknown1Mapping>();
 			SamplerMappings = new List<SamplerMapping>();
 			RuntimeConstantMappings = new List<RuntimeConstantMapping>();
-	}
+		}
 		internal static BytecodeChunk Parse(BytecodeReader chunkContentReader, uint chunkSize)
 		{
 			var result = new Level9ShaderChunk();
@@ -43,35 +43,35 @@ namespace DXDecompiler.Chunks.Aon9
 			var samplerMappingOffset = chunkContentReader.ReadUInt16();
 			var runtimeConstantMappingCount = chunkContentReader.ReadUInt16();
 			var runtimeConstantMappingOffset = chunkContentReader.ReadUInt16();
-			if (cbMappingCount > 0)
+			if(cbMappingCount > 0)
 			{
 				var mappingReader = chunkContentReader.CopyAtOffset(cbMappingOffset);
-				for (int i = 0; i < cbMappingCount; i++)
+				for(int i = 0; i < cbMappingCount; i++)
 				{
 					result.ConstantBufferMappings.Add(ConstantBufferMapping.Parse(mappingReader));
 				}
 			}
-			if (loopRegisterMappingCount > 0)
+			if(loopRegisterMappingCount > 0)
 			{
 				var mappingReader = chunkContentReader.CopyAtOffset(loopRegisterMappingOffset);
-				for (int i = 0; i < loopRegisterMappingCount; i++)
+				for(int i = 0; i < loopRegisterMappingCount; i++)
 				{
 					result.LoopRegisterMappings.Add(LoopRegisterMapping.Parse(mappingReader));
 				}
 			}
-			if (unk0MappingCount > 0)
+			if(unk0MappingCount > 0)
 			{
 				Debug.Assert(false, "Unknown Level9 Mapping");
 				var mappingReader = chunkContentReader.CopyAtOffset(unk0MappingOffset);
-				for (int i = 0; i < unk0MappingCount; i++)
+				for(int i = 0; i < unk0MappingCount; i++)
 				{
 					result.Unknown0Mappings.Add(Unknown1Mapping.Parse(mappingReader));
 				}
 			}
-			if (samplerMappingCount > 0)
+			if(samplerMappingCount > 0)
 			{
 				var mappingReader = chunkContentReader.CopyAtOffset(samplerMappingOffset);
-				for (int i = 0; i < samplerMappingCount; i++)
+				for(int i = 0; i < samplerMappingCount; i++)
 				{
 					result.SamplerMappings.Add(SamplerMapping.Parse(mappingReader));
 				}
@@ -80,10 +80,10 @@ namespace DXDecompiler.Chunks.Aon9
 					.OrderBy(s => s.TargetSampler)
 					.ToList();
 			}
-			if (runtimeConstantMappingCount > 0)
+			if(runtimeConstantMappingCount > 0)
 			{
 				var mappingReader = chunkContentReader.CopyAtOffset(runtimeConstantMappingOffset);
-				for (int i = 0; i < runtimeConstantMappingCount; i++)
+				for(int i = 0; i < runtimeConstantMappingCount; i++)
 				{
 					result.RuntimeConstantMappings.Add(RuntimeConstantMapping.Parse(mappingReader));
 				}
@@ -96,25 +96,25 @@ namespace DXDecompiler.Chunks.Aon9
 		public override string ToString()
 		{
 			var sb = new StringBuilder();
-			if (ConstantBufferMappings.Count > 0 || LoopRegisterMappings.Count > 0)
+			if(ConstantBufferMappings.Count > 0 || LoopRegisterMappings.Count > 0)
 			{
 				sb.AppendLine("// Constant buffer to DX9 shader constant mappings:");
 				sb.AppendLine("//");
-				if (LoopRegisterMappings.Count > 0)
+				if(LoopRegisterMappings.Count > 0)
 				{
 					sb.AppendLine("// Target Reg Buffer  Source Reg Component");
 					sb.AppendLine("// ---------- ------- ---------- ---------");
-					foreach (var mapping in LoopRegisterMappings)
+					foreach(var mapping in LoopRegisterMappings)
 					{
 						sb.AppendLine(mapping.ToString());
 					}
 					sb.AppendLine("//");
 				}
-				if (ConstantBufferMappings.Count > 0)
+				if(ConstantBufferMappings.Count > 0)
 				{
 					sb.AppendLine("// Target Reg Buffer  Start Reg # of Regs        Data Conversion");
 					sb.AppendLine("// ---------- ------- --------- --------- ----------------------");
-					foreach (var mapping in ConstantBufferMappings)
+					foreach(var mapping in ConstantBufferMappings)
 					{
 						sb.AppendLine(mapping.ToString());
 					}
@@ -122,18 +122,18 @@ namespace DXDecompiler.Chunks.Aon9
 				}
 				sb.AppendLine("//");
 			}
-			if (Unknown0Mappings.Count > 0)
+			if(Unknown0Mappings.Count > 0)
 			{
 				sb.AppendLine("// Unknown0Mappings:");
 				sb.AppendLine("//");
-				foreach (var mapping in Unknown0Mappings)
+				foreach(var mapping in Unknown0Mappings)
 				{
 					sb.AppendLine(mapping.ToString());
 				}
 				sb.AppendLine("//");
 				sb.AppendLine("//");
 			}
-			if (SamplerMappings.Count > 0)
+			if(SamplerMappings.Count > 0)
 			{
 				sb.AppendLine("// Sampler/Resource to DX9 shader sampler mappings:");
 				sb.AppendLine("//");
@@ -146,20 +146,20 @@ namespace DXDecompiler.Chunks.Aon9
 				sb.AppendLine("//");
 				sb.AppendLine("//");
 			}
-			if (RuntimeConstantMappings.Count > 0)
+			if(RuntimeConstantMappings.Count > 0)
 			{
 				sb.AppendLine("// Runtime generated constant mappings:");
 				sb.AppendLine("//");
 				sb.AppendLine("// Target Reg                               Constant Description");
 				sb.AppendLine("// ---------- --------------------------------------------------");
-				foreach (var mapping in RuntimeConstantMappings)
+				foreach(var mapping in RuntimeConstantMappings)
 				{
 					sb.AppendLine(mapping.ToString());
 				}
 				sb.AppendLine("//");
 				sb.AppendLine("//");
 			}
-			switch (ChunkType)
+			switch(ChunkType)
 			{
 				case ChunkType.Aon9:
 					sb.AppendLine($"// Level9 shader bytecode:");
@@ -175,7 +175,7 @@ namespace DXDecompiler.Chunks.Aon9
 					break;
 			}
 			sb.AppendLine($"//");
-			using (var stream = new MemoryStream())
+			using(var stream = new MemoryStream())
 			{
 				var decompiledAssmembly = DX9Shader.AsmWriter.Disassemble(ShaderModel);
 				decompiledAssmembly = decompiledAssmembly

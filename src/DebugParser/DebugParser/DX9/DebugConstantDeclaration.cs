@@ -29,12 +29,12 @@ namespace DXDecompiler.DebugParser.DX9
 			var typeReader = reader.CopyAtOffset("TypeReader", decReader, (int)typeInfoOffset);
 			result.Type = DebugConstantType.Parse(reader, typeReader);
 
-			if (defaultValueOffset != 0)
+			if(defaultValueOffset != 0)
 			{
 				//Note: thre are corrisponding def instructions. TODO: check that they are the same
 				var defaultValueReader = reader.CopyAtOffset("DefaultValueReader", decReader, (int)defaultValueOffset);
 				var elementCount = result.Type.GetSize() / 4;
-				for (int i = 0; i < elementCount; i++)
+				for(int i = 0; i < elementCount; i++)
 				{
 					result.DefaultValue.Add(defaultValueReader.ReadSingle($"DefaultValue {i}"));
 				}

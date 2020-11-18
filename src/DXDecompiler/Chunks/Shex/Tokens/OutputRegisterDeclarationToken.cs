@@ -77,7 +77,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			{
 				Operand = Operand.Parse(reader, opcodeType)
 			};
-			switch (opcodeType)
+			switch(opcodeType)
 			{
 				case OpcodeType.DclOutputSgv:
 				case OpcodeType.DclOutputSiv:
@@ -92,7 +92,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 		{
 			string result = string.Format("{0} {1}", TypeDescription, Operand);
 
-			if (Header.OpcodeType == OpcodeType.DclOutputSgv || Header.OpcodeType == OpcodeType.DclOutputSiv)
+			if(Header.OpcodeType == OpcodeType.DclOutputSgv || Header.OpcodeType == OpcodeType.DclOutputSiv)
 				result += ", " + SystemValueName.GetDescription();
 
 			return result;

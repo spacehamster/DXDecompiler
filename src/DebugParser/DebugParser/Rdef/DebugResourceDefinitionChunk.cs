@@ -24,7 +24,8 @@ namespace DXDecompiler.DebugParser.Rdef
 			if(version.MajorVersion == 5 && version.MinorVersion == 1)
 			{
 				return 40;
-			} else
+			}
+			else
 			{
 				return 32;
 			}
@@ -51,17 +52,17 @@ namespace DXDecompiler.DebugParser.Rdef
 				Creator = creator
 			};
 
-			if (target.MajorVersion == 5 || target.ProgramType == ProgramType.LibraryShader)
+			if(target.MajorVersion == 5 || target.ProgramType == ProgramType.LibraryShader)
 			{
 				var isVersion5_1 = target.MajorVersion == 5 && target.MinorVersion == 1;
-				if (isVersion5_1)
+				if(isVersion5_1)
 				{
 					var unknown0 = headerReader.ReadUInt32("unkRdefHeader");
 				}
 				else
 				{
 					string rd11 = headerReader.ReadUInt32("rd11").ToFourCcString();
-					if (rd11 != "RD11")
+					if(rd11 != "RD11")
 						throw new ParseException("Expected RD11.");
 				}
 
@@ -76,7 +77,7 @@ namespace DXDecompiler.DebugParser.Rdef
 
 				Debug.Assert(unkStride1 == 60, $"unkStride1 is {unkStride1}");
 				Debug.Assert(constantBufferStride == 24, $"constantBufferStride is {constantBufferStride}");
-				Debug.Assert(resourceBindingStride == CalculateResourceBindingStride(target), 
+				Debug.Assert(resourceBindingStride == CalculateResourceBindingStride(target),
 					$"resourceBindingStride is {resourceBindingStride}");
 				Debug.Assert(unkStride2 == 40, $"unkStride2 is {unkStride2}");
 				Debug.Assert(unkStride3 == 36, $"unkStride3 is {unkStride3}");
@@ -86,12 +87,12 @@ namespace DXDecompiler.DebugParser.Rdef
 			}
 
 			var resourceBindingReader = reader.CopyAtOffset("ResourceBindings", headerReader, (int)resourceBindingOffset);
-			for (int i = 0; i < resourceBindingCount; i++)
+			for(int i = 0; i < resourceBindingCount; i++)
 				result.ResourceBindings.Add(DebugResourceBinding.Parse(reader, resourceBindingReader, target));
 
 			var constantBufferReader = reader.CopyAtOffset("ContantBuffers", headerReader, (int)constantBufferOffset);
 			constantBufferReader.Indent++;
-			for (int i = 0; i < constantBufferCount; i++)
+			for(int i = 0; i < constantBufferCount; i++)
 				result.ConstantBuffers.Add(DebugConstantBuffer.Parse(reader, constantBufferReader, result.Target));
 
 			return result;

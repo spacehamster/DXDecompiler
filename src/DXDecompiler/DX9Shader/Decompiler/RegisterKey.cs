@@ -14,7 +14,7 @@
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is RegisterKey other))
+			if(!(obj is RegisterKey other))
 			{
 				return false;
 			}

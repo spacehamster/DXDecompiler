@@ -17,7 +17,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public static int GetNumSwizzleElementsWithMask(this Operand operand, ComponentMask mask)
 		{
-			switch (operand.OperandType)
+			switch(operand.OperandType)
 			{
 				case OperandType.InputThreadIDInGroupFlattened:
 					return 1;
@@ -37,74 +37,74 @@ namespace DXDecompiler.Decompiler
 					return compMask.GetNumberOfFlagsSet();
 			}
 			int count = 0;
-			if (operand.NumComponents != 1)
+			if(operand.NumComponents != 1)
 			{
-				if (operand.SelectionMode == Operand4ComponentSelectionMode.Mask)
+				if(operand.SelectionMode == Operand4ComponentSelectionMode.Mask)
 				{
 					var compMask = operand.ComponentMask & mask;
-					if (compMask == ComponentMask.All) return 4;
-					if (compMask.HasFlag(ComponentMask.X))
+					if(compMask == ComponentMask.All) return 4;
+					if(compMask.HasFlag(ComponentMask.X))
 					{
 						count++;
 					}
-					if (compMask.HasFlag(ComponentMask.Y))
+					if(compMask.HasFlag(ComponentMask.Y))
 					{
 						count++;
 					}
-					if (compMask.HasFlag(ComponentMask.Z))
+					if(compMask.HasFlag(ComponentMask.Z))
 					{
 						count++;
 					}
-					if (compMask.HasFlag(ComponentMask.W))
+					if(compMask.HasFlag(ComponentMask.W))
 					{
 						count++;
 					}
 				}
-				else if (operand.SelectionMode == Operand4ComponentSelectionMode.Swizzle)
+				else if(operand.SelectionMode == Operand4ComponentSelectionMode.Swizzle)
 				{
-					for (int i = 0; i < 4; i++)
+					for(int i = 0; i < 4; i++)
 					{
-						if (((int)mask & (1 << i)) == 0)
+						if(((int)mask & (1 << i)) == 0)
 							continue;
-						if (operand.Swizzles[0] == Operand4ComponentName.X)
+						if(operand.Swizzles[0] == Operand4ComponentName.X)
 						{
 							count++;
 						}
-						if (operand.Swizzles[0] == Operand4ComponentName.Y)
+						if(operand.Swizzles[0] == Operand4ComponentName.Y)
 						{
 							count++;
 						}
-						if (operand.Swizzles[0] == Operand4ComponentName.Z)
+						if(operand.Swizzles[0] == Operand4ComponentName.Z)
 						{
 							count++;
 						}
-						if (operand.Swizzles[0] == Operand4ComponentName.W)
+						if(operand.Swizzles[0] == Operand4ComponentName.W)
 						{
 							count++;
 						}
 					}
 				}
-				else if (operand.SelectionMode == Operand4ComponentSelectionMode.Select1)
+				else if(operand.SelectionMode == Operand4ComponentSelectionMode.Select1)
 				{
-					if (operand.Swizzles[0] == Operand4ComponentName.X && mask.HasFlag(ComponentMask.X))
+					if(operand.Swizzles[0] == Operand4ComponentName.X && mask.HasFlag(ComponentMask.X))
 					{
 						count++;
 					}
-					if (operand.Swizzles[0] == Operand4ComponentName.Y && mask.HasFlag(ComponentMask.Y))
+					if(operand.Swizzles[0] == Operand4ComponentName.Y && mask.HasFlag(ComponentMask.Y))
 					{
 						count++;
 					}
-					if (operand.Swizzles[0] == Operand4ComponentName.Z && mask.HasFlag(ComponentMask.Z))
+					if(operand.Swizzles[0] == Operand4ComponentName.Z && mask.HasFlag(ComponentMask.Z))
 					{
 						count++;
 					}
-					if (operand.Swizzles[0] == Operand4ComponentName.W && mask.HasFlag(ComponentMask.W))
+					if(operand.Swizzles[0] == Operand4ComponentName.W && mask.HasFlag(ComponentMask.W))
 					{
 						count++;
 					}
 				}
 			}
-			if (count == 0)
+			if(count == 0)
 			{
 				var compMask = (ComponentMask)((1 << operand.NumComponents) - 1);
 				compMask &= mask;
@@ -114,11 +114,11 @@ namespace DXDecompiler.Decompiler
 		}
 		public static ComponentMask GetUsedComponents(this Operand operand)
 		{
-			if (operand.ParentType == OpcodeType.DclConstantBuffer)
+			if(operand.ParentType == OpcodeType.DclConstantBuffer)
 			{
 				return ComponentMask.None;
 			}
-			switch (operand.SelectionMode)
+			switch(operand.SelectionMode)
 			{
 				case Operand4ComponentSelectionMode.Mask:
 					return operand.ComponentMask;
@@ -145,7 +145,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public static ComponentMask ToComponentMask(this Operand4ComponentName name)
 		{
-			switch (name)
+			switch(name)
 			{
 				case Operand4ComponentName.X:
 					return ComponentMask.X;
@@ -161,7 +161,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public static string GetStreamName(this PrimitiveTopology topology)
 		{
-			switch (topology)
+			switch(topology)
 			{
 				case PrimitiveTopology.PointList:
 					return "PointStream";
@@ -173,7 +173,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public static string GetAttributeName(this TessellatorDomain topology)
 		{
-			switch (topology)
+			switch(topology)
 			{
 				case TessellatorDomain.Isoline:
 					return "isoline";
@@ -187,7 +187,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public static bool IsStructured(this ShaderInputType shaderInputType)
 		{
-			switch (shaderInputType)
+			switch(shaderInputType)
 			{
 				case ShaderInputType.Structured:
 				case ShaderInputType.UavRwStructured:
@@ -201,7 +201,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public static bool IsUav(this ShaderInputType shaderInputType)
 		{
-			switch (shaderInputType)
+			switch(shaderInputType)
 			{
 				case ShaderInputType.UavRwTyped:
 				case ShaderInputType.UavRwStructured:
@@ -216,7 +216,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public static string GetTypeName(this MinPrecision minPrecision)
 		{
-			switch (minPrecision)
+			switch(minPrecision)
 			{
 				case MinPrecision.Min16f:
 					return "min16float";
@@ -235,17 +235,17 @@ namespace DXDecompiler.Decompiler
 		public static uint GetCBVarSize(this ShaderTypeMember member, bool wholeArraySize = false)
 		{
 			uint size;
-			if (member.Type.VariableClass == ShaderVariableClass.Struct)
+			if(member.Type.VariableClass == ShaderVariableClass.Struct)
 			{
 				size = member.Type.Members.Last().Offset + GetCBVarSize(member.Type.Members.Last(), true);
 			}
-			else if (member.Type.VariableClass == ShaderVariableClass.MatrixRows)
+			else if(member.Type.VariableClass == ShaderVariableClass.MatrixRows)
 			{
 				var columns = (uint)member.Type.Columns;
 				var rows = (uint)member.Type.Rows;
 				size = (rows - 1) * 16 + columns * 4;
 			}
-			else if (member.Type.VariableClass == ShaderVariableClass.MatrixColumns)
+			else if(member.Type.VariableClass == ShaderVariableClass.MatrixColumns)
 			{
 				var columns = (uint)member.Type.Columns;
 				var rows = (uint)member.Type.Rows;
@@ -255,7 +255,7 @@ namespace DXDecompiler.Decompiler
 			{
 				size = (uint)member.Type.Columns * (uint)member.Type.Rows * 4;
 			}
-			if (wholeArraySize && member.Type.ElementCount > 1)
+			if(wholeArraySize && member.Type.ElementCount > 1)
 			{
 				uint paddedSize = ((size + 15) / 16) * 16; // Arrays are padded to float4 size
 				size = ((uint)member.Type.ElementCount - 1) * paddedSize + size; // Except the last element
@@ -268,7 +268,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public static ConstantBufferType ToCBType(this ShaderInputType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case ShaderInputType.CBuffer:
 					return ConstantBufferType.ConstantBuffer;
@@ -280,7 +280,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public static string GetRegisterName(this RootParameterType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case RootParameterType._32BitConstants:
 				case RootParameterType.Cbv:
@@ -295,7 +295,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public static string GetRegisterName(this DescriptorRangeType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case DescriptorRangeType.Sampler:
 					return "s";

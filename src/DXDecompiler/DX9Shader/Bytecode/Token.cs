@@ -14,7 +14,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			get
 			{
-				switch (Opcode)
+				switch(Opcode)
 				{
 					case Opcode.Abs:
 					case Opcode.Add:
@@ -93,7 +93,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			get
 			{
-				switch (Opcode)
+				switch(Opcode)
 				{
 					case Opcode.Tex:
 					case Opcode.TexBem:
@@ -172,10 +172,10 @@ namespace DXDecompiler.DX9Shader
 			int registerNumber = GetParamRegisterNumber(index);
 
 			string registerTypeName;
-			switch (registerType)
+			switch(registerType)
 			{
 				case RegisterType.Addr:
-					if (_shaderModel.Type == ShaderType.Vertex)
+					if(_shaderModel.Type == ShaderType.Vertex)
 					{
 						registerTypeName = "a";
 					}
@@ -209,7 +209,7 @@ namespace DXDecompiler.DX9Shader
 					registerTypeName = "v";
 					break;
 				case RegisterType.Output:
-					if (_shaderModel.MajorVersion >= 3)
+					if(_shaderModel.MajorVersion >= 3)
 					{
 						registerTypeName = "o";
 					}
@@ -222,7 +222,7 @@ namespace DXDecompiler.DX9Shader
 					{
 						//Unsure about this one
 						var usage = GetDeclUsage();
-						if (usage == DeclUsage.Position)
+						if(usage == DeclUsage.Position)
 						{
 							return "oPos";
 						}
@@ -247,11 +247,11 @@ namespace DXDecompiler.DX9Shader
 					registerTypeName = "oD";
 					break;
 				case RegisterType.MiscType:
-					if (registerNumber == 0)
+					if(registerNumber == 0)
 					{
 						return "vFace";
 					}
-					else if (registerNumber == 1)
+					else if(registerNumber == 1)
 					{
 						return "vPos";
 					}
@@ -270,7 +270,7 @@ namespace DXDecompiler.DX9Shader
 
 		public int GetDestinationParamIndex()
 		{
-			if (Opcode == Opcode.Dcl) return 1;
+			if(Opcode == Opcode.Dcl) return 1;
 			return 0;
 		}
 
@@ -291,7 +291,7 @@ namespace DXDecompiler.DX9Shader
 			ComponentFlags writeMask = GetDestinationWriteMask();
 			var writeMaskLength = GetDestinationMaskLength();
 
-			if (!hlsl)
+			if(!hlsl)
 			{
 				destinationLength = 4; // explicit mask in assembly
 			}
@@ -300,7 +300,7 @@ namespace DXDecompiler.DX9Shader
 				return "";
 			}
 			// Check if mask is the same length and of the form .xyzw
-			if (writeMaskLength == destinationLength && writeMask == (ComponentFlags)((1 << writeMaskLength) - 1))
+			if(writeMaskLength == destinationLength && writeMask == (ComponentFlags)((1 << writeMaskLength) - 1))
 			{
 				return "";
 			}
@@ -319,10 +319,10 @@ namespace DXDecompiler.DX9Shader
 		public int GetDestinationMaskedLength()
 		{
 			ComponentFlags writeMask = GetDestinationWriteMask();
-			for (int i = 3; i != 0; i--)
+			for(int i = 3; i != 0; i--)
 			{
 				var mask = (ComponentFlags)(1 << i);
-				if ((writeMask & mask) != ComponentFlags.None)
+				if((writeMask & mask) != ComponentFlags.None)
 				{
 					return i + 1;
 				}
@@ -335,10 +335,10 @@ namespace DXDecompiler.DX9Shader
 		{
 			ComponentFlags writeMask = GetDestinationWriteMask();
 			int length = 0;
-			for (int i = 0; i < 4; i++)
+			for(int i = 0; i < 4; i++)
 			{
 				var mask = (ComponentFlags)(1 << i);
-				if ((writeMask & mask) != ComponentFlags.None)
+				if((writeMask & mask) != ComponentFlags.None)
 				{
 					length++;
 				}
@@ -355,7 +355,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			int swizzle = GetSourceSwizzle(srcIndex);
 			byte[] swizzleArray = new byte[4];
-			for (int i = 0; i < 4; i++)
+			for(int i = 0; i < 4; i++)
 			{
 				swizzleArray[i] = (byte)((swizzle >> (i * 2)) & 0x3);
 			}
@@ -365,18 +365,18 @@ namespace DXDecompiler.DX9Shader
 		public string GetSourceSwizzleName(int srcIndex, bool hlsl = false)
 		{
 			int swizzleLength = 4;
-			if (Opcode == Opcode.Dp4)
+			if(Opcode == Opcode.Dp4)
 			{
 				swizzleLength = 4;
 			}
 			//TODO: Probably useful in hlsl mode
-			else if (hlsl) 
+			else if(hlsl)
 			{
-				if (Opcode == Opcode.Dp3)
+				if(Opcode == Opcode.Dp3)
 				{
 					swizzleLength = 3;
 				}
-				else if (HasDestination)
+				else if(HasDestination)
 				{
 					swizzleLength = GetDestinationMaskLength();
 				}
@@ -384,9 +384,9 @@ namespace DXDecompiler.DX9Shader
 
 			string swizzleName = "";
 			byte[] swizzle = GetSourceSwizzleComponents(srcIndex);
-			for (int i = 0; i < swizzleLength; i++)
+			for(int i = 0; i < swizzleLength; i++)
 			{
-				switch (swizzle[i])
+				switch(swizzle[i])
 				{
 					case 0:
 						swizzleName += "x";
@@ -402,7 +402,7 @@ namespace DXDecompiler.DX9Shader
 						break;
 				}
 			}
-			switch (swizzleName)
+			switch(swizzleName)
 			{
 				case "xxx":
 					return ".x";
@@ -458,12 +458,12 @@ namespace DXDecompiler.DX9Shader
 		public string GetDeclSemantic()
 		{
 			var registerType = GetParamRegisterType(1);
-			switch (registerType)
+			switch(registerType)
 			{
 				case RegisterType.Input:
 				case RegisterType.Output:
 					string name;
-					switch (GetDeclUsage())
+					switch(GetDeclUsage())
 					{
 						case DeclUsage.Binormal:
 						case DeclUsage.BlendIndices:
@@ -484,14 +484,14 @@ namespace DXDecompiler.DX9Shader
 						default:
 							throw new NotImplementedException();
 					}
-					if (GetDeclIndex() != 0)
+					if(GetDeclIndex() != 0)
 					{
 						name += GetDeclIndex().ToString();
 					}
 					return name;
 				case RegisterType.Sampler:
 					var samplerTexturetype = GetDeclSamplerTextureType();
-					switch (samplerTexturetype)
+					switch(samplerTexturetype)
 					{
 						case SamplerTextureType.TwoD:
 							return "2d";
@@ -503,11 +503,11 @@ namespace DXDecompiler.DX9Shader
 							throw new NotImplementedException();
 					}
 				case RegisterType.MiscType:
-					if (GetParamRegisterNumber(1) == 0)
+					if(GetParamRegisterNumber(1) == 0)
 					{
 						return "vFace";
 					}
-					if (GetParamRegisterNumber(1) == 1)
+					if(GetParamRegisterNumber(1) == 1)
 					{
 						return "vPos";
 					}

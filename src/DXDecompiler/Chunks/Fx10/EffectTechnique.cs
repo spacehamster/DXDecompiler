@@ -32,11 +32,11 @@ namespace DXDecompiler.Chunks.Fx10
 			var passCount = techniqueReader.ReadUInt32();
 			var annotationCount = techniqueReader.ReadUInt32();
 
-			for (int i = 0; i < annotationCount; i++)
+			for(int i = 0; i < annotationCount; i++)
 			{
 				result.Annotations.Add(EffectAnnotation.Parse(reader, techniqueReader, version));
 			}
-			for (int i = 0; i < passCount; i++)
+			for(int i = 0; i < passCount; i++)
 			{
 				result.Passes.Add(EffectPass.Parse(reader, techniqueReader, version));
 			}

@@ -28,13 +28,13 @@ namespace DXDecompiler.DebugParser.FX9
 			result.PassCount = footerReader.ReadUInt32("PassCount");
 			result.ShaderCount = footerReader.ReadUInt32("ShaderCount");
 
-			for (int i = 0; i < variableCount; i++)
+			for(int i = 0; i < variableCount; i++)
 			{
 				footerReader.AddIndent($"Variable {i}");
 				result.Variables.Add(DebugVariable.Parse(bodyReader, footerReader));
 				footerReader.RemoveIndent();
 			}
-			for (int i = 0; i < techniqueCount; i++)
+			for(int i = 0; i < techniqueCount; i++)
 			{
 				footerReader.AddIndent($"Technique {i}");
 				result.Techniques.Add(DebugTechnique.Parse(bodyReader, footerReader));
@@ -43,13 +43,13 @@ namespace DXDecompiler.DebugParser.FX9
 
 			result.VariableBlobCount = footerReader.ReadUInt32("VariableBlobCount");
 			result.StateBlobCount = footerReader.ReadUInt32("StateBlobCount");
-			for (int i = 0; i < result.VariableBlobCount; i++)
+			for(int i = 0; i < result.VariableBlobCount; i++)
 			{
 				footerReader.AddIndent($"VariableBlob {i}");
 				result.VariableBlobs.Add(DebugBinaryData.Parse(bodyReader, footerReader));
 				footerReader.RemoveIndent();
 			}
-			for (int i = 0; i < result.StateBlobCount; i++)
+			for(int i = 0; i < result.StateBlobCount; i++)
 			{
 				footerReader.AddIndent($"StateBlob {i}");
 				result.StateBlobs.Add(DebugStateBlob.Parse(bodyReader, footerReader));

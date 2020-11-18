@@ -8,7 +8,7 @@ namespace DXDecompiler.Chunks.Xsgn
 		public uint? FindRegister(string semanticName, uint semanticIndex)
 		{
 			var parameter = this.SingleOrDefault(x => x.SemanticName == semanticName && x.SemanticIndex == semanticIndex);
-			if (parameter == null)
+			if(parameter == null)
 				return null;
 			return parameter.Register;
 		}

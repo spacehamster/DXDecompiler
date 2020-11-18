@@ -44,9 +44,10 @@ namespace DXDecompiler.Chunks.Fx10
 				{
 					result.DefaultNumericValue.Add(Number.Parse(defaultValueReader));
 				}
-			} else
+			}
+			else
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					result.DefaultStringValue.Add(defaultValueReader.ReadString());
 				}
@@ -56,11 +57,13 @@ namespace DXDecompiler.Chunks.Fx10
 		public override string ToString()
 		{
 			string defaultValue = "";
-			if (Type.EffectVariableType == EffectVariableType.Numeric)
+			if(Type.EffectVariableType == EffectVariableType.Numeric)
 			{
 				defaultValue = string.Join(", ", DefaultNumericValue);
-			} else {
-				defaultValue = string.Join(", ", DefaultStringValue.Select(v => $"\"{v}\"" ));
+			}
+			else
+			{
+				defaultValue = string.Join(", ", DefaultStringValue.Select(v => $"\"{v}\""));
 			}
 			return string.Format("{0} {1} = {2};",
 				Type.TypeName, Name, defaultValue);

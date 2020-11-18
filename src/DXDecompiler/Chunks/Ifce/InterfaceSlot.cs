@@ -25,17 +25,17 @@ namespace DXDecompiler.Chunks.Ifce
 			var count = interfaceSlotReader.ReadUInt32();
 
 			var typeIDsOffset = interfaceSlotReader.ReadUInt32();
-			var typeIDsReader = reader.CopyAtOffset((int) typeIDsOffset);
+			var typeIDsReader = reader.CopyAtOffset((int)typeIDsOffset);
 
 			var tableIDsOffset = interfaceSlotReader.ReadUInt32();
-			var tableIDsReader = reader.CopyAtOffset((int) tableIDsOffset);
+			var tableIDsReader = reader.CopyAtOffset((int)tableIDsOffset);
 
 			var result = new InterfaceSlot
 			{
 				SlotSpan = slotSpan
 			};
 
-			for (int i = 0; i < count; i++)
+			for(int i = 0; i < count; i++)
 			{
 				result.TypeIDs.Add(typeIDsReader.ReadUInt16());
 				result.TableIDs.Add(tableIDsReader.ReadUInt32());
@@ -53,10 +53,10 @@ namespace DXDecompiler.Chunks.Ifce
 
 			var sb = new StringBuilder();
 
-			string slotSpan = (SlotSpan == 1) 
-				? StartSlot.ToString() : 
+			string slotSpan = (SlotSpan == 1)
+				? StartSlot.ToString() :
 				string.Format("{0}-{1}", StartSlot, StartSlot + SlotSpan - 1);
-			sb.AppendLine(string.Format("// | Type ID  |   {0,-5} |{1}", slotSpan, 
+			sb.AppendLine(string.Format("// | Type ID  |   {0,-5} |{1}", slotSpan,
 				string.Join(" ", TypeIDs.Select(x => string.Format("{0,-4}", x)))));
 			sb.AppendLine(string.Format("// | Table ID |         |{0}",
 				string.Join(" ", TableIDs.Select(x => string.Format("{0,-4}", x)))));

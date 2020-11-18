@@ -88,13 +88,13 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 		public static Operand Parse(BytecodeReader reader, OpcodeType parentType)
 		{
 			uint token0 = reader.ReadUInt32();
-			if (token0 == 0)
+			if(token0 == 0)
 				return null;
 
 			var operand = new Operand(parentType);
 
 			var numComponents = token0.DecodeValue<OperandNumComponents>(0, 1);
-			switch (numComponents)
+			switch(numComponents)
 			{
 				case OperandNumComponents.Zero:
 					{
@@ -110,7 +110,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 					{
 						operand.NumComponents = 4;
 						operand.SelectionMode = token0.DecodeValue<Operand4ComponentSelectionMode>(2, 3);
-						switch (operand.SelectionMode)
+						switch(operand.SelectionMode)
 						{
 							case Operand4ComponentSelectionMode.Mask:
 								{
@@ -121,7 +121,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 								{
 									var swizzle = token0.DecodeValue(4, 11);
 									Func<uint, byte, Operand4ComponentName> swizzleDecoder = (s, i) =>
-										(Operand4ComponentName) ((s >> (i * 2)) & 3);
+										(Operand4ComponentName)((s >> (i * 2)) & 3);
 									operand.Swizzles[0] = swizzleDecoder(swizzle, 0);
 									operand.Swizzles[1] = swizzleDecoder(swizzle, 1);
 									operand.Swizzles[2] = swizzleDecoder(swizzle, 2);
@@ -151,20 +151,20 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			operand.IndexDimension = token0.DecodeValue<OperandIndexDimension>(20, 21);
 
 			operand.IsExtended = token0.DecodeValue(31, 31) == 1;
-			if (operand.IsExtended)
+			if(operand.IsExtended)
 				ReadExtendedOperand(operand, reader);
 
 			Func<uint, byte, OperandIndexRepresentation> indexRepresentationDecoder = (t, i) =>
-				(OperandIndexRepresentation) t.DecodeValue((byte) (22 + (i * 3)), (byte) (22 + (i * 3) + 2));
+				(OperandIndexRepresentation)t.DecodeValue((byte)(22 + (i * 3)), (byte)(22 + (i * 3) + 2));
 
-			for (byte i = 0; i < (byte) operand.IndexDimension; i++)
+			for(byte i = 0; i < (byte)operand.IndexDimension; i++)
 			{
 				operand.Indices[i] = new OperandIndex();
 
 				var indexRepresentation = indexRepresentationDecoder(token0, i);
 				operand.Indices[i].Representation = indexRepresentation;
 
-				switch (indexRepresentation)
+				switch(indexRepresentation)
 				{
 					case OperandIndexRepresentation.Immediate32:
 						operand.Indices[i].Value = reader.ReadUInt32();
@@ -187,24 +187,24 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			}
 
 			var numberType = parentType.GetNumberType();
-			switch (operand.OperandType)
+			switch(operand.OperandType)
 			{
 				case OperandType.Immediate32:
-				{
-					var immediateValues = new Number4();
-					for (var i = 0; i < operand.NumComponents; i++)
-						immediateValues.SetNumber(i, Number.Parse(reader));
-					operand.ImmediateValues = immediateValues;
-					break;
-				}
+					{
+						var immediateValues = new Number4();
+						for(var i = 0; i < operand.NumComponents; i++)
+							immediateValues.SetNumber(i, Number.Parse(reader));
+						operand.ImmediateValues = immediateValues;
+						break;
+					}
 				case OperandType.Immediate64:
-				{
-					var immediateValues = new Number4();
-					for (var i = 0; i < operand.NumComponents; i++)
-						immediateValues.SetDouble(i, reader.ReadDouble());
-					operand.ImmediateValues = immediateValues;
-					break;
-				}
+					{
+						var immediateValues = new Number4();
+						for(var i = 0; i < operand.NumComponents; i++)
+							immediateValues.SetDouble(i, reader.ReadDouble());
+						operand.ImmediateValues = immediateValues;
+						break;
+					}
 			}
 
 			return operand;
@@ -245,7 +245,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 		{
 			uint token1 = reader.ReadUInt32();
 			var type = token1.DecodeValue<ExtendedOperandType>(0, 5);
-			switch (type)
+			switch(type)
 			{
 				case ExtendedOperandType.Modifier:
 					operand.Modifier = token1.DecodeValue<OperandModifier>(6, 13);
@@ -259,14 +259,14 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 
 		private string GetOperandDescription()
 		{
-			switch (OperandType)
+			switch(OperandType)
 			{
 				case OperandType.UnorderedAccessView:
 				case OperandType.Sampler:
 				case OperandType.Resource:
-					if (ParentType.IsDeclaration())
+					if(ParentType.IsDeclaration())
 					{
-						if (IndexDimension == OperandIndexDimension._3D)
+						if(IndexDimension == OperandIndexDimension._3D)
 						{
 							return OperandType.GetDescription().ToUpper();
 						}
@@ -277,7 +277,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 					}
 					else
 					{
-						if (IndexDimension == OperandIndexDimension._2D)
+						if(IndexDimension == OperandIndexDimension._2D)
 						{
 							return OperandType.GetDescription().ToUpper();
 						}
@@ -290,7 +290,8 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 					if(IndexDimension == OperandIndexDimension._3D)
 					{
 						return OperandType.GetDescription().ToUpper();
-					} else
+					}
+					else
 					{
 						return OperandType.GetDescription();
 					}
@@ -301,24 +302,24 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 
 		public override string ToString()
 		{
-			switch (OperandType)
+			switch(OperandType)
 			{
 				case OperandType.Immediate32:
 				case OperandType.Immediate64:
 					{
 						string result = (OperandType == OperandType.Immediate64) ? "d(" : "l(";
 						bool addSpaces = ParentType != OpcodeType.Mov && ParentType != OpcodeType.MovC && ParentType != OpcodeType.StoreStructured;
-						for (int i = 0; i < NumComponents; i++)
+						for(int i = 0; i < NumComponents; i++)
 						{
 							var parentType = ParentType.GetNumberType();
 							result += (OperandType == OperandType.Immediate64)
 								? ImmediateValues.GetDouble(i).ToString()
 								: ImmediateValues.GetNumber(i).ToString(parentType);
 
-							if (i < NumComponents - 1)
+							if(i < NumComponents - 1)
 							{
 								result += ",";
-								if (addSpaces)
+								if(addSpaces)
 									result += " ";
 							}
 						}
@@ -332,7 +333,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				default:
 					{
 						string index = string.Empty;
-						switch (IndexDimension)
+						switch(IndexDimension)
 						{
 							case OperandIndexDimension._0D:
 								break;
@@ -358,9 +359,9 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 						}
 
 						string components = string.Empty;
-						if (ParentType.OpcodeHasSwizzle())
+						if(ParentType.OpcodeHasSwizzle())
 						{
-							switch (SelectionMode)
+							switch(SelectionMode)
 							{
 								case Operand4ComponentSelectionMode.Mask:
 									components = ComponentMask.GetDescription();
@@ -377,7 +378,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 								default:
 									throw new InvalidOperationException("Unrecognised selection mode: " + SelectionMode);
 							}
-							if (!string.IsNullOrEmpty(components))
+							if(!string.IsNullOrEmpty(components))
 								components = "." + components;
 						}
 						string minPrecision = MinPrecision == OperandMinPrecision.Default ?

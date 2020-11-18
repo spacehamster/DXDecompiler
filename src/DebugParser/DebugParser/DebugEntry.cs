@@ -30,21 +30,22 @@ namespace DXDecompiler.DebugParser
 			var indent = new string(' ', (int)member.Indent * 2);
 			var sb = new StringBuilder();
 			sb.Append(indent);
-			if (DebugBytecodeReader.DumpOffsets)
+			if(DebugBytecodeReader.DumpOffsets)
 			{
 				var absIndex = member.AbsoluteIndex;
 				var absOffset = member.AbsoluteIndex + member.Size - 1;
 				var relIndex = member.RelativeIndex;
 				var relOffset = member.RelativeIndex + member.Size - 1;
-				if (formatHex)
+				if(formatHex)
 				{
 					sb.Append($"{absIndex.ToString("X4")}:{absOffset.ToString("X4")}[{relIndex.ToString("X4")}:{relOffset.ToString("X4")}] - ");
-				} else
+				}
+				else
 				{
 					sb.Append($"{absIndex}:{absOffset}[{relIndex}:{relOffset}] - ");
 				}
 			}
-			if (formatHex && uint.TryParse(member.Value, out uint intVal))
+			if(formatHex && uint.TryParse(member.Value, out uint intVal))
 			{
 				sb.Append($"{member.Name}=0x{intVal.ToString("X4")}\n");
 			}
@@ -52,7 +53,7 @@ namespace DXDecompiler.DebugParser
 			{
 				sb.Append($"{member.Name}={member.Value}\n");
 			}
-			
+
 			return sb.ToString();
 		}
 		public string DumpInline()
@@ -69,7 +70,7 @@ namespace DXDecompiler.DebugParser
 			var absOffset = member.AbsoluteIndex + member.Size - 1;
 			var relIndex = member.RelativeIndex;
 			var relOffset = member.RelativeIndex + member.Size - 1;
-			if (formatHex)
+			if(formatHex)
 			{
 				return $"{absIndex.ToString("X4")}:{absOffset.ToString("X4")}[{relIndex.ToString("X4")}:{relOffset.ToString("X4")}]";
 			}

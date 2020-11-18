@@ -8,7 +8,7 @@ namespace DXDecompiler.Tests.DX10Util
 		public static List<T> GetAsList<T>(int count, System.Func<int, T> Getter)
 		{
 			var result = new List<T>();
-			for (int i = 0; i < count; i++)
+			for(int i = 0; i < count; i++)
 			{
 				var variable = Getter(i);
 				result.Add(variable);
@@ -18,7 +18,7 @@ namespace DXDecompiler.Tests.DX10Util
 		public static List<EffectTechnique> GetTechniques(this Effect effect)
 		{
 			return GetAsList(
-				effect.Description.TechniqueCount, 
+				effect.Description.TechniqueCount,
 				(i) => effect.GetTechniqueByIndex(i));
 		}
 		public static List<EffectConstantBuffer> GetConstantBuffers(this Effect effect)

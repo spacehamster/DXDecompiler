@@ -16,13 +16,13 @@ namespace DXDecompiler.DebugParser.FX9
 			result.NameOffset = passReader.ReadUInt32("NameOffset");
 			result.AnnotationCount = passReader.ReadUInt32("AnnoationCount");
 			result.AssignmentCount = passReader.ReadUInt32("AssignmentCount");
-			for (int i = 0; i < result.AnnotationCount; i++)
+			for(int i = 0; i < result.AnnotationCount; i++)
 			{
 				passReader.AddIndent($"Annotation {i}");
 				result.Annotations.Add(DebugAnnotation.Parse(reader, passReader));
 				passReader.RemoveIndent();
 			}
-			for (int i = 0; i < result.AssignmentCount; i++)
+			for(int i = 0; i < result.AssignmentCount; i++)
 			{
 				passReader.AddIndent($"Assignment {i}");
 				result.Assignments.Add(DebugAssignment.Parse(reader, passReader));

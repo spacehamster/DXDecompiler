@@ -11,7 +11,7 @@ namespace DXDecompiler.DX9Shader.FX9
 		public List<Number> Value { get; private set; }
 
 		public static Assignment Parse(BytecodeReader reader, BytecodeReader shaderReader)
-		{ 
+		{
 			var result = new Assignment();
 			result.Type = (StateType)shaderReader.ReadUInt32();
 			result.ArrayIndex = shaderReader.ReadUInt32();

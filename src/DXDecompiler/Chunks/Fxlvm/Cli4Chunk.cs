@@ -44,11 +44,11 @@ namespace DXDecompiler.Chunks.Fxlvm
 				var index = elementIndex + i;
 				var number = Numbers[(int)index];
 				sb.Append(number.ToString());
-				if( i < elementCount - 1)
+				if(i < elementCount - 1)
 				{
 					sb.Append(", ");
 				}
-			}			
+			}
 			return sb.ToString();
 		}
 	}

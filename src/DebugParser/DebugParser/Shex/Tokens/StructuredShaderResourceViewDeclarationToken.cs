@@ -18,7 +18,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 				Operand = DebugOperand.Parse(reader, token0.DecodeValue<OpcodeType>(0, 10)),
 				StructByteStride = reader.ReadUInt32("StructByteStride")
 			};
-			if (version.IsSM51)
+			if(version.IsSM51)
 			{
 				result.SpaceIndex = reader.ReadUInt32("SpaceIndex");
 			}

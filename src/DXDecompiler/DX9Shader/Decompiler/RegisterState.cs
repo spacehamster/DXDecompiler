@@ -29,10 +29,10 @@ namespace DXDecompiler.DX9Shader
 		private void Load(ShaderModel shader)
 		{
 			ConstantDeclarations = shader.ConstantTable.ConstantDeclarations;
-			foreach (var constantDeclaration in ConstantDeclarations)
+			foreach(var constantDeclaration in ConstantDeclarations)
 			{
 				RegisterType registerType;
-				switch (constantDeclaration.RegisterSet)
+				switch(constantDeclaration.RegisterSet)
 				{
 					case RegisterSet.Bool:
 						registerType = RegisterType.ConstBool;
@@ -49,12 +49,12 @@ namespace DXDecompiler.DX9Shader
 					default:
 						throw new InvalidOperationException();
 				}
-				if (registerType == RegisterType.Sampler)
+				if(registerType == RegisterType.Sampler)
 				{
 					// Use declaration from declaration instruction instead
 					continue;
 				}
-				for (int r = 0; r < constantDeclaration.RegisterCount; r++)
+				for(int r = 0; r < constantDeclaration.RegisterCount; r++)
 				{
 					var registerKey = new RegisterKey(registerType, constantDeclaration.RegisterIndex + r);
 					var registerDeclaration = new RegisterDeclaration(registerKey);
@@ -62,16 +62,16 @@ namespace DXDecompiler.DX9Shader
 				}
 			}
 
-			foreach (var instruction in shader.Tokens.Where(i => i.HasDestination))
+			foreach(var instruction in shader.Tokens.Where(i => i.HasDestination))
 			{
-				if (instruction.Opcode == Opcode.Dcl)
+				if(instruction.Opcode == Opcode.Dcl)
 				{
 					var registerDeclaration = new RegisterDeclaration(instruction);
 					RegisterKey registerKey = registerDeclaration.RegisterKey;
 
 					_registerDeclarations.Add(registerKey, registerDeclaration);
 
-					switch (registerKey.Type)
+					switch(registerKey.Type)
 					{
 						case RegisterType.Input:
 						case RegisterType.MiscType:
@@ -88,7 +88,7 @@ namespace DXDecompiler.DX9Shader
 							throw new Exception($"Unexpected dcl {registerKey.Type}");
 					}
 				}
-				else if (instruction.Opcode == Opcode.Def)
+				else if(instruction.Opcode == Opcode.Def)
 				{
 					var constant = new Constant(
 						instruction.GetParamRegisterNumber(0),
@@ -98,7 +98,7 @@ namespace DXDecompiler.DX9Shader
 						instruction.GetParamSingle(4));
 					_constantDefinitions.Add(constant);
 				}
-				else if (instruction.Opcode == Opcode.DefI)
+				else if(instruction.Opcode == Opcode.DefI)
 				{
 					var constantInt = new ConstantInt(instruction.GetParamRegisterNumber(0),
 						instruction.Data[1],
@@ -114,11 +114,11 @@ namespace DXDecompiler.DX9Shader
 					RegisterType registerType = instruction.GetParamRegisterType(destIndex);
 					int registerNumber = instruction.GetParamRegisterNumber(destIndex);
 					var registerKey = new RegisterKey(registerType, registerNumber);
-					if (_registerDeclarations.ContainsKey(registerKey) == false)
+					if(_registerDeclarations.ContainsKey(registerKey) == false)
 					{
 						var reg = new RegisterDeclaration(registerKey);
 						_registerDeclarations[registerKey] = reg;
-						if (registerType == RegisterType.ColorOut ||
+						if(registerType == RegisterType.ColorOut ||
 								registerType == RegisterType.RastOut ||
 								registerType == RegisterType.Output ||
 								registerType == RegisterType.AttrOut)
@@ -149,7 +149,7 @@ namespace DXDecompiler.DX9Shader
 			string sourceRegisterName;
 			RegisterKey registerKey = instruction.GetParamRegisterKey(srcIndex);
 			var registerType = instruction.GetParamRegisterType(srcIndex);
-			switch (registerType)
+			switch(registerType)
 			{
 				case RegisterType.Const:
 				case RegisterType.Const2:
@@ -158,13 +158,13 @@ namespace DXDecompiler.DX9Shader
 				case RegisterType.ConstBool:
 				case RegisterType.ConstInt:
 					sourceRegisterName = GetSourceConstantName(instruction, srcIndex);
-					if (sourceRegisterName != null)
+					if(sourceRegisterName != null)
 					{
 						return sourceRegisterName;
 					}
 
 					ParameterType parameterType;
-					switch (registerType)
+					switch(registerType)
 					{
 						case RegisterType.Const:
 						case RegisterType.Const2:
@@ -183,7 +183,7 @@ namespace DXDecompiler.DX9Shader
 					}
 					int registerNumber = instruction.GetParamRegisterNumber(srcIndex);
 					ConstantDeclaration decl = FindConstant(registerNumber);
-					if (decl == null)
+					if(decl == null)
 					{
 						// Constant register not found in def statements nor the constant table
 						//TODO:
@@ -191,7 +191,7 @@ namespace DXDecompiler.DX9Shader
 						//throw new NotImplementedException();
 					}
 
-					if (decl.ParameterClass == ParameterClass.MatrixRows)
+					if(decl.ParameterClass == ParameterClass.MatrixRows)
 					{
 						sourceRegisterName = string.Format("{0}[{1}]", decl.Name, registerNumber - decl.RegisterIndex);
 					}
@@ -213,14 +213,14 @@ namespace DXDecompiler.DX9Shader
 
 		public uint GetRegisterFullLength(RegisterKey registerKey)
 		{
-			if (registerKey.Type == RegisterType.Const)
+			if(registerKey.Type == RegisterType.Const)
 			{
 				var constant = FindConstant(ParameterType.Float, registerKey.Number);
 				return constant.Columns;
 			}
 
 			RegisterDeclaration decl = _registerDeclarations[registerKey];
-			switch (decl.TypeName)
+			switch(decl.TypeName)
 			{
 				case "float":
 					return 1;
@@ -238,7 +238,7 @@ namespace DXDecompiler.DX9Shader
 		public string GetRegisterName(RegisterKey registerKey)
 		{
 			var decl = _registerDeclarations[registerKey];
-			switch (registerKey.Type)
+			switch(registerKey.Type)
 			{
 				case RegisterType.Texture:
 					return decl.Name;
@@ -246,21 +246,21 @@ namespace DXDecompiler.DX9Shader
 					return (MethodInputRegisters.Count == 1) ? decl.Name : ("i." + decl.Name);
 				case RegisterType.RastOut:
 				case RegisterType.Output:
-				 case RegisterType.AttrOut:
+				case RegisterType.AttrOut:
 				case RegisterType.ColorOut:
 					return (MethodOutputRegisters.Count == 1) ? decl.Name : ("o." + decl.Name);
 				case RegisterType.Const:
 					var constDecl = FindConstant(ParameterType.Float, registerKey.Number);
-					if (ColumnMajorOrder)
+					if(ColumnMajorOrder)
 					{
-						if (constDecl.Rows == 1)
+						if(constDecl.Rows == 1)
 						{
 							return constDecl.Name;
 						}
 						string col = (registerKey.Number - constDecl.RegisterIndex).ToString();
 						return $"transpose({constDecl.Name})[{col}]";
 					}
-					if (constDecl.Rows == 1)
+					if(constDecl.Rows == 1)
 					{
 						return constDecl.Name;
 					}
@@ -268,7 +268,7 @@ namespace DXDecompiler.DX9Shader
 					return constDecl.Name + $"[{row}]";
 				case RegisterType.Sampler:
 					ConstantDeclaration samplerDecl = FindConstant(RegisterSet.Sampler, registerKey.Number);
-					if (samplerDecl != null)
+					if(samplerDecl != null)
 					{
 						return samplerDecl.Name;
 					}
@@ -277,7 +277,7 @@ namespace DXDecompiler.DX9Shader
 						throw new NotImplementedException();
 					}
 				case RegisterType.MiscType:
-					switch (registerKey.Number)
+					switch(registerKey.Number)
 					{
 						case 0:
 							return "vFace";
@@ -295,7 +295,7 @@ namespace DXDecompiler.DX9Shader
 
 		public ConstantDeclaration FindConstant(RegisterInputNode register)
 		{
-			if (register.RegisterComponentKey.Type != RegisterType.Const)
+			if(register.RegisterComponentKey.Type != RegisterType.Const)
 			{
 				return null;
 			}
@@ -327,7 +327,7 @@ namespace DXDecompiler.DX9Shader
 			var registerType = instruction.GetParamRegisterType(srcIndex);
 			int registerNumber = instruction.GetParamRegisterNumber(srcIndex);
 
-			switch (registerType)
+			switch(registerType)
 			{
 				case RegisterType.ConstBool:
 					//throw new NotImplementedException();
@@ -335,7 +335,7 @@ namespace DXDecompiler.DX9Shader
 				case RegisterType.ConstInt:
 					{
 						var constantInt = _constantIntDefinitions.FirstOrDefault(x => x.RegisterIndex == registerNumber);
-						if (constantInt == null)
+						if(constantInt == null)
 						{
 							return null;
 						}
@@ -346,41 +346,41 @@ namespace DXDecompiler.DX9Shader
 								constantInt[swizzle[2]],
 								constantInt[swizzle[3]] };
 
-						switch (instruction.GetSourceModifier(srcIndex))
+						switch(instruction.GetSourceModifier(srcIndex))
 						{
 							case SourceModifier.None:
 								break;
 							case SourceModifier.Negate:
 								throw new NotImplementedException();
-								/*
-								for (int i = 0; i < 4; i++)
-								{
-									constant[i] = -constant[i];
-								}
-								break;*/
+							/*
+							for (int i = 0; i < 4; i++)
+							{
+								constant[i] = -constant[i];
+							}
+							break;*/
 							default:
 								throw new NotImplementedException();
 						}
 
 						int destLength = instruction.GetDestinationMaskLength();
-						switch (destLength)
+						switch(destLength)
 						{
 							case 1:
 								return constant[0].ToString();
 							case 2:
-								if (constant[0] == constant[1])
+								if(constant[0] == constant[1])
 								{
 									return constant[0].ToString();
 								}
 								return $"int2({constant[0]}, {constant[1]})";
 							case 3:
-								if (constant[0] == constant[1] && constant[0] == constant[2])
+								if(constant[0] == constant[1] && constant[0] == constant[2])
 								{
 									return constant[0].ToString();
 								}
 								return $"int3({constant[0]}, {constant[1]}, {constant[2]})";
 							case 4:
-								if (constant[0] == constant[1] && constant[0] == constant[2] && constant[0] == constant[3])
+								if(constant[0] == constant[1] && constant[0] == constant[2] && constant[0] == constant[3])
 								{
 									return constant[0].ToString();
 								}
@@ -396,7 +396,7 @@ namespace DXDecompiler.DX9Shader
 				case RegisterType.Const4:
 					{
 						var constantRegister = _constantDefinitions.FirstOrDefault(x => x.RegisterIndex == registerNumber);
-						if (constantRegister == null)
+						if(constantRegister == null)
 						{
 							return null;
 						}
@@ -408,12 +408,12 @@ namespace DXDecompiler.DX9Shader
 							constantRegister[swizzle[2]],
 							constantRegister[swizzle[3]] };
 
-						switch (instruction.GetSourceModifier(srcIndex))
+						switch(instruction.GetSourceModifier(srcIndex))
 						{
 							case SourceModifier.None:
 								break;
 							case SourceModifier.Negate:
-								for (int i = 0; i < 4; i++)
+								for(int i = 0; i < 4; i++)
 								{
 									constant[i] = -constant[i];
 								}
@@ -423,24 +423,24 @@ namespace DXDecompiler.DX9Shader
 						}
 
 						int destLength;
-						if (instruction.HasDestination)
+						if(instruction.HasDestination)
 						{
 							destLength = instruction.GetDestinationMaskLength();
 						}
 						else
 						{
-							if (instruction.Opcode == Opcode.If || instruction.Opcode == Opcode.IfC)
+							if(instruction.Opcode == Opcode.If || instruction.Opcode == Opcode.IfC)
 							{
 								// TODO
 							}
 							destLength = 4;
 						}
-						switch (destLength)
+						switch(destLength)
 						{
 							case 1:
 								return constant[0].ToString(_culture);
 							case 2:
-								if (constant[0] == constant[1])
+								if(constant[0] == constant[1])
 								{
 									return constant[0].ToString(_culture);
 								}
@@ -448,7 +448,7 @@ namespace DXDecompiler.DX9Shader
 									constant[0].ToString(_culture),
 									constant[1].ToString(_culture));
 							case 3:
-								if (constant[0] == constant[1] && constant[0] == constant[2])
+								if(constant[0] == constant[1] && constant[0] == constant[2])
 								{
 									return constant[0].ToString(_culture);
 								}
@@ -457,7 +457,7 @@ namespace DXDecompiler.DX9Shader
 									constant[1].ToString(_culture),
 									constant[2].ToString(_culture));
 							case 4:
-								if (constant[0] == constant[1] && constant[0] == constant[2] && constant[0] == constant[3])
+								if(constant[0] == constant[1] && constant[0] == constant[2] && constant[0] == constant[3])
 								{
 									return constant[0].ToString(_culture);
 								}
@@ -478,7 +478,7 @@ namespace DXDecompiler.DX9Shader
 
 		private static string ApplyModifier(SourceModifier modifier, string value)
 		{
-			switch (modifier)
+			switch(modifier)
 			{
 				case SourceModifier.None:
 					return value;

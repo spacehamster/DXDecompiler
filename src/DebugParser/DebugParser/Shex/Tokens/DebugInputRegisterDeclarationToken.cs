@@ -13,7 +13,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 			DebugOpcodeHeader.AddNotes(reader, token0);
 
 			DebugInputRegisterDeclarationToken result;
-			switch (opcodeType)
+			switch(opcodeType)
 			{
 				case OpcodeType.DclInput:
 				case OpcodeType.DclInputSgv:
@@ -35,7 +35,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 
 			result.Operand = DebugOperand.Parse(reader, opcodeType);
 
-			switch (opcodeType)
+			switch(opcodeType)
 			{
 				case OpcodeType.DclInputSgv:
 				case OpcodeType.DclInputSiv:

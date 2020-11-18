@@ -11,13 +11,13 @@
 
 		public override HlslTreeNode Reduce()
 		{
-			if (Value is NegateOperation negate)
+			if(Value is NegateOperation negate)
 			{
 				HlslTreeNode newValue = negate.Value;
 				Replace(newValue);
 				return newValue;
 			}
-			if (Value is ConstantNode constant)
+			if(Value is ConstantNode constant)
 			{
 				var newValue = new ConstantNode(-constant.Value);
 				Replace(newValue);

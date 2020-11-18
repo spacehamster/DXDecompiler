@@ -26,7 +26,7 @@ namespace DXDecompiler.DX9Shader.FX9
 			{
 				result.Annotations.Add(Annotation.Parse(reader, variableReader));
 			}
-			for (int i = 0; i < passCount; i++)
+			for(int i = 0; i < passCount; i++)
 			{
 				result.Passes.Add(Pass.Parse(reader, variableReader));
 			}

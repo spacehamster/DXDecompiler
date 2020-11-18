@@ -34,9 +34,11 @@ namespace DXDecompiler.Chunks.Fx10
 			NumericType.Columns : 0;
 		public ShaderVariableType VariableType
 		{
-			get {
+			get
+			{
 				//TODO: remove numeric and interface value from ObjectType
-				switch (EffectVariableType){
+				switch(EffectVariableType)
+				{
 					case EffectVariableType.Numeric:
 					case EffectVariableType.Object:
 						return ObjectType.ToShaderVariableType();
@@ -67,11 +69,11 @@ namespace DXDecompiler.Chunks.Fx10
 			result.UnpackedSize = typeReader.ReadUInt32();
 			result.Stride = typeReader.ReadUInt32();
 			result.PackedSize = typeReader.ReadUInt32();
-			if (result.EffectVariableType == EffectVariableType.Numeric)
+			if(result.EffectVariableType == EffectVariableType.Numeric)
 			{
 				var type = result.PackedType = typeReader.ReadUInt32();
 				var numericType = result.NumericType = EffectNumericType.Parse(type);
-				switch (numericType.NumericLayout)
+				switch(numericType.NumericLayout)
 				{
 					case EffectNumericLayout.Scalar:
 						result.VariableClass = ShaderVariableClass.Scalar;
@@ -85,7 +87,7 @@ namespace DXDecompiler.Chunks.Fx10
 							ShaderVariableClass.MatrixRows;
 						break;
 				}
-				switch (numericType.ScalarType)
+				switch(numericType.ScalarType)
 				{
 					case EffectScalarType.Float:
 						result.ObjectType = EffectObjectType.Float;
@@ -101,26 +103,26 @@ namespace DXDecompiler.Chunks.Fx10
 						break;
 				}
 			}
-			else if (result.EffectVariableType == EffectVariableType.Object)
+			else if(result.EffectVariableType == EffectVariableType.Object)
 			{
 				var type = result.PackedType = typeReader.ReadUInt32();
 				result.VariableClass = ShaderVariableClass.Object;
 				result.ObjectType = (EffectObjectType)type;
 			}
-			else if (result.EffectVariableType == EffectVariableType.Struct)
+			else if(result.EffectVariableType == EffectVariableType.Struct)
 			{
 				result.ObjectType = EffectObjectType.Void;
 				result.VariableClass = ShaderVariableClass.Struct;
 				result.MemberCount = typeReader.ReadUInt32();
-				for (int i = 0; i < result.MemberCount; i++)
+				for(int i = 0; i < result.MemberCount; i++)
 				{
 					result.Members.Add(EffectMember.Parse(reader, typeReader, version));
 				}
-				if (version.MajorVersion == 5)
+				if(version.MajorVersion == 5)
 				{
 					result.BaseClassType = typeReader.ReadUInt32();
 					result.InterfaceCount = typeReader.ReadUInt32();
-					for (int i = 0; i < result.InterfaceCount; i++)
+					for(int i = 0; i < result.InterfaceCount; i++)
 					{
 						var interfaceOffset = typeReader.ReadUInt32();
 						var interfaceReader = reader.CopyAtOffset((int)interfaceOffset);
@@ -128,7 +130,7 @@ namespace DXDecompiler.Chunks.Fx10
 					}
 				}
 			}
-			else if (result.EffectVariableType == EffectVariableType.Interface)
+			else if(result.EffectVariableType == EffectVariableType.Interface)
 			{
 				result.VariableClass = ShaderVariableClass.InterfaceClass;
 				result.ObjectType = EffectObjectType.Interface;

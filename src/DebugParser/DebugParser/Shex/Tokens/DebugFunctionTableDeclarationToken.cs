@@ -22,7 +22,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 			};
 
 			uint tableLength = reader.ReadUInt32("tableLength");
-			for (int i = 0; i < tableLength; i++)
+			for(int i = 0; i < tableLength; i++)
 				result.FunctionBodyIndices.Add(reader.ReadUInt32($"FunctionBodyIndices[{i}]"));
 
 			return result;

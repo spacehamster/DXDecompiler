@@ -30,12 +30,12 @@ namespace DXDecompiler.Chunks.RTS0
 			var staticSamplerOffset = chunkReader.ReadUInt32();
 			result.Flags = (RootSignatureFlags)chunkReader.ReadUInt32();
 			var paramReader = reader.CopyAtOffset((int)parameterOffset);
-			for (int i = 0; i < numParameters; i++)
+			for(int i = 0; i < numParameters; i++)
 			{
 				result.RootParameters.Add(RootParameter.Parse(chunkReader, paramReader, result.Version));
 			}
 			var staticSamplerReader = reader.CopyAtOffset((int)staticSamplerOffset);
-			for (int i = 0; i < numberStaticSamplers; i++)
+			for(int i = 0; i < numberStaticSamplers; i++)
 			{
 				result.StaticSamplers.Add(StaticSampler.Parse(staticSamplerReader));
 			}
@@ -52,7 +52,7 @@ namespace DXDecompiler.Chunks.RTS0
 				sb.AppendLine(RootParameters[i].ToString());
 			}
 			sb.AppendLine($"StaticSamplers: {StaticSamplers.Count}");
-			for (int i = 0; i < StaticSamplers.Count; i++)
+			for(int i = 0; i < StaticSamplers.Count; i++)
 			{
 				sb.AppendLine(StaticSamplers[i].ToString());
 			}

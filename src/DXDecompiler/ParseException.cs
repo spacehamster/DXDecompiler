@@ -13,7 +13,7 @@ namespace DXDecompiler
 		public ParseException(string message)
 			: base(message)
 		{
-			
+
 		}
 	}
 }

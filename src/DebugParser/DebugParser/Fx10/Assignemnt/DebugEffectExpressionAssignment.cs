@@ -8,7 +8,7 @@
 			var result = new DebugEffectExpressionAssignment();
 			var shaderSize = assignmentReader.ReadUInt32("ShaderSize");
 
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = DebugBytecodeContainer.Parse(assignmentReader.CopyAtCurrentPosition("ExpressionReader", assignmentReader));
 			}

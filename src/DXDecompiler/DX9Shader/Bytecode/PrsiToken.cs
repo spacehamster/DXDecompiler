@@ -39,7 +39,7 @@ namespace DXDecompiler.DX9Shader.Bytecode
 				$"Unknown5 ({unknown5}) and OutputRegisterOffset ({result.OutputRegisterOffset}) differ");
 			//Debug.Assert(unk6 == outputRegisterCount,
 			//	$"unk6 ({unk6}) and OutputRegisterCount ({outputRegisterCount}) differ");
-			for (int i = 0; i < mappingCount; i++)
+			for(int i = 0; i < mappingCount; i++)
 			{
 				result.Mapping.Add(new Tuple<uint, uint>(
 					reader.ReadUInt32(),

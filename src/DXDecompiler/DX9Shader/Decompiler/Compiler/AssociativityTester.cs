@@ -4,7 +4,7 @@
 	{
 		public static bool TestForMultiplication(HlslTreeNode node)
 		{
-			switch (node)
+			switch(node)
 			{
 				case AddOperation _:
 				case SubtractOperation _:

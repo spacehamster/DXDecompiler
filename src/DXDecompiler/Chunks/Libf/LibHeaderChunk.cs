@@ -33,7 +33,7 @@ namespace DXDecompiler.Chunks.Libf
 			var creatorStringReader = chunkReader.CopyAtOffset((int)creatorStringOffset);
 			result.CreatorString = creatorStringReader.ReadString();
 			var functionInfoReader = reader.CopyAtOffset((int)functionInfoOffset);
-			for (int i = 0; i < functionCount; i++)
+			for(int i = 0; i < functionCount; i++)
 			{
 				// is 0 for lib_4_0, lib_4_1, lib_5_0
 				// is 1 for lib_4_0_level_9_1_vs_only, lib_4_0_level_9_3_vs_only
@@ -51,9 +51,9 @@ namespace DXDecompiler.Chunks.Libf
 		{
 			var sb = new StringBuilder();
 			sb.AppendLine(string.Format("// Library:  flags 0, {0} functions: ", FunctionDescs.Count()));
-			for (int i = 0; i < FunctionDescs.Count; i++)
+			for(int i = 0; i < FunctionDescs.Count; i++)
 			{
-				sb.AppendLine(string.Format("//   {0}  {1}", 
+				sb.AppendLine(string.Format("//   {0}  {1}",
 					i, FunctionDescs[i].Name));
 			}
 			sb.AppendLine("//");

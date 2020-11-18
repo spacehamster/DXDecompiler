@@ -32,7 +32,7 @@ namespace DXDecompiler.DebugParser.Icfe
 				SlotSpan = slotSpan
 			};
 
-			for (int i = 0; i < count; i++)
+			for(int i = 0; i < count; i++)
 			{
 				result.TypeIDs.Add(typeIDsReader.ReadUInt16($"TypeIDs[{i}]"));
 				result.TableIDs.Add(tableIDsReader.ReadUInt32($"TableIDs[{i}]"));

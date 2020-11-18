@@ -34,21 +34,21 @@ namespace DXDecompiler.Chunks.Fx10
 			var interfaceBindingOffset = variableReader.ReadUInt32();
 			var shaderReader = reader.CopyAtOffset((int)shaderOffset);
 			var shaderSize = shaderReader.ReadUInt32();
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = BytecodeContainer.Parse(shaderReader.ReadBytes((int)shaderSize));
 			}
-			for (int i = 0; i < 4; i++)
+			for(int i = 0; i < 4; i++)
 			{
 				var offset = result.SODeclsOffset[i];
-				if (offset != 0)
+				if(offset != 0)
 				{
 					var soDeclReader = reader.CopyAtOffset((int)offset);
 					result.SODecls.Add(soDeclReader.ReadString());
 				}
 			}
 			var interfaceReader = reader.CopyAtOffset((int)interfaceBindingOffset);
-			for (int i = 0; i < interfaceBindingCount; i++)
+			for(int i = 0; i < interfaceBindingCount; i++)
 			{
 				result.InterfaceBindings.Add(EffectInterfaceInitializer.Parse(reader, interfaceReader));
 			}
@@ -56,7 +56,7 @@ namespace DXDecompiler.Chunks.Fx10
 		}
 		public override string ToString()
 		{
-			if (Shader == null)
+			if(Shader == null)
 			{
 				return string.Format("{0} = NULL;", MemberType);
 			}

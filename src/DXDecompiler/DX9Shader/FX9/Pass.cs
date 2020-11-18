@@ -22,11 +22,11 @@ namespace DXDecompiler.DX9Shader.FX9
 			var nameOffset = variableReader.ReadUInt32();
 			var annotationCount = variableReader.ReadUInt32();
 			var assignmentCount = variableReader.ReadUInt32();
-			for (int i = 0; i < annotationCount; i++)
+			for(int i = 0; i < annotationCount; i++)
 			{
 				result.Annotations.Add(Annotation.Parse(reader, variableReader));
 			}
-			for (int i = 0; i < assignmentCount; i++)
+			for(int i = 0; i < assignmentCount; i++)
 			{
 				result.Assignments.Add(Assignment.Parse(reader, variableReader));
 			}

@@ -35,7 +35,7 @@ namespace DXDecompiler.DebugParser.FX9
 			var semanticReader = reader.CopyAtOffset("SemanticReader", variableReader, (int)result.SemanticOffset);
 			result.Semantic = semanticReader.TryReadString("Semantic");
 
-			if (result.ParameterClass == ParameterClass.Scalar ||
+			if(result.ParameterClass == ParameterClass.Scalar ||
 				result.ParameterClass == ParameterClass.Vector ||
 				result.ParameterClass == ParameterClass.MatrixRows ||
 				result.ParameterClass == ParameterClass.MatrixColumns)
@@ -44,17 +44,17 @@ namespace DXDecompiler.DebugParser.FX9
 				result.Rows = variableReader.ReadUInt32("Rows");
 				result.Columns = variableReader.ReadUInt32("Columns");
 			}
-			if (result.ParameterClass == ParameterClass.Struct)
+			if(result.ParameterClass == ParameterClass.Struct)
 			{
 				result.Elements = variableReader.ReadUInt32("ElementCount");
 				result.StructMemberCount = variableReader.ReadUInt32("StructMemberCount");
-				for (int i = 0; i < result.StructMemberCount; i++)
+				for(int i = 0; i < result.StructMemberCount; i++)
 				{
 					result.StructMembers.Add(DebugParameter.Parse(reader, variableReader));
 				}
 
 			}
-			if (result.ParameterClass == ParameterClass.Object)
+			if(result.ParameterClass == ParameterClass.Object)
 			{
 				result.Elements = variableReader.ReadUInt32("Elements");
 			}
@@ -64,7 +64,7 @@ namespace DXDecompiler.DebugParser.FX9
 		public uint GetSize()
 		{
 			var elementCount = Math.Max(1, Elements);
-			switch (ParameterClass)
+			switch(ParameterClass)
 			{
 				case ParameterClass.Scalar:
 					return 4 * elementCount;

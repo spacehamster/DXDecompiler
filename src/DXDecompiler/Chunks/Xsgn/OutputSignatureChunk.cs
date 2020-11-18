@@ -12,7 +12,7 @@ namespace DXDecompiler.Chunks.Xsgn
 			sb.AppendLine("//");
 			sb.Append(base.ToString());
 
-			if (!Parameters.Any())
+			if(!Parameters.Any())
 				sb.AppendLine("// no Output");
 
 			return sb.ToString();

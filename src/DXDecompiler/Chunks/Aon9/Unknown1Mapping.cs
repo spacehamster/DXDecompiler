@@ -5,7 +5,7 @@ namespace DXDecompiler.Chunks.Aon9
 	public class Unknown1Mapping
 	{
 		public static Unknown1Mapping Parse(BytecodeReader reader)
-		{ 
+		{
 			var result = new Unknown1Mapping();
 			return result;
 		}

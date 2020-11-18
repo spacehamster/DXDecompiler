@@ -15,43 +15,43 @@ namespace DXDecompiler.DX9Shader
 		public HlslTreeNode[] TryGetContext(IList<HlslTreeNode> components)
 		{
 			var firstComponent = components[0];
-			if (!(firstComponent is DivisionOperation firstDivision))
+			if(!(firstComponent is DivisionOperation firstDivision))
 			{
 				return null;
 			}
 
 			var firstLengthContext = _nodeGrouper.LengthGrouper.TryGetLengthContext(firstDivision.Divisor);
-			if (firstLengthContext == null)
+			if(firstLengthContext == null)
 			{
 				return null;
 			}
 
 			int dimension = firstLengthContext.Length;
 
-			if (firstLengthContext.Any(c => NodeGrouper.AreNodesEquivalent(firstDivision.Dividend, c)) == false)
+			if(firstLengthContext.Any(c => NodeGrouper.AreNodesEquivalent(firstDivision.Dividend, c)) == false)
 			{
 				return null;
 			}
 
-			for (int i = 1; i < dimension; i++)
+			for(int i = 1; i < dimension; i++)
 			{
-				if (i >= components.Count)
+				if(i >= components.Count)
 				{
 					return null;
 				}
 
 				var nextComponent = components[i];
-				if (!(nextComponent is DivisionOperation nextDivision))
+				if(!(nextComponent is DivisionOperation nextDivision))
 				{
 					return null;
 				}
 
-				if (NodeGrouper.AreNodesEquivalent(nextDivision.Divisor, firstDivision.Divisor) == false)
+				if(NodeGrouper.AreNodesEquivalent(nextDivision.Divisor, firstDivision.Divisor) == false)
 				{
 					return null;
 				}
 
-				if (firstLengthContext.Any(c => NodeGrouper.AreNodesEquivalent(nextDivision.Dividend, c)) == false)
+				if(firstLengthContext.Any(c => NodeGrouper.AreNodesEquivalent(nextDivision.Dividend, c)) == false)
 				{
 					return null;
 				}

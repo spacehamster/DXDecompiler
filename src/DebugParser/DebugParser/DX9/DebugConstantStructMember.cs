@@ -6,7 +6,8 @@ namespace DebugParser.DebugParser.DX9
 	{
 		public string Name;
 		public DebugConstantType Type;
-		public DebugConstantStructMember Parse(DebugBytecodeReader reader, DebugBytecodeReader memberReader) {
+		public DebugConstantStructMember Parse(DebugBytecodeReader reader, DebugBytecodeReader memberReader)
+		{
 			var result = new DebugConstantStructMember();
 			var nameOffset = memberReader.ReadUInt32("NameOffset");
 			var nameReader = reader.CopyAtOffset("NameReader", memberReader, (int)nameOffset);

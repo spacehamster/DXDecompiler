@@ -20,7 +20,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			SODecls = new List<string>();
 			InterfaceBindings = new List<DebugEffectInterfaceInitializer>();
 		}
-		public static DebugEffectShaderData5 Parse(DebugBytecodeReader reader, 
+		public static DebugEffectShaderData5 Parse(DebugBytecodeReader reader,
 				DebugBytecodeReader variableReader)
 		{
 			var result = new DebugEffectShaderData5();
@@ -35,14 +35,14 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			var interfaceBindingOffset = result.InterfaceBindingOffset = variableReader.ReadUInt32("InterfaceBindingOffset");
 			var shaderReader = reader.CopyAtOffset("ShaderReader", variableReader, (int)shaderOffset);
 			var shaderSize = shaderReader.ReadUInt32("ShaderSize");
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = BytecodeContainer.Parse(shaderReader.ReadBytes("Shader", (int)shaderSize));
 			}
 			for(int i = 0; i < 4; i++)
 			{
 				var offset = result.SODeclsOffset[i];
-				if (offset != 0)
+				if(offset != 0)
 				{
 					var soDeclReader = reader.CopyAtOffset("SODeclReader", variableReader, (int)offset);
 					result.SODecls.Add(soDeclReader.ReadString("SODecls"));

@@ -62,7 +62,7 @@ namespace DXDecompiler.Chunks
 			uint chunkSize = chunkReader.ReadUInt32();
 
 			ChunkType chunkType;
-			if (KnownChunkTypes.ContainsKey(fourCc))
+			if(KnownChunkTypes.ContainsKey(fourCc))
 			{
 				chunkType = KnownChunkTypes[fourCc];
 			}
@@ -73,11 +73,11 @@ namespace DXDecompiler.Chunks
 				return null;
 			}
 
-			var chunkContentReader = chunkReader.CopyAtCurrentPosition((int) chunkSize);
+			var chunkContentReader = chunkReader.CopyAtCurrentPosition((int)chunkSize);
 			BytecodeChunk chunk;
-			switch (chunkType)
+			switch(chunkType)
 			{
-				case ChunkType.Ifce :
+				case ChunkType.Ifce:
 					chunk = InterfacesChunk.Parse(chunkContentReader, chunkSize);
 					break;
 				case ChunkType.Isgn:
@@ -92,8 +92,8 @@ namespace DXDecompiler.Chunks
 				case ChunkType.Rdef:
 					chunk = ResourceDefinitionChunk.Parse(chunkContentReader);
 					break;
-				case ChunkType.Sdbg :
-				case ChunkType.Spdb :
+				case ChunkType.Sdbg:
+				case ChunkType.Spdb:
 					chunk = DebuggingChunk.Parse(chunkContentReader, chunkType, chunkSize);
 					break;
 				case ChunkType.Sfi0:
@@ -138,7 +138,7 @@ namespace DXDecompiler.Chunks
 				case ChunkType.Fxlc:
 					chunk = FxlcChunk.Parse(chunkContentReader, chunkSize, container);
 					break;
-				default :
+				default:
 					throw new ParseException("Invalid chunk type: " + chunkType);
 			}
 

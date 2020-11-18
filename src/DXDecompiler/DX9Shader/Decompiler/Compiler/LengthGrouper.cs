@@ -11,18 +11,18 @@
 
 		public HlslTreeNode[] TryGetLengthContext(HlslTreeNode node)
 		{
-			if (!(node is SquareRootOperation squareRoot))
+			if(!(node is SquareRootOperation squareRoot))
 			{
 				return null;
 			}
 
 			DotProductContext dotProduct = _nodeGrouper.DotProductGrouper.TryGetDotProductGroup(squareRoot.Value);
-			if (dotProduct == null)
+			if(dotProduct == null)
 			{
 				return null;
 			}
 
-			if (NodeGrouper.IsVectorEquivalent(dotProduct.Value1, dotProduct.Value2) == false)
+			if(NodeGrouper.IsVectorEquivalent(dotProduct.Value1, dotProduct.Value2) == false)
 			{
 				return null;
 			}

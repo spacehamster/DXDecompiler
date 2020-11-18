@@ -82,7 +82,7 @@ maps
 				$"unk5 ({unk5}) and OutputRegisterOffset ({outputRegisterOffset}) differ");
 			//Debug.Assert(unk6 == outputRegisterCount,
 			//	$"unk6 ({unk6}) and OutputRegisterCount ({outputRegisterCount}) differ");
-			for (int i = 0; i < mappingCount; i++)
+			for(int i = 0; i < mappingCount; i++)
 			{
 				reader.AddIndent($"Mapping{i}");
 				reader.ReadUInt32("ConstOutput");

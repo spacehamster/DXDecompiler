@@ -16,19 +16,19 @@ namespace DXDecompiler.DX9Shader
 
 			int instructionPointer = 0;
 			bool ifBlock = false;
-			while (instructionPointer < shader.Tokens.Count)
+			while(instructionPointer < shader.Tokens.Count)
 			{
 				var instruction = shader.Tokens[instructionPointer];
-				if (ifBlock)
+				if(ifBlock)
 				{
-					if (instruction.Opcode == Opcode.Else)
+					if(instruction.Opcode == Opcode.Else)
 					{
 						ifBlock = false;
 					}
 				}
 				else
 				{
-					if (instruction.Opcode == Opcode.IfC)
+					if(instruction.Opcode == Opcode.IfC)
 					{
 						ifBlock = true;
 					}
@@ -38,7 +38,7 @@ namespace DXDecompiler.DX9Shader
 			}
 
 			Dictionary<RegisterComponentKey, HlslTreeNode> roots;
-			if (shader.Type == ShaderType.Pixel)
+			if(shader.Type == ShaderType.Pixel)
 			{
 				roots = _activeOutputs
 					.Where(o => o.Key.Type == RegisterType.ColorOut)
@@ -60,14 +60,14 @@ namespace DXDecompiler.DX9Shader
 			_activeOutputs = new Dictionary<RegisterComponentKey, HlslTreeNode>();
 			_samplers = new Dictionary<RegisterKey, HlslTreeNode>();
 
-			foreach (var constant in constantTable)
+			foreach(var constant in constantTable)
 			{
-				if (constant.RegisterSet == RegisterSet.Sampler)
+				if(constant.RegisterSet == RegisterSet.Sampler)
 				{
 					var registerKey = new RegisterKey(RegisterType.Sampler, constant.RegisterIndex);
 					var destinationKey = new RegisterComponentKey(registerKey, 0);
 					int samplerTextureDimension;
-					switch (constant.ParameterType)
+					switch(constant.ParameterType)
 					{
 						case ParameterType.Sampler1D:
 							samplerTextureDimension = 1;
@@ -87,14 +87,14 @@ namespace DXDecompiler.DX9Shader
 				}
 				else
 				{
-					for (int r = 0; r < constant.RegisterCount; r++)
+					for(int r = 0; r < constant.RegisterCount; r++)
 					{
-						if (constant.ParameterType != ParameterType.Float)
+						if(constant.ParameterType != ParameterType.Float)
 						{
 							throw new NotImplementedException();
 						}
 						var registerKey = new RegisterKey(RegisterType.Const, constant.RegisterIndex + r);
-						for (int i = 0; i < 4; i++)
+						for(int i = 0; i < 4; i++)
 						{
 							var destinationKey = new RegisterComponentKey(registerKey, i);
 							var shaderInput = new RegisterInputNode(destinationKey);
@@ -107,18 +107,18 @@ namespace DXDecompiler.DX9Shader
 
 		private void ParseInstruction(Token instruction)
 		{
-			if (instruction.HasDestination)
+			if(instruction.HasDestination)
 			{
 				var newOutputs = new Dictionary<RegisterComponentKey, HlslTreeNode>();
 
 				RegisterComponentKey[] destinationKeys = GetDestinationKeys(instruction).ToArray();
-				foreach (RegisterComponentKey destinationKey in destinationKeys)
+				foreach(RegisterComponentKey destinationKey in destinationKeys)
 				{
 					HlslTreeNode instructionTree = CreateInstructionTree(instruction, destinationKey);
 					newOutputs[destinationKey] = instructionTree;
 				}
 
-				foreach (var output in newOutputs)
+				foreach(var output in newOutputs)
 				{
 					_activeOutputs[output.Key] = output.Value;
 				}
@@ -130,15 +130,15 @@ namespace DXDecompiler.DX9Shader
 			int index = instruction.GetDestinationParamIndex();
 			RegisterKey registerKey = instruction.GetParamRegisterKey(index);
 
-			if (registerKey.Type == RegisterType.Sampler)
+			if(registerKey.Type == RegisterType.Sampler)
 			{
 				yield break;
 			}
-			
+
 			ComponentFlags mask = instruction.GetDestinationWriteMask();
-			for (int component = 0; component < 4; component++)
+			for(int component = 0; component < 4; component++)
 			{
-				if ((mask & (ComponentFlags)(1 << component)) == 0) continue;
+				if((mask & (ComponentFlags)(1 << component)) == 0) continue;
 
 				yield return new RegisterComponentKey(registerKey, component);
 			}
@@ -148,7 +148,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			int componentIndex = destinationKey.ComponentIndex;
 
-			switch (instruction.Opcode)
+			switch(instruction.Opcode)
 			{
 				case Opcode.Dcl:
 					{
@@ -187,7 +187,7 @@ namespace DXDecompiler.DX9Shader
 				case Opcode.Slt:
 					{
 						HlslTreeNode[] inputs = GetInputs(instruction, componentIndex);
-						switch (instruction.Opcode)
+						switch(instruction.Opcode)
 						{
 							case Opcode.Abs:
 								return new AbsoluteOperation(inputs[0]);
@@ -216,7 +216,7 @@ namespace DXDecompiler.DX9Shader
 							case Opcode.Rsq:
 								return new ReciprocalSquareRootOperation(inputs[0]);
 							case Opcode.SinCos:
-								if (componentIndex == 0)
+								if(componentIndex == 0)
 								{
 									return new CosineOperation(inputs[0]);
 								}
@@ -250,7 +250,7 @@ namespace DXDecompiler.DX9Shader
 			const int SamplerIndex = 2;
 
 			RegisterKey samplerRegister = instruction.GetParamRegisterKey(SamplerIndex);
-			if (!_samplers.TryGetValue(samplerRegister, out HlslTreeNode samplerInput))
+			if(!_samplers.TryGetValue(samplerRegister, out HlslTreeNode samplerInput))
 			{
 				throw new InvalidOperationException();
 			}
@@ -258,7 +258,7 @@ namespace DXDecompiler.DX9Shader
 			int numSamplerOutputComponents = samplerRegisterInput.SamplerTextureDimension;
 
 			IList<HlslTreeNode> texCoords = new List<HlslTreeNode>();
-			for (int component = 0; component < numSamplerOutputComponents; component++)
+			for(int component = 0; component < numSamplerOutputComponents; component++)
 			{
 				RegisterComponentKey textureCoordsKey = GetParamRegisterComponentKey(instruction, TextureCoordsIndex, component);
 				HlslTreeNode textureCoord = _activeOutputs[textureCoordsKey];
@@ -285,7 +285,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			var addends = new List<HlslTreeNode>();
 			int numComponents = instruction.Opcode == Opcode.Dp3 ? 3 : 4;
-			for (int component = 0; component < numComponents; component++)
+			for(int component = 0; component < numComponents; component++)
 			{
 				IList<HlslTreeNode> componentInput = GetInputs(instruction, component);
 				var multiply = new MultiplyOperation(componentInput[0], componentInput[1]);
@@ -298,7 +298,7 @@ namespace DXDecompiler.DX9Shader
 		private HlslTreeNode CreateNormalizeOutputNode(Token instruction, int outputComponent)
 		{
 			var inputs = new List<HlslTreeNode>();
-			for (int component = 0; component < 3; component++)
+			for(int component = 0; component < 3; component++)
 			{
 				IList<HlslTreeNode> componentInput = GetInputs(instruction, component);
 				inputs.AddRange(componentInput);
@@ -311,7 +311,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			int numInputs = GetNumInputs(instruction.Opcode);
 			var inputs = new HlslTreeNode[numInputs];
-			for (int i = 0; i < numInputs; i++)
+			for(int i = 0; i < numInputs; i++)
 			{
 				int inputParameterIndex = i + 1;
 				RegisterComponentKey inputKey = GetParamRegisterComponentKey(instruction, inputParameterIndex, componentIndex);
@@ -326,7 +326,7 @@ namespace DXDecompiler.DX9Shader
 		private HlslTreeNode[] GetInputComponents(Token instruction, int inputParameterIndex, int numComponents)
 		{
 			var components = new HlslTreeNode[numComponents];
-			for (int i = 0; i < numComponents; i++)
+			for(int i = 0; i < numComponents; i++)
 			{
 				RegisterComponentKey inputKey = GetParamRegisterComponentKey(instruction, inputParameterIndex, i);
 				HlslTreeNode input = _activeOutputs[inputKey];
@@ -339,7 +339,7 @@ namespace DXDecompiler.DX9Shader
 
 		private static HlslTreeNode ApplyModifier(HlslTreeNode input, SourceModifier modifier)
 		{
-			switch (modifier)
+			switch(modifier)
 			{
 				case SourceModifier.Abs:
 					return new AbsoluteOperation(input);
@@ -356,7 +356,7 @@ namespace DXDecompiler.DX9Shader
 
 		private static int GetNumInputs(Opcode opcode)
 		{
-			switch (opcode)
+			switch(opcode)
 			{
 				case Opcode.Abs:
 				case Opcode.Frc:

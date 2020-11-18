@@ -23,7 +23,7 @@ namespace DXDecompiler.DebugParser.Shex
 				Version = DebugShaderVersion.ParseShex(reader),
 				Length = reader.ReadUInt32("Length")
 			};
-			while (!reader.EndOfBuffer)
+			while(!reader.EndOfBuffer)
 			{
 				var opcodeIndex = program.Tokens.Count;
 				var opcodeToken0 = reader.PeakUint32();
@@ -39,11 +39,11 @@ namespace DXDecompiler.DebugParser.Shex
 					throw new Exception("Error parsing shader");
 				}
 				DebugOpcodeToken opcodeToken;
-				if (opcodeHeader.OpcodeType == OpcodeType.CustomData)
+				if(opcodeHeader.OpcodeType == OpcodeType.CustomData)
 				{
 					opcodeToken = DebugCustomDataToken.Parse(reader, opcodeToken0);
 				}
-				else if (opcodeHeader.OpcodeType.IsDeclaration())
+				else if(opcodeHeader.OpcodeType.IsDeclaration())
 				{
 					opcodeToken = DebugDeclarationToken.Parse(reader, opcodeHeader.OpcodeType, program.Version);
 				}

@@ -15,7 +15,8 @@ namespace DXDecompiler.DebugParser.DX9
 		private uint ComponentCount;
 		public static DebugFxlcOperand Parse(DebugBytecodeReader reader, uint componentCount)
 		{
-			var result = new DebugFxlcOperand() {
+			var result = new DebugFxlcOperand()
+			{
 				ComponentCount = componentCount,
 				IsArray = reader.ReadUInt32("IsArray"),
 				OpType = reader.ReadEnum32<FxlcOperandType>("OpType"),

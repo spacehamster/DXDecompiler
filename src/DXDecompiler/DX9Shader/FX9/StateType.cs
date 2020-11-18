@@ -37,7 +37,7 @@
 		StencilWriteMask = 29,
 		TextureFactor = 30,
 		Wrap0 = 31,
-		Wrap1 = 32, 
+		Wrap1 = 32,
 		Wrap2 = 33,
 		Wrap3 = 34,
 		Wrap4 = 35,

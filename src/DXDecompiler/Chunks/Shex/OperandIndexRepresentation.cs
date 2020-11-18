@@ -20,8 +20,8 @@
 		/// <summary>
 		/// Extra DWORD followed by extra operand
 		/// </summary>
-		Immediate32PlusRelative = 3, 
- 
+		Immediate32PlusRelative = 3,
+
 		/// <summary>
 		/// 2 Extra DWORDS (HI32:LO32) followed by extra operand
 		/// </summary>

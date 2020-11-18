@@ -50,12 +50,12 @@ namespace DXDecompiler.DebugParser
 				new XDocumentType("html", null, null, null),
 				new XElement("html",
 					new XElement("head",
-						new XElement("meta", 
+						new XElement("meta",
 							new XAttribute("charset", "utf-8")),
 						styleTag,
 						javascriptTag),
 					new XElement("body",
-						new XElement("div", 
+						new XElement("div",
 							new XAttribute("class", "panel-row"),
 							new XElement("div",
 								new XAttribute("class", "panel-column"),
@@ -90,7 +90,7 @@ namespace DXDecompiler.DebugParser
 				Encoding = Encoding.UTF8
 			};
 
-			using (var writer = XmlWriter.Create(stringBuilder, settings))
+			using(var writer = XmlWriter.Create(stringBuilder, settings))
 			{
 				xDocument.WriteTo(writer);
 			}
@@ -104,10 +104,10 @@ namespace DXDecompiler.DebugParser
 			for(int i = 0; i < entries.Count; i++)
 			{
 				var entry = entries[i];
-				var nextEntry = i < entries.Count - 1 ? entries[i+1] : null;
+				var nextEntry = i < entries.Count - 1 ? entries[i + 1] : null;
 				var span = new XElement("span", new XAttribute("class", "tree-item"), "");
 				XElement label = null;
-				if (entry is DebugEntry de)
+				if(entry is DebugEntry de)
 				{
 					var valueLength = 10;
 					var value = de.Value.Length > valueLength ?
@@ -128,7 +128,8 @@ namespace DXDecompiler.DebugParser
 						new XAttribute("type", de.Type),
 						new XAttribute("notes", noteText));
 				}
-				if(entry is DebugIndent di){
+				if(entry is DebugIndent di)
+				{
 					var noteText = string.Join(";", di.ExtraNotes);
 					label = new XElement("span", di.Name,
 						new XAttribute("class", "tree-label"),
@@ -144,7 +145,7 @@ namespace DXDecompiler.DebugParser
 						new XAttribute("notes", noteText)
 						);
 				}
-				if (entry is DebugBytecodeReader dr)
+				if(entry is DebugBytecodeReader dr)
 				{
 					var labelText = dr.Name;
 					var value = "";
@@ -179,22 +180,23 @@ namespace DXDecompiler.DebugParser
 				var nextIndent = nextEntry != null ?
 					((nextEntry is DebugBytecodeReader) ? nextEntry.Indent - 1 : nextEntry.Indent) : 0;
 				var indent = (entry is DebugBytecodeReader) ? entry.Indent - 1 : entry.Indent;
-				if (nextEntry != null && nextIndent > indent)
+				if(nextEntry != null && nextIndent > indent)
 				{
 					var caret = new XElement("span", new XAttribute("class", "caret"), "");
 					span.Add(caret);
 					span.Add(label);
-					if (nextIndent - indent > 1) throw new Exception("Unbalanced Indents");
+					if(nextIndent - indent > 1) throw new Exception("Unbalanced Indents");
 					var subList = new XElement("ul", new XAttribute("class", "nested"));
 					li.Add(subList);
 					stack.Push(subList);
-				} else
+				}
+				else
 				{
 					span.Add(label);
 				}
-				if (nextEntry != null && nextIndent < indent)
+				if(nextEntry != null && nextIndent < indent)
 				{
-					for (int j = 0; j < indent - nextIndent; j++)
+					for(int j = 0; j < indent - nextIndent; j++)
 					{
 						stack.Pop();
 					}
@@ -205,25 +207,26 @@ namespace DXDecompiler.DebugParser
 		{
 			var nbsp = "\u00A0";
 			var used = BuildUsedLookup();
-			for (int i = 0; i < buffer.Length; i += 16)
+			for(int i = 0; i < buffer.Length; i += 16)
 			{
 				var row = new XElement("div",
 					new XAttribute("row", i / 16),
 					new XAttribute("class", "hex_row monospace"),
-					new XElement("span",  $"{i.ToString("X4")}:{nbsp}{nbsp}"));
+					new XElement("span", $"{i.ToString("X4")}:{nbsp}{nbsp}"));
 				element.Add(row);
-				for (int j = i; j < i + 16; j++)
+				for(int j = i; j < i + 16; j++)
 				{
-					
+
 					var text = j < buffer.Length ? buffer[j].ToString("X2") : $"{nbsp}{nbsp}";
 					var hexElement = new XElement("span", text,
 						new XAttribute("id", "b" + j.ToString()),
 						new XAttribute("index", j.ToString()),
 						new XAttribute("class", "hex_byte"));
-					if (j < used.Length && used[j] == null)
+					if(j < used.Length && used[j] == null)
 					{
 						hexElement.Attribute("class").Value += " unused";
-					} else if(j < used.Length && used[j] != null)
+					}
+					else if(j < used.Length && used[j] != null)
 					{
 						hexElement.Add(new XAttribute("member", "member_" + used[j].GetHashCode()));
 					}
@@ -234,20 +237,20 @@ namespace DXDecompiler.DebugParser
 					}
 				}
 				row.Add(new XElement("span", $"{nbsp}{nbsp}"));
-				for (int j = i; j < i + 16; j++)
+				for(int j = i; j < i + 16; j++)
 				{
 					var asciiText = j < buffer.Length ? DebugUtil.CharToReadable((char)buffer[j]) : nbsp;
-					var asciiElement = new XElement("span", 
+					var asciiElement = new XElement("span",
 							asciiText,
 							new XAttribute("id", "a" + j.ToString()),
 							new XAttribute("index", j.ToString()),
 							new XAttribute("class", "hex_ascii"));
 					row.Add(asciiElement);
-					if (j < used.Length && used[j] == null)
+					if(j < used.Length && used[j] == null)
 					{
 						asciiElement.Attribute("class").Value += " unused";
 					}
-					else if (j < used.Length && used[j] != null)
+					else if(j < used.Length && used[j] != null)
 					{
 						asciiElement.Add(new XAttribute("member", "member_" + used[j].GetHashCode()));
 					}
@@ -258,9 +261,9 @@ namespace DXDecompiler.DebugParser
 		{
 			var entries = Members.OfType<DebugEntry>();
 			var used = new DebugEntry[buffer.Length];
-			foreach (var entry in entries)
+			foreach(var entry in entries)
 			{
-				for (var i = entry.AbsoluteIndex; i < entry.AbsoluteIndex + entry.Size; i++)
+				for(var i = entry.AbsoluteIndex; i < entry.AbsoluteIndex + entry.Size; i++)
 				{
 					if(used[i] == null)
 					{

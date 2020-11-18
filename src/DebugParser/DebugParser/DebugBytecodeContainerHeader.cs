@@ -13,7 +13,7 @@ namespace DXDecompiler.DebugParser
 		public static DebugBytecodeContainerHeader Parse(DebugBytecodeReader reader)
 		{
 			var fourCc = reader.ReadUInt32("fourCC");
-			if (fourCc != "DXBC".ToFourCc())
+			if(fourCc != "DXBC".ToFourCc())
 				throw new ParseException($"Invalid FourCC 0x{fourCc.ToString("X2")}");
 
 			var uniqueKey = new uint[4];

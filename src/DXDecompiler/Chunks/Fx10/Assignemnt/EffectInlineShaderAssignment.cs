@@ -16,7 +16,7 @@ namespace DXDecompiler.Chunks.Fx10
 			var SODeclOffset = assignmentReader.ReadUInt32();
 			var shaderReader = reader.CopyAtOffset((int)shaderOffset);
 			var shaderSize = shaderReader.ReadUInt32();
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = BytecodeContainer.Parse(shaderReader.ReadBytes((int)shaderSize));
 			}

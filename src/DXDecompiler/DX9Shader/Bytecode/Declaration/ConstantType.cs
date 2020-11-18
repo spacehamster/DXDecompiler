@@ -26,10 +26,10 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 			result.Elements = typeReader.ReadUInt16();
 			var memberCount = typeReader.ReadUInt16();
 			var memberInfoOffset = typeReader.ReadUInt32();
-			if (memberCount != 0)
+			if(memberCount != 0)
 			{
 				var memberReader = reader.CopyAtOffset((int)memberInfoOffset);
-				for (int i = 0; i < memberCount; i++)
+				for(int i = 0; i < memberCount; i++)
 				{
 					result.Members.Add(ConstantMember.Parse(reader, memberReader));
 				}
@@ -39,7 +39,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 		public uint GetSize()
 		{
 			var elementCount = Math.Max(1, Elements);
-			switch (ParameterClass)
+			switch(ParameterClass)
 			{
 				case ParameterClass.Scalar:
 					return 4 * elementCount;
@@ -59,9 +59,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 
 		public string GetTypeName()
 		{
-			if (ParameterClass == ParameterClass.Vector)
+			if(ParameterClass == ParameterClass.Vector)
 			{
-				if (Columns > 1)
+				if(Columns > 1)
 				{
 					return $"{ParameterType.GetDescription()}{Columns}";
 				}
@@ -70,11 +70,11 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 					return $"{ParameterType.GetDescription()}";
 				}
 			}
-			else if (ParameterClass == ParameterClass.MatrixColumns)
+			else if(ParameterClass == ParameterClass.MatrixColumns)
 			{
 				return $"{ParameterType.GetDescription()}{Rows}x{Columns}";
 			}
-			else if (ParameterClass == ParameterClass.MatrixRows)
+			else if(ParameterClass == ParameterClass.MatrixRows)
 			{
 				return $"{ParameterType.GetDescription()}{Columns}x{Rows}";
 			}

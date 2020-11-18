@@ -46,10 +46,10 @@ namespace DXDecompiler.Chunks.Fx10
 			ShaderData5 = new List<EffectShaderData5>();
 			ShaderData = new List<EffectShaderData>();
 			GSSOInitializers = new List<EffectGSSOInitializer>();
-	}
+		}
 		private static bool IfHasAssignments(EffectType type)
 		{
-			switch (type.VariableType)
+			switch(type.VariableType)
 			{
 				case ShaderVariableType.Sampler:
 				case ShaderVariableType.DepthStencil:
@@ -61,7 +61,7 @@ namespace DXDecompiler.Chunks.Fx10
 		}
 		private static bool IsShader(EffectType type)
 		{
-			switch (type.VariableType)
+			switch(type.VariableType)
 			{
 				case ShaderVariableType.VertexShader:
 				case ShaderVariableType.PixelShader:
@@ -75,7 +75,7 @@ namespace DXDecompiler.Chunks.Fx10
 		}
 		private static bool IsShader5(EffectType type)
 		{
-			switch (type.ObjectType)
+			switch(type.ObjectType)
 			{
 				case EffectObjectType.VertexShader5:
 				case EffectObjectType.PixelShader5:
@@ -97,7 +97,7 @@ namespace DXDecompiler.Chunks.Fx10
 			var typeReader = reader.CopyAtOffset((int)typeOffset);
 			result.Type = EffectType.Parse(reader, typeReader, version);
 			var semanticOffset = variableReader.ReadUInt32();
-			if (semanticOffset != 0)
+			if(semanticOffset != 0)
 			{
 				var semanticReader = reader.CopyAtOffset((int)semanticOffset);
 				result.Semantic = semanticReader.ReadString();
@@ -107,56 +107,56 @@ namespace DXDecompiler.Chunks.Fx10
 				result.Semantic = "";
 			}
 			result.BufferOffset = variableReader.ReadUInt32();
-			if (isShared)
+			if(isShared)
 			{
 				return result;
 			}
 			// Initializer data
-			if (result.Type.ObjectType == EffectObjectType.String)
+			if(result.Type.ObjectType == EffectObjectType.String)
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					var stringValueOffset = variableReader.ReadUInt32();
 					var stringValueReader = reader.CopyAtOffset((int)stringValueOffset);
 					result.Strings.Add(stringValueReader.ReadString());
 				}
 			}
-			if (IfHasAssignments(result.Type))
+			if(IfHasAssignments(result.Type))
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					var assignmentCount = variableReader.ReadUInt32();
 					var assignments = new List<EffectAssignment>();
 					result.Assignments.Add(assignments);
-					for (int j = 0; j < assignmentCount; j++)
+					for(int j = 0; j < assignmentCount; j++)
 					{
 						assignments.Add(EffectAssignment.Parse(reader, variableReader));
 					}
 				}
 			}
-			if (result.Type.ObjectType == EffectObjectType.GeometryShaderWithStream)
+			if(result.Type.ObjectType == EffectObjectType.GeometryShaderWithStream)
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					result.GSSOInitializers.Add(EffectGSSOInitializer.Parse(reader, variableReader));
 				}
 			}
-			else if (IsShader5(result.Type))
+			else if(IsShader5(result.Type))
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					result.ShaderData5.Add(EffectShaderData5.Parse(reader, variableReader));
 				}
 			}
-			else if (IsShader(result.Type))
+			else if(IsShader(result.Type))
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					result.ShaderData.Add(EffectShaderData.Parse(reader, variableReader));
 				}
 			}
 			var annotationCount = variableReader.ReadUInt32();
-			for (int i = 0; i < annotationCount; i++)
+			for(int i = 0; i < annotationCount; i++)
 			{
 				result.Annotations.Add(EffectAnnotation.Parse(reader, variableReader, version));
 			}
@@ -172,62 +172,64 @@ namespace DXDecompiler.Chunks.Fx10
 			}
 			sb.Append(string.Format("{0,-7} {1}{2}", Type.TypeName, Name, arrayFormat));
 
-			if (Annotations.Count > 0)
+			if(Annotations.Count > 0)
 			{
 				sb.AppendLine();
 				sb.AppendLine("<");
-				foreach (var annotation in Annotations)
+				foreach(var annotation in Annotations)
 				{
 					sb.AppendLine($"    {annotation}");
 				}
 				sb.Append(">");
 			}
-			if (Assignments.Count == 1)
+			if(Assignments.Count == 1)
 			{
 				sb.AppendLine();
 				sb.AppendLine("{");
-				foreach (var subAssignment in Assignments[0])
+				foreach(var subAssignment in Assignments[0])
 				{
 					sb.AppendLine($"    {subAssignment}");
 				}
 				sb.Append("}");
-			} else if(Assignments.Count > 1) {
+			}
+			else if(Assignments.Count > 1)
+			{
 				sb.AppendLine();
 				sb.AppendLine("{");
-				for (int i = 0; i < Assignments.Count; i++)
+				for(int i = 0; i < Assignments.Count; i++)
 				{
 					var assignment = Assignments[i];
 					sb.AppendLine("    {");
-					foreach (var subAssignment in assignment)
+					foreach(var subAssignment in assignment)
 					{
 						sb.AppendLine($"        {subAssignment}");
 					}
 					sb.Append("    }");
-					if (i < Assignments.Count - 1) sb.Append(",");
+					if(i < Assignments.Count - 1) sb.Append(",");
 					sb.AppendLine();
 				}
 				sb.Append("}");
 			}
-			if (Type.ObjectType == EffectObjectType.GeometryShaderWithStream)
+			if(Type.ObjectType == EffectObjectType.GeometryShaderWithStream)
 			{
 				sb.AppendLine(" =");
-				foreach (var data in GSSOInitializers)
+				foreach(var data in GSSOInitializers)
 				{
 					sb.Append(data.ToString());
 				}
 			}
-			else if (IsShader5(Type))
+			else if(IsShader5(Type))
 			{
 				sb.AppendLine(" =");
-				foreach (var data in ShaderData5)
+				foreach(var data in ShaderData5)
 				{
 					sb.Append(data.ToString());
 				}
 			}
-			else if (IsShader(Type))
+			else if(IsShader(Type))
 			{
 				sb.AppendLine(" =");
-				foreach (var data in ShaderData)
+				foreach(var data in ShaderData)
 				{
 					sb.Append(data.ToString());
 				}

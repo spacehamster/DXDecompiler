@@ -22,7 +22,7 @@ namespace DXDecompiler.Chunks.RTS0
 				ShaderRegister = descReader.ReadUInt32(),
 				RegisterSpace = descReader.ReadUInt32(),
 			};
-			if (version == RootSignatureVersion.Version1_1)
+			if(version == RootSignatureVersion.Version1_1)
 			{
 				result.Flags = (RootDescriptorFlags)descReader.ReadUInt32();
 			}

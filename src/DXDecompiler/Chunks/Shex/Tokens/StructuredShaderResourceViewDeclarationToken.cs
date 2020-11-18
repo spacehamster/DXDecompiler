@@ -37,7 +37,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				Operand = Operand.Parse(reader, token0.DecodeValue<OpcodeType>(0, 10)),
 				StructByteStride = reader.ReadUInt32()
 			};
-			if (version.IsSM51)
+			if(version.IsSM51)
 			{
 				result.SpaceIndex = reader.ReadUInt32();
 			}
@@ -46,7 +46,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 
 		public override string ToString()
 		{
-			return string.Format("{0} {1}, {2}{3}", 
+			return string.Format("{0} {1}, {2}{3}",
 				TypeDescription, Operand, StructByteStride,
 				IsSM51 ? $", space={SpaceIndex}" : "");
 		}

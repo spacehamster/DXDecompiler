@@ -19,7 +19,7 @@ namespace DXDecompiler.Chunks.Fx10
 		{
 			var result = new EffectConstantAssignment();
 			var assignmentCount = assignmentReader.ReadUInt32();
-			for (int i = 0; i < assignmentCount; i++)
+			for(int i = 0; i < assignmentCount; i++)
 			{
 				result.Types.Add((EffectScalarType)assignmentReader.ReadUInt32());
 				result.Values.Add(Number.Parse(assignmentReader));
@@ -34,7 +34,7 @@ namespace DXDecompiler.Chunks.Fx10
 				return value.UInt.ToString();
 			}
 			var numberType = scalarType.ToNumberType();
-			if (type.IsEnum && scalarType == EffectScalarType.Int)
+			if(type.IsEnum && scalarType == EffectScalarType.Int)
 			{
 				var enumValue = (Enum)Enum.ToObject(type, value.UInt);
 				var description = EnumExtensions.GetDescription(enumValue);
@@ -44,13 +44,13 @@ namespace DXDecompiler.Chunks.Fx10
 			{
 				return value.ToString(numberType);
 			}
-			if (type == typeof(float))
+			if(type == typeof(float))
 			{
 				return value.ToString();
 			}
-			if (type == typeof(byte))
+			if(type == typeof(byte))
 			{
-				if (numberType == Shex.NumberType.UInt || numberType == Shex.NumberType.Int)
+				if(numberType == Shex.NumberType.UInt || numberType == Shex.NumberType.Int)
 				{
 					return string.Format("0x{0:x2}", value.Byte0);
 				}
@@ -59,13 +59,14 @@ namespace DXDecompiler.Chunks.Fx10
 					return value.ToString(numberType);
 				}
 			}
-			if (type == typeof(bool))
+			if(type == typeof(bool))
 			{
-				if (scalarType == EffectScalarType.Bool)
+				if(scalarType == EffectScalarType.Bool)
 				{
 					return string.Format("{0} /* {1} */",
 						value.ToString(Shex.NumberType.Bool).ToUpper(), value.ToString(Shex.NumberType.Bool));
-				} else if (scalarType == EffectScalarType.Int)
+				}
+				else if(scalarType == EffectScalarType.Int)
 				{
 					return string.Format("{0} /* {1} */",
 						value.ToString(Shex.NumberType.Bool).ToUpper(), value.UInt);
@@ -75,11 +76,11 @@ namespace DXDecompiler.Chunks.Fx10
 					return value.ToString(numberType);
 				}
 			}
-			if (type == typeof(uint))
+			if(type == typeof(uint))
 			{
-				if (scalarType == EffectScalarType.UInt)
+				if(scalarType == EffectScalarType.UInt)
 				{
-					if (value.UInt > 10000)
+					if(value.UInt > 10000)
 						return "0x" + value.UInt.ToString("x8");
 					return value.UInt.ToString();
 				}
@@ -96,35 +97,35 @@ namespace DXDecompiler.Chunks.Fx10
 			var formatedValues = Values.Zip(Types, (x, y) => FormatValue(x, y));
 			string value = string.Join(", ", formatedValues);
 			string typeName = "unknown";
-			if (type == null)
+			if(type == null)
 			{
 				return "NULL";
 			}
-			else if (type.IsEnum)
+			else if(type.IsEnum)
 			{
 				typeName = "uint";
 			}
-			else if (type == typeof(float))
+			else if(type == typeof(float))
 			{
 				typeName = "float";
 			}
-			else if (type == typeof(byte))
+			else if(type == typeof(byte))
 			{
 				typeName = "byte";
 			}
-			else if (type == typeof(bool))
+			else if(type == typeof(bool))
 			{
 				typeName = "bool";
 			}
-			else if (type == typeof(uint))
+			else if(type == typeof(uint))
 			{
 				typeName = "uint";
 			}
-			else if (type == typeof(int))
+			else if(type == typeof(int))
 			{
 				typeName = "uint";
 			}
-			if (Values.Count > 1)
+			if(Values.Count > 1)
 			{
 				typeName += Values.Count;
 			}

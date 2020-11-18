@@ -37,7 +37,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 			var shaderFlags = (ShaderFlags)ctabReader.ReadUInt32();
 			var shaderModelOffset = ctabReader.ReadInt32();
 
-			for (int i = 0; i < numConstants; i++)
+			for(int i = 0; i < numConstants; i++)
 			{
 				var decReader = ctabReader.CopyAtOffset(constantInfoOffset + i * 20);
 				ConstantDeclaration declaration = ConstantDeclaration.Parse(ctabReader, decReader);
@@ -56,7 +56,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 		{
 			var decl = ConstantDeclarations
 				.FirstOrDefault(d => d.ContainsIndex((int)elementIndex));
-			if(decl.ParameterClass == ParameterClass.MatrixColumns || 
+			if(decl.ParameterClass == ParameterClass.MatrixColumns ||
 				decl.ParameterClass == ParameterClass.MatrixRows ||
 				decl.ParameterClass == ParameterClass.Struct ||
 				decl.Elements > 1)
@@ -64,7 +64,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 				var arrayIndex = elementIndex - decl.RegisterIndex;
 				return $"{decl.Name}[{arrayIndex}]";
 			}
-			if (decl == null)
+			if(decl == null)
 			{
 				return string.Format("var{0}", elementIndex);
 			}

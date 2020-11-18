@@ -12,7 +12,7 @@ namespace DXDecompiler.Decompiler
 		internal void TranslateInstruction(InstructionToken token)
 		{
 			DebugLog(token);
-			switch (token.Header.OpcodeType)
+			switch(token.Header.OpcodeType)
 			{
 				case OpcodeType.Dtoi:
 				case OpcodeType.Dtou:
@@ -341,7 +341,7 @@ namespace DXDecompiler.Decompiler
 					}
 				case OpcodeType.Ret:
 					{
-						if (Container.Shader.Version.ProgramType != ProgramType.ComputeShader &&
+						if(Container.Shader.Version.ProgramType != ProgramType.ComputeShader &&
 							Container.Shader.Version.ProgramType != ProgramType.GeometryShader)
 						{
 							AddIndent();
@@ -356,25 +356,25 @@ namespace DXDecompiler.Decompiler
 				//Functions
 				case OpcodeType.Sincos:
 					{
-						if (token.Operands[0].OperandType == token.Operands[2].OperandType &&
+						if(token.Operands[0].OperandType == token.Operands[2].OperandType &&
 							token.Operands[0].Indices[0].Value == token.Operands[2].Indices[0].Value)
 						{
-							if (token.Operands[1].OperandType != OperandType.Null)
+							if(token.Operands[1].OperandType != OperandType.Null)
 							{
 								CallHelper("cos", token, 1, 2);
 							}
-							if (token.Operands[0].OperandType != OperandType.Null)
+							if(token.Operands[0].OperandType != OperandType.Null)
 							{
 								CallHelper("cos", token, 0, 2);
 							}
 						}
 						else
 						{
-							if (token.Operands[0].OperandType != OperandType.Null)
+							if(token.Operands[0].OperandType != OperandType.Null)
 							{
 								CallHelper("sin", token, 0, 2);
 							}
-							if (token.Operands[1].OperandType != OperandType.Null)
+							if(token.Operands[1].OperandType != OperandType.Null)
 							{
 								CallHelper("cos", token, 1, 2);
 							}
@@ -532,7 +532,7 @@ namespace DXDecompiler.Decompiler
 					}
 				case OpcodeType.StoreRaw:
 					{
-						if (token.Operands[0].OperandType == OperandType.UnorderedAccessView)
+						if(token.Operands[0].OperandType == OperandType.UnorderedAccessView)
 						{
 							AddCallInterfaceNoDest("Store", token, 0, 1, 2);
 						}
@@ -597,7 +597,7 @@ namespace DXDecompiler.Decompiler
 				case OpcodeType.Resinfo:
 					{
 						int parameterCount = token.Operands[0].GetNumSwizzleElements();
-						for (int i = 0; i < 3 - parameterCount; i++)
+						for(int i = 0; i < 3 - parameterCount; i++)
 						{
 							AddIndent();
 							Output.AppendLine($"float unused{i};");
@@ -607,17 +607,17 @@ namespace DXDecompiler.Decompiler
 						Output.Append(".GetDimensions(");
 						WriteOperand(token.Operands[1]);
 						var usedMask = token.Operands[0].GetUsedComponents();
-						for (int i = 0; i < 4; i++)
+						for(int i = 0; i < 4; i++)
 						{
 							var mask = (ComponentMask)(1 << i);
-							if (!usedMask.HasFlag(mask))
+							if(!usedMask.HasFlag(mask))
 							{
 								continue;
 							}
 							Output.Append(", ");
 							WriteOperandWithMask(token.Operands[0], mask);
 						}
-						for (int i = 0; i < 3 - parameterCount; i++)
+						for(int i = 0; i < 3 - parameterCount; i++)
 						{
 							Output.Append($", unused{i}");
 						}
@@ -777,27 +777,27 @@ namespace DXDecompiler.Decompiler
 				case OpcodeType.Sync:
 					{
 						AddIndent();
-						if (token.SyncFlags == SyncFlags.UnorderedAccessViewGlobal)
+						if(token.SyncFlags == SyncFlags.UnorderedAccessViewGlobal)
 						{
 							Output.AppendLine("DeviceMemoryBarrier();");
 						}
-						else if (token.SyncFlags == SyncFlags.SharedMemory)
+						else if(token.SyncFlags == SyncFlags.SharedMemory)
 						{
 							Output.AppendLine("GroupMemoryBarrier();");
 						}
-						else if (token.SyncFlags == (SyncFlags.SharedMemory | SyncFlags.UnorderedAccessViewGlobal))
+						else if(token.SyncFlags == (SyncFlags.SharedMemory | SyncFlags.UnorderedAccessViewGlobal))
 						{
 							Output.AppendLine("AllMemoryBarrier();");
 						}
-						else if (token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.UnorderedAccessViewGlobal))
+						else if(token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.UnorderedAccessViewGlobal))
 						{
 							Output.AppendLine("DeviceMemoryBarrierWithGroupSync();");
 						}
-						else if (token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.SharedMemory))
+						else if(token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.SharedMemory))
 						{
 							Output.AppendLine("GroupMemoryBarrierWithGroupSync();");
 						}
-						else if (token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.SharedMemory | SyncFlags.UnorderedAccessViewGlobal))
+						else if(token.SyncFlags == (SyncFlags.ThreadsInGroup | SyncFlags.SharedMemory | SyncFlags.UnorderedAccessViewGlobal))
 						{
 							Output.AppendLine("AllMemoryBarrierWithGroupSync();");
 						}
@@ -809,7 +809,7 @@ namespace DXDecompiler.Decompiler
 					}
 				case OpcodeType.Discard:
 					{
-						if (token.Operands[0].OperandType == OperandType.Immediate32 ||
+						if(token.Operands[0].OperandType == OperandType.Immediate32 ||
 							token.Operands[0].OperandType == OperandType.Immediate64)
 						{
 							AddIndent();
@@ -889,7 +889,7 @@ namespace DXDecompiler.Decompiler
 					}
 				case OpcodeType.SamplePos:
 					{
-						if (token.Operands[1].OperandType == OperandType.Rasterizer)
+						if(token.Operands[1].OperandType == OperandType.Rasterizer)
 						{
 							CallHelper("GetRenderTargetSamplePosition", token, 0, 2);
 						}
@@ -936,10 +936,10 @@ namespace DXDecompiler.Decompiler
 			AddIndent();
 			WriteOperand(instruction.Operands[dest]);
 			Output.AppendFormat(" = {0}(", name);
-			for (int i = 0; i < srcs.Length; i++)
+			for(int i = 0; i < srcs.Length; i++)
 			{
 				WriteOperand(instruction.Operands[srcs[i]]);
-				if (i < srcs.Length - 1)
+				if(i < srcs.Length - 1)
 				{
 					Output.Append(", ");
 				}
@@ -962,25 +962,25 @@ namespace DXDecompiler.Decompiler
 			Output.Append("if((");
 			WriteOperand(instruction.Operands[0]);
 			string statement = "";
-			if (instruction.Header.OpcodeType == OpcodeType.BreakC)
+			if(instruction.Header.OpcodeType == OpcodeType.BreakC)
 			{
 				statement = "break";
 			}
-			else if (instruction.Header.OpcodeType == OpcodeType.ContinueC)
+			else if(instruction.Header.OpcodeType == OpcodeType.ContinueC)
 			{
 				statement = "continue";
 			}
-			else if (instruction.Header.OpcodeType == OpcodeType.RetC)
+			else if(instruction.Header.OpcodeType == OpcodeType.RetC)
 			{
 				statement = "return";
 			}
-			else if (instruction.Header.OpcodeType == OpcodeType.Discard)
+			else if(instruction.Header.OpcodeType == OpcodeType.Discard)
 			{
 				statement = "discard";
 			}
-			if (instruction.TestBoolean == InstructionTestBoolean.Zero)
+			if(instruction.TestBoolean == InstructionTestBoolean.Zero)
 			{
-				if (instruction.Header.OpcodeType == OpcodeType.If)
+				if(instruction.Header.OpcodeType == OpcodeType.If)
 				{
 					Output.AppendLine(") == 0u){");
 					indent++;
@@ -992,7 +992,7 @@ namespace DXDecompiler.Decompiler
 			}
 			else
 			{
-				if (instruction.Header.OpcodeType == OpcodeType.If)
+				if(instruction.Header.OpcodeType == OpcodeType.If)
 				{
 					Output.AppendLine(") != 0u){");
 					indent++;
@@ -1064,9 +1064,9 @@ namespace DXDecompiler.Decompiler
 			string[] intTypes = new string[] { " ", "int", "int2", "int3", "int4" };
 			string[] floatTypes = new string[] { " ", "float", "float2", "float3", "float4" };
 			string[] doubleTypes = new string[] { " ", "double", "double2", "double3", "double4" };
-			if (components < 1 || components > 4)
+			if(components < 1 || components > 4)
 				return "ERROR TOO MANY COMPONENTS IN VECTOR";
-			switch (type)
+			switch(type)
 			{
 				case ShaderVariableType.UInt:
 					return uintTypes[components];
@@ -1086,9 +1086,9 @@ namespace DXDecompiler.Decompiler
 			AddAssignToDest(inst.Operands[dest]);
 			WriteOperandWithMask(inst.Operands[src0], ComponentMask.None);
 			Output.AppendFormat(".{0}(", method);
-			for (int i = 0; i < args.Length; i++)
+			for(int i = 0; i < args.Length; i++)
 			{
-				if (i > 0) Output.Append(", ");
+				if(i > 0) Output.Append(", ");
 				WriteOperand(inst.Operands[args[i]]);
 			}
 			Output.AppendLine(");");
@@ -1098,9 +1098,9 @@ namespace DXDecompiler.Decompiler
 			AddIndent();
 			WriteOperandWithMask(inst.Operands[src0], ComponentMask.None);
 			Output.AppendFormat(".{0}(", method);
-			for (int i = 0; i < args.Length; i++)
+			for(int i = 0; i < args.Length; i++)
 			{
-				if (i > 0) Output.Append(", ");
+				if(i > 0) Output.Append(", ");
 				WriteOperand(inst.Operands[args[i]]);
 			}
 			Output.AppendLine(");");
@@ -1110,7 +1110,7 @@ namespace DXDecompiler.Decompiler
 			AddIndent();
 			AddAssignToDest(inst.Operands[0]);
 			WriteOperandWithMask(inst.Operands[2], ComponentMask.None);
-			switch (inst.Header.OpcodeType)
+			switch(inst.Header.OpcodeType)
 			{
 				case OpcodeType.Sample:
 					Output.Append(".Sample(");
@@ -1168,7 +1168,7 @@ namespace DXDecompiler.Decompiler
 					break;
 				default:
 					throw new InvalidOperationException($"Unexpected token {inst}");
-			}				
+			}
 			WriteOperandWithMask(inst.Operands[3], ComponentMask.None);
 			Output.Append(", ");
 			WriteOperand(inst.Operands[1]);
@@ -1183,17 +1183,19 @@ namespace DXDecompiler.Decompiler
 			AddIndent();
 			AddAssignToDest(token.Operands[0]);
 			var tex = token.Header.OpcodeType.IsFeedbackResourceAccess() ?
-					token.Operands[4] : 
+					token.Operands[4] :
 					token.Operands[3];
 			// tex.OperandType is Resource for texture reads, OperandType.UnorderedAccessView for UAV reads
 			uint structSize = 16;
-			if (tex.OperandType == OperandType.ThreadGroupSharedMemory)
+			if(tex.OperandType == OperandType.ThreadGroupSharedMemory)
 			{
 				var dcl = Container.Shader.DeclarationTokens
 					.OfType<StructuredThreadGroupSharedMemoryDeclarationToken>()
 					.First(d => d.Operand.Indices[0].Value == tex.Indices[0].Value);
 				structSize = dcl.StructByteStride * dcl.StructCount * 4;
-			} else { 
+			}
+			else
+			{
 				var buffer = GetConstantBuffer(tex.OperandType, (uint)tex.Indices[0].Value);
 				structSize = buffer.Variables[0].Size;
 			}
@@ -1201,8 +1203,8 @@ namespace DXDecompiler.Decompiler
 			WriteOperandWithMask(token.Operands[3], ComponentMask.None);
 			Output.Append(".Load(");
 			WriteOperand(token.Operands[1]);
-			Output.AppendFormat("))[{0}]", token.Operands[2].ImmediateValues.GetNumber(0).UInt / 16 );
-		
+			Output.AppendFormat("))[{0}]", token.Operands[2].ImmediateValues.GetNumber(0).UInt / 16);
+
 			Output.AppendLine(";");
 		}
 		void AddLoad(InstructionToken token)
@@ -1211,23 +1213,23 @@ namespace DXDecompiler.Decompiler
 			AddAssignToDest(token.Operands[0]);
 			var tex = token.Operands[2];
 			var resourceBinding = GetResourceBinding(tex.OperandType, (uint)tex.Indices[0].Value);
-			if (resourceBinding.Type == ShaderInputType.TBuffer)
+			if(resourceBinding.Type == ShaderInputType.TBuffer)
 			{
 				var buffer = GetConstantBuffer(tex.OperandType, (uint)tex.Indices[0].Value);
 				var variable = buffer.Variables[0];
-				bool castNeeded = variable.ShaderType.VariableClass != ShaderVariableClass.Vector 
+				bool castNeeded = variable.ShaderType.VariableClass != ShaderVariableClass.Vector
 					|| variable.ShaderType.ElementCount < 2;
-				if (castNeeded)
+				if(castNeeded)
 				{
 					Output.AppendFormat("((float4[{0}])", buffer.Size / 16);
 				}
 				WriteOperandWithMask(tex, ComponentMask.None);
-				if (castNeeded)
+				if(castNeeded)
 				{
 					Output.Append(")");
 				}
 				Output.Append("[");
-				if (token.Operands[1].OperandType == OperandType.Immediate32)
+				if(token.Operands[1].OperandType == OperandType.Immediate32)
 				{
 					Output.Append(token.Operands[1].ImmediateValues.Int0);
 				}
@@ -1255,7 +1257,7 @@ namespace DXDecompiler.Decompiler
 			Output.AppendLine();
 			AddIndent();
 			string command;
-			switch (message.InfoQueueMessageID)
+			switch(message.InfoQueueMessageID)
 			{
 				case 2097410:
 					command = "printf";
@@ -1275,7 +1277,7 @@ namespace DXDecompiler.Decompiler
 				.Replace("\r", "\\r")
 				);
 
-			foreach (var operand in message.Operands)
+			foreach(var operand in message.Operands)
 			{
 				Output.AppendFormat(", ");
 				WriteOperand(operand);

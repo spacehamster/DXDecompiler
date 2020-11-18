@@ -26,13 +26,13 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			result.Name = nameReader.ReadString("Name");
 			result.ShaderCount = passReader.ReadUInt32("ShaderCount");
 			result.AnnotationCount = passReader.ReadUInt32("AnnotationCount");
-			for (int i = 0; i < result.AnnotationCount; i++)
+			for(int i = 0; i < result.AnnotationCount; i++)
 			{
 				passReader.AddIndent($"Annotation {i}");
 				result.Annotations.Add(DebugEffectAnnotation.Parse(reader, passReader, version));
 				passReader.RemoveIndent();
 			}
-			for (int i = 0; i < result.ShaderCount; i++)
+			for(int i = 0; i < result.ShaderCount; i++)
 			{
 				passReader.AddIndent($"Shader {i}");
 				result.Assignments.Add(DebugEffectAssignment.Parse(reader, passReader));

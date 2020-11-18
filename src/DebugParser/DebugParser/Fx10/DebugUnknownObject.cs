@@ -8,7 +8,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 		public static DebugUnknownObject Parse(DebugBytecodeReader variableReader, uint count)
 		{
 			var result = new DebugUnknownObject();
-			for (int i = 0; i < count; i++)
+			for(int i = 0; i < count; i++)
 			{
 				result.Data.Add(variableReader.ReadUInt32($"UnknownValue{i}"));
 			}

@@ -39,10 +39,11 @@ namespace DXDecompiler.Tests
 				{
 					var path = Path.GetDirectoryName(pathWithExt) + @"\" + Path.GetFileNameWithoutExtension(pathWithExt);
 					var relPath = FileUtil.GetRelativePath(path, ShaderDirectory);
-					if (Ignore.Contains(relPath))
+					if(Ignore.Contains(relPath))
 					{
 						yield return new TestCaseData(relPath).Ignore("FXC quirk");
-					} else
+					}
+					else
 					{
 						yield return new TestCaseData(relPath);
 					}
@@ -77,7 +78,7 @@ namespace DXDecompiler.Tests
 			asmFileText = TestUtils.NormalizeAssembly(asmFileText);
 
 			// Assert.
-			if (container.Chunks.OfType<DebuggingChunk>().Any())
+			if(container.Chunks.OfType<DebuggingChunk>().Any())
 			{
 				Warn.If(true, "Debugging information is ignored during dissasembly");
 			}
@@ -92,12 +93,12 @@ namespace DXDecompiler.Tests
 			var dir = Path.GetDirectoryName(path);
 			var file = Path.GetFileName(path);
 			var parts = file.Split('_');
-			for (int i = parts.Length; i > 0; i--)
+			for(int i = parts.Length; i > 0; i--)
 			{
 				file = string.Join("_", parts.Take(i));
-				if (File.Exists($"{dir}/{file}")) return file;
-				if (File.Exists($"{dir}/{file}.fx")) return $"{file}.fx";
-				if (File.Exists($"{dir}/{file}.hlsl")) return $"{file}.hlsl";
+				if(File.Exists($"{dir}/{file}")) return file;
+				if(File.Exists($"{dir}/{file}.fx")) return $"{file}.fx";
+				if(File.Exists($"{dir}/{file}.hlsl")) return $"{file}.hlsl";
 			}
 			return Path.GetFileName(path);
 		}
@@ -132,15 +133,15 @@ namespace DXDecompiler.Tests
 			var relDir = Path.GetDirectoryName(relPath);
 			Directory.CreateDirectory($"{OutputDir}/{relDir}");
 			var sourceName = GetSourceNameFromObject($"{ShaderDirectory}/{relPath}.o");
-			if (ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relDir}/{sourceName}", $"{OutputDir}/{relDir}/{sourceName}", true);
-			if (ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relPath}.asm", $"{OutputDir}/{relPath}.asm", true);
+			if(ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relDir}/{sourceName}", $"{OutputDir}/{relDir}/{sourceName}", true);
+			if(ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relPath}.asm", $"{OutputDir}/{relPath}.asm", true);
 
 			var asmFileText = string.Join(Environment.NewLine,
 				File.ReadAllLines(file + ".asm").Select(x => x.Trim()));
 
 			// Act.
 			var binaryFileBytes = File.ReadAllBytes(file + ".o");
-			using (var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
+			using(var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
 			{
 				var shaderVersion = shaderBytecode.GetVersion();
 				var shaderCode = HLSLDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
@@ -168,7 +169,7 @@ namespace DXDecompiler.Tests
 			var relDir = Path.GetDirectoryName(relPath);
 			Directory.CreateDirectory($"{OutputDir}/{relDir}");
 			var sourceName = GetSourceNameFromObject($"{ShaderDirectory}/{relPath}.o");
-			if (ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relDir}/{sourceName}", $"{OutputDir}/{relDir}/{sourceName}", true);
+			if(ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relDir}/{sourceName}", $"{OutputDir}/{relDir}/{sourceName}", true);
 			var binaryFileBytes = File.ReadAllBytes(file + ".o");
 
 			// Act.
@@ -205,7 +206,7 @@ namespace DXDecompiler.Tests
 			var binaryFileBytes = File.ReadAllBytes(file + ".o");
 
 			// Act.
-			if( binaryFileBytes[0] == 0x01 &&
+			if(binaryFileBytes[0] == 0x01 &&
 				binaryFileBytes[1] == 0x20 &&
 				binaryFileBytes[2] == 0xFF &&
 				binaryFileBytes[3] == 0xFE)
@@ -214,18 +215,18 @@ namespace DXDecompiler.Tests
 				return;
 			}
 			var container = BytecodeContainer.Parse(binaryFileBytes);
-			if (container.Chunks.OfType<LibHeaderChunk>().Any())
+			if(container.Chunks.OfType<LibHeaderChunk>().Any())
 			{
 				CompareLibrary(container, binaryFileBytes);
 				return;
 			}
-			if (container.Chunks.OfType<EffectChunk>().Any())
+			if(container.Chunks.OfType<EffectChunk>().Any())
 			{
 				Effects10.CompareEffect(container, binaryFileBytes, Path.GetFileNameWithoutExtension(relPath));
 				return;
 			}
-			using (var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
-			using (var shaderReflection = new ShaderReflection(shaderBytecode))
+			using(var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
+			using(var shaderReflection = new ShaderReflection(shaderBytecode))
 			{
 				var desc = shaderReflection.Description;
 
@@ -233,17 +234,19 @@ namespace DXDecompiler.Tests
 				Assert.AreEqual(shaderReflection.BitwiseInstructionCount, 0); // TODO
 				Assert.AreEqual(shaderReflection.ConditionalMoveInstructionCount, container.Statistics.MovCInstructionCount);
 				Assert.AreEqual(shaderReflection.ConversionInstructionCount, container.Statistics.ConversionInstructionCount);
-				Assert.AreEqual((int) shaderReflection.GeometryShaderSInputPrimitive, (int) container.Statistics.InputPrimitive);
+				Assert.AreEqual((int)shaderReflection.GeometryShaderSInputPrimitive, (int)container.Statistics.InputPrimitive);
 				Assert.AreEqual(shaderReflection.InterfaceSlotCount, container.ResourceDefinition.InterfaceSlotCount);
-				Assert.AreEqual((bool) shaderReflection.IsSampleFrequencyShader, container.Statistics.IsSampleFrequencyShader);
+				Assert.AreEqual((bool)shaderReflection.IsSampleFrequencyShader, container.Statistics.IsSampleFrequencyShader);
 				Assert.AreEqual(shaderReflection.MoveInstructionCount, container.Statistics.MovInstructionCount);
 
 				var flags = ShaderRequiresFlags.None;
 				if(container.Version.MajorVersion >= 5)
 				{
-					if (container.Sfi0 != null) {
+					if(container.Sfi0 != null)
+					{
 						flags = (ShaderRequiresFlags)container.Sfi0.Flags;
-					} else
+					}
+					else
 					{
 						var dcl = container.Shader.DeclarationTokens
 							.OfType<GlobalFlagsDeclarationToken>()
@@ -264,7 +267,7 @@ namespace DXDecompiler.Tests
 
 
 				SharpDX.Direct3D.FeatureLevel featureLevel = 0;
-				if (container.Chunks.OfType<Chunks.Aon9.Level9ShaderChunk>().Any())
+				if(container.Chunks.OfType<Chunks.Aon9.Level9ShaderChunk>().Any())
 				{
 					var level9Chunk = container.Chunks
 						.OfType<Chunks.Aon9.Level9ShaderChunk>()
@@ -272,18 +275,20 @@ namespace DXDecompiler.Tests
 					featureLevel = level9Chunk.ShaderModel.MinorVersion == 1
 						? SharpDX.Direct3D.FeatureLevel.Level_9_3 :
 						SharpDX.Direct3D.FeatureLevel.Level_9_1;
-				} else if(container.Version.MajorVersion == 4 && container.Version.MinorVersion == 0)
+				}
+				else if(container.Version.MajorVersion == 4 && container.Version.MinorVersion == 0)
 				{
 					featureLevel = SharpDX.Direct3D.FeatureLevel.Level_10_0;
 				}
-				else if (container.Version.MajorVersion == 4 && container.Version.MinorVersion == 1)
+				else if(container.Version.MajorVersion == 4 && container.Version.MinorVersion == 1)
 				{
 					featureLevel = SharpDX.Direct3D.FeatureLevel.Level_10_1;
 				}
-				else if (container.Version.MajorVersion == 5)
+				else if(container.Version.MajorVersion == 5)
 				{
 					featureLevel = SharpDX.Direct3D.FeatureLevel.Level_11_0;
-					if (flags.HasFlag(ShaderRequiresFlags.ShaderRequires64UnorderedAccessViews)){
+					if(flags.HasFlag(ShaderRequiresFlags.ShaderRequires64UnorderedAccessViews))
+					{
 						featureLevel = SharpDX.Direct3D.FeatureLevel.Level_11_1;
 					}
 				}
@@ -301,15 +306,15 @@ namespace DXDecompiler.Tests
 				Assert.AreEqual(desc.DefineCount, container.Statistics.DefineCount);
 				Assert.AreEqual(desc.DynamicFlowControlCount, container.Statistics.DynamicFlowControlCount);
 				Assert.AreEqual(desc.EmitInstructionCount, container.Statistics.EmitInstructionCount);
-				Assert.AreEqual((int) desc.Flags, (int) container.ResourceDefinition.Flags);
+				Assert.AreEqual((int)desc.Flags, (int)container.ResourceDefinition.Flags);
 				Assert.AreEqual(desc.FloatInstructionCount, container.Statistics.FloatInstructionCount);
 				Assert.AreEqual(desc.GeometryShaderInstanceCount, container.Statistics.GeometryShaderInstanceCount);
 				Assert.AreEqual(desc.GeometryShaderMaxOutputVertexCount, container.Statistics.GeometryShaderMaxOutputVertexCount);
-				Assert.AreEqual((int) desc.GeometryShaderOutputTopology, (int) container.Statistics.GeometryShaderOutputTopology);
-				Assert.AreEqual((int) desc.HullShaderOutputPrimitive, (int) container.Statistics.HullShaderOutputPrimitive);
-				Assert.AreEqual((int) desc.HullShaderPartitioning, (int) container.Statistics.HullShaderPartitioning);
+				Assert.AreEqual((int)desc.GeometryShaderOutputTopology, (int)container.Statistics.GeometryShaderOutputTopology);
+				Assert.AreEqual((int)desc.HullShaderOutputPrimitive, (int)container.Statistics.HullShaderOutputPrimitive);
+				Assert.AreEqual((int)desc.HullShaderPartitioning, (int)container.Statistics.HullShaderPartitioning);
 				Assert.AreEqual(desc.InputParameters, container.InputSignature.Parameters.Count);
-				Assert.AreEqual((int) desc.InputPrimitive, (int) container.Statistics.InputPrimitive);
+				Assert.AreEqual((int)desc.InputPrimitive, (int)container.Statistics.InputPrimitive);
 				Assert.AreEqual(desc.InstructionCount, container.Statistics.InstructionCount);
 				Assert.AreEqual(desc.InterlockedInstructions, container.Statistics.InterlockedInstructions);
 				Assert.AreEqual(desc.IntInstructionCount, container.Statistics.IntInstructionCount);
@@ -321,7 +326,7 @@ namespace DXDecompiler.Tests
 				Assert.AreEqual(desc.StaticFlowControlCount, container.Statistics.StaticFlowControlCount);
 				Assert.AreEqual(desc.TempArrayCount, container.Statistics.TempArrayCount);
 				Assert.AreEqual(desc.TempRegisterCount, container.Statistics.TempRegisterCount);
-				Assert.AreEqual((int) desc.TessellatorDomain, (int) container.Statistics.TessellatorDomain);
+				Assert.AreEqual((int)desc.TessellatorDomain, (int)container.Statistics.TessellatorDomain);
 				Assert.AreEqual(desc.TextureBiasInstructions, container.Statistics.TextureBiasInstructions);
 				Assert.AreEqual(desc.TextureCompInstructions, container.Statistics.TextureCompInstructions);
 				Assert.AreEqual(desc.TextureGradientInstructions, container.Statistics.TextureGradientInstructions);
@@ -333,23 +338,23 @@ namespace DXDecompiler.Tests
 				var version = Chunks.Common.ShaderVersion.FromShexToken((uint)desc.Version);
 				Assert.AreEqual(version.ToString(), container.ResourceDefinition.Target.ToString());
 
-				for (int i = 0; i < shaderReflection.Description.ConstantBuffers; i++)
+				for(int i = 0; i < shaderReflection.Description.ConstantBuffers; i++)
 					CompareConstantBuffer(shaderReflection.GetConstantBuffer(i),
 						container.ResourceDefinition.ConstantBuffers[i]);
 
-				for (int i = 0; i < shaderReflection.Description.BoundResources; i++)
+				for(int i = 0; i < shaderReflection.Description.BoundResources; i++)
 					CompareResourceBinding(shaderReflection.GetResourceBindingDescription(i),
 						container.ResourceDefinition.ResourceBindings[i]);
 
-				for (int i = 0; i < shaderReflection.Description.InputParameters; i++)
+				for(int i = 0; i < shaderReflection.Description.InputParameters; i++)
 					CompareParameter(shaderReflection.GetInputParameterDescription(i),
 						container.InputSignature.Parameters[i]);
 
-				for (int i = 0; i < shaderReflection.Description.OutputParameters; i++)
+				for(int i = 0; i < shaderReflection.Description.OutputParameters; i++)
 					CompareParameter(shaderReflection.GetOutputParameterDescription(i),
 						container.OutputSignature.Parameters[i]);
 
-				for (int i = 0; i < shaderReflection.Description.PatchConstantParameters; i++)
+				for(int i = 0; i < shaderReflection.Description.PatchConstantParameters; i++)
 					CompareParameter(shaderReflection.GetPatchConstantParameterDescription(i),
 						container.PatchConstantSignature.Parameters[i]);
 			}
@@ -366,13 +371,13 @@ namespace DXDecompiler.Tests
 
 		private static void CompareConstantBuffer(SharpDX.D3DCompiler.ConstantBuffer expected, Chunks.Rdef.ConstantBuffer actual)
 		{
-			Assert.AreEqual((int) expected.Description.Flags, (int) actual.Flags);
+			Assert.AreEqual((int)expected.Description.Flags, (int)actual.Flags);
 			Assert.AreEqual(expected.Description.Name, actual.Name);
 			Assert.AreEqual(expected.Description.Size, actual.Size);
-			Assert.AreEqual((int) expected.Description.Type, (int) actual.BufferType);
+			Assert.AreEqual((int)expected.Description.Type, (int)actual.BufferType);
 			Assert.AreEqual(expected.Description.VariableCount, actual.Variables.Count);
 
-			for (int i = 0; i < expected.Description.VariableCount; i++)
+			for(int i = 0; i < expected.Description.VariableCount; i++)
 				CompareConstantBufferVariable(expected.GetVariable(i), actual.Variables[i]);
 		}
 
@@ -380,15 +385,15 @@ namespace DXDecompiler.Tests
 			ShaderVariable actual)
 		{
 			//Assert.AreEqual(expected.Description.DefaultValue, actual.DefaultValue); // TODO
-			Assert.AreEqual((int) expected.Description.Flags, (int) actual.Flags);
+			Assert.AreEqual((int)expected.Description.Flags, (int)actual.Flags);
 			Assert.AreEqual(expected.Description.Name, actual.Name);
 			Assert.AreEqual(expected.Description.SamplerSize, actual.SamplerSize);
 			Assert.AreEqual(expected.Description.Size, actual.Size);
 			Assert.AreEqual((uint)expected.Description.StartOffset, actual.StartOffset);
-			if (expected.Description.StartSampler != -1 && actual.StartSampler != 0)
+			if(expected.Description.StartSampler != -1 && actual.StartSampler != 0)
 				Assert.AreEqual(expected.Description.StartSampler, actual.StartSampler);
-			if (expected.Description.StartTexture != -1 && actual.StartTexture != 0)
-			Assert.AreEqual(expected.Description.StartTexture, actual.StartTexture);
+			if(expected.Description.StartTexture != -1 && actual.StartTexture != 0)
+				Assert.AreEqual(expected.Description.StartTexture, actual.StartTexture);
 			Assert.AreEqual(expected.Description.TextureSize, actual.TextureSize);
 
 			CompareConstantBufferVariableType(expected.GetVariableType(), actual.ShaderType);
@@ -403,18 +408,18 @@ namespace DXDecompiler.Tests
 				CompareConstantBufferVariableType(expected.BaseClass, actual.BaseClass);
 			}
 			Assert.AreEqual(expected.SubType?.Description.Name, actual.SubType?.BaseTypeName);
-			if (expected.SubType != null && actual.SubType != null)
+			if(expected.SubType != null && actual.SubType != null)
 			{
 				CompareConstantBufferVariableType(expected.SubType, actual.SubType);
 			}
-			Assert.AreEqual((int) expected.Description.Class, (int) actual.VariableClass);
+			Assert.AreEqual((int)expected.Description.Class, (int)actual.VariableClass);
 			Assert.AreEqual(expected.Description.ColumnCount, actual.Columns);
 			Assert.AreEqual(expected.Description.ElementCount, actual.ElementCount);
 			Assert.AreEqual(expected.Description.MemberCount, actual.Members.Count);
 			Assert.AreEqual(expected.Description.Name, actual.BaseTypeName);
 			Assert.AreEqual(expected.Description.Offset, 0); // TODO
 			Assert.AreEqual(expected.Description.RowCount, actual.Rows);
-			Assert.AreEqual((int) expected.Description.Type, (int) actual.VariableType);
+			Assert.AreEqual((int)expected.Description.Type, (int)actual.VariableType);
 			Assert.AreEqual(expected.NumInterfaces, actual.Interfaces.Count);
 			for(int i = 0; i < expected.NumInterfaces && i < actual.Interfaces.Count; i++)
 			{
@@ -426,15 +431,15 @@ namespace DXDecompiler.Tests
 		private static void CompareParameter(ShaderParameterDescription expected,
 			SignatureParameterDescription actual)
 		{
-			Assert.AreEqual((int) expected.ComponentType, (int) actual.ComponentType);
+			Assert.AreEqual((int)expected.ComponentType, (int)actual.ComponentType);
 			//Assert.AreEqual((int) expected.ReadWriteMask, (int) actual.ReadWriteMask); // TODO: Bug in SharpDX?
-			if (expected.Register != -1 || actual.Register != uint.MaxValue)
+			if(expected.Register != -1 || actual.Register != uint.MaxValue)
 				Assert.AreEqual(expected.Register, actual.Register);
 			Assert.AreEqual(expected.SemanticIndex, actual.SemanticIndex);
 			Assert.AreEqual(expected.SemanticName, actual.SemanticName);
 			Assert.AreEqual(expected.Stream, actual.Stream);
-			Assert.AreEqual((int) expected.SystemValueType, (int) actual.SystemValueType);
-			Assert.AreEqual((int) expected.UsageMask, (int) actual.Mask);
+			Assert.AreEqual((int)expected.SystemValueType, (int)actual.SystemValueType);
+			Assert.AreEqual((int)expected.UsageMask, (int)actual.Mask);
 		}
 
 		private static void CompareResourceBinding(InputBindingDescription expected,
@@ -442,13 +447,13 @@ namespace DXDecompiler.Tests
 		{
 			Assert.AreEqual((uint)expected.BindCount, actual.BindCount);
 			Assert.AreEqual(expected.BindPoint, actual.BindPoint);
-			Assert.AreEqual((int) expected.Dimension, (int) actual.Dimension);
-			Assert.AreEqual((int) expected.Flags, (int) actual.Flags);
+			Assert.AreEqual((int)expected.Dimension, (int)actual.Dimension);
+			Assert.AreEqual((int)expected.Flags, (int)actual.Flags);
 			Assert.AreEqual(expected.Name, actual.Name);
-			if (expected.NumSamples != -1 || actual.NumSamples != uint.MaxValue)
+			if(expected.NumSamples != -1 || actual.NumSamples != uint.MaxValue)
 				Assert.AreEqual(expected.NumSamples, actual.NumSamples);
-			Assert.AreEqual((int) expected.ReturnType, (int) actual.ReturnType);
-			Assert.AreEqual((int) expected.Type, (int) actual.Type);
+			Assert.AreEqual((int)expected.ReturnType, (int)actual.ReturnType);
+			Assert.AreEqual((int)expected.Type, (int)actual.Type);
 		}
 	}
 }

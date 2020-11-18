@@ -32,14 +32,14 @@ namespace DXDecompiler.Chunks.Rdef
 			int indent, bool isFirst, uint parentOffset)
 		{
 			var nameOffset = memberReader.ReadUInt32();
-			var nameReader = reader.CopyAtOffset((int) nameOffset);
+			var nameReader = reader.CopyAtOffset((int)nameOffset);
 			var name = nameReader.ReadString();
 
 			var memberTypeOffset = memberReader.ReadUInt32();
 
 			var offset = memberReader.ReadUInt32();
 
-			var memberTypeReader = reader.CopyAtOffset((int) memberTypeOffset);
+			var memberTypeReader = reader.CopyAtOffset((int)memberTypeOffset);
 			var memberType = ShaderType.Parse(reader, memberTypeReader, target, indent, isFirst, parentOffset + offset);
 
 			return new ShaderTypeMember(parentOffset)
@@ -53,7 +53,7 @@ namespace DXDecompiler.Chunks.Rdef
 		public override string ToString()
 		{
 			string declaration = Type + " " + Name;
-			if (Type.ElementCount > 0)
+			if(Type.ElementCount > 0)
 				declaration += string.Format("[{0}]", Type.ElementCount);
 			declaration += ";";
 			var memberOffset = _parentOffset + Offset;

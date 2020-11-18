@@ -22,8 +22,8 @@ namespace DXDecompiler.DX9Shader
 		}
 		public static bool operator ==(ConstantNode x, ConstantNode y)
 		{
-			if (x is null) return y is null;
-			if (y is null) return false;
+			if(x is null) return y is null;
+			if(y is null) return false;
 			return x.Value == y.Value;
 		}
 		public static bool operator !=(ConstantNode x, ConstantNode y)

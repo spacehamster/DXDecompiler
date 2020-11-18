@@ -38,13 +38,13 @@ namespace DXDecompiler.DX9Shader
 		}
 		public string Decompile()
 		{
-			using (var stream = new MemoryStream())
+			using(var stream = new MemoryStream())
 			{
 				Writer = new StreamWriter(stream);
 				Write();
 				Writer.Flush();
 				stream.Position = 0;
-				using (var reader = new StreamReader(stream, Encoding.UTF8))
+				using(var reader = new StreamReader(stream, Encoding.UTF8))
 				{
 					return reader.ReadToEnd();
 				}

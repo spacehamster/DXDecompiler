@@ -20,12 +20,12 @@ namespace DebugParser.DebugParser.DX9
 		public string GetLiteral(uint elementIndex, uint elementCount)
 		{
 			var sb = new StringBuilder();
-			for (int i = 0; i < elementCount; i++)
+			for(int i = 0; i < elementCount; i++)
 			{
 				var index = elementIndex + i;
 				var number = Numbers[(int)index];
 				sb.Append(number.ToString());
-				if (i < elementCount - 1)
+				if(i < elementCount - 1)
 				{
 					sb.Append(", ");
 				}

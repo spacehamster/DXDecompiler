@@ -11,7 +11,7 @@
 
 		public override HlslTreeNode Reduce()
 		{
-			switch (Value)
+			switch(Value)
 			{
 				case ReciprocalSquareRootOperation reciprocalSquareRoot:
 					{

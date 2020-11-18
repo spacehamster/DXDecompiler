@@ -35,7 +35,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 	{
 		/// <summary>
 		/// Return type for the resinfo instruction.
- 		/// </summary>
+		/// </summary>
 		public ResInfoReturnType ResInfoReturnType { get; private set; }
 
 		public bool Saturate { get; private set; }
@@ -76,7 +76,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			// Advance to next token.
 			var instructionEnd = reader.CurrentPosition + (header.Length * sizeof(uint));
 			var token0 = reader.ReadUInt32();
-			if (header.OpcodeType == OpcodeType.Sync)
+			if(header.OpcodeType == OpcodeType.Sync)
 			{
 				instructionToken.SyncFlags = token0.DecodeValue<SyncFlags>(11, 14);
 			}
@@ -89,14 +89,14 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			}
 
 			bool extended = header.IsExtended;
-			while (extended)
+			while(extended)
 			{
 				uint extendedToken = reader.ReadUInt32();
 				var extendedType = extendedToken.DecodeValue<InstructionTokenExtendedType>(0, 5);
 				instructionToken.ExtendedTypes.Add(extendedType);
 				extended = (extendedToken.DecodeValue(31, 31) == 1);
 
-				switch (extendedType)
+				switch(extendedType)
 				{
 					case InstructionTokenExtendedType.SampleControls:
 						instructionToken.SampleOffsets[0] = extendedToken.DecodeSigned4BitValue(09, 12);
@@ -118,7 +118,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				}
 			}
 
-			if (header.OpcodeType == OpcodeType.InterfaceCall)
+			if(header.OpcodeType == OpcodeType.InterfaceCall)
 			{
 				// Interface call
 				//
@@ -138,10 +138,10 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				instructionToken.FunctionIndex = reader.ReadUInt32();
 			}
 
-			while (reader.CurrentPosition < instructionEnd)
+			while(reader.CurrentPosition < instructionEnd)
 			{
 				var operand = Operand.Parse(reader, header.OpcodeType);
-				if (operand != null)
+				if(operand != null)
 					instructionToken.Operands.Add(operand);
 			}
 			return instructionToken;
@@ -151,56 +151,56 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 		{
 			string result = TypeDescription;
 
-			if (Header.OpcodeType == OpcodeType.Sync)
+			if(Header.OpcodeType == OpcodeType.Sync)
 				result += SyncFlags.GetDescription();
 
-			if (ExtendedTypes.Contains(InstructionTokenExtendedType.SampleControls))
+			if(ExtendedTypes.Contains(InstructionTokenExtendedType.SampleControls))
 				result += "_aoffimmi";
 
-			if (ExtendedTypes.Contains(InstructionTokenExtendedType.ResourceDim))
+			if(ExtendedTypes.Contains(InstructionTokenExtendedType.ResourceDim))
 				result += "_indexable";
 
-			if (ExtendedTypes.Contains(InstructionTokenExtendedType.SampleControls))
+			if(ExtendedTypes.Contains(InstructionTokenExtendedType.SampleControls))
 				result += string.Format("({0},{1},{2})", SampleOffsets[0], SampleOffsets[1], SampleOffsets[2]);
 
-			if (ExtendedTypes.Contains(InstructionTokenExtendedType.ResourceDim))
+			if(ExtendedTypes.Contains(InstructionTokenExtendedType.ResourceDim))
 			{
 				result += string.Format("({0}", ResourceTarget.GetDescription());
-				if (ResourceStride != 0)
+				if(ResourceStride != 0)
 					result += string.Format(", stride={0}", ResourceStride);
 				result += ")";
 			}
 
-			if (ExtendedTypes.Contains(InstructionTokenExtendedType.ResourceReturnType))
+			if(ExtendedTypes.Contains(InstructionTokenExtendedType.ResourceReturnType))
 				result += string.Format("({0},{1},{2},{3})",
 					ResourceReturnTypes[0].GetDescription(),
 					ResourceReturnTypes[1].GetDescription(),
 					ResourceReturnTypes[2].GetDescription(),
 					ResourceReturnTypes[3].GetDescription());
 
-			if (Header.OpcodeType == OpcodeType.Resinfo && ResInfoReturnType != ResInfoReturnType.Float)
+			if(Header.OpcodeType == OpcodeType.Resinfo && ResInfoReturnType != ResInfoReturnType.Float)
 				result += string.Format("_{0}", ResInfoReturnType.GetDescription().ToLower());
 
-			if (Header.OpcodeType.IsConditionalInstruction())
+			if(Header.OpcodeType.IsConditionalInstruction())
 				result += "_" + TestBoolean.GetDescription();
 
-			if (Saturate)
+			if(Saturate)
 				result += "_sat";
 			result += " ";
 
-			if (Header.OpcodeType == OpcodeType.InterfaceCall)
+			if(Header.OpcodeType == OpcodeType.InterfaceCall)
 			{
-				result += string.Format("fp{0}[{1}][{2}]", 
+				result += string.Format("fp{0}[{1}][{2}]",
 					Operands[0].Indices[0].Value,
 					Operands[0].Indices[1],
 					FunctionIndex);
 			}
 			else
 			{
-				for (int i = 0; i < Operands.Count; i++)
+				for(int i = 0; i < Operands.Count; i++)
 				{
 					var operandString = Operands[i].ToString();
-					if (i > 0 && !string.IsNullOrEmpty(operandString))
+					if(i > 0 && !string.IsNullOrEmpty(operandString))
 						result += ", ";
 					result += operandString;
 				}

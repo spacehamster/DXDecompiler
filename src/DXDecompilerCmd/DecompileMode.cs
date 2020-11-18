@@ -2,7 +2,7 @@
 {
 	public enum DecompileMode
 	{
-		Decompile, 
+		Decompile,
 		Dissassemble,
 		Debug,
 		DebugHtml

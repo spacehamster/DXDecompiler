@@ -31,21 +31,21 @@ namespace DXDecompiler.Tests
 			Assert.AreEqual(variableDesc.BufferOffset, variableDesc.BufferOffset);
 			Assert.AreEqual(variableDesc.ExplicitBindPoint, variableDesc.ExplicitBindPoint);
 
-			if (variable is EffectNumericVariable v1)
+			if(variable is EffectNumericVariable v1)
 			{
 				Assert.AreEqual(variableDesc.Name, v1.Name);
 				Assert.AreEqual(0, v1.ExplicitBindPoint);
 			}
-			if (variable is EffectObjectVariable v2)
+			if(variable is EffectObjectVariable v2)
 			{
 				Assert.AreEqual(variableDesc.Name, v2.Name);
 			}
 
-			for (int i = 0; i < variableDesc.AnnotationCount; i++)
+			for(int i = 0; i < variableDesc.AnnotationCount; i++)
 			{
 				var annotation = reflectionVariable.GetAnnotationByIndex(i);
 			}
-			if (typeDesc.Type == ShaderVariableType.Sampler)
+			if(typeDesc.Type == ShaderVariableType.Sampler)
 			{
 				EffectSamplerVariable sampVariable = reflectionVariable.AsSampler();
 				SamplerState samplerState = sampVariable.GetSampler();
@@ -54,19 +54,19 @@ namespace DXDecompiler.Tests
 		}
 		public static int GetBufferCount(Effect effect)
 		{
-			for (int i = 0; i < 1000; i++)
+			for(int i = 0; i < 1000; i++)
 			{
 				var cb = effect.GetConstantBufferByIndex(i);
-				if (!cb.IsValid) return i;
+				if(!cb.IsValid) return i;
 			}
 			return 1000;
 		}
 		public static int GetVariableCount(Effect effect)
 		{
-			for (int i = 0; i < 1000; i++)
+			for(int i = 0; i < 1000; i++)
 			{
 				var cb = effect.GetVariableByIndex(i);
-				if (!cb.IsValid) return i;
+				if(!cb.IsValid) return i;
 			}
 			return 1000;
 		}
@@ -74,7 +74,7 @@ namespace DXDecompiler.Tests
 		{
 			var desc = effect.Description;
 			var result = new List<EffectVariable>();
-			for (int i = 0; i < desc.GlobalVariableCount; i++)
+			for(int i = 0; i < desc.GlobalVariableCount; i++)
 			{
 				var variable = effect.GetVariableByIndex(i);
 				result.Add(variable);
@@ -88,7 +88,7 @@ namespace DXDecompiler.Tests
 				DeviceCreationFlags.Debug,
 				FeatureLevel.Level_10_1);
 			Effect effectReflection = null;
-			if (container == null)
+			if(container == null)
 			{
 				effectReflection = new Effect(device, effectBytecode, EffectFlags.None);
 				Warn.If(true, "Container is null");
@@ -96,7 +96,7 @@ namespace DXDecompiler.Tests
 			}
 			var chunk = container.Chunks.OfType<EffectChunk>().First();
 
-			if (chunk.IsChildEffect)
+			if(chunk.IsChildEffect)
 			{
 				effectReflection = new Effect(device, effectBytecode, EffectFlags.None);
 				//var effectPool = new EffectPool(device, effectBytecode, EffectFlags.None);
@@ -124,12 +124,12 @@ namespace DXDecompiler.Tests
 			var reflectionNames = reflectionVariables
 				.Select(v => $"{v.Description.Name}, {v.TypeInfo.Description.Type}, {v.TypeInfo.Description.Class}")
 				.ToList();
-			for (int i = 0; i < desc.GlobalVariableCount; i++)
+			for(int i = 0; i < desc.GlobalVariableCount; i++)
 			{
 				CompareVariable(reflectionVariables[i], variables[i]);
 			}
 			var buffers = chunk.AllBuffers.ToList();
-			for (int i = 0; i < desc.ConstantBufferCount; i++)
+			for(int i = 0; i < desc.ConstantBufferCount; i++)
 			{
 				var cb = effectReflection.GetConstantBufferByIndex(i);
 				//CompareConstantBuffer(cb, buffers[i]);

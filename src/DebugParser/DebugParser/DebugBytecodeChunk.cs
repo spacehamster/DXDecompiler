@@ -62,7 +62,7 @@ namespace DXDecompiler.DebugParser
 			uint chunkSize = chunkReader.ReadUInt32("chunkSize");
 
 			ChunkType chunkType;
-			if (KnownChunkTypes.ContainsKey(fourCc))
+			if(KnownChunkTypes.ContainsKey(fourCc))
 			{
 				chunkType = KnownChunkTypes[fourCc];
 			}
@@ -75,7 +75,7 @@ namespace DXDecompiler.DebugParser
 
 			var chunkContentReader = chunkReader.CopyAtCurrentPosition($"{fourCc.ToFourCcString()}", chunkReader, (int)chunkSize);
 			DebugBytecodeChunk chunk = null;
-			switch (chunkType)
+			switch(chunkType)
 			{
 				case ChunkType.Ifce:
 					chunk = DebugInterfacesChunk.Parse(chunkContentReader, chunkSize);
@@ -135,10 +135,10 @@ namespace DXDecompiler.DebugParser
 				case ChunkType.Fxlc:
 					chunk = DebugFxlcChunk.Parse(chunkContentReader, chunkSize, container);
 					break;
-				//default:
-				//	throw new ParseException("Invalid chunk type: " + chunkType);
+					//default:
+					//	throw new ParseException("Invalid chunk type: " + chunkType);
 			}
-			if (chunk == null)
+			if(chunk == null)
 			{
 				chunkReader.ReadBytes("UnknownChunk", (int)chunkSize);
 				return null;

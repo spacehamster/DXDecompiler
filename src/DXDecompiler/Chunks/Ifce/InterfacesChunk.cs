@@ -35,13 +35,13 @@ namespace DXDecompiler.Chunks.Ifce
 
 			// Think this is offset to start of interface slot info, but we
 			// don't need it because it is also contained in the InterfaceSlot class
-			var typeIDsOffset = headerReader.ReadUInt32(); 
+			var typeIDsOffset = headerReader.ReadUInt32();
 
 			var classTypeOffset = headerReader.ReadUInt32();
-			var availableClassReader = reader.CopyAtOffset((int) classTypeOffset);
+			var availableClassReader = reader.CopyAtOffset((int)classTypeOffset);
 
 			var interfaceSlotOffset = headerReader.ReadUInt32();
-			var interfaceSlotReader = reader.CopyAtOffset((int) interfaceSlotOffset);
+			var interfaceSlotReader = reader.CopyAtOffset((int)interfaceSlotOffset);
 
 			var unknown1 = headerReader.ReadUInt32();
 			Debug.Assert(unknown1.ToFourCcString() == "OSGN");
@@ -50,21 +50,21 @@ namespace DXDecompiler.Chunks.Ifce
 			var unknown3 = headerReader.ReadUInt16();
 			Debug.Assert(unknown3 == 16);
 
-			for (uint i = 0; i < classTypeCount; i++)
+			for(uint i = 0; i < classTypeCount; i++)
 			{
 				var classType = ClassType.Parse(reader, availableClassReader);
 				classType.ID = i; // Really??
 				result.AvailableClassTypes.Add(classType);
 			}
 
-			for (uint i = 0; i < classInstanceCount; i++)
+			for(uint i = 0; i < classInstanceCount; i++)
 			{
 				var classInstance = ClassInstance.Parse(reader, availableClassReader);
 				result.AvailableClassInstances.Add(classInstance);
 			}
 
 			uint startSlot = 0;
-			for (uint i = 0; i < interfaceSlotRecordCount; i++)
+			for(uint i = 0; i < interfaceSlotRecordCount; i++)
 			{
 				var interfaceSlot = InterfaceSlot.Parse(reader, interfaceSlotReader);
 				interfaceSlot.StartSlot = startSlot; // Really??
@@ -86,19 +86,19 @@ namespace DXDecompiler.Chunks.Ifce
 			sb.AppendLine("// Name                             ID CB Stride Texture Sampler");
 			sb.AppendLine("// ------------------------------ ---- --------- ------- -------");
 
-			foreach (var classType in AvailableClassTypes)
+			foreach(var classType in AvailableClassTypes)
 				sb.AppendLine("// " + classType);
 
 			sb.AppendLine("//");
 
-			if (AvailableClassInstances.Any())
+			if(AvailableClassInstances.Any())
 			{
 				sb.AppendLine("// Available Class Instances:");
 				sb.AppendLine("//");
 				sb.AppendLine("// Name                        Type CB CB Offset Texture Sampler");
 				sb.AppendLine("// --------------------------- ---- -- --------- ------- -------");
 
-				foreach (var classInstance in AvailableClassInstances)
+				foreach(var classInstance in AvailableClassInstances)
 					sb.AppendLine("// " + classInstance);
 
 				sb.AppendLine("//");
@@ -109,7 +109,7 @@ namespace DXDecompiler.Chunks.Ifce
 			sb.AppendLine("//             Slots");
 			sb.AppendLine("// +----------+---------+---------------------------------------");
 
-			foreach (var interfaceSlot in InterfaceSlots)
+			foreach(var interfaceSlot in InterfaceSlots)
 				sb.Append(interfaceSlot);
 
 			return sb.ToString();

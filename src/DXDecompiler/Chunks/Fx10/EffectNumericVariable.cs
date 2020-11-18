@@ -40,11 +40,12 @@ namespace DXDecompiler.Chunks.Fx10
 			var typeReader = reader.CopyAtOffset((int)typeOffset);
 			result.Type = EffectType.Parse(reader, typeReader, version);
 			var semanticOffset = result.SemanticOffset = variableReader.ReadUInt32();
-			if (semanticOffset != 0)
+			if(semanticOffset != 0)
 			{
 				var semanticReader = reader.CopyAtOffset((int)semanticOffset);
 				result.Semantic = semanticReader.ReadString();
-			} else
+			}
+			else
 			{
 				result.Semantic = "";
 			}
@@ -53,18 +54,18 @@ namespace DXDecompiler.Chunks.Fx10
 
 			List<Number> defaultValue = null;
 			var size = result.Type.PackedSize;
-			if (defaultValueOffset != 0)
+			if(defaultValueOffset != 0)
 			{
 				defaultValue = new List<Number>();
 				var defaultValueReader = reader.CopyAtOffset((int)defaultValueOffset);
-				if (size % 4 != 0)
+				if(size % 4 != 0)
 					throw new ParseException("Can only deal with 4-byte default values at the moment.");
-				for (int i = 0; i < size; i += 4)
+				for(int i = 0; i < size; i += 4)
 					defaultValue.Add(new Number(defaultValueReader.ReadBytes(4)));
 			}
 			result.DefaultValue = defaultValue;
 
-			if (!isShared)
+			if(!isShared)
 			{
 				result.ExplicitBindPoint = variableReader.ReadUInt32();
 			}
@@ -83,10 +84,10 @@ namespace DXDecompiler.Chunks.Fx10
 				elements = string.Format("[{0}]", Type.ElementCount);
 			}
 			string defaultValue = "";
-			if (DefaultValue != null)
+			if(DefaultValue != null)
 			{
 				var numberType = NumberType.Float;
-				switch (Type.VariableType)
+				switch(Type.VariableType)
 				{
 					case Rdef.ShaderVariableType.Int:
 						numberType = NumberType.Int;
@@ -109,18 +110,19 @@ namespace DXDecompiler.Chunks.Fx10
 				else if(DefaultValue.Distinct().Count() == 1)
 				{
 					defaultValue = $" = {{ {DefaultValue[0].ToString(numberType)} }}";
-				} else
+				}
+				else
 				{
 					var values = DefaultValue.Select(v => v.ToString(numberType));
 					defaultValue = $" = {{ {string.Join(", ", values)} }}";
 				}
 			}
 			string packOffset = "";
-			if (ExplicitBindPoint == 4)
+			if(ExplicitBindPoint == 4)
 			{
 				var componentOffset = BufferOffset % 16 / 4;
 				string componentPacking = "";
-				switch (componentOffset)
+				switch(componentOffset)
 				{
 					case 0:
 						componentPacking = ".x";
@@ -139,7 +141,7 @@ namespace DXDecompiler.Chunks.Fx10
 			}
 			string semantic = string.IsNullOrEmpty(Semantic) ? "" : string.Format(" : {0}", Semantic);
 			string name = string.Format("{0,-7} {1}{2}{3}{4}{5};",
-					Type.TypeName, Name, elements,semantic, defaultValue, packOffset);
+					Type.TypeName, Name, elements, semantic, defaultValue, packOffset);
 			return string.Format("    {0,-36}// Offset: {1, 4}, size: {2, 4}",
 				name, BufferOffset, Type.UnpackedSize);
 		}

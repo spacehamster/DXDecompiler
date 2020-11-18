@@ -18,7 +18,7 @@ namespace DXDecompiler.Chunks.RTS0
 			var bodyOffset = paramReader.ReadUInt32();
 			var bodyReader = reader.CopyAtOffset((int)bodyOffset);
 			RootParameter result;
-			switch (type)
+			switch(type)
 			{
 				case RootParameterType.DescriptorTable:
 					result = RootDescriptorTable.Parse(reader, bodyReader, version);

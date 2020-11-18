@@ -15,7 +15,7 @@
 
 			var bytecodeReader = reader.CopyAtOffset("BytecodeReader", variableReader, (int)shaderOffset);
 			var shaderSize = bytecodeReader.ReadUInt32("ShaderSize");
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = BytecodeContainer.Parse(bytecodeReader.ReadBytes("Shader", (int)shaderSize));
 			}

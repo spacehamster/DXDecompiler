@@ -16,7 +16,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 		{
 			var result = new DebugEffectConstantAssignment();
 			var assignmentCount = assignmentReader.ReadUInt32("AssignmentCount");
-			for (int i = 0; i < assignmentCount; i++)
+			for(int i = 0; i < assignmentCount; i++)
 			{
 				result.Types.Add((EffectScalarType)assignmentReader.ReadUInt32($"Type{i}"));
 				result.Values.Add(DebugNumber.Parse(assignmentReader));

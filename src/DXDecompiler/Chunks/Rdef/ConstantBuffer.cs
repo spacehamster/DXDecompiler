@@ -44,7 +44,7 @@ namespace DXDecompiler.Chunks.Rdef
 			ShaderVersion target)
 		{
 			uint nameOffset = constantBufferReader.ReadUInt32();
-			var nameReader = reader.CopyAtOffset((int) nameOffset);
+			var nameReader = reader.CopyAtOffset((int)nameOffset);
 
 			uint variableCount = constantBufferReader.ReadUInt32();
 			uint variableOffset = constantBufferReader.ReadUInt32();
@@ -54,13 +54,13 @@ namespace DXDecompiler.Chunks.Rdef
 				Name = nameReader.ReadString()
 			};
 
-			var variableReader = reader.CopyAtOffset((int) variableOffset);
-			for (int i = 0; i < variableCount; i++)
+			var variableReader = reader.CopyAtOffset((int)variableOffset);
+			for(int i = 0; i < variableCount; i++)
 				result.Variables.Add(ShaderVariable.Parse(reader, variableReader, target, i == 0));
 
 			result.Size = constantBufferReader.ReadUInt32();
-			result.Flags = (ConstantBufferFlags) constantBufferReader.ReadUInt32();
-			result.BufferType = (ConstantBufferType) constantBufferReader.ReadUInt32();
+			result.Flags = (ConstantBufferFlags)constantBufferReader.ReadUInt32();
+			result.BufferType = (ConstantBufferType)constantBufferReader.ReadUInt32();
 
 			return result;
 		}
@@ -71,7 +71,7 @@ namespace DXDecompiler.Chunks.Rdef
 			sb.AppendLine(string.Format("// {0} {1}", BufferType.GetDescription(), Name));
 			sb.AppendLine("// {");
 
-			foreach (var variable in Variables)
+			foreach(var variable in Variables)
 				sb.Append(variable);
 
 			sb.AppendLine("//");

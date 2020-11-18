@@ -18,7 +18,7 @@
 			var shaderOffset = result.ShaderOffset = assignmentReader.ReadUInt32("ShaderOffset");
 			var shaderReader = reader.CopyAtOffset("ShaderReader", assignmentReader, (int)shaderOffset);
 			var shaderSize = result.ShaderSize = shaderReader.ReadUInt32("ShaderSize");
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = DebugBytecodeContainer.Parse(shaderReader.CopyAtCurrentPosition("ExpressionIndexReader", shaderReader));
 			}

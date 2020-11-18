@@ -13,7 +13,7 @@ namespace DXDecompiler.Chunks.Shex
 			get
 			{
 				return _declarations.OfType<ConstantBufferDeclarationToken>()
-					.Select(x => (uint) x.Operand.Indices[1].Value)
+					.Select(x => (uint)x.Operand.Indices[1].Value)
 					.ToArray();
 			}
 		}

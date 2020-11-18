@@ -41,21 +41,21 @@ namespace DXDecompiler.DebugParser.Icfe
 			var unknown2 = headerReader.ReadUInt16("InterfaceChunkUnknown2");
 			var unknown3 = headerReader.ReadUInt16("InterfaceChunkUnknown3");
 
-			for (uint i = 0; i < classTypeCount; i++)
+			for(uint i = 0; i < classTypeCount; i++)
 			{
 				var classType = DebugClassType.Parse(reader, availableClassReader);
 				classType.ID = i; // Really??
 				result.AvailableClassTypes.Add(classType);
 			}
 
-			for (uint i = 0; i < classInstanceCount; i++)
+			for(uint i = 0; i < classInstanceCount; i++)
 			{
 				var classInstance = DebugClassInstance.Parse(reader, availableClassReader);
 				result.AvailableClassInstances.Add(classInstance);
 			}
 
 			uint startSlot = 0;
-			for (uint i = 0; i < interfaceSlotRecordCount; i++)
+			for(uint i = 0; i < interfaceSlotRecordCount; i++)
 			{
 				var interfaceSlot = DebugInterfaceSlot.Parse(reader, interfaceSlotReader);
 				interfaceSlot.StartSlot = startSlot; // Really??

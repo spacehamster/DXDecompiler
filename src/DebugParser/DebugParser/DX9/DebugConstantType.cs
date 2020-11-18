@@ -24,9 +24,10 @@ namespace DebugParser.DebugParser.DX9
 			result.Elements = typeReader.ReadUInt16("Elements");
 			result.MemberCount = typeReader.ReadUInt16("Members");
 			var memberInfoOffset = typeReader.ReadUInt32("MemberInfoOffset");
-			if (memberInfoOffset != 0) {
+			if(memberInfoOffset != 0)
+			{
 				var memberInfoReader = reader.CopyAtOffset("MemberReader", typeReader, (int)memberInfoOffset);
-				for (int i = 0; i < result.MemberCount; i++)
+				for(int i = 0; i < result.MemberCount; i++)
 				{
 					var nameOffset = memberInfoReader.ReadUInt32($"Member{i}NameOffset");
 					var nameReader = reader.CopyAtOffset($"Member{i}NameReader", memberInfoReader, (int)nameOffset);
@@ -41,7 +42,7 @@ namespace DebugParser.DebugParser.DX9
 		public uint GetSize()
 		{
 			var elementCount = Math.Max(1, Elements);
-			switch (ParameterClass)
+			switch(ParameterClass)
 			{
 				case ParameterClass.Scalar:
 					return 4 * elementCount;

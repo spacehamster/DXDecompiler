@@ -14,7 +14,7 @@ namespace DXDecompiler.Decompiler
 		string GetOperandIndex(Operand operand)
 		{
 			string index = string.Empty;
-			switch (operand.IndexDimension)
+			switch(operand.IndexDimension)
 			{
 				case OperandIndexDimension._0D:
 					break;
@@ -41,7 +41,7 @@ namespace DXDecompiler.Decompiler
 		{
 			try
 			{
-				switch (operand.OperandType)
+				switch(operand.OperandType)
 				{
 					case OperandType.Immediate32:
 					case OperandType.Immediate64:
@@ -49,7 +49,7 @@ namespace DXDecompiler.Decompiler
 							var parentType = operand.ParentType;
 							var numComponents = operand.NumComponents;
 							var immediateValues = operand.ImmediateValues;
-							if (numComponents == 1)
+							if(numComponents == 1)
 							{
 								return operand.OperandType == OperandType.Immediate64
 									? immediateValues.GetDouble(0).ToString()
@@ -58,12 +58,12 @@ namespace DXDecompiler.Decompiler
 							string result = (operand.OperandType == OperandType.Immediate64) ?
 								$"double{numComponents}(" :
 								$"float{numComponents}(";
-							for (int i = 0; i < numComponents; i++)
+							for(int i = 0; i < numComponents; i++)
 							{
 								result += operand.OperandType == OperandType.Immediate64
 									? immediateValues.GetDouble(i).ToString()
 									: immediateValues.GetNumber(i).ToString(parentType.GetNumberType());
-								if (i < numComponents - 1)
+								if(i < numComponents - 1)
 								{
 									result += ", ";
 								}
@@ -108,7 +108,7 @@ namespace DXDecompiler.Decompiler
 							var cb = GetConstantBuffer(OperandType.ConstantBuffer, bindPoint);
 							var offset = fieldIndex * 16;
 							GetShaderVariableByOffset(cb, offset, out string fullname);
-							if (fullname == null)
+							if(fullname == null)
 							{
 								GetShaderVariableByOffset(cb, offset, out string foo);
 								return $"cb{bindPoint}[{fieldIndex}]";
@@ -141,7 +141,8 @@ namespace DXDecompiler.Decompiler
 							return binding.Name;
 						}
 				}
-			} catch (Exception ex)
+			}
+			catch(Exception ex)
 			{
 				return $"error_{operand.ToString()}";
 			}
@@ -172,9 +173,9 @@ namespace DXDecompiler.Decompiler
 			{
 				return "";
 			}
-			if (operand.ParentType != OpcodeType.DclConstantBuffer)
+			if(operand.ParentType != OpcodeType.DclConstantBuffer)
 			{
-				switch (operand.SelectionMode)
+				switch(operand.SelectionMode)
 				{
 					case Operand4ComponentSelectionMode.Mask:
 						var newMask = operand.ComponentMask & mask;
@@ -192,7 +193,7 @@ namespace DXDecompiler.Decompiler
 					default:
 						throw new InvalidOperationException("Unrecognised selection mode: " + operand.SelectionMode);
 				}
-				if (!string.IsNullOrEmpty(components))
+				if(!string.IsNullOrEmpty(components))
 					components = "." + components;
 				sb.Append(components);
 			}
@@ -200,11 +201,11 @@ namespace DXDecompiler.Decompiler
 		}
 		internal ShaderTypeMember GetShaderVariableByOffset(ConstantBuffer cb, uint offset, out string fullname)
 		{
-			foreach (var variable in cb.Variables)
+			foreach(var variable in cb.Variables)
 			{
 				bool isArray = false;
 				var result = IsOffsetInType(variable.Member, 0, offset, out fullname, out isArray);
-				if (result != null)
+				if(result != null)
 				{
 					return result;
 				}
@@ -219,25 +220,25 @@ namespace DXDecompiler.Decompiler
 			uint paddedSize = ((thisSize + 15) / 16) * 16;
 			uint arraySize = thisSize;
 			fullName = null;
-			if (member.Type.ElementCount > 1)
+			if(member.Type.ElementCount > 1)
 			{
 				arraySize = (paddedSize * ((uint)member.Type.ElementCount - 1)) + thisSize;
 			}
 			isArray = false;
-			if (offsetToFind < thisOffset || offsetToFind >= (thisOffset + arraySize))
+			if(offsetToFind < thisOffset || offsetToFind >= (thisOffset + arraySize))
 			{
 				return null;
 			}
 			string arrayIndex = "";
-			if (member.Type.VariableClass == ShaderVariableClass.Struct)
+			if(member.Type.VariableClass == ShaderVariableClass.Struct)
 			{
 				uint offsetInStruct = (offsetToFind - thisOffset) % paddedSize;
-				foreach (var child in member.Type.Members)
+				foreach(var child in member.Type.Members)
 				{
 					var foundType = IsOffsetInType(child, thisOffset, thisOffset + offsetInStruct, out string childName, out isArray);
-					if (foundType != null)
+					if(foundType != null)
 					{
-						if (child.Type.ElementCount > 1)
+						if(child.Type.ElementCount > 1)
 						{
 							arrayIndex = $"[{(offsetToFind - thisOffset) / thisSize}]";
 						}
@@ -246,7 +247,7 @@ namespace DXDecompiler.Decompiler
 					}
 				}
 			}
-			else if ((member.Type.VariableClass == ShaderVariableClass.MatrixRows ||
+			else if((member.Type.VariableClass == ShaderVariableClass.MatrixRows ||
 			  member.Type.VariableClass == ShaderVariableClass.MatrixColumns) ||
 			  ((member.Type.VariableClass == ShaderVariableClass.Scalar ||
 			  member.Type.VariableClass == ShaderVariableClass.Vector) &&
@@ -255,7 +256,7 @@ namespace DXDecompiler.Decompiler
 				isArray = true;
 				arrayIndex = $"[{(offsetToFind - thisOffset) / 16}]";
 			}
-			else if (member.Type.VariableClass == ShaderVariableClass.Vector)
+			else if(member.Type.VariableClass == ShaderVariableClass.Vector)
 			{
 				//Check for vector starting at a non-vec4 offset.
 			}

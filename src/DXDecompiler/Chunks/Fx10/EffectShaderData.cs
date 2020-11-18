@@ -13,7 +13,7 @@ namespace DXDecompiler.Chunks.Fx10
 			var shaderOffset = variableReader.ReadUInt32();
 			var bytecodeReader = reader.CopyAtOffset((int)shaderOffset);
 			var shaderSize = bytecodeReader.ReadUInt32();
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = BytecodeContainer.Parse(bytecodeReader.ReadBytes((int)shaderSize));
 			}
@@ -21,7 +21,7 @@ namespace DXDecompiler.Chunks.Fx10
 		}
 		public override string ToString()
 		{
-			if (Shader == null) return "NULL";
+			if(Shader == null) return "NULL";
 			var sb = new StringBuilder();
 			sb.AppendLine("    asm {");
 			sb.Append("        ");

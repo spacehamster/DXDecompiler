@@ -28,23 +28,23 @@ namespace DXDecompiler.DX9Shader.FX9
 			var techniqueCount = footerReader.ReadUInt32();
 			var passCount = footerReader.ReadUInt32();
 			var shaderCount = footerReader.ReadUInt32();
-			for (int i = 0; i < variableCount; i++)
+			for(int i = 0; i < variableCount; i++)
 			{
 				result.Variables.Add(Variable.Parse(bodyReader, footerReader));
 			}
-			for (int i = 0; i < techniqueCount; i++)
+			for(int i = 0; i < techniqueCount; i++)
 			{
 				result.Techniques.Add(Technique.Parse(bodyReader, footerReader));
 			}
 			var variableBlobCount = footerReader.ReadUInt32();
 			var stateBlobCount = footerReader.ReadUInt32();
-			for (int i = 0; i < variableBlobCount; i++)
+			for(int i = 0; i < variableBlobCount; i++)
 			{
 				var data = VariableBlob.Parse(bodyReader, footerReader);
 				result.VariableBlobs.Add(data);
 
 			}
-			for (int i = 0; i < stateBlobCount; i++)
+			for(int i = 0; i < stateBlobCount; i++)
 			{
 				var data = StateBlob.Parse(bodyReader, footerReader);
 				result.StateBlobs.Add(data);
@@ -54,13 +54,13 @@ namespace DXDecompiler.DX9Shader.FX9
 		}
 		private void AnnotationBlobLookup(List<Annotation> annotations)
 		{
-			foreach (var annotation in annotations)
+			foreach(var annotation in annotations)
 			{
-				if (annotation.Parameter.ParameterType.HasVariableBlob())
+				if(annotation.Parameter.ParameterType.HasVariableBlob())
 				{
 					var blobs = new List<VariableBlob>();
 					var elementCount = annotation.Parameter.ElementCount == 0 ? 1 : annotation.Parameter.ElementCount;
-					for (int i = 0; i < elementCount; i++)
+					for(int i = 0; i < elementCount; i++)
 					{
 						var index = annotation.Value[i].UInt;
 						var blob = VariableBlobs.FirstOrDefault(b => b.Index == index);
@@ -79,7 +79,7 @@ namespace DXDecompiler.DX9Shader.FX9
 				{
 					var blobs = new List<VariableBlob>();
 					var elementCount = variable.Parameter.ElementCount == 0 ? 1 : variable.Parameter.ElementCount;
-					for (int j = 0; j < elementCount; j++)
+					for(int j = 0; j < elementCount; j++)
 					{
 						var index = variable.DefaultValue[j].UInt;
 						var blob = VariableBlobs.FirstOrDefault(b => b.Index == index);
@@ -88,17 +88,17 @@ namespace DXDecompiler.DX9Shader.FX9
 					VariableBlobLookup[variable.Parameter] = blobs;
 				}
 				AnnotationBlobLookup(variable.Annotations);
-				if (variable.Parameter.ParameterType.IsSampler())
+				if(variable.Parameter.ParameterType.IsSampler())
 				{
 					for(int j = 0; j < variable.SamplerStates.Count; j++)
 					{
 						var samplerState = variable.SamplerStates[j];
-						for (int k = 0; k < samplerState.Assignments.Count; k++)
+						for(int k = 0; k < samplerState.Assignments.Count; k++)
 						{
 							var assignment = samplerState.Assignments[k];
-							if (assignment.Type.HasStateBlob())
+							if(assignment.Type.HasStateBlob())
 							{
-								StateBlobLookup[assignment] = StateBlobs.FirstOrDefault(b => 
+								StateBlobLookup[assignment] = StateBlobs.FirstOrDefault(b =>
 									b.PassIndex == i &&
 									b.SamplerStateIndex == j &&
 									b.AssignmentIndex == k);
@@ -107,18 +107,18 @@ namespace DXDecompiler.DX9Shader.FX9
 					}
 				}
 			}
-			for (int i = 0; i < Techniques.Count; i++)
+			for(int i = 0; i < Techniques.Count; i++)
 			{
 				var technique = Techniques[i];
 				AnnotationBlobLookup(technique.Annotations);
-				for (int j = 0; j < technique.Passes.Count; j++)
+				for(int j = 0; j < technique.Passes.Count; j++)
 				{
 					var pass = technique.Passes[j];
 					AnnotationBlobLookup(pass.Annotations);
-					for (int k = 0; k < pass.Assignments.Count; k++)
+					for(int k = 0; k < pass.Assignments.Count; k++)
 					{
 						var assignment = pass.Assignments[k];
-						var blob = StateBlobs.FirstOrDefault(b => 
+						var blob = StateBlobs.FirstOrDefault(b =>
 								b.TechniqueIndex == i &&
 								b.PassIndex == j &&
 								b.AssignmentIndex == k);

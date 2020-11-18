@@ -16,7 +16,7 @@ namespace DXDecompiler.DebugParser.Aon9
 			result.StartReg = reader.ReadUInt16("StartReg");
 			result.RegCount = reader.ReadUInt16("RegCount");
 			result.TargetReg = reader.ReadUInt16("TargetReg");
-			for (int i = 0; i < 4; i++)
+			for(int i = 0; i < 4; i++)
 			{
 				var type = reader.ReadEnum8<DataConversionType>("DataConversionType");
 				result.DataConversion[i] = type;

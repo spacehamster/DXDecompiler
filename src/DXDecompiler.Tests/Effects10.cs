@@ -16,7 +16,7 @@ namespace DXDecompiler.Tests
 		}
 		public static void CompareBuffer(Buffer reflectionBuffer)
 		{
-			if (reflectionBuffer == null) return;
+			if(reflectionBuffer == null) return;
 			var desc = reflectionBuffer.Description;
 			Assert.AreEqual(desc.SizeInBytes, desc.SizeInBytes);
 			Assert.AreEqual(desc.Usage, desc.Usage);
@@ -38,7 +38,8 @@ namespace DXDecompiler.Tests
 			{
 				var cbufferDesc = reflectionEffectBuffer.GetConstantBuffer().Description;
 				//TODO: Compare cbufferDesc
-			} else
+			}
+			else
 			{
 				var tbufferDesc = reflectionEffectBuffer.GetTextureBuffer().Description;
 				//TODO: Compare tbufferDesc
@@ -67,72 +68,72 @@ namespace DXDecompiler.Tests
 			//Assert.AreEqual(variableDesc.BufferOffset, variable.BufferOffset == uint.MaxValue ? 0 : variable.BufferOffset);
 			Assert.AreEqual(variableDesc.ExplicitBindPoint, variable.ExplicitBindPoint);
 			var annotations = GetAnnotations(reflectionVariable);
-			if (typeDesc.Class == ShaderVariableClass.Struct)
+			if(typeDesc.Class == ShaderVariableClass.Struct)
 			{
 				//TODO: SharpDx has GetMemberValues on the EffectType.  
-				for (int i = 0; i < typeDesc.Members; i++)
+				for(int i = 0; i < typeDesc.Members; i++)
 				{
 					var reflectionMember = reflectionVariable.GetMemberByIndex(i);
 					var member = variable.Type.Members[i];
 					CompareVariable(reflectionMember, member);
 				}
 			}
-			for (int i = 0; i < annotations.Count; i++)
+			for(int i = 0; i < annotations.Count; i++)
 			{
 				var reflectionAnnotation = annotations[i];
 				var annotation = variable.Annotations[i];
 				CompareVariable(reflectionAnnotation, annotation);
 			}
-			if (typeDesc.Type == ShaderVariableType.Blend)
+			if(typeDesc.Type == ShaderVariableType.Blend)
 			{
 				var specDesc = reflectionVariable
 								.AsBlend()
 								.GetBlendState()
 								.Description;
 			}
-			if (typeDesc.Type == ShaderVariableType.ConstantBuffer)
+			if(typeDesc.Type == ShaderVariableType.ConstantBuffer)
 			{
 				var specDesc = reflectionVariable
 								.AsConstantBuffer()
 								.GetConstantBuffer()
 								.Description;
 			}
-			if (typeDesc.Type == ShaderVariableType.DepthStencil)
+			if(typeDesc.Type == ShaderVariableType.DepthStencil)
 			{
 				var specDesc = reflectionVariable
 								.AsDepthStencil()
 								.GetDepthStencilState()
 								.Description;
 			}
-			if (typeDesc.Type == ShaderVariableType.DepthStencilView)
+			if(typeDesc.Type == ShaderVariableType.DepthStencilView)
 			{
 				var specDesc = reflectionVariable
 								.AsDepthStencilView()
 								.GetDepthStencil()
 								.Description;
 			}
-			if (typeDesc.Type == ShaderVariableType.Rasterizer)
+			if(typeDesc.Type == ShaderVariableType.Rasterizer)
 			{
 				var specDesc = reflectionVariable
 								.AsRasterizer()
 								.GetRasterizerState()
 								.Description;
 			}
-			if (typeDesc.Type == ShaderVariableType.Rasterizer)
+			if(typeDesc.Type == ShaderVariableType.Rasterizer)
 			{
 				var specDesc = reflectionVariable
 								.AsRasterizer()
 								.GetRasterizerState()
 								.Description;
 			}
-			if (typeDesc.Type == ShaderVariableType.RenderTargetView)
+			if(typeDesc.Type == ShaderVariableType.RenderTargetView)
 			{
 				var specDesc = reflectionVariable
 								.AsRenderTargetView()
 								.GetRenderTarget()
 								.Description;
 			}
-			if (typeDesc.Type == ShaderVariableType.Sampler)
+			if(typeDesc.Type == ShaderVariableType.Sampler)
 			{
 				var specDesc = reflectionVariable
 								.AsSampler()
@@ -140,14 +141,14 @@ namespace DXDecompiler.Tests
 								.Description;
 				var stateAnnotations = (variable as Fx10.EffectObjectVariable).Assignments;
 			}
-			if (typeDesc.Type == ShaderVariableType.PixelShader ||
+			if(typeDesc.Type == ShaderVariableType.PixelShader ||
 				typeDesc.Type == ShaderVariableType.VertexShader ||
 				typeDesc.Type == ShaderVariableType.GeometryShader)
 			{
 				var shader = reflectionVariable
 								.AsShader();
 			}
-			if (false)
+			if(false)
 			{
 
 				var shader = reflectionVariable
@@ -157,7 +158,7 @@ namespace DXDecompiler.Tests
 		public static List<EffectVariable> GetAnnotations(EffectVariable reflectionVariable)
 		{
 			var result = new List<EffectVariable>();
-			for (int i = 0; i < reflectionVariable.Description.AnnotationCount; i++)
+			for(int i = 0; i < reflectionVariable.Description.AnnotationCount; i++)
 			{
 				var annotation = reflectionVariable.GetAnnotationByIndex(i);
 				result.Add(annotation);
@@ -168,7 +169,7 @@ namespace DXDecompiler.Tests
 		{
 			var desc = effect.Description;
 			var result = new List<EffectVariable>();
-			for (int i = 0; i < desc.GlobalVariableCount + desc.SharedGlobalVariableCount; i++)
+			for(int i = 0; i < desc.GlobalVariableCount + desc.SharedGlobalVariableCount; i++)
 			{
 				var variable = effect.GetVariableByIndex(i);
 				result.Add(variable);
@@ -179,7 +180,7 @@ namespace DXDecompiler.Tests
 		{
 			var desc = effect.Description;
 			var result = new List<EffectTechnique>();
-			for (int i = 0; i < desc.TechniqueCount; i++)
+			for(int i = 0; i < desc.TechniqueCount; i++)
 			{
 				var variable = effect.GetTechniqueByIndex(i);
 				result.Add(variable);
@@ -190,16 +191,16 @@ namespace DXDecompiler.Tests
 		{
 
 			var chunk = container.Chunks.OfType<Fx10.EffectChunk>().First();
-			if (chunk.Header.Techniques == 0)
+			if(chunk.Header.Techniques == 0)
 			{
 				return;
 			}
-			if (chunk.Header.Version.MinorVersion == 1)
+			if(chunk.Header.Version.MinorVersion == 1)
 			{
 				Assert.Warn("Version fx_4_1 is not supported by SharpDX");
 				return;
 			}
-			if (chunk.IsChildEffect)
+			if(chunk.IsChildEffect)
 			{
 				Assert.Warn("Child Effects are not supported by SharpDX");
 				return;
@@ -219,18 +220,18 @@ namespace DXDecompiler.Tests
 			var reflectionNames = reflectionVariables
 				.Select(v => $"{v.Description.Name}, {v.TypeInfo.Description.Type}, {v.TypeInfo.Description.Class}")
 				.ToList();
-			for (int i = 0; i < desc.GlobalVariableCount + desc.SharedGlobalVariableCount; i++)
+			for(int i = 0; i < desc.GlobalVariableCount + desc.SharedGlobalVariableCount; i++)
 			{
 				CompareVariable(reflectionVariables[i], variables[i]);
 			}
 			var buffers = chunk.AllBuffers.ToList();
 			var reflectionBuffers = effectReflection.GetConstantBuffers();
-			for (int i = 0; i < desc.ConstantBufferCount + desc.SharedConstantBufferCount; i++)
+			for(int i = 0; i < desc.ConstantBufferCount + desc.SharedConstantBufferCount; i++)
 			{
 				CompareConstantBuffer(reflectionBuffers[i], buffers[i]);
 			}
 			var techniques = effectReflection.GetTechniques();
-			for (int i = 0; i < desc.TechniqueCount; i++)
+			for(int i = 0; i < desc.TechniqueCount; i++)
 			{
 				CompareTechniques(techniques[i], chunk.Techniques[i]);
 			}
@@ -248,7 +249,7 @@ namespace DXDecompiler.Tests
 				ComparePass(passes[i], technique.Passes[i]);
 			}
 			var annotations = reflectionTechnique.GetAnnotations();
-			for (int i = 0; i < desc.AnnotationCount; i++)
+			for(int i = 0; i < desc.AnnotationCount; i++)
 			{
 				CompareVariable(annotations[i], technique.Annotations[i]);
 			}

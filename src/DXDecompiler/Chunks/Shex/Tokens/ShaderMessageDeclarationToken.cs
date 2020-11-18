@@ -78,20 +78,20 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			{
 				DeclarationLength = length,
 				InfoQueueMessageID = reader.ReadUInt32(),
-				MessageFormat = (ShaderMessageFormat) reader.ReadUInt32(),
+				MessageFormat = (ShaderMessageFormat)reader.ReadUInt32(),
 				NumCharacters = reader.ReadUInt32(),
 				NumOperands = reader.ReadUInt32(),
 				OperandsLength = reader.ReadUInt32()
 			};
 
-			for (int i = 0; i < result.NumOperands; i++)
+			for(int i = 0; i < result.NumOperands; i++)
 				result.Operands.Add(Operand.Parse(reader, OpcodeType.CustomData));
 
 			result.Format = reader.ReadString();
 
 			// String is padded to a multiple of DWORDs.
 			uint remainingBytes = (4 - ((result.NumCharacters + 1) % 4)) % 4;
-			reader.ReadBytes((int) remainingBytes);
+			reader.ReadBytes((int)remainingBytes);
 
 			return result;
 		}
@@ -101,15 +101,15 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			var sb = new StringBuilder();
 
 			string command;
-			switch (InfoQueueMessageID)
+			switch(InfoQueueMessageID)
 			{
-				case 2097410 :
+				case 2097410:
 					command = "printf";
 					break;
-				case 2097411 :
+				case 2097411:
 					command = "errorf";
 					break;
-				default :
+				default:
 					throw new NotSupportedException("Unknown InfoQueueMessageID: " + InfoQueueMessageID);
 			}
 			sb.AppendFormat("{0} \"{1}\"", command, Format
@@ -119,7 +119,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				.Replace("\b", "\\b")
 				.Replace("\r", "\\r")
 				);
-			foreach (var operand in Operands)
+			foreach(var operand in Operands)
 				sb.AppendFormat(", {0}", operand);
 
 			return sb.ToString();

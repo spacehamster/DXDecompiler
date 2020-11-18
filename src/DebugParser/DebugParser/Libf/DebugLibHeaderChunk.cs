@@ -24,7 +24,7 @@ namespace DXDecompiler.DebugParser.Libf
 			var creatorStringReader = chunkReader.CopyAtOffset("creatorStringReader", chunkReader, (int)creatorStringOffset);
 			result.CreatorString = creatorStringReader.ReadString("CreatorString");
 			var functionInfoReader = reader.CopyAtOffset("functionInfoReader", chunkReader, (int)functionInfoOffset);
-			for (int i = 0; i < functionCount; i++)
+			for(int i = 0; i < functionCount; i++)
 			{
 				// is 0 for lib_4_0, lib_4_1, lib_5_0
 				// is 1 for lib_4_0_level_9_1_vs_only, lib_4_0_level_9_3_vs_only

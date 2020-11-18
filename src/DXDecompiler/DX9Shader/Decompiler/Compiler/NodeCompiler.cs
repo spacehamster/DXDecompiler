@@ -28,23 +28,23 @@ namespace DXDecompiler.DX9Shader
 
 		public string Compile(List<HlslTreeNode> components, int promoteToVectorSize = PromoteToAnyVectorSize)
 		{
-			if (components.Count == 0)
+			if(components.Count == 0)
 			{
 				throw new ArgumentOutOfRangeException(nameof(components));
 			}
 
-			if (components.Count == 1)
+			if(components.Count == 1)
 			{
 				HlslTreeNode singleComponent = components[0];
 				HlslTreeNode[] vector = _nodeGrouper.LengthGrouper.TryGetLengthContext(singleComponent);
-				if (vector != null)
+				if(vector != null)
 				{
 					string value = Compile(vector);
 					return $"length({value})";
 				}
 
 				DotProductContext dotProduct = _nodeGrouper.DotProductGrouper.TryGetDotProductGroup(singleComponent);
-				if (dotProduct != null)
+				if(dotProduct != null)
 				{
 					string value1 = Compile(dotProduct.Value1);
 					string value2 = Compile(dotProduct.Value2);
@@ -54,19 +54,19 @@ namespace DXDecompiler.DX9Shader
 			else
 			{
 				IList<IList<HlslTreeNode>> componentGroups = _nodeGrouper.GroupComponents(components);
-				if (componentGroups.Count > 1)
+				if(componentGroups.Count > 1)
 				{
 					return CompileVectorConstructor(components, componentGroups);
 				}
 
 				var multiplication = _nodeGrouper.MatrixMultiplicationGrouper.TryGetMultiplicationGroup(components);
-				if (multiplication != null)
+				if(multiplication != null)
 				{
 					return _matrixMultiplicationCompiler.Compile(multiplication);
 				}
 
 				var normalize = _nodeGrouper.NormalizeGrouper.TryGetContext(components);
-				if (normalize != null)
+				if(normalize != null)
 				{
 					var vector = Compile(normalize);
 					return $"normalize({vector})";
@@ -75,17 +75,17 @@ namespace DXDecompiler.DX9Shader
 
 			var first = components[0];
 
-			if (first is ConstantNode constant)
+			if(first is ConstantNode constant)
 			{
 				return CompileConstant(components, promoteToVectorSize);
 			}
 
-			if (first is Operation operation)
+			if(first is Operation operation)
 			{
 				return CompileOperation(operation, components, promoteToVectorSize);
 			}
 
-			if (first is IHasComponentIndex component)
+			if(first is IHasComponentIndex component)
 			{
 				return CompileNodesWithComponents(components, first, promoteToVectorSize);
 			}
@@ -104,13 +104,13 @@ namespace DXDecompiler.DX9Shader
 		private static void UngroupConstantGroups(IList<IList<HlslTreeNode>> componentGroups)
 		{
 			int i = 0;
-			while (i < componentGroups.Count)
+			while(i < componentGroups.Count)
 			{
 				var componentGroup = componentGroups[i];
-				if (componentGroup.All(c => c is ConstantNode))
+				if(componentGroup.All(c => c is ConstantNode))
 				{
 					componentGroups.RemoveAt(i);
-					foreach (var groupComponent in componentGroup)
+					foreach(var groupComponent in componentGroup)
 					{
 						componentGroups.Insert(i, new[] { groupComponent });
 						i++;
@@ -131,7 +131,7 @@ namespace DXDecompiler.DX9Shader
 
 		private string CompileOperation(Operation operation, List<HlslTreeNode> components, int promoteToVectorSize)
 		{
-			switch (operation)
+			switch(operation)
 			{
 				case NegateOperation _:
 					{
@@ -172,7 +172,7 @@ namespace DXDecompiler.DX9Shader
 						var multiplicand1 = components.Select(g => g.Inputs[0]);
 						var multiplicand2 = components.Select(g => g.Inputs[1]);
 
-						if (!(multiplicand1.First() is ConstantNode) && multiplicand2.First() is ConstantNode)
+						if(!(multiplicand1.First() is ConstantNode) && multiplicand2.First() is ConstantNode)
 						{
 							var temp = multiplicand1;
 							multiplicand1 = multiplicand2;
@@ -246,12 +246,12 @@ namespace DXDecompiler.DX9Shader
 		{
 			var componentsWithIndices = components.Cast<IHasComponentIndex>();
 
-			if (first is RegisterInputNode shaderInput)
+			if(first is RegisterInputNode shaderInput)
 			{
 				var registerKey = shaderInput.RegisterComponentKey.RegisterKey;
 
 				string swizzle = "";
-				if (registerKey.Type != RegisterType.Sampler)
+				if(registerKey.Type != RegisterType.Sampler)
 				{
 					swizzle = GetAstSourceSwizzleName(componentsWithIndices,
 						_registers.GetRegisterFullLength(registerKey),
@@ -262,7 +262,7 @@ namespace DXDecompiler.DX9Shader
 				return $"{name}{swizzle}";
 			}
 
-			if (first is TextureLoadOutputNode textureLoad)
+			if(first is TextureLoadOutputNode textureLoad)
 			{
 				string swizzle = GetAstSourceSwizzleName(componentsWithIndices, 4);
 
@@ -271,7 +271,7 @@ namespace DXDecompiler.DX9Shader
 				return $"tex2D({sampler}, {texcoords}){swizzle}";
 			}
 
-			if (first is NormalizeOutputNode)
+			if(first is NormalizeOutputNode)
 			{
 				string input = Compile(first.Inputs);
 				string swizzle = GetAstSourceSwizzleName(componentsWithIndices, 4);
@@ -282,21 +282,21 @@ namespace DXDecompiler.DX9Shader
 		}
 
 		private static string GetAstSourceSwizzleName(IEnumerable<IHasComponentIndex> inputs,
-			uint registerSize, 
+			uint registerSize,
 			int promoteToVectorSize = PromoteToAnyVectorSize)
 		{
 			string swizzleName = "";
-			foreach (int swizzle in inputs.Select(i => i.ComponentIndex))
+			foreach(int swizzle in inputs.Select(i => i.ComponentIndex))
 			{
 				swizzleName += "xyzw"[swizzle];
 			}
 
-			if (swizzleName.Equals("xyzw".Substring(0, (int)registerSize)))
+			if(swizzleName.Equals("xyzw".Substring(0, (int)registerSize)))
 			{
 				return "";
 			}
 
-			if (promoteToVectorSize == PromoteToAnyVectorSize && swizzleName.ToCharArray().Distinct().Count() == 1)
+			if(promoteToVectorSize == PromoteToAnyVectorSize && swizzleName.ToCharArray().Distinct().Count() == 1)
 			{
 				return "." + swizzleName[0];
 			}

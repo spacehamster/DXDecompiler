@@ -69,12 +69,12 @@ namespace DXDecompiler.Chunks.Libf
 		/// The first output register component for this parameter.
 		/// </summary>
 		public uint FirstOutComponent { get; private set; }
-		
+
 		public string InputDescription
 		{
 			get
 			{
-				if (FirstInRegister != uint.MaxValue)
+				if(FirstInRegister != uint.MaxValue)
 				{
 					return $"v{FirstInRegister}";
 				}
@@ -88,7 +88,7 @@ namespace DXDecompiler.Chunks.Libf
 		{
 			get
 			{
-				if (FirstOutRegister != uint.MaxValue)
+				if(FirstOutRegister != uint.MaxValue)
 				{
 					return $"o{FirstOutRegister}";
 				}
@@ -107,11 +107,11 @@ namespace DXDecompiler.Chunks.Libf
 					return "void";
 				}
 				var sb = new StringBuilder();
-				if (Flags.HasFlag(ParameterFlags.In))
+				if(Flags.HasFlag(ParameterFlags.In))
 				{
 					sb.Append("in");
 				}
-				if (Flags.HasFlag(ParameterFlags.Out))
+				if(Flags.HasFlag(ParameterFlags.Out))
 				{
 					sb.Append("out");
 				}
@@ -124,7 +124,7 @@ namespace DXDecompiler.Chunks.Libf
 					sb.Append("row_major ");
 				}
 				sb.Append(VariableType.GetDescription());
-				switch (VariableClass)
+				switch(VariableClass)
 				{
 					case ShaderVariableClass.MatrixRows:
 						sb.AppendFormat("{0}x{1}", Rows, Column);
@@ -159,11 +159,12 @@ namespace DXDecompiler.Chunks.Libf
 			var nameReader = reader.CopyAtOffset((int)nameOffset);
 			result.Name = nameReader.ReadString();
 
-			if (semanticNameOffset != 0)
+			if(semanticNameOffset != 0)
 			{
 				var semanticNameReader = reader.CopyAtOffset((int)semanticNameOffset);
 				result.SemanticName = semanticNameReader.ReadString();
-			} else
+			}
+			else
 			{
 				result.SemanticName = "";
 			}
@@ -171,7 +172,7 @@ namespace DXDecompiler.Chunks.Libf
 		}
 		string GetMask()
 		{
-			switch (Column)
+			switch(Column)
 			{
 				case 1:
 					return "x";
@@ -197,13 +198,13 @@ namespace DXDecompiler.Chunks.Libf
 			string outDesc = "";
 			string outNum = "";
 			string outMask = "";
-			if (FirstInRegister != uint.MaxValue)
+			if(FirstInRegister != uint.MaxValue)
 			{
 				inDesc = InputDescription;
 				inNum = Rows.ToString();
 				inMask = GetMask();
 			}
-			if (FirstOutRegister != uint.MaxValue)
+			if(FirstOutRegister != uint.MaxValue)
 			{
 				outDesc = OutputDescription;
 				outNum = Rows.ToString();

@@ -19,14 +19,16 @@ namespace DXDecompiler.DebugParser
 		public uint AbsoluteIndex => (uint)Offset;
 		public uint RelativeIndex => (uint)(Offset - _parentOffset);
 		//public uint Size => (uint)(InheritSize ? ReadCount : Count);
-		public uint Size {
-			get {
-				if (!InheritSize)
+		public uint Size
+		{
+			get
+			{
+				if(!InheritSize)
 				{
 					return (uint)Count;
 				}
-				if (Members.Count == 0) return 0;
-				if (Members.Count == 1) return Members.First().Size;
+				if(Members.Count == 0) return 0;
+				if(Members.Count == 1) return Members.First().Size;
 				var last = Members.Last();
 				return last.AbsoluteIndex - AbsoluteIndex + last.Size;
 			}
@@ -59,7 +61,7 @@ namespace DXDecompiler.DebugParser
 			Count = count;
 			_reader = new BinaryReader(new MemoryStream(buffer, index, count));
 		}
-		public DebugBytecodeReader(byte[] buffer, int index, int count, int parentIndex, 
+		public DebugBytecodeReader(byte[] buffer, int index, int count, int parentIndex,
 			int indent, string name, DebugBytecodeReader root, bool inheritSize)
 		{
 			_buffer = buffer;
@@ -83,7 +85,7 @@ namespace DXDecompiler.DebugParser
 				Indent = Indent
 			};
 			var currentReadCount = (int)(_reader.BaseStream.Position);
-			if (currentReadCount > ReadCount)
+			if(currentReadCount > ReadCount)
 			{
 				ReadCount = currentReadCount;
 			}
@@ -104,7 +106,7 @@ namespace DXDecompiler.DebugParser
 				Indent = Indent
 			};
 			Indents.Push(result);
-			if (this != Root) Members.Add(result);
+			if(this != Root) Members.Add(result);
 			Root.Members.Add(result);
 			Indent++;
 		}
@@ -236,12 +238,13 @@ namespace DXDecompiler.DebugParser
 				toRead += 4 - toRead % 4;
 			}
 			var extraBytes = new byte[0];
-			if (length > 0)
+			if(length > 0)
 			{
 				var stringBytes = _reader.ReadBytes((int)length - 1);
 				extraBytes = _reader.ReadBytes((int)(toRead - (length - 1)));
 				result = Encoding.UTF8.GetString(stringBytes, 0, stringBytes.Length);
-			} else
+			}
+			else
 			{
 				extraBytes = _reader.ReadBytes((int)toRead);
 			}
@@ -257,17 +260,18 @@ namespace DXDecompiler.DebugParser
 		{
 			var sb = new StringBuilder();
 			char nextCharacter;
-			while (!EndOfBuffer && (nextCharacter = _reader.ReadChar()) != 0)
+			while(!EndOfBuffer && (nextCharacter = _reader.ReadChar()) != 0)
 			{
 				sb.Append(nextCharacter);
 			}
 			int paddingCount = 0;
-			while (!EndOfBuffer)
+			while(!EndOfBuffer)
 			{
-				if (_reader.ReadByte() == 0xAB)
+				if(_reader.ReadByte() == 0xAB)
 				{
 					paddingCount++;
-				} else
+				}
+				else
 				{
 					_reader.BaseStream.Position -= 1;
 					break;
@@ -291,11 +295,11 @@ namespace DXDecompiler.DebugParser
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.Append("hex(");
-			for (int i = 0; i < data.Length; i++)
+			for(int i = 0; i < data.Length; i++)
 			{
 				var hex = data[i].ToString("X2");
 				sb.Append(hex);
-				if ((i + 1) % 4 == 0 && i != 0 && i < data.Length - 1) sb.Append(" ");
+				if((i + 1) % 4 == 0 && i != 0 && i < data.Length - 1) sb.Append(" ");
 			}
 			sb.Append("), chr(");
 			sb.Append(DebugUtil.ToReadable(data));
@@ -328,30 +332,31 @@ namespace DXDecompiler.DebugParser
 				.ToList();
 			for(int i = 0; i < used.Length; i++)
 			{
-				if (!used[i])
+				if(!used[i])
 				{
 					int next = 1;
 					int fillerCount = _buffer[i] == 0xAB ? 1 : 0;
 					while(i + next < used.Length && used[i + next] == false)
 					{
-						if (_buffer[i + next] == 0xAB) fillerCount++;
+						if(_buffer[i + next] == 0xAB) fillerCount++;
 						next++;
 					}
 					//Strings are padded to 4 byte boundary with 0xAB
-					if (fillerCount != next)
+					if(fillerCount != next)
 					{
 						var closest = sorted
 							.Last(e => e.AbsoluteIndex < i);
-	
-						
+
+
 						var absIndex = i;
 						var absOffset = i + next - 1;
 						var relIndex = i - (closest.AbsoluteIndex - closest.RelativeIndex);
 						var relOffset = relIndex + next - 1;
-						if (FormatHex)
+						if(FormatHex)
 						{
 							sb.Append($"Unread Memory {absIndex.ToString("X4")}:{absOffset.ToString("X4")}[{relIndex.ToString("X4")}:{relOffset.ToString("X4")}] (See {closest.AbsoluteIndex.ToString("X4")}:{(closest.AbsoluteIndex + closest.Size).ToString("X4")} - {closest.Name})");
-						} else
+						}
+						else
 						{
 							sb.Append($"Unread Memory {absIndex}:{absOffset}[{relIndex}:{relOffset}] (See {closest.AbsoluteIndex}:{closest.AbsoluteIndex + closest.Size} - {closest.Name})");
 						}
@@ -374,12 +379,13 @@ namespace DXDecompiler.DebugParser
 					(Offset + _buffer.Length - 1).ToString();
 			var sb = new StringBuilder();
 			sb.Append($"{indent}Container: {Name}");
-			if (DumpOffsets)
+			if(DumpOffsets)
 			{
-				if (FormatHex)
+				if(FormatHex)
 				{
 					sb.Append($"[{Offset.ToString("X4")}:{next}]");
-				} else
+				}
+				else
 				{
 					sb.Append($"[{Offset}:{next}]");
 				}
@@ -398,7 +404,7 @@ namespace DXDecompiler.DebugParser
 			count = count ?? (int)(_reader.BaseStream.Length - offset);
 			var result = new DebugBytecodeReader(_buffer, Offset + offset, count.Value, Offset, parent.Indent + 1, name, Root, inheritOffset);
 			Root.Members.Add(result);
-			if (this != Root)
+			if(this != Root)
 			{
 				Members.Add(result);
 			}

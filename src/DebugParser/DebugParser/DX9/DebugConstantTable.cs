@@ -21,7 +21,7 @@ namespace DXDecompiler.DebugParser.DX9
 			var shaderFlags = ctabReader.ReadEnum32<ShaderFlags>("ShaderFlags");
 			var shaderModelOffset = ctabReader.ReadInt32("ShaderModelOffset");
 
-			for (int i = 0; i < numConstants; i++)
+			for(int i = 0; i < numConstants; i++)
 			{
 				var decReader = ctabReader.CopyAtOffset($"Declaration {i}", ctabReader, constantInfoOffset + i * 20);
 				DebugConstantDeclaration declaration = DebugConstantDeclaration.Parse(ctabReader, decReader);

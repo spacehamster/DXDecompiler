@@ -20,7 +20,7 @@ namespace DXDecompiler.Chunks.Xsgn
 
 		public static bool RequiresMask(this Name value)
 		{
-			switch (value)
+			switch(value)
 			{
 				case Name.Coverage:
 				case Name.Depth:
@@ -28,14 +28,14 @@ namespace DXDecompiler.Chunks.Xsgn
 				case Name.DepthLessEqual:
 				case Name.StencilRef:
 					return false;
-				default :
+				default:
 					return true;
 			}
 		}
 
 		public static string GetRegisterName(this Name value)
 		{
-			switch (value)
+			switch(value)
 			{
 				case Name.DepthGreaterEqual:
 					return OperandType.OutputDepthGreaterEqual.GetDescription();

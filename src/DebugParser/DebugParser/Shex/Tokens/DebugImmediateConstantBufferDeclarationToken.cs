@@ -16,7 +16,7 @@
 				Data = new DebugNumber[length]
 			};
 
-			for (int i = 0; i < length; i++)
+			for(int i = 0; i < length; i++)
 				result.Data[i] = DebugNumber.Parse(reader);
 
 			return result;

@@ -19,9 +19,9 @@ namespace DXDecompiler.DX9Shader.FX9
 			var paddedSize = blobSize + (blobSize % 4 == 0 ? 0 : 4 - blobSize % 4);
 			var shaderReader = dataReader.CopyAtCurrentPosition();
 			var data = dataReader.ReadBytes((int)paddedSize);
-			if (!_IsShader(data))
+			if(!_IsShader(data))
 			{
-				if (blobSize == 0)
+				if(blobSize == 0)
 				{
 					result.Value = "";
 				}
@@ -29,7 +29,8 @@ namespace DXDecompiler.DX9Shader.FX9
 				{
 					result.Value = Encoding.UTF8.GetString(data, 0, (int)(blobSize - 1));
 				}
-			} else
+			}
+			else
 			{
 				result.Shader = ShaderModel.Parse(shaderReader);
 			}
@@ -38,9 +39,9 @@ namespace DXDecompiler.DX9Shader.FX9
 
 		private static bool _IsShader(byte[] data)
 		{
-			if (data.Length < 4) return false;
+			if(data.Length < 4) return false;
 			var type = (ShaderType)BitConverter.ToUInt16(data, 2);
-			switch (type)
+			switch(type)
 			{
 				case ShaderType.Effect:
 				case ShaderType.Pixel:

@@ -63,17 +63,17 @@ namespace DXDecompiler.Chunks.Rdef
 		public static ResourceBinding Parse(BytecodeReader reader, BytecodeReader resourceBindingReader, ShaderVersion target)
 		{
 			uint nameOffset = resourceBindingReader.ReadUInt32();
-			var nameReader = reader.CopyAtOffset((int) nameOffset);
+			var nameReader = reader.CopyAtOffset((int)nameOffset);
 			var result = new ResourceBinding
 			{
 				Name = nameReader.ReadString(),
-				Type = (ShaderInputType) resourceBindingReader.ReadUInt32(),
-				ReturnType = (ResourceReturnType) resourceBindingReader.ReadUInt32(),
-				Dimension = (ShaderResourceViewDimension) resourceBindingReader.ReadUInt32(),
+				Type = (ShaderInputType)resourceBindingReader.ReadUInt32(),
+				ReturnType = (ResourceReturnType)resourceBindingReader.ReadUInt32(),
+				Dimension = (ShaderResourceViewDimension)resourceBindingReader.ReadUInt32(),
 				NumSamples = resourceBindingReader.ReadUInt32(),
 				BindPoint = resourceBindingReader.ReadUInt32(),
 				BindCount = resourceBindingReader.ReadUInt32(),
-				Flags = (ShaderInputFlags) resourceBindingReader.ReadUInt32()
+				Flags = (ShaderInputFlags)resourceBindingReader.ReadUInt32()
 			};
 			if(target.MajorVersion == 5 && target.MinorVersion == 1)
 			{
@@ -81,7 +81,8 @@ namespace DXDecompiler.Chunks.Rdef
 
 				result.SpaceIndex = resourceBindingReader.ReadUInt32();
 				result.ID = resourceBindingReader.ReadUInt32();
-			} else
+			}
+			else
 			{
 				result.ID = result.BindPoint;
 			}
@@ -90,7 +91,7 @@ namespace DXDecompiler.Chunks.Rdef
 		public string GetBindPointDescription()
 		{
 			string hlslBind;
-			switch (Type)
+			switch(Type)
 			{
 				case ShaderInputType.CBuffer:
 					hlslBind = $"cb{BindPoint}";
@@ -121,7 +122,7 @@ namespace DXDecompiler.Chunks.Rdef
 		public string GetIDDescription()
 		{
 			string hlslBind;
-			switch (Type)
+			switch(Type)
 			{
 				case ShaderInputType.CBuffer:
 					hlslBind = $"CB{ID}";
@@ -152,29 +153,30 @@ namespace DXDecompiler.Chunks.Rdef
 		public override string ToString()
 		{
 			string returnType = ReturnType.GetDescription(Type);
-			if (Flags.HasFlag(ShaderInputFlags.TextureComponent0) && !Flags.HasFlag(ShaderInputFlags.TextureComponent1))
+			if(Flags.HasFlag(ShaderInputFlags.TextureComponent0) && !Flags.HasFlag(ShaderInputFlags.TextureComponent1))
 				returnType += "2";
-			if (!Flags.HasFlag(ShaderInputFlags.TextureComponent0) && Flags.HasFlag(ShaderInputFlags.TextureComponent1))
+			if(!Flags.HasFlag(ShaderInputFlags.TextureComponent0) && Flags.HasFlag(ShaderInputFlags.TextureComponent1))
 				returnType += "3";
-			if (Flags.HasFlag(ShaderInputFlags.TextureComponent0) && Flags.HasFlag(ShaderInputFlags.TextureComponent1))
+			if(Flags.HasFlag(ShaderInputFlags.TextureComponent0) && Flags.HasFlag(ShaderInputFlags.TextureComponent1))
 				returnType += "4";
 			string typeDescription = Type.GetDescription();
-			if (Flags.HasFlag(ShaderInputFlags.ComparisonSampler))
+			if(Flags.HasFlag(ShaderInputFlags.ComparisonSampler))
 				typeDescription += "_c";
 			string hlslBindPoint = GetBindPointDescription();
 			string dimDescription = Dimension.GetDescription(Type, ReturnType);
-			dimDescription += (Dimension.IsMultiSampled() && NumSamples > 0 ? 
+			dimDescription += (Dimension.IsMultiSampled() && NumSamples > 0 ?
 					NumSamples.ToString() : string.Empty);
-			if (!m_IsSM51)
+			if(!m_IsSM51)
 			{
 				return string.Format("// {0,-30} {1,10} {2,7} {3,11} {4,14} {5,6}",
 					Name, typeDescription, returnType,
 					dimDescription,
 					hlslBindPoint, BindCount);
-			} else
+			}
+			else
 			{
-				var hlslBind = SpaceIndex > 0 ? 
-					$"{hlslBindPoint},space{SpaceIndex}" : 
+				var hlslBind = SpaceIndex > 0 ?
+					$"{hlslBindPoint},space{SpaceIndex}" :
 					hlslBindPoint;
 				return string.Format("// {0,-30} {1,10} {2,7} {3,11} {4, 7} {5,14} {6,6}",
 					Name, typeDescription, returnType,

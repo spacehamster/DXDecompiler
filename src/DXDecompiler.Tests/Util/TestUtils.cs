@@ -19,7 +19,7 @@ namespace DXDecompiler.Tests.Util
 		}
 		public static string GetShaderEntryPoint(ShaderProfile version)
 		{
-			switch (version.Version)
+			switch(version.Version)
 			{
 				case ShaderVersion.VertexShader:
 					return "MainVS";
@@ -40,7 +40,7 @@ namespace DXDecompiler.Tests.Util
 		public static string GetShaderProfile(ShaderProfile version)
 		{
 			return version.ToString();
-  		}
+		}
 		public static string StripDX9InstructionSlots(string assembly)
 		{
 			return Regex.Replace(assembly, @" ?\/\/ approximately \d+ instruction slots used.*", "");
@@ -59,7 +59,7 @@ namespace DXDecompiler.Tests.Util
 			assembly = assembly.Trim();
 			assembly = Regex.Replace(assembly, @"([^\w\n]|^)([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?)", match =>
 			{
-				if (match.Groups[2].Value == "-0")
+				if(match.Groups[2].Value == "-0")
 				{
 					return $"{match.Groups[1].Value}-0";
 				}

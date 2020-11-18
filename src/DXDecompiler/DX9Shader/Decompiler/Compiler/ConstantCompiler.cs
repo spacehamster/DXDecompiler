@@ -18,12 +18,12 @@ namespace DXDecompiler.DX9Shader
 			ConstantNode first = group[0];
 
 			int count = group.Length;
-			if (count == 1)
+			if(count == 1)
 			{
 				return CompileConstant(first);
 			}
 
-			if (group.All(c => NodeGrouper.AreNodesEquivalent(c, first)))
+			if(group.All(c => NodeGrouper.AreNodesEquivalent(c, first)))
 			{
 				return CompileConstant(first);
 			}

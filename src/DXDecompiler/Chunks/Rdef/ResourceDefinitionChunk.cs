@@ -33,20 +33,20 @@ namespace DXDecompiler.Chunks.Rdef
 			uint flags = headerReader.ReadUInt32();
 
 			var creatorOffset = headerReader.ReadUInt32();
-			var creatorReader = reader.CopyAtOffset((int) creatorOffset);
+			var creatorReader = reader.CopyAtOffset((int)creatorOffset);
 			var creator = creatorReader.ReadString();
 
 			var result = new ResourceDefinitionChunk
 			{
 				Target = target,
-				Flags = (ShaderFlags) flags,
+				Flags = (ShaderFlags)flags,
 				Creator = creator
 			};
 
-			if (target.MajorVersion == 5 || target.ProgramType == ProgramType.LibraryShader)
+			if(target.MajorVersion == 5 || target.ProgramType == ProgramType.LibraryShader)
 			{
 				var isVersion5_1 = target.MajorVersion == 5 && target.MinorVersion == 1;
-				if (isVersion5_1)
+				if(isVersion5_1)
 				{
 					var unknown0 = headerReader.ReadUInt32();
 					Debug.Assert(unknown0 == 625218323, $"Unexpected RDef Header identifier {unknown0}");
@@ -54,7 +54,7 @@ namespace DXDecompiler.Chunks.Rdef
 				else
 				{
 					string rd11 = headerReader.ReadUInt32().ToFourCcString();
-					if (rd11 != "RD11")
+					if(rd11 != "RD11")
 						throw new ParseException("Expected RD11.");
 				}
 
@@ -82,46 +82,48 @@ namespace DXDecompiler.Chunks.Rdef
 				result.InterfaceSlotCount = headerReader.ReadUInt32();
 			}
 
-			var constantBufferReader = reader.CopyAtOffset((int) constantBufferOffset);
-			for (int i = 0; i < constantBufferCount; i++)
+			var constantBufferReader = reader.CopyAtOffset((int)constantBufferOffset);
+			for(int i = 0; i < constantBufferCount; i++)
 				result.ConstantBuffers.Add(ConstantBuffer.Parse(reader, constantBufferReader, result.Target));
 
-			var resourceBindingReader = reader.CopyAtOffset((int) resourceBindingOffset);
-			for (int i = 0; i < resourceBindingCount; i++)
+			var resourceBindingReader = reader.CopyAtOffset((int)resourceBindingOffset);
+			for(int i = 0; i < resourceBindingCount; i++)
 				result.ResourceBindings.Add(ResourceBinding.Parse(reader, resourceBindingReader, target));
-			
+
 			return result;
 		}
-		
+
 		public override string ToString()
 		{
 			var sb = new StringBuilder();
 
-			if (ConstantBuffers.Any())
+			if(ConstantBuffers.Any())
 			{
 				sb.AppendLine("// Buffer Definitions: ");
 				sb.AppendLine("//");
 
-				foreach (var constantBuffer in ConstantBuffers)
+				foreach(var constantBuffer in ConstantBuffers)
 					sb.Append(constantBuffer);
 
 				sb.AppendLine("//");
 			}
 
-			if (ResourceBindings.Any())
+			if(ResourceBindings.Any())
 			{
 				sb.AppendLine("// Resource Bindings:");
 				sb.AppendLine("//");
-				if (!Target.IsSM51)
+				if(!Target.IsSM51)
 				{
 					sb.AppendLine("// Name                                 Type  Format         Dim      HLSL Bind  Count");
 					sb.AppendLine("// ------------------------------ ---------- ------- ----------- -------------- ------");
-				} else {
+				}
+				else
+				{
 					sb.AppendLine("// Name                                 Type  Format         Dim      ID      HLSL Bind  Count");
 					sb.AppendLine("// ------------------------------ ---------- ------- ----------- ------- -------------- ------");
 
 				}
-				foreach (var resourceBinding in ResourceBindings)
+				foreach(var resourceBinding in ResourceBindings)
 					sb.AppendLine(resourceBinding.ToString());
 
 				sb.AppendLine("//");

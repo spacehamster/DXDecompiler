@@ -8,7 +8,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 
 		public static DebugDeclarationToken Parse(DebugBytecodeReader reader, OpcodeType opcodeType, DebugShaderVersion version)
 		{
-			switch (opcodeType)
+			switch(opcodeType)
 			{
 				case OpcodeType.DclGlobalFlags:
 					return DebugGlobalFlagsDeclarationToken.Parse(reader);

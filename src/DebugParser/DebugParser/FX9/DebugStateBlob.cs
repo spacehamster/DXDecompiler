@@ -121,8 +121,8 @@ result:
 			result.PassIndex = blobReader.ReadUInt32("PassIndex");
 			result.SamplerStateIndex = blobReader.ReadUInt32("SamplerStateIndex");
 			result.AssignmentIndex = blobReader.ReadUInt32("AssignmentIndex");
-			result.BlobType = blobReader.ReadEnum32< StateBlobType>("BlobType");
-			if (result.BlobType == StateBlobType.Shader)
+			result.BlobType = blobReader.ReadEnum32<StateBlobType>("BlobType");
+			if(result.BlobType == StateBlobType.Shader)
 			{
 				result.ShaderSize = blobReader.ReadUInt32("BlobSize");
 				var startPosition = blobReader._reader.BaseStream.Position;
@@ -130,7 +130,7 @@ result:
 				result.Shader = DebugShaderModel.Parse(shaderReader);
 				blobReader._reader.BaseStream.Position = startPosition + result.ShaderSize;
 			}
-			if (result.BlobType == StateBlobType.Variable)
+			if(result.BlobType == StateBlobType.Variable)
 			{
 				result.VariableName = blobReader.TryReadString("VariableName");
 			}

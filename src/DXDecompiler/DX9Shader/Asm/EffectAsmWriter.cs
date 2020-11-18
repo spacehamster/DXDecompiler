@@ -17,7 +17,7 @@ namespace DXDecompiler.DX9Shader
 		}
 		protected override void Write()
 		{
-			foreach (var variable in EffectChunk.Variables)
+			foreach(var variable in EffectChunk.Variables)
 			{
 				if(variable.Parameter.ParameterType == ParameterType.PixelShader ||
 					variable.Parameter.ParameterType == ParameterType.VertexShader)
@@ -41,15 +41,15 @@ namespace DXDecompiler.DX9Shader
 				WriteLine("");
 			}
 		}
-		public void WriteShaderVariable(Variable variable) 
+		public void WriteShaderVariable(Variable variable)
 		{
 
 			WriteIndent();
-			Write("{0} {1}", 
+			Write("{0} {1}",
 					variable.Parameter.ParameterType.ToString().ToLower(),
 					variable.Parameter.Name);
 			var elementCount = variable.Parameter.ElementCount == 0 ? 1 : variable.Parameter.ElementCount;
-			if (elementCount > 1)
+			if(elementCount > 1)
 			{
 				Write("[{0}]",
 					variable.Parameter.ElementCount);
@@ -59,10 +59,10 @@ namespace DXDecompiler.DX9Shader
 			{
 				WriteLine();
 				WriteLine("{");
-				for (int i = 0; i < elementCount; i++)
+				for(int i = 0; i < elementCount; i++)
 				{
 					var blob = EffectChunk.VariableBlobLookup[variable.Parameter][i];
-					if (blob.Shader == null)
+					if(blob.Shader == null)
 					{
 						WriteIndent();
 						WriteLine("null;");
@@ -84,10 +84,11 @@ namespace DXDecompiler.DX9Shader
 				}
 				WriteLine("};");
 				WriteLine();
-			} else
+			}
+			else
 			{
 				var blob = EffectChunk.VariableBlobLookup[variable.Parameter][0];
-				if (blob.Shader == null)
+				if(blob.Shader == null)
 				{
 					WriteIndent();
 					WriteLine("null;");
@@ -115,14 +116,15 @@ namespace DXDecompiler.DX9Shader
 			if(vertexAssignment != null)
 			{
 				WriteAssignment(vertexAssignment);
-			} else
+			}
+			else
 			{
 				WriteIndent();
 				WriteLine("//No embedded vertex shader");
 			}
 			var pixelAssignment = pass.Assignments
 				.FirstOrDefault(a => a.Type == StateType.PixelShader);
-			if (pixelAssignment != null)
+			if(pixelAssignment != null)
 			{
 				WriteAssignment(pixelAssignment);
 			}
@@ -139,7 +141,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			WriteIndent();
 			EffectChunk.StateBlobLookup.TryGetValue(assignment, out StateBlob stateBlob);
-			if (stateBlob != null)
+			if(stateBlob != null)
 			{
 				Write("{0} = ", assignment.Type.ToString().ToLower());
 				if(stateBlob.BlobType == StateBlobType.Variable)
@@ -158,7 +160,8 @@ namespace DXDecompiler.DX9Shader
 					WriteIndent();
 					WriteLine("};");
 					Indent--;
-				} else if(stateBlob.BlobType == StateBlobType.Shader)
+				}
+				else if(stateBlob.BlobType == StateBlobType.Shader)
 				{
 					WriteLine();
 					Indent++;
@@ -171,12 +174,13 @@ namespace DXDecompiler.DX9Shader
 					WriteIndent();
 					WriteLine("};");
 					Indent--;
-				} else if (stateBlob.BlobType == StateBlobType.IndexShader)
+				}
+				else if(stateBlob.BlobType == StateBlobType.IndexShader)
 				{
 					WriteLine("{0}[TODO];", stateBlob.VariableName);
 				}
 			}
-			else if (assignment.Type == StateType.VertexShader)
+			else if(assignment.Type == StateType.VertexShader)
 			{
 				WriteLine("//No embedded vertex shader");
 			}

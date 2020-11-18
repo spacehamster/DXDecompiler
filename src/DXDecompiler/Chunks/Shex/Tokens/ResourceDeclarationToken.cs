@@ -87,7 +87,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 		{
 			get
 			{
-				switch (ResourceDimension)
+				switch(ResourceDimension)
 				{
 					case ResourceDimension.Texture2DMultiSampled:
 					case ResourceDimension.Texture2DMultiSampledArray:
@@ -105,7 +105,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			var resourceDimension = token0.DecodeValue<ResourceDimension>(11, 15);
 
 			byte sampleCount;
-			switch (resourceDimension)
+			switch(resourceDimension)
 			{
 				case ResourceDimension.Texture2DMultiSampled:
 				case ResourceDimension.Texture2DMultiSampledArray:
@@ -125,7 +125,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				Operand = operand,
 				ReturnType = returnType
 			};
-			if (version.IsSM51)
+			if(version.IsSM51)
 			{
 				result.SpaceIndex = reader.ReadUInt32();
 			}
@@ -134,10 +134,10 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 
 		public override string ToString()
 		{
-			return string.Format("{0}_{1}{2} ({3}) {4}{5}", 
-				TypeDescription, 
+			return string.Format("{0}_{1}{2} ({3}) {4}{5}",
+				TypeDescription,
 				ResourceDimension.GetDescription(),
-				(IsMultiSampled) ? "(" + SampleCount + ")" : string.Empty, 
+				(IsMultiSampled) ? "(" + SampleCount + ")" : string.Empty,
 				ReturnType,
 				Operand,
 				IsSM51 ? $", space={SpaceIndex}" : "");

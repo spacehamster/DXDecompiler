@@ -27,7 +27,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 		{
 			var customDataClass = token0.DecodeValue<CustomDataClass>(11, 31);
 			CustomDataToken token;
-			switch (customDataClass)
+			switch(customDataClass)
 			{
 				case CustomDataClass.DclImmediateConstantBuffer:
 					token = ImmediateConstantBufferDeclarationToken.Parse(reader);

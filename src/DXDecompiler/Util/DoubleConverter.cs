@@ -19,11 +19,11 @@ namespace DXDecompiler.Util
 		/// <returns>A string representation of the double's exact decimal value.</returns>
 		public static string ToExactString(double d, int precision = 6)
 		{
-			if (double.IsPositiveInfinity(d))
+			if(double.IsPositiveInfinity(d))
 				return "+Infinity";
-			if (double.IsNegativeInfinity(d))
+			if(double.IsNegativeInfinity(d))
 				return "-Infinity";
-			if (double.IsNaN(d))
+			if(double.IsNaN(d))
 				return "NaN";
 
 			// Translate the double into sign, exponent and mantissa.
@@ -35,7 +35,7 @@ namespace DXDecompiler.Util
 
 			// Subnormal numbers; exponent is effectively one higher,
 			// but there's no extra normalisation bit in the mantissa
-			if (exponent == 0)
+			if(exponent == 0)
 			{
 				exponent++;
 			}
@@ -51,13 +51,13 @@ namespace DXDecompiler.Util
 			// to subtract another 52 from it.
 			exponent -= 1075;
 
-			if (mantissa == 0)
+			if(mantissa == 0)
 			{
 				return "0";
 			}
 
 			/* Normalize */
-			while ((mantissa & 1) == 0)
+			while((mantissa & 1) == 0)
 			{    /*  i.e., Mantissa is even */
 				mantissa >>= 1;
 				exponent++;
@@ -69,21 +69,21 @@ namespace DXDecompiler.Util
 			// If the exponent is less than 0, we need to repeatedly
 			// divide by 2 - which is the equivalent of multiplying
 			// by 5 and dividing by 10.
-			if (exponent < 0)
+			if(exponent < 0)
 			{
-				for (int i = 0; i < -exponent; i++)
+				for(int i = 0; i < -exponent; i++)
 					ad.MultiplyBy(5);
 				ad.Shift(-exponent);
 			}
 			// Otherwise, we need to repeatedly multiply by 2
 			else
 			{
-				for (int i = 0; i < exponent; i++)
+				for(int i = 0; i < exponent; i++)
 					ad.MultiplyBy(2);
 			}
 
 			// Finally, return the string with an appropriate sign
-			if (negative)
+			if(negative)
 				return "-" + ad.ToString(precision);
 			else
 				return ad.ToString(precision);
@@ -108,14 +108,14 @@ namespace DXDecompiler.Util
 			{
 				string tmp = x.ToString(CultureInfo.InvariantCulture);
 				digits = new byte[tmp.Length];
-				for (int i = 0; i < tmp.Length; i++)
+				for(int i = 0; i < tmp.Length; i++)
 					digits[i] = (byte)(tmp[i] - '0');
 				Normalize();
 			}
 			public ArbitraryDecimal(string tmp, int decimalPoint)
 			{
 				digits = new byte[tmp.Length];
-				for (int i = 0; i < tmp.Length; i++)
+				for(int i = 0; i < tmp.Length; i++)
 					digits[i] = (byte)(tmp[i] - '0');
 				this.decimalPoint = decimalPoint;
 			}
@@ -127,13 +127,13 @@ namespace DXDecompiler.Util
 			public void MultiplyBy(int amount)
 			{
 				byte[] result = new byte[digits.Length + 1];
-				for (int i = digits.Length - 1; i >= 0; i--)
+				for(int i = digits.Length - 1; i >= 0; i--)
 				{
 					int resultDigit = digits[i] * amount + result[i + 1];
 					result[i] = (byte)(resultDigit / 10);
 					result[i + 1] = (byte)(resultDigit % 10);
 				}
-				if (result[0] != 0)
+				if(result[0] != 0)
 				{
 					digits = result;
 				}
@@ -161,19 +161,19 @@ namespace DXDecompiler.Util
 			public void Normalize()
 			{
 				int first;
-				for (first = 0; first < digits.Length; first++)
-					if (digits[first] != 0)
+				for(first = 0; first < digits.Length; first++)
+					if(digits[first] != 0)
 						break;
 				int last;
-				for (last = digits.Length - 1; last >= 0; last--)
-					if (digits[last] != 0)
+				for(last = digits.Length - 1; last >= 0; last--)
+					if(digits[last] != 0)
 						break;
 
-				if (first == 0 && last == digits.Length - 1)
+				if(first == 0 && last == digits.Length - 1)
 					return;
 
 				byte[] tmp = new byte[last - first + 1];
-				for (int i = 0; i < tmp.Length; i++)
+				for(int i = 0; i < tmp.Length; i++)
 					tmp[i] = digits[i + first];
 
 				decimalPoint -= digits.Length - (last + 1);
@@ -193,19 +193,19 @@ namespace DXDecompiler.Util
 			public void RoundDigits(int precision)
 			{
 				int roundPoint;
-				if (digits.Length - decimalPoint > 0)
+				if(digits.Length - decimalPoint > 0)
 				{
 					// When number > 1 eg 18.09871673583984375 -> 18.098717
 					// RoundPoin
 					roundPoint = digits.Length - decimalPoint + precision;
 				}
-				else if (decimalPoint - digits.Length == precision)
+				else if(decimalPoint - digits.Length == precision)
 				{
 					//When significate figures are just behind the rounding point
 					//EG 0.0000004 -> 0
 					var digit = digits[0];
 					digit = (byte)(digit >= 5 ? 1 : 0);
-					if (digit > 0)
+					if(digit > 0)
 					{
 						decimalPoint -= 1;
 					}
@@ -217,16 +217,16 @@ namespace DXDecompiler.Util
 					//For number < 1, EG 0.003508398309350013732910156
 					roundPoint = precision + (digits.Length - decimalPoint);
 				}
-				if (roundPoint >= digits.Length) return;
-				if (roundPoint < 1) return;
+				if(roundPoint >= digits.Length) return;
+				if(roundPoint < 1) return;
 				var result = new byte[roundPoint];
 				bool carry = digits.Length > roundPoint && digits[roundPoint] >= 5;
-				for (var i = roundPoint - 1; i >= 0; i--)
+				for(var i = roundPoint - 1; i >= 0; i--)
 				{
 					var digit = digits[i];
-					if (carry) digit += 1;
+					if(carry) digit += 1;
 					carry = digit > 9 ? true : false;
-					if (carry)
+					if(carry)
 					{
 						result[i] = 0;
 					}
@@ -235,7 +235,7 @@ namespace DXDecompiler.Util
 						result[i] = digit;
 					}
 				}
-				if (carry)
+				if(carry)
 				{
 					result[0] = 0;
 					result = (new byte[] { 1 }).Concat(result).ToArray();
@@ -252,33 +252,33 @@ namespace DXDecompiler.Util
 				char[] digitString = new char[digits.Length];
 				string debugRounded = "";
 				string debug = "";
-				for (int i = 0; i < digits.Length; i++)
+				for(int i = 0; i < digits.Length; i++)
 				{
 					debug += (char)(digits[i] + '0');
 				}
-				if (requestedPrecision != -1) RoundDigits(precision);
-				for (int i = 0; i < digits.Length; i++)
+				if(requestedPrecision != -1) RoundDigits(precision);
+				for(int i = 0; i < digits.Length; i++)
 				{
 					debugRounded += (char)(digits[i] + '0');
 					digitString[i] = (char)(digits[i] + '0');
 				}
 				// Simplest case - nothing after the decimal point,
 				// and last real digit is non-zero, eg value=35
-				if (decimalPoint == 0)
+				if(decimalPoint == 0)
 				{
 					return new string(digitString) + '.' + new string('0', 6);
 				}
 
 				// Fairly simple case - nothing after the decimal
 				// point, but some 0s to add, eg value=350
-				if (decimalPoint < 0)
+				if(decimalPoint < 0)
 				{
 					return new string(digitString)
 						+ new string('0', -decimalPoint)
 						+ '.' + new string('0', precision);
 				}
 				// Value is just below the rounding point, eg 0.0000006
-				if (decimalPoint - digitString.Length == precision)
+				if(decimalPoint - digitString.Length == precision)
 				{
 					return "0." +
 						new string('0', decimalPoint - digitString.Length - 1) +
@@ -286,7 +286,7 @@ namespace DXDecompiler.Util
 				}
 
 				// Nothing before the decimal point, eg 0.035
-				if (decimalPoint >= digitString.Length)
+				if(decimalPoint >= digitString.Length)
 				{
 					return "0." +
 						(new string('0', (decimalPoint - digitString.Length)) +

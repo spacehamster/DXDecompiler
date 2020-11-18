@@ -47,7 +47,7 @@ namespace DXDecompiler.Chunks.Shex
 				Length = reader.ReadUInt32()
 			};
 
-			while (!reader.EndOfBuffer)
+			while(!reader.EndOfBuffer)
 			{
 				// Opcode Format (OpcodeToken0)
 				//
@@ -73,11 +73,11 @@ namespace DXDecompiler.Chunks.Shex
 				};
 				var pos = reader.CurrentPosition;
 				OpcodeToken opcodeToken;
-				if (opcodeHeader.OpcodeType == OpcodeType.CustomData)
+				if(opcodeHeader.OpcodeType == OpcodeType.CustomData)
 				{
 					opcodeToken = CustomDataToken.Parse(reader, opcodeToken0);
 				}
-				else if (opcodeHeader.OpcodeType.IsDeclaration())
+				else if(opcodeHeader.OpcodeType.IsDeclaration())
 				{
 					opcodeToken = DeclarationToken.Parse(reader, opcodeHeader.OpcodeType, program.Version);
 				}
@@ -88,7 +88,7 @@ namespace DXDecompiler.Chunks.Shex
 				opcodeToken.Header = opcodeHeader;
 				program.Tokens.Add(opcodeToken);
 
-				Debug.Assert(reader.CurrentPosition == pos + opcodeHeader.Length * 4 
+				Debug.Assert(reader.CurrentPosition == pos + opcodeHeader.Length * 4
 					|| opcodeHeader.OpcodeType == OpcodeType.CustomData,
 					$"Expected token length of: {opcodeHeader.Length * 4}, read {reader.CurrentPosition - pos} for {opcodeHeader.OpcodeType}");
 			}
@@ -102,21 +102,21 @@ namespace DXDecompiler.Chunks.Shex
 		{
 			var stack = new Stack<int>();
 			var breakTokenIndices = new List<int>();
-			for (int instructionIndex = 0; instructionIndex < Tokens.Count; instructionIndex++)
+			for(int instructionIndex = 0; instructionIndex < Tokens.Count; instructionIndex++)
 			{
 				var token = Tokens[instructionIndex] as InstructionToken;
-				if (token == null)
+				if(token == null)
 					continue;
 
-				switch (token.Header.OpcodeType)
+				switch(token.Header.OpcodeType)
 				{
 					case OpcodeType.If:
 					case OpcodeType.Switch:
 					case OpcodeType.Loop:
 						stack.Push(instructionIndex);
 						break;
-					case OpcodeType.Break :
-					case OpcodeType.BreakC :
+					case OpcodeType.Break:
+					case OpcodeType.BreakC:
 						breakTokenIndices.Add(instructionIndex);
 						break;
 					case OpcodeType.EndSwitch:
@@ -128,13 +128,13 @@ namespace DXDecompiler.Chunks.Shex
 						token.LinkedInstructionOffset = v - instructionIndex;
 
 						// Link [If/Switch/Loop] to End[If/Switch/Loop]
-						((InstructionToken) Tokens[v]).LinkedInstructionOffset = instructionIndex - v;
+						((InstructionToken)Tokens[v]).LinkedInstructionOffset = instructionIndex - v;
 
-						if (token.Header.OpcodeType != OpcodeType.EndIf)
+						if(token.Header.OpcodeType != OpcodeType.EndIf)
 						{
 							// Link [Break/BreakC] to End[Switch/Loop]
-							foreach (var breakTokenIndex in breakTokenIndices)
-								((InstructionToken) Tokens[breakTokenIndex]).LinkedInstructionOffset = instructionIndex - breakTokenIndex;
+							foreach(var breakTokenIndex in breakTokenIndices)
+								((InstructionToken)Tokens[breakTokenIndex]).LinkedInstructionOffset = instructionIndex - breakTokenIndex;
 							breakTokenIndices.Clear();
 						}
 						break;
@@ -146,7 +146,7 @@ namespace DXDecompiler.Chunks.Shex
 		public void GetThreadGroupSize(out uint sizeX, out uint sizeY, out uint sizeZ)
 		{
 			var threadGroupDeclarationToken = Tokens.OfType<ThreadGroupDeclarationToken>().FirstOrDefault();
-			if (threadGroupDeclarationToken == null)
+			if(threadGroupDeclarationToken == null)
 			{
 				sizeX = sizeY = sizeZ = 0;
 				return;
@@ -166,14 +166,14 @@ namespace DXDecompiler.Chunks.Shex
 				Version.MinorVersion));
 
 			int indent = 0;
-			foreach (var token in Tokens)
+			foreach(var token in Tokens)
 			{
-				if (token.Header.OpcodeType.IsNestedSectionEnd())
+				if(token.Header.OpcodeType.IsNestedSectionEnd())
 				{
 					indent -= 2;
 				}
 				sb.AppendLine(string.Join(string.Empty, Enumerable.Repeat(" ", indent)) + token);
-				if (token.Header.OpcodeType.IsNestedSectionStart())
+				if(token.Header.OpcodeType.IsNestedSectionStart())
 				{
 					indent += 2;
 				}

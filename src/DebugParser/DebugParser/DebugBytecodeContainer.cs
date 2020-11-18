@@ -37,7 +37,7 @@ namespace DXDecompiler.DebugParser
 
 				_reader = reader;
 				var magicNumber = reader.PeakUint32();
-				if (magicNumber == 0xFEFF2001)
+				if(magicNumber == 0xFEFF2001)
 				{
 					Chunks.Add(DebugEffectChunk.Parse(reader, (uint)rawBytes.Length));
 					return;
@@ -45,17 +45,18 @@ namespace DXDecompiler.DebugParser
 
 				Header = DebugBytecodeContainerHeader.Parse(reader);
 
-				for (uint i = 0; i < Header.ChunkCount; i++)
+				for(uint i = 0; i < Header.ChunkCount; i++)
 				{
 					uint chunkOffset = reader.ReadUInt32("chunkOffset");
 					var fourCC = DebugUtil.ToReadable(reader.PeakUInt32At((int)chunkOffset).ToFourCcString());
 					var chunkReader = reader.CopyAtOffset($"Chunk{fourCC}", reader, (int)chunkOffset);
 
 					var chunk = DebugBytecodeChunk.ParseChunk(chunkReader, this);
-					if (chunk != null)
+					if(chunk != null)
 						Chunks.Add(chunk);
 				}
-			} catch (Exception ex)
+			}
+			catch(Exception ex)
 			{
 				Exception = ex;
 				Error = ex.ToString();
@@ -69,25 +70,25 @@ namespace DXDecompiler.DebugParser
 
 				_reader = reader;
 				var magicNumber = reader.PeakUint32();
-				if (magicNumber == 0xFEFF2001)
+				if(magicNumber == 0xFEFF2001)
 				{
 					Chunks.Add(DebugEffectChunk.Parse(reader, (uint)reader.Count));
 					return;
 				}
 				Header = DebugBytecodeContainerHeader.Parse(reader);
 
-				for (uint i = 0; i < Header.ChunkCount; i++)
+				for(uint i = 0; i < Header.ChunkCount; i++)
 				{
 					uint chunkOffset = reader.ReadUInt32("chunkOffset");
 					var fourCC = DebugUtil.ToReadable(reader.PeakUInt32At((int)chunkOffset).ToFourCcString());
 					var chunkReader = reader.CopyAtOffset($"Chunk{fourCC}", reader, (int)chunkOffset);
 
 					var chunk = DebugBytecodeChunk.ParseChunk(chunkReader, this);
-					if (chunk != null)
+					if(chunk != null)
 						Chunks.Add(chunk);
 				}
 			}
-			catch (Exception ex)
+			catch(Exception ex)
 			{
 				Exception = ex;
 				Error = ex.ToString();
@@ -103,18 +104,19 @@ namespace DXDecompiler.DebugParser
 		{
 			return new DebugBytecodeContainer(reader);
 		}
-		public string ParseErrors {
+		public string ParseErrors
+		{
 			get
 			{
 				var sb = new StringBuilder();
-				if (!string.IsNullOrEmpty(Error))
+				if(!string.IsNullOrEmpty(Error))
 				{
 					sb.AppendLine(Error);
 				}
 				var libraryChunks = Chunks.OfType<Libf.DebugLibfChunk>().ToList();
-				foreach (var chunk in libraryChunks)
+				foreach(var chunk in libraryChunks)
 				{
-					if (!string.IsNullOrEmpty(chunk.LibraryContainer.Error))
+					if(!string.IsNullOrEmpty(chunk.LibraryContainer.Error))
 					{
 						var msg = $"Error in Library {libraryChunks.IndexOf(chunk)}\n" + chunk.LibraryContainer.Error;
 						sb.AppendLine(Error);
@@ -133,9 +135,9 @@ namespace DXDecompiler.DebugParser
 					result.Add(Exception);
 				}
 				var libraryChunks = Chunks.OfType<Libf.DebugLibfChunk>().ToList();
-				foreach (var chunk in libraryChunks)
+				foreach(var chunk in libraryChunks)
 				{
-					if (chunk.LibraryContainer.Exception != null)
+					if(chunk.LibraryContainer.Exception != null)
 					{
 						result.Add(chunk.LibraryContainer.Exception);
 					}
@@ -146,7 +148,7 @@ namespace DXDecompiler.DebugParser
 		public string Dump()
 		{
 			var dump = _reader.DumpStructure();
-			if (!string.IsNullOrEmpty(ParseErrors))
+			if(!string.IsNullOrEmpty(ParseErrors))
 			{
 				dump += $"\n{ParseErrors}";
 			}

@@ -25,7 +25,7 @@ namespace DXDecompiler.Decompiler
 			InitContantBuffers();
 			InitResources();
 			InitDeclarations();
-			if (Container.LibrarySignature != null)
+			if(Container.LibrarySignature != null)
 			{
 				InitLibraryParams();
 			}
@@ -37,19 +37,21 @@ namespace DXDecompiler.Decompiler
 		}
 		public void AddRegister(string key, Register register)
 		{
-			if (Registers.ContainsKey(key))
+			if(Registers.ContainsKey(key))
 			{
 				Registers[key].Add(register);
-			} else
+			}
+			else
 			{
 				Registers[key] = new List<Register>() { register };
 			}
 		}
 		void InitContantBuffers()
 		{
-			foreach (var cb in Container.ResourceDefinition
-				.ConstantBuffers.Where(cb => cb.BufferType == ConstantBufferType.ConstantBuffer || 
-				cb.BufferType == ConstantBufferType.TextureBuffer))			{
+			foreach(var cb in Container.ResourceDefinition
+				.ConstantBuffers.Where(cb => cb.BufferType == ConstantBufferType.ConstantBuffer ||
+				cb.BufferType == ConstantBufferType.TextureBuffer))
+			{
 				var registerName = cb.BufferType == ConstantBufferType.ConstantBuffer ?
 					"cb" : "t";
 				var bindingType = cb.BufferType == ConstantBufferType.ConstantBuffer ?
@@ -62,7 +64,7 @@ namespace DXDecompiler.Decompiler
 		}
 		void InitConstantBuffer(ConstantBuffer cb, string registerName, ResourceBinding binding)
 		{
-			foreach (var variable in cb.Variables)
+			foreach(var variable in cb.Variables)
 			{
 				InitMember(variable.Member, registerName, binding.BindPoint);
 			}
@@ -72,29 +74,30 @@ namespace DXDecompiler.Decompiler
 			uint thisOffset = parentOffset + member.Offset;
 			uint thisSize = member.GetCBVarSize();
 			var elementCount = member.Type.ElementCount == 0 ? 1 : member.Type.ElementCount;
-			for (uint i = 0; i < elementCount; i++)
+			for(uint i = 0; i < elementCount; i++)
 			{
 				string arrayIndex = member.Type.ElementCount > 1 ? $"[{i}]" : "";
-				if (member.Type.VariableClass == ShaderVariableClass.MatrixColumns)
+				if(member.Type.VariableClass == ShaderVariableClass.MatrixColumns)
 				{
-					for (int j = 0; j < member.Type.Columns; j++)
+					for(int j = 0; j < member.Type.Columns; j++)
 					{
 						var key = $"{registerName}{bindPoint}[{thisOffset / 16 + i * member.Type.Columns + j}]";
 						AddRegister(key, new Register($"{prefix}{member.Name}{arrayIndex}[{j}]"));
 					}
-				} else if(member.Type.VariableClass == ShaderVariableClass.MatrixRows)
+				}
+				else if(member.Type.VariableClass == ShaderVariableClass.MatrixRows)
 				{
-					for (int j = 0; j < member.Type.Rows; j++)
+					for(int j = 0; j < member.Type.Rows; j++)
 					{
 						var key = $"{registerName}{bindPoint}[{thisOffset / 16 + i * member.Type.Rows + j}]";
 						AddRegister(key, new Register($"{prefix}{member.Name}{arrayIndex}[{j}]"));
 					}
 				}
-				else if (member.Type.VariableClass == ShaderVariableClass.Struct)
+				else if(member.Type.VariableClass == ShaderVariableClass.Struct)
 				{
 					uint paddedSize = ((thisSize + 15) / 16) * 16;
 					uint structOffset = thisOffset + paddedSize * i;
-					foreach (var child in member.Type.Members)
+					foreach(var child in member.Type.Members)
 					{
 						InitMember(child, registerName, bindPoint, structOffset, $"{prefix}{member.Name}{arrayIndex}.");
 					}
@@ -108,7 +111,7 @@ namespace DXDecompiler.Decompiler
 		}
 		void InitResources()
 		{
-			foreach (var rb in Container.ResourceDefinition.ResourceBindings.Where(rb => rb.Type != ShaderInputType.CBuffer))
+			foreach(var rb in Container.ResourceDefinition.ResourceBindings.Where(rb => rb.Type != ShaderInputType.CBuffer))
 			{
 				var key = $"{rb.GetBindPointDescription()}";
 				AddRegister(key, new Register($"{rb.Name}"));
@@ -116,7 +119,7 @@ namespace DXDecompiler.Decompiler
 		}
 		void InitLibraryParams()
 		{
-			foreach (var param in Container.LibrarySignature
+			foreach(var param in Container.LibrarySignature
 				.Parameters
 				.Where(p => p.FirstInRegister != uint.MaxValue))
 			{
@@ -128,7 +131,7 @@ namespace DXDecompiler.Decompiler
 				AddRegister(key, register);
 				InputRegisters.Add(register);
 			}
-			foreach (var param in Container.LibrarySignature
+			foreach(var param in Container.LibrarySignature
 				.Parameters
 				.Where(p => p.FirstOutRegister != uint.MaxValue))
 			{
@@ -147,11 +150,12 @@ namespace DXDecompiler.Decompiler
 			{
 				string key;
 				string name;
-				if (param.SystemValueType.RequiresMask())
+				if(param.SystemValueType.RequiresMask())
 				{
 					key = $"v{param.Register}";
 					name = $"{param.GetName()}";
-				} else
+				}
+				else
 				{
 					key = $"{param.SystemValueType}";
 					name = $"{param.GetName()}";
@@ -160,11 +164,11 @@ namespace DXDecompiler.Decompiler
 				AddRegister(key, register);
 				InputRegisters.Add(register);
 			}
-			foreach (var param in Container.OutputSignature.Parameters)
+			foreach(var param in Container.OutputSignature.Parameters)
 			{
 				string key;
 				string name;
-				if (param.SystemValueType.RequiresMask())
+				if(param.SystemValueType.RequiresMask())
 				{
 					key = $"o{param.Register}";
 					name = $"{param.GetName()}";
@@ -183,7 +187,7 @@ namespace DXDecompiler.Decompiler
 		{
 			foreach(var token in Container.Shader.DeclarationTokens)
 			{
-				switch (token.Header.OpcodeType)
+				switch(token.Header.OpcodeType)
 				{
 					case OpcodeType.DclTemps:
 						{
@@ -197,7 +201,7 @@ namespace DXDecompiler.Decompiler
 					case OpcodeType.DclIndexableTemp:
 						{
 							var dcl = token as IndexableTempRegisterDeclarationToken;
-							for (int i = 0; i < dcl.RegisterCount; i++)
+							for(int i = 0; i < dcl.RegisterCount; i++)
 							{
 								AddRegister($"x{dcl.RegisterIndex}[{i}]", new Register($"x{dcl.RegisterIndex}[{i}]"));
 							}
@@ -227,12 +231,12 @@ namespace DXDecompiler.Decompiler
 			}
 			foreach(var token in Container.Shader.Tokens.OfType<CustomDataToken>())
 			{
-				switch (token.Header.OpcodeType)
+				switch(token.Header.OpcodeType)
 				{
 					case OpcodeType.DclConstantBuffer:
 						{
 							var dcl = token as ImmediateConstantBufferDeclarationToken;
-							for (int i = 0; i < dcl.Data.Length; i++)
+							for(int i = 0; i < dcl.Data.Length; i++)
 							{
 								AddRegister($"icb[{i}]", new Register($"icb[{i}]"));
 							}
@@ -244,7 +248,7 @@ namespace DXDecompiler.Decompiler
 		void InitOutputDeclaration(DeclarationToken token)
 		{
 			var key = token.Operand.OperandType.GetDescription();
-			switch (token.Operand.OperandType)
+			switch(token.Operand.OperandType)
 			{
 				case OperandType.OutputDepth:
 					{
@@ -291,7 +295,7 @@ namespace DXDecompiler.Decompiler
 		void InitInputDeclaration(DeclarationToken token)
 		{
 			var key = token.Operand.OperandType.GetDescription();
-			switch (token.Operand.OperandType)
+			switch(token.Operand.OperandType)
 			{
 				case OperandType.InputCoverageMask:
 					{
@@ -421,7 +425,8 @@ namespace DXDecompiler.Decompiler
 		}
 		public Register GetRegister(Operand operand)
 		{
-			switch(operand.OperandType){
+			switch(operand.OperandType)
+			{
 				case OperandType.ConstantBuffer:
 					{
 						int bindPoint = (int)operand.Indices[0].Value;
@@ -454,7 +459,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public Register GetRegister(InstructionToken token)
 		{
-			switch (token.Header.OpcodeType)
+			switch(token.Header.OpcodeType)
 			{
 				case OpcodeType.InterfaceCall:
 					{
@@ -478,7 +483,7 @@ namespace DXDecompiler.Decompiler
 				var names = string.Join(", ", kv.Value);
 				sb.AppendLine($"// {kv.Key} = {names}");
 			}
-			foreach (var kv in this.ResourceBindings)
+			foreach(var kv in this.ResourceBindings)
 			{
 				sb.AppendLine($"// RB! {kv.Key} = {kv.Value.Variables[0].ShaderType}");
 			}

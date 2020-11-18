@@ -13,7 +13,7 @@ namespace DXDecompiler.DebugParser.FX9
 		{
 			var result = new DebugSamplerState();
 			var assignmentCount = stateReader.ReadUInt32("AssignmentCount");
-			for (int j = 0; j < assignmentCount; j++)
+			for(int j = 0; j < assignmentCount; j++)
 			{
 				stateReader.AddIndent($"Assignment {j}");
 				result.Assignments.Add(DebugAssignment.Parse(reader, stateReader));

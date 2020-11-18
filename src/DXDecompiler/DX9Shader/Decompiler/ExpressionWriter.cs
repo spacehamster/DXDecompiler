@@ -49,7 +49,7 @@ namespace DXDecompiler.DX9Shader.Decompiler
 		{
 			WriteIndent();
 			WriteLine($"// {token.ToString(Shader.ConstantTable, Shader.Cli)}");
-			switch (token.Opcode)
+			switch(token.Opcode)
 			{
 				case Bytecode.Fxlvm.FxlcOpcode.Mov:
 					WriteIndent();
@@ -160,7 +160,7 @@ namespace DXDecompiler.DX9Shader.Decompiler
 			var operands = token.Operands
 				.Skip(1)
 				.Select(o => o.ToString(Ctab, Cli));
-			WriteLine ("{0} = {1}({2});",
+			WriteLine("{0} = {1}({2});",
 				token.Operands[0].ToString(Ctab, Cli),
 				func,
 				string.Join(", ", operands));

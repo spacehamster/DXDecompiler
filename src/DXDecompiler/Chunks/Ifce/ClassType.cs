@@ -13,7 +13,7 @@ namespace DXDecompiler.Chunks.Ifce
 		public static ClassType Parse(BytecodeReader reader, BytecodeReader classTypeReader)
 		{
 			var nameOffset = classTypeReader.ReadUInt32();
-			var nameReader = reader.CopyAtOffset((int) nameOffset);
+			var nameReader = reader.CopyAtOffset((int)nameOffset);
 
 			return new ClassType
 			{

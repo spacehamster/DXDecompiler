@@ -13,7 +13,7 @@ namespace DXDecompiler
 	{
 		public static Number Abs(Number value, NumberType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case NumberType.Float:
 					return FromFloat(Math.Abs(value.Float));
@@ -24,7 +24,7 @@ namespace DXDecompiler
 
 		public static Number Negate(Number value, NumberType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case NumberType.Int:
 					return FromInt(-value.Int);
@@ -42,7 +42,7 @@ namespace DXDecompiler
 
 		public static Number FromByteArray(byte[] bytes, int startIndex)
 		{
-			if (startIndex >= bytes.Length)
+			if(startIndex >= bytes.Length)
 				return new Number();
 
 			return new Number
@@ -87,7 +87,7 @@ namespace DXDecompiler
 		{
 			const int byteCount = 4;
 			var bytes = new byte[byteCount];
-			for (int i = 0; i < byteCount; i++)
+			for(int i = 0; i < byteCount; i++)
 				bytes[i] = reader.ReadByte();
 			return new Number(bytes);
 		}
@@ -148,33 +148,33 @@ namespace DXDecompiler
 			const int floatThresholdPos = 0x00700000; // TODO: Work out the actual float threshold.
 			const int floatThresholdNeg = -0x00700000; // TODO: Work out the actual float threshold.
 			const uint uintThresholdPos = 0xfff00000; // TODO: Work out the actual float threshold.
-			switch (type)
+			switch(type)
 			{
 				case NumberType.Hex:
 					return "0x" + Int.ToString("x8");
 				case NumberType.Int:
-					if (Int > hexThreshold)
+					if(Int > hexThreshold)
 						return "0x" + Int.ToString("x8");
 					return Int.ToString();
 				case NumberType.UInt:
-					if (UInt > negThreshold)
+					if(UInt > negThreshold)
 						return Int.ToString();
-					if (UInt > hexThreshold)
+					if(UInt > hexThreshold)
 						return "0x" + UInt.ToString("x8");
 					return UInt.ToString();
 				case NumberType.Float:
 					var result = ((double)Float).ToString("g7");
-					if (!result.StartsWith("-") && Float < 0.0f)
+					if(!result.StartsWith("-") && Float < 0.0f)
 						result = "-" + result;
 					return result;
 				case NumberType.Double:
-					if (RawBytes[0] == 0 && RawBytes[1] == 0 && RawBytes[2] == 0 && RawBytes[3] == 128)
+					if(RawBytes[0] == 0 && RawBytes[1] == 0 && RawBytes[2] == 0 && RawBytes[3] == 128)
 						return "-0.000000"; // "Negative" zero
-					//TODO: Some instructions expect 0 to be 0 and others expect 0 to be 0.000000
-					//if(RawBytes[0] == 0 && RawBytes[1] == 0 && RawBytes[2] == 0 && RawBytes[3] == 0)
-					//{
-					//	return "0.000000";
-					//}
+											//TODO: Some instructions expect 0 to be 0 and others expect 0 to be 0.000000
+											//if(RawBytes[0] == 0 && RawBytes[1] == 0 && RawBytes[2] == 0 && RawBytes[3] == 0)
+											//{
+											//	return "0.000000";
+											//}
 					return DoubleConverter.ToExactString(Float);
 				case NumberType.Unknown:
 					// fxc.exe has some strange rules for formatting output of numbers of 
@@ -183,9 +183,9 @@ namespace DXDecompiler
 					// move bytes around without interpreting them - this is from the mov doc page:
 					// "The modifiers, other than swizzle, assume the data is floating point. The absence of modifiers 
 					// just moves data without altering bits."
-					if (UInt > uintThresholdPos)
+					if(UInt > uintThresholdPos)
 						goto case NumberType.UInt;
-					if (Int < floatThresholdNeg || Int > floatThresholdPos)
+					if(Int < floatThresholdNeg || Int > floatThresholdPos)
 						goto case NumberType.Float;
 					goto case NumberType.Int;
 				case NumberType.Bool:

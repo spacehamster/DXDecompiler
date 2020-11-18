@@ -45,9 +45,10 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 				{
 					result.DefaultNumericValue.Add(DebugNumber.Parse(defaultValueReader));
 				}
-			} else
+			}
+			else
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					result.DefaultStringValue.Add(defaultValueReader.ReadString($"DefaultValueString{i}"));
 				}

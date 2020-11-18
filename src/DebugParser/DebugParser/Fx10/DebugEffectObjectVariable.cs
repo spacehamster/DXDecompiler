@@ -37,7 +37,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 		//TODO
 		public uint Flags => 0;
 		public uint ExplicitBindPoint => 0;
-		IList<IDebugEffectVariable> IDebugEffectVariable.Annotations => 
+		IList<IDebugEffectVariable> IDebugEffectVariable.Annotations =>
 			Annotations.Cast<IDebugEffectVariable>().ToList();
 
 		private uint ElementCount => Type.ElementCount == 0 ? 1 : Type.ElementCount;
@@ -49,10 +49,10 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			ShaderData5 = new List<DebugEffectShaderData5>();
 			ShaderData = new List<DebugEffectShaderData>();
 			GSSOInitializers = new List<DebugEffectGSSOInitializer>();
-	}
+		}
 		private static bool IfHasAssignments(DebugEffectType type)
 		{
-			switch (type.VariableType)
+			switch(type.VariableType)
 			{
 				case ShaderVariableType.Sampler:
 				case ShaderVariableType.DepthStencil:
@@ -64,7 +64,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 		}
 		private static bool IsShader(DebugEffectType type)
 		{
-			switch (type.VariableType)
+			switch(type.VariableType)
 			{
 				case ShaderVariableType.VertexShader:
 				case ShaderVariableType.PixelShader:
@@ -78,7 +78,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 		}
 		private static bool IsShader5(DebugEffectType type)
 		{
-			switch (type.ObjectType)
+			switch(type.ObjectType)
 			{
 				case EffectObjectType.VertexShader5:
 				case EffectObjectType.PixelShader5:
@@ -101,7 +101,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			var typeReader = reader.CopyAtOffset("TypeReader", variableReader, (int)result.TypeOffset);
 			result.Type = DebugEffectType.Parse(reader, typeReader, version);
 			var semanticOffset = result.SemanticOffset = variableReader.ReadUInt32("SemanticOffset");
-			if (semanticOffset != 0)
+			if(semanticOffset != 0)
 			{
 				var semanticReader = reader.CopyAtOffset("SemanticReader", variableReader, (int)semanticOffset);
 				result.Semantic = semanticReader.ReadString("Semantic");
@@ -111,28 +111,28 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 				result.Semantic = "";
 			}
 			result.BufferOffset = variableReader.ReadUInt32("BufferOffset");
-			if (isShared)
+			if(isShared)
 			{
 				return result;
 			}
 			// Initializer data
-			if (result.Type.ObjectType == EffectObjectType.String)
+			if(result.Type.ObjectType == EffectObjectType.String)
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					var stringValueOffset = variableReader.ReadUInt32($"StringValueOffset{i}");
 					var stringValueReader = reader.CopyAtOffset($"StringValueReader{i}", variableReader, (int)stringValueOffset);
 					result.Strings.Add(stringValueReader.ReadString($"StringValue{i}"));
 				}
 			}
-			if (IfHasAssignments(result.Type))
+			if(IfHasAssignments(result.Type))
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					var assignmentCount = variableReader.ReadUInt32($"AssignmentCount{i}");
 					var assignments = new List<DebugEffectAssignment>();
 					result.Assignments.Add(assignments);
-					for (int j = 0; j < assignmentCount; j++)
+					for(int j = 0; j < assignmentCount; j++)
 					{
 						variableReader.AddIndent($"Assignment {i}");
 						assignments.Add(DebugEffectAssignment.Parse(reader, variableReader));
@@ -140,27 +140,27 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 					}
 				}
 			}
-			if (result.Type.ObjectType == EffectObjectType.GeometryShaderWithStream)
+			if(result.Type.ObjectType == EffectObjectType.GeometryShaderWithStream)
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					variableReader.AddIndent($"GSSOInitializer {i}");
 					result.GSSOInitializers.Add(DebugEffectGSSOInitializer.Parse(reader, variableReader));
 					variableReader.RemoveIndent();
 				}
 			}
-			else if (IsShader5(result.Type))
+			else if(IsShader5(result.Type))
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					variableReader.AddIndent($"ShaderData5 {i}");
 					result.ShaderData5.Add(DebugEffectShaderData5.Parse(reader, variableReader));
 					variableReader.RemoveIndent();
 				}
 			}
-			else if (IsShader(result.Type))
+			else if(IsShader(result.Type))
 			{
-				for (int i = 0; i < result.ElementCount; i++)
+				for(int i = 0; i < result.ElementCount; i++)
 				{
 					variableReader.AddIndent($"ShaderData {i}");
 					result.ShaderData.Add(DebugEffectShaderData.Parse(reader, variableReader));
@@ -168,7 +168,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 				}
 			}
 			result.AnnotationCount = variableReader.ReadUInt32("AnnotationCount");
-			for (int i = 0; i < result.AnnotationCount; i++)
+			for(int i = 0; i < result.AnnotationCount; i++)
 			{
 				variableReader.AddIndent($"Annotation {i}");
 				result.Annotations.Add(DebugEffectAnnotation.Parse(reader, variableReader, version));

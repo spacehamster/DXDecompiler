@@ -38,7 +38,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 			var token0 = reader.ReadUInt32("token0");
 			DebugOpcodeHeader.AddNotes(reader, token0);
 
-			if (header.OpcodeType == OpcodeType.Sync)
+			if(header.OpcodeType == OpcodeType.Sync)
 			{
 				instructionToken.SyncFlags = token0.DecodeValue<SyncFlags>(11, 14);
 				reader.AddNote("SyncFlags", instructionToken.SyncFlags);
@@ -56,7 +56,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 			}
 
 			bool extended = header.IsExtended;
-			while (extended)
+			while(extended)
 			{
 				uint extendedToken = reader.ReadUInt32("extendedToken");
 				var extendedType = extendedToken.DecodeValue<InstructionTokenExtendedType>(0, 5);
@@ -65,7 +65,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 				extended = (extendedToken.DecodeValue(31, 31) == 1);
 				reader.AddNote("extended", extended);
 
-				switch (extendedType)
+				switch(extendedType)
 				{
 					case InstructionTokenExtendedType.SampleControls:
 						instructionToken.SampleOffsets[0] = extendedToken.DecodeSigned4BitValue(09, 12);
@@ -96,16 +96,16 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 				}
 			}
 
-			if (header.OpcodeType == OpcodeType.InterfaceCall)
+			if(header.OpcodeType == OpcodeType.InterfaceCall)
 			{
 				instructionToken.FunctionIndex = reader.ReadUInt32("FunctionIndex");
 			}
 
-			while (reader.CurrentPosition < instructionEnd)
+			while(reader.CurrentPosition < instructionEnd)
 			{
 				reader.AddIndent($"Operand{instructionToken.Operands.Count}");
 				var operand = DebugOperand.Parse(reader, header.OpcodeType);
-				if (operand != null)
+				if(operand != null)
 					instructionToken.Operands.Add(operand);
 				reader.RemoveIndent();
 			}

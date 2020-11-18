@@ -12,7 +12,7 @@ namespace DXDecompiler.Chunks.Fx10
 		{
 			return type.GetAttributeValue<AssignmentTypeAttribute, Type>((a, v) =>
 			{
-				if (!a.Any())
+				if(!a.Any())
 					return null;
 				return a.First().Type;
 			});
@@ -20,7 +20,7 @@ namespace DXDecompiler.Chunks.Fx10
 
 		public static ShaderVariableType ToShaderVariableType(this EffectObjectType effectType)
 		{
-			switch (effectType)
+			switch(effectType)
 			{
 				case EffectObjectType.Void:
 					return ShaderVariableType.Void;
@@ -120,7 +120,7 @@ namespace DXDecompiler.Chunks.Fx10
 		}
 		public static bool IsArrayAssignemnt(this EffectAssignmentType assignmentType)
 		{
-			switch (assignmentType)
+			switch(assignmentType)
 			{
 				case EffectAssignmentType.BlendEnable:
 				case EffectAssignmentType.SrcBlend:
@@ -137,7 +137,7 @@ namespace DXDecompiler.Chunks.Fx10
 		}
 		public static NumberType ToNumberType(this EffectScalarType scalarType)
 		{
-			switch (scalarType)
+			switch(scalarType)
 			{
 				case EffectScalarType.Bool:
 					return NumberType.Bool;

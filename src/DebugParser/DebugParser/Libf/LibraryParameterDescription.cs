@@ -69,7 +69,7 @@ namespace DXDecompiler.DebugParser.Chunks.Libf
 		/// </summary>
 		public uint FirstOutComponent { get; private set; }
 
-		public static DebugLibraryParameterDescription Parse(DebugBytecodeReader reader, 
+		public static DebugLibraryParameterDescription Parse(DebugBytecodeReader reader,
 			DebugBytecodeReader paramReader)
 		{
 			var nameOffset = paramReader.ReadUInt32("NameOffset");
@@ -80,7 +80,7 @@ namespace DXDecompiler.DebugParser.Chunks.Libf
 				VariableClass = paramReader.ReadEnum32<ShaderVariableClass>("VariableClass"),
 				Rows = paramReader.ReadUInt32("Rows"),
 				Column = paramReader.ReadUInt32("Column"),
-				InterpolationMode = paramReader.ReadEnum32< InterpolationMode>("InterpolationMode"),
+				InterpolationMode = paramReader.ReadEnum32<InterpolationMode>("InterpolationMode"),
 				Flags = paramReader.ReadEnum32<ParameterFlags>("Flags"),
 				FirstInRegister = paramReader.ReadUInt32("FirstInRegister"),
 				FirstInComponent = paramReader.ReadUInt32("FirstInComponent"),
@@ -90,11 +90,12 @@ namespace DXDecompiler.DebugParser.Chunks.Libf
 			var nameReader = reader.CopyAtOffset("NameReader", paramReader, (int)nameOffset);
 			result.Name = nameReader.ReadString("Name");
 
-			if (semanticNameOffset != 0)
+			if(semanticNameOffset != 0)
 			{
 				var semanticNameReader = reader.CopyAtOffset("SemanticNameReader", paramReader, (int)semanticNameOffset);
 				result.SemanticName = semanticNameReader.ReadString("SemanticName");
-			} else
+			}
+			else
 			{
 				result.SemanticName = "";
 			}

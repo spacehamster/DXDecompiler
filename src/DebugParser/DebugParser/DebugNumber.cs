@@ -35,7 +35,7 @@ namespace DXDecompiler.DebugParser
 		{
 			const int byteCount = 4;
 			var bytes = new byte[byteCount];
-			for (int i = 0; i < byteCount; i++)
+			for(int i = 0; i < byteCount; i++)
 				bytes[i] = reader.ReadByte($"NumberByte{i}");
 			return new DebugNumber(bytes);
 		}

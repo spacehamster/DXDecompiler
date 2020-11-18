@@ -214,8 +214,8 @@ namespace DXDecompiler.Chunks.Stat
 			var unknown0 = reader.ReadUInt32();
 			Debug.Assert(unknown0 == 0, $"Statistics unknown1 is {unknown0}");
 
-			result.InputPrimitive = (Primitive) reader.ReadUInt32();
-			result.GeometryShaderOutputTopology = (PrimitiveTopology) reader.ReadUInt32();
+			result.InputPrimitive = (Primitive)reader.ReadUInt32();
+			result.GeometryShaderOutputTopology = (PrimitiveTopology)reader.ReadUInt32();
 			result.GeometryShaderMaxOutputVertexCount = reader.ReadUInt32();
 
 			result.TextureGatherInstructions = reader.ReadUInt32();
@@ -224,21 +224,21 @@ namespace DXDecompiler.Chunks.Stat
 			result.IsSampleFrequencyShader = (reader.ReadUInt32() == 1);
 
 			// DX10 stat size
-			if (size == 29)
+			if(size == 29)
 				return result;
 
 			result.GeometryShaderInstanceCount = reader.ReadUInt32();
 			result.ControlPoints = reader.ReadUInt32();
-			result.HullShaderOutputPrimitive = (TessellatorOutputPrimitive) reader.ReadUInt32();
-			result.HullShaderPartitioning = (TessellatorPartitioning) reader.ReadUInt32();
-			result.TessellatorDomain = (TessellatorDomain) reader.ReadUInt32();
+			result.HullShaderOutputPrimitive = (TessellatorOutputPrimitive)reader.ReadUInt32();
+			result.HullShaderPartitioning = (TessellatorPartitioning)reader.ReadUInt32();
+			result.TessellatorDomain = (TessellatorDomain)reader.ReadUInt32();
 
 			result.BarrierInstructions = reader.ReadUInt32();
 			result.InterlockedInstructions = reader.ReadUInt32();
 			result.TextureStoreInstructions = reader.ReadUInt32();
 
 			// DX11 stat size.
-			if (size == 37)
+			if(size == 37)
 				return result;
 
 			throw new ParseException("Unhandled stat size: " + chunkSize);
@@ -247,7 +247,7 @@ namespace DXDecompiler.Chunks.Stat
 		public override string ToString()
 		{
 			var sb = new StringBuilder();
-			if (TessellatorDomain != TessellatorDomain.Undefined)
+			if(TessellatorDomain != TessellatorDomain.Undefined)
 			{
 				sb.AppendLine("// Tessellation Domain   # of control points");
 				sb.AppendLine("// -------------------- --------------------");
@@ -255,16 +255,16 @@ namespace DXDecompiler.Chunks.Stat
 					ControlPoints));
 				sb.AppendLine("//");
 			}
-			if (HullShaderOutputPrimitive != TessellatorOutputPrimitive.Undefined)
+			if(HullShaderOutputPrimitive != TessellatorOutputPrimitive.Undefined)
 			{
 				sb.AppendLine("// Tessellation Output Primitive  Partitioning Type ");
 				sb.AppendLine("// ------------------------------ ------------------");
-				sb.AppendLine(string.Format("// {0,-30} {1,-18}", 
+				sb.AppendLine(string.Format("// {0,-30} {1,-18}",
 					HullShaderOutputPrimitive.GetDescription(ChunkType.Stat),
 					HullShaderPartitioning.GetDescription(ChunkType.Stat)));
 				sb.AppendLine("//");
 			}
-			if (IsSampleFrequencyShader)
+			if(IsSampleFrequencyShader)
 			{
 				sb.AppendLine("// Pixel Shader runs at sample frequency");
 				sb.AppendLine("//");

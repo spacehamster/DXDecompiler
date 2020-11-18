@@ -33,7 +33,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				Data = new Number[length]
 			};
 
-			for (int i = 0; i < length; i++)
+			for(int i = 0; i < length; i++)
 				result.Data[i] = Number.Parse(reader);
 
 			return result;
@@ -43,14 +43,14 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 		{
 			string result = "dcl_immediateConstantBuffer { ";
 
-			for (int i = 0; i < Data.Length; i += 4)
+			for(int i = 0; i < Data.Length; i += 4)
 			{
-				if (i > 0)
+				if(i > 0)
 					result += "," + Environment.NewLine + new string(' ', 30);
 				result += string.Format("{{ {0}, {1}, {2}, {3}}}",
 					Data[i], Data[i + 1], Data[i + 2], Data[i + 3]);
 			}
-			
+
 			result += " }";
 			return result;
 		}

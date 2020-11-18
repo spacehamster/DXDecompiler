@@ -34,38 +34,38 @@ namespace DXDecompiler.Util
 			where T : struct
 		{
 			var decodedValue = DecodeValue(token, start, end);
-			if (typeof(T).IsEnum)
-				return (T) Enum.ToObject(typeof(T), decodedValue);
-			return (T) Convert.ChangeType(decodedValue, typeof(T));
+			if(typeof(T).IsEnum)
+				return (T)Enum.ToObject(typeof(T), decodedValue);
+			return (T)Convert.ChangeType(decodedValue, typeof(T));
 		}
 
 		private static uint GenerateMask(byte start, byte end)
 		{
 			uint mask = 0;
-			for (int i = start; i <= end; i++)
-				mask |= (uint) Math.Pow(2, i);
+			for(int i = start; i <= end; i++)
+				mask |= (uint)Math.Pow(2, i);
 			return mask;
 		}
 
 		public static sbyte DecodeSigned4BitValue(this uint token, byte start, byte end)
 		{
-			if (end - start != 3)
+			if(end - start != 3)
 				throw new ParseException("DecodeSigned4BitValue can only be called for 4-bit intervals");
 			var value = token.DecodeValue<sbyte>(start, end);
-			if (value > 7)
-				return (sbyte) (value - 16);
+			if(value > 7)
+				return (sbyte)(value - 16);
 			return value;
 		}
 
 		public static uint ToFourCc(this string fourCc)
 		{
-			if (string.IsNullOrEmpty(fourCc) || fourCc.Length != 4)
+			if(string.IsNullOrEmpty(fourCc) || fourCc.Length != 4)
 				throw new ArgumentOutOfRangeException("fourCc", "Invalid FOURCC: " + fourCc);
-			var a = (byte) fourCc[0];
-			var b = (byte) fourCc[1];
-			var c = (byte) fourCc[2];
-			var d = (byte) fourCc[3];
-			return a | ((uint) (b << 8)) | ((uint) c << 16) | ((uint) d << 24);
+			var a = (byte)fourCc[0];
+			var b = (byte)fourCc[1];
+			var c = (byte)fourCc[2];
+			var d = (byte)fourCc[3];
+			return a | ((uint)(b << 8)) | ((uint)c << 16) | ((uint)d << 24);
 		}
 
 		public static string ToFourCcString(this uint fourCc)

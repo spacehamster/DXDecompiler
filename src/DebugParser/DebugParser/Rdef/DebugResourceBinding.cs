@@ -31,7 +31,7 @@ namespace DXDecompiler.DebugParser.Rdef
 				BindCount = resourceBindingReader.ReadUInt32("BindCount"),
 				Flags = (ShaderInputFlags)resourceBindingReader.ReadUInt32("Flags")
 			};
-			if (target.MajorVersion == 5 && target.MinorVersion == 1)
+			if(target.MajorVersion == 5 && target.MinorVersion == 1)
 			{
 				result.SpaceIndex = resourceBindingReader.ReadUInt32("SpaceIndex");
 				result.ID = resourceBindingReader.ReadUInt32("ID");

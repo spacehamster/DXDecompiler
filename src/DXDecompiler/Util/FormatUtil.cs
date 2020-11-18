@@ -7,12 +7,12 @@ namespace DXDecompiler.Util
 		public static string FormatBytes(byte[] data)
 		{
 			var sb = new StringBuilder();
-			for (int i = 0; i < data.Length; i += 16)
+			for(int i = 0; i < data.Length; i += 16)
 			{
 				sb.AppendFormat("// {0}:  ", i.ToString("X4"));
-				for (int j = i; j < i + 16; j++)
+				for(int j = i; j < i + 16; j++)
 				{
-					if (j < data.Length)
+					if(j < data.Length)
 					{
 						sb.Append(data[j].ToString("X2"));
 					}
@@ -20,23 +20,23 @@ namespace DXDecompiler.Util
 					{
 						sb.Append("  ");
 					}
-					if ((j + 1) % 4 == 0)
+					if((j + 1) % 4 == 0)
 					{
 						sb.Append("  ");
 					}
 				}
-				for (int j = i; j < i + 16 && j < data.Length; j++)
+				for(int j = i; j < i + 16 && j < data.Length; j++)
 				{
 					var c = (char)data[j];
-					if (char.IsControl(c))
+					if(char.IsControl(c))
 					{
 						sb.Append("_");
 					}
-					else if (c > 0x7E)
+					else if(c > 0x7E)
 					{
 						sb.Append('.');
 					}
-					else if (char.IsWhiteSpace(c))
+					else if(char.IsWhiteSpace(c))
 					{
 						sb.Append('.');
 					}
@@ -57,7 +57,8 @@ namespace DXDecompiler.Util
 				if(b >= 32 && b <= 126)
 				{
 					sb.Append((char)b);
-				} else
+				}
+				else
 				{
 					sb.Append((char)219);
 				}

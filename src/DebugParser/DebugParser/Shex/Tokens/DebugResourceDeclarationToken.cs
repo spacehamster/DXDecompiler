@@ -19,7 +19,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 			reader.AddNote("resourceDimension", resourceDimension);
 
 			byte sampleCount;
-			switch (resourceDimension)
+			switch(resourceDimension)
 			{
 				case ResourceDimension.Texture2DMultiSampled:
 				case ResourceDimension.Texture2DMultiSampledArray:
@@ -40,7 +40,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 				Operand = operand,
 				ReturnType = returnType
 			};
-			if (version.IsSM51)
+			if(version.IsSM51)
 			{
 				result.SpaceIndex = reader.ReadUInt32("SpaceIndex");
 			}

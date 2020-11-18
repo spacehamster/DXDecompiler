@@ -10,21 +10,21 @@ namespace DXDecompiler.Chunks.Shex
 		{
 			string result = string.Empty;
 
-			if (value.HasFlag(ComponentMask.X))
+			if(value.HasFlag(ComponentMask.X))
 				result += "x";
-			if (value.HasFlag(ComponentMask.Y))
+			if(value.HasFlag(ComponentMask.Y))
 				result += "y";
-			if (value.HasFlag(ComponentMask.Z))
+			if(value.HasFlag(ComponentMask.Z))
 				result += "z";
-			if (value.HasFlag(ComponentMask.W))
+			if(value.HasFlag(ComponentMask.W))
 				result += "w";
-			
+
 			return result;
 		}
 
 		public static string GetDescription(this Operand4ComponentName value)
 		{
-			switch (value)
+			switch(value)
 			{
 				case Operand4ComponentName.X:
 					return "x";
@@ -43,13 +43,13 @@ namespace DXDecompiler.Chunks.Shex
 		{
 			string result = string.Empty;
 
-			if (value.HasFlag(SyncFlags.UnorderedAccessViewGlobal))
+			if(value.HasFlag(SyncFlags.UnorderedAccessViewGlobal))
 				result += "_uglobal";
-			if (value.HasFlag(SyncFlags.UnorderedAccessViewGroup))
+			if(value.HasFlag(SyncFlags.UnorderedAccessViewGroup))
 				result += "_ugroup";
-			if (value.HasFlag(SyncFlags.SharedMemory))
+			if(value.HasFlag(SyncFlags.SharedMemory))
 				result += "_g";
-			if (value.HasFlag(SyncFlags.ThreadsInGroup))
+			if(value.HasFlag(SyncFlags.ThreadsInGroup))
 				result += "_t";
 
 			return result;
@@ -65,10 +65,10 @@ namespace DXDecompiler.Chunks.Shex
 		public static string GetDescription(this GlobalFlags value)
 		{
 			string result = string.Empty;
-			foreach (Enum enumValue in Enum.GetValues(typeof(GlobalFlags)))
-				if ((int) value > 0 && value.HasFlag(enumValue))
+			foreach(Enum enumValue in Enum.GetValues(typeof(GlobalFlags)))
+				if((int)value > 0 && value.HasFlag(enumValue))
 				{
-					if (!string.IsNullOrEmpty(result))
+					if(!string.IsNullOrEmpty(result))
 						result += " | ";
 					result += enumValue.GetDescription();
 				}
@@ -77,20 +77,20 @@ namespace DXDecompiler.Chunks.Shex
 
 		public static bool IsConditionalInstruction(this OpcodeType type)
 		{
-			switch (type)
+			switch(type)
 			{
-				case OpcodeType.BreakC :
-				case OpcodeType.CallC :
-				case OpcodeType.Discard :
-				case OpcodeType.If :
+				case OpcodeType.BreakC:
+				case OpcodeType.CallC:
+				case OpcodeType.Discard:
+				case OpcodeType.If:
 					return true;
-				default :
+				default:
 					return false;
 			}
 		}
 		public static bool IsFeedbackResourceAccess(this OpcodeType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case OpcodeType.Gather4S:
 				case OpcodeType.Gather4CS:
@@ -119,12 +119,12 @@ namespace DXDecompiler.Chunks.Shex
 			return (type >= OpcodeType.DclResource && type <= OpcodeType.DclGlobalFlags)
 				|| (type >= OpcodeType.DclStream && type <= OpcodeType.DclResourceStructured)
 				|| type == OpcodeType.DclGsInstanceCount;
-				//todo
-				//|| (type >= OpcodeType.HsDecls && type <= OpcodeType.HsJoinPhase);
+			//todo
+			//|| (type >= OpcodeType.HsDecls && type <= OpcodeType.HsJoinPhase);
 		}
 		public static bool OpcodeHasSwizzle(this OpcodeType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case OpcodeType.DclConstantBuffer:
 				case OpcodeType.DclUnorderedAccessViewRaw:
@@ -144,15 +144,15 @@ namespace DXDecompiler.Chunks.Shex
 		{
 			return type.GetAttributeValue<NumberTypeAttribute, NumberType>((a, v) =>
 			{
-				if (!a.Any())
+				if(!a.Any())
 					return NumberType.Unknown;
 				return a.First().Type;
-			});	
+			});
 		}
 
 		public static bool RequiresRegisterNumberFor1DIndex(this OperandType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case OperandType.ImmediateConstantBuffer:
 				case OperandType.ThisPointer:
@@ -164,7 +164,7 @@ namespace DXDecompiler.Chunks.Shex
 
 		public static bool RequiresRegisterNumberFor2DIndex(this OperandType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case OperandType.InputControlPoint:
 				case OperandType.Input:
@@ -176,7 +176,7 @@ namespace DXDecompiler.Chunks.Shex
 
 		public static string Wrap(this OperandModifier modifier, string valueToWrap)
 		{
-			switch (modifier)
+			switch(modifier)
 			{
 				case OperandModifier.None:
 					return valueToWrap;
@@ -193,21 +193,21 @@ namespace DXDecompiler.Chunks.Shex
 
 		public static bool IsNestedSectionStart(this OpcodeType type)
 		{
-			switch (type)
+			switch(type)
 			{
-				case OpcodeType.Loop :
-				case OpcodeType.If :
-				case OpcodeType.Else :
-				case OpcodeType.Switch :
+				case OpcodeType.Loop:
+				case OpcodeType.If:
+				case OpcodeType.Else:
+				case OpcodeType.Switch:
 					return true;
-				default :
+				default:
 					return false;
 			}
 		}
 
 		public static bool IsNestedSectionEnd(this OpcodeType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case OpcodeType.EndLoop:
 				case OpcodeType.EndIf:

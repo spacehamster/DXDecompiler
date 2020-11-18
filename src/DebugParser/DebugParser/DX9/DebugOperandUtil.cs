@@ -6,7 +6,7 @@ namespace DebugParser.DebugParser.DX9
 	{
 		public static string OperandToString(RegisterType registerType, uint registerNumber)
 		{
-			switch (registerType)
+			switch(registerType)
 			{
 				case RegisterType.Const:
 					return $"c{registerNumber}";

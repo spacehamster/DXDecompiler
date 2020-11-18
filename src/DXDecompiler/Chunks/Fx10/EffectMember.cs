@@ -31,11 +31,12 @@ namespace DXDecompiler.Chunks.Fx10
 			result.Name = nameReader.ReadString();
 
 			var semanticNameOffset = memberReader.ReadUInt32();
-			if (semanticNameOffset != 0)
+			if(semanticNameOffset != 0)
 			{
 				var semanticNameReader = reader.CopyAtOffset((int)semanticNameOffset);
 				result.Semantic = semanticNameReader.ReadString();
-			} else
+			}
+			else
 			{
 				result.Semantic = "";
 			}

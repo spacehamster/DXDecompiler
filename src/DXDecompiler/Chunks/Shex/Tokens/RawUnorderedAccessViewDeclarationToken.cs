@@ -50,7 +50,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				IsRasterOrderedAccess = token0.DecodeValue<bool>(17, 17),
 				Operand = Operand.Parse(reader, token0.DecodeValue<OpcodeType>(0, 10))
 			};
-			if (version.IsSM51)
+			if(version.IsSM51)
 			{
 				result.SpaceIndex = reader.ReadUInt32();
 			}
@@ -59,7 +59,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 
 		public override string ToString()
 		{
-			return string.Format("{0}{1}{2} {3}{4}", 
+			return string.Format("{0}{1}{2} {3}{4}",
 				TypeDescription,
 				Coherency.GetDescription(),
 				GetRasterOrderedAccessDescription(),

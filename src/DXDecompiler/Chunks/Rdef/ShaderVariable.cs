@@ -66,7 +66,7 @@ namespace DXDecompiler.Chunks.Rdef
 		/// Number of texture slots possibly used.
 		/// </summary>
 		public int TextureSize { get; private set; }
-		
+
 		/// <summary>
 		/// First sampler index (or -1 if no textures used)
 		/// </summary>
@@ -87,25 +87,25 @@ namespace DXDecompiler.Chunks.Rdef
 			bool isFirst)
 		{
 			uint nameOffset = variableReader.ReadUInt32();
-			var nameReader = reader.CopyAtOffset((int) nameOffset);
+			var nameReader = reader.CopyAtOffset((int)nameOffset);
 
 			var startOffset = variableReader.ReadUInt32();
 			uint size = variableReader.ReadUInt32();
-			var flags = (ShaderVariableFlags) variableReader.ReadUInt32();
+			var flags = (ShaderVariableFlags)variableReader.ReadUInt32();
 
 			var typeOffset = variableReader.ReadUInt32();
-			var typeReader = reader.CopyAtOffset((int) typeOffset);
+			var typeReader = reader.CopyAtOffset((int)typeOffset);
 			var shaderType = ShaderType.Parse(reader, typeReader, target, 2, isFirst, startOffset);
 
 			var defaultValueOffset = variableReader.ReadUInt32();
 			List<Number> defaultValue = null;
-			if (defaultValueOffset != 0)
+			if(defaultValueOffset != 0)
 			{
 				defaultValue = new List<Number>();
-				var defaultValueReader = reader.CopyAtOffset((int) defaultValueOffset);
-				if (size % 4 != 0)
+				var defaultValueReader = reader.CopyAtOffset((int)defaultValueOffset);
+				if(size % 4 != 0)
 					throw new ParseException("Can only deal with 4-byte default values at the moment.");
-				for (int i = 0; i < size; i += 4)
+				for(int i = 0; i < size; i += 4)
 					defaultValue.Add(new Number(defaultValueReader.ReadBytes(4)));
 			}
 
@@ -124,7 +124,7 @@ namespace DXDecompiler.Chunks.Rdef
 				Flags = flags
 			};
 
-			if (target.MajorVersion >= 5 || target.ProgramType == ProgramType.LibraryShader)
+			if(target.MajorVersion >= 5 || target.ProgramType == ProgramType.LibraryShader)
 			{
 				result.StartTexture = variableReader.ReadInt32();
 				result.TextureSize = variableReader.ReadInt32();
@@ -142,17 +142,17 @@ namespace DXDecompiler.Chunks.Rdef
 			var size = Size == 0 ? "N/A" : Size.ToString();
 			sb.AppendFormat("{0} Size: {1,5}", Member, size);
 
-			if (!Flags.HasFlag(ShaderVariableFlags.Used))
+			if(!Flags.HasFlag(ShaderVariableFlags.Used))
 				sb.Append(" [unused]");
 
 			sb.AppendLine();
 
-			if (DefaultValue != null)
+			if(DefaultValue != null)
 			{
 				sb.Append("//      = ");
-				for (int i = 0; i < DefaultValue.Count; i++)
+				for(int i = 0; i < DefaultValue.Count; i++)
 				{
-					if (i % 4 == 0 && i != 0)
+					if(i % 4 == 0 && i != 0)
 					{
 						sb.AppendLine();
 						sb.Append("//        ");

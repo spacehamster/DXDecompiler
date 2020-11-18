@@ -23,7 +23,7 @@ namespace DXDecompiler.Tests
 		{
 			//Note each test takes approximately 0.0011 seconds
 			var rnd = new Random();
-			for (uint i = 0; i < 10000; i++)
+			for(uint i = 0; i < 10000; i++)
 			{
 				int ival = rnd.Next(int.MinValue, int.MaxValue);
 				var data = BitConverter.GetBytes(ival);
@@ -75,7 +75,7 @@ namespace DXDecompiler.Tests
 				int ival = val is int ? (int)val : BitConverter.ToInt32(BitConverter.GetBytes((float)val), 0);
 				DumpFloat(ival, sb);
 			}
-			for (uint i = 0; i < 100; i++)
+			for(uint i = 0; i < 100; i++)
 			{
 				int ival = rnd.Next(int.MinValue, int.MaxValue);
 				var floatValue = ToFloat(ival);
@@ -95,7 +95,7 @@ namespace DXDecompiler.Tests
 			TestRoundTrip(-1945768850);
 			//Note each test takes approximately 0.0011 seconds
 			var rnd = new Random();
-			for (uint i = 0; i < 1000000; i++)
+			for(uint i = 0; i < 1000000; i++)
 			{
 				int ival = rnd.Next(int.MinValue, int.MaxValue);
 				TestRoundTrip(ival);
@@ -112,7 +112,7 @@ namespace DXDecompiler.Tests
 		{
 			var data = BitConverter.GetBytes(expected);
 			float original = BitConverter.ToSingle(data, 0);
-			if (float.IsNaN(original))
+			if(float.IsNaN(original))
 			{
 				return;
 			}
@@ -200,7 +200,7 @@ namespace DXDecompiler.Tests
 			var stringValue = DoubleConverter.ToExactString(floatValue, -1);
 			var digits = ad.digits;
 			var chr = new char[digits.Length];
-			for (int i = 0; i < digits.Length; i++)
+			for(int i = 0; i < digits.Length; i++)
 			{
 				chr[i] = (char)(digits[i] + '0');
 			}
@@ -209,7 +209,7 @@ namespace DXDecompiler.Tests
 		}
 		public static string FormatFloat(float value)
 		{
-			if (value == 0f) return "0";
+			if(value == 0f) return "0";
 			var result = DoubleConverter.ToExactString(value);
 			return result;
 		}
@@ -226,7 +226,7 @@ namespace DXDecompiler.Tests
 		public static void TestFloat(int value)
 		{
 			var floatValue = ToFloat(value);
-			if (float.IsNaN(floatValue))
+			if(float.IsNaN(floatValue))
 			{
 				return;
 			}
@@ -253,7 +253,7 @@ namespace DXDecompiler.Tests
 		public static void DumpFloat(int value, StringBuilder sb)
 		{
 			var floatValue = ToFloat(value);
-			if (float.IsNaN(floatValue))
+			if(float.IsNaN(floatValue))
 			{
 				return;
 			}
@@ -270,7 +270,7 @@ namespace DXDecompiler.Tests
 			var actualFloat = FormatFloat(floatValue);
 			var fullFloat = DoubleConverter.ToExactString(floatValue, -1);
 			var correct = expectedFloat == actualFloat;
-			if (value != number.Int0)
+			if(value != number.Int0)
 			{
 				return;
 			}

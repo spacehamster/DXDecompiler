@@ -18,7 +18,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 			{
 				Operand = DebugOperand.Parse(reader, opcodeType)
 			};
-			switch (opcodeType)
+			switch(opcodeType)
 			{
 				case OpcodeType.DclOutputSgv:
 				case OpcodeType.DclOutputSiv:

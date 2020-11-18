@@ -19,7 +19,7 @@ namespace DXDecompiler.Decompiler
 		{
 			Container = container;
 			List<OpcodeToken> currentBody = null;
-			foreach (var token in container.Shader.Tokens)
+			foreach(var token in container.Shader.Tokens)
 			{
 				switch(token.Header.OpcodeType)
 				{
@@ -61,17 +61,17 @@ namespace DXDecompiler.Decompiler
 				.Where(cb => cb.BufferType == ConstantBufferType.InterfacePointers)
 				.Single()
 				.Variables;
-			foreach (var intf in cbVariables)
+			foreach(var intf in cbVariables)
 			{
 				var elementCount = intf.ShaderType.ElementCount;
-				if (elementCount == 0) elementCount = 1;
+				if(elementCount == 0) elementCount = 1;
 				elementCount = 1; //Disable element indexing
 				var slots = Container.Interfaces.InterfaceSlots.Single(slot => slot.StartSlot == intf.StartOffset);
 				var funtionTable = FunctionTables[$"ft{slots.TableIDs.First()}"];
-				for (int i = 0; i < elementCount; i++)
+				for(int i = 0; i < elementCount; i++)
 				{
 					var indexString = elementCount >= 2 ? $"[{i}]" : "";
-					for (int j = 0; j < funtionTable.Count; j++)
+					for(int j = 0; j < funtionTable.Count; j++)
 					{
 						result[$"fp{intf.StartOffset}{indexString}[{j}]"] = $"{intf.Name}{indexString}.Call{j}";
 					}
@@ -87,11 +87,11 @@ namespace DXDecompiler.Decompiler
 		}
 		internal string GetShaderTypeName(ShaderType variable)
 		{
-			switch (variable.VariableClass)
+			switch(variable.VariableClass)
 			{
 				case ShaderVariableClass.InterfacePointer:
 					{
-						if (!string.IsNullOrEmpty(variable.BaseTypeName)) // BaseTypeName is only populated in SM 5.0
+						if(!string.IsNullOrEmpty(variable.BaseTypeName)) // BaseTypeName is only populated in SM 5.0
 						{
 							return variable.BaseTypeName;
 						}
@@ -109,7 +109,7 @@ namespace DXDecompiler.Decompiler
 		void WriteInterfacePointers()
 		{
 			Output.AppendLine("// Interface Pointers");
-			foreach (var cb in Container.ResourceDefinition.ConstantBuffers
+			foreach(var cb in Container.ResourceDefinition.ConstantBuffers
 				.Where(cb => cb.BufferType == ConstantBufferType.InterfacePointers))
 			{
 				Output.AppendLine($"{cb.ToString()}");
@@ -118,7 +118,7 @@ namespace DXDecompiler.Decompiler
 				.Where(cb => cb.BufferType == ConstantBufferType.InterfacePointers)
 				.Single()
 				.Variables;
-			foreach (var group in cbVariables.GroupBy(v => GetShaderTypeName(v.ShaderType)))
+			foreach(var group in cbVariables.GroupBy(v => GetShaderTypeName(v.ShaderType)))
 			{
 				var itf = group.First();
 				Output.AppendLine($"interface {group.Key} ");
@@ -127,19 +127,19 @@ namespace DXDecompiler.Decompiler
 				var slots = Container.Interfaces.InterfaceSlots.Single(i => i.StartSlot == itf.StartOffset);
 				var tableId = slots.TableIDs.First();
 				var functionTables = FunctionTables[$"ft{tableId}"];
-				for (int i = 0; i < functionTables.Count; i++)
+				for(int i = 0; i < functionTables.Count; i++)
 				{
 					Output.AppendLine($"    void Call{i}();");
-				}					
+				}
 				Output.AppendLine("};");
 			}
-			foreach (var variable in cbVariables)
+			foreach(var variable in cbVariables)
 			{
 				// interface definition must come before instance
 				var indexString = variable.ShaderType.ElementCount > 0 ? $"[{variable.ShaderType.ElementCount}]" : "";
 				Output.AppendLine($"{GetShaderTypeName(variable.ShaderType)} {variable.Name}{indexString};");
 			}
-			foreach (var ct in Container.Interfaces.AvailableClassTypes)
+			foreach(var ct in Container.Interfaces.AvailableClassTypes)
 			{
 				var slots = Container.Interfaces.InterfaceSlots.First(i => i.TypeIDs.Contains(ct.ID));
 				var itf = cbVariables.First(v => v.StartOffset == slots.StartSlot);
@@ -148,7 +148,7 @@ namespace DXDecompiler.Decompiler
 				var functionTables = FunctionTables[$"ft{ct.ID}"];
 				Output.AppendLine($"    // ft{ct.ID}");
 				Output.AppendLine($"{slots}");
-				for (int i = 0; i < functionTables.Count; i++)
+				for(int i = 0; i < functionTables.Count; i++)
 				{
 					var functionBody = FunctionBodies[functionTables[i]];
 					Output.AppendLine($"    void Call{i}(){{");
@@ -165,7 +165,7 @@ namespace DXDecompiler.Decompiler
 		void WriteInterfaces()
 		{
 			var interfaces = Container.Interfaces;
-			if (interfaces == null) return;
+			if(interfaces == null) return;
 			Output.AppendFormat(Container.Interfaces.ToString());
 		}
 	}

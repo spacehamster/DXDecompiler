@@ -26,7 +26,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			get
 			{
-				switch (ComponentIndex)
+				switch(ComponentIndex)
 				{
 					case 0:
 						return "x";
@@ -44,7 +44,7 @@ namespace DXDecompiler.DX9Shader
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is RegisterComponentKey other))
+			if(!(obj is RegisterComponentKey other))
 			{
 				return false;
 			}

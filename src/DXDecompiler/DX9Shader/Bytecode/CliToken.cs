@@ -10,7 +10,7 @@ namespace DXDecompiler.DX9Shader.Bytecode
 		{
 			var result = new CliToken();
 			var count = reader.ReadUInt32();
-			for (int i = 0; i < count; i++)
+			for(int i = 0; i < count; i++)
 			{
 				result.Numbers.Add(reader.ReadDouble());
 			}

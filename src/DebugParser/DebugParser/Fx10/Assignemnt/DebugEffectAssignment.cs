@@ -9,10 +9,11 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 		public uint MemberIndex;
 		public EffectCompilerAssignmentType AssignmentType;
 		public uint ValueOffset;
-		public string MemberName {
+		public string MemberName
+		{
 			get
 			{
-				if (MemberType.IsArrayAssignemnt())
+				if(MemberType.IsArrayAssignemnt())
 				{
 					return string.Format("{0}[{1}]", MemberType, MemberIndex);
 				}
@@ -30,7 +31,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			var valueOffset = annotationReader.ReadUInt32("ValueOffset");
 			var typeSpecificReader = reader.CopyAtOffset("TypeSpecificReader", annotationReader, (int)valueOffset);
 			DebugEffectAssignment result;
-			switch (assignmentType)
+			switch(assignmentType)
 			{
 				case EffectCompilerAssignmentType.Constant:
 					result = DebugEffectConstantAssignment.Parse(reader, typeSpecificReader);

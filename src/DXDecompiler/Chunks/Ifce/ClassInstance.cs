@@ -15,7 +15,7 @@ namespace DXDecompiler.Chunks.Ifce
 		public static ClassInstance Parse(BytecodeReader reader, BytecodeReader classInstanceReader)
 		{
 			var nameOffset = classInstanceReader.ReadUInt32();
-			var nameReader = reader.CopyAtOffset((int) nameOffset);
+			var nameReader = reader.CopyAtOffset((int)nameOffset);
 			var name = nameReader.ReadString();
 			return new ClassInstance
 			{

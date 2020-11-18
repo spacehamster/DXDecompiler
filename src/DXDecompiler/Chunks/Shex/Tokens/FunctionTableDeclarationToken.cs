@@ -49,7 +49,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			};
 
 			uint tableLength = reader.ReadUInt32();
-			for (int i = 0; i < tableLength; i++)
+			for(int i = 0; i < tableLength; i++)
 				result.FunctionBodyIndices.Add(reader.ReadUInt32());
 
 			return result;

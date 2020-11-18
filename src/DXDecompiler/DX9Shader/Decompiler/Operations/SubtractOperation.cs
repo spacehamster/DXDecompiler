@@ -15,13 +15,13 @@
 
 		public override HlslTreeNode Reduce()
 		{
-			if (Subtrahend is ConstantNode constant && constant.Value == 0)
+			if(Subtrahend is ConstantNode constant && constant.Value == 0)
 			{
 				var newValue = Minuend.Reduce();
 				Replace(newValue);
 				return newValue;
 			}
-			if (Subtrahend is NegateOperation negation)
+			if(Subtrahend is NegateOperation negation)
 			{
 				var addition = new AddOperation(Minuend.Reduce(), negation.Value.Reduce());
 				Replace(addition);

@@ -42,17 +42,17 @@ namespace DXDecompiler.Chunks.Fx10
 			result.InstanceName = instanceNameReader.ReadString();
 			result.Flags = variableReader.ReadUInt32();
 			var annotationCount = variableReader.ReadUInt32();
-			for (int i = 0; i < annotationCount; i++)
+			for(int i = 0; i < annotationCount; i++)
 			{
 				result.Annotations.Add(EffectAnnotation.Parse(reader, variableReader, version));
 			}
-	
+
 			return result;
 		}
 		public override string ToString()
 		{
 			string arrayFormat = "";
-			if (Type.ElementCount > 1)
+			if(Type.ElementCount > 1)
 			{
 				arrayFormat = string.Format("[{0}]", Type.ElementCount);
 			}

@@ -9,9 +9,9 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 		public override string ToString()
 		{
 			string result = string.Empty;
-			if (Register != null)
+			if(Register != null)
 				result += Register + " + ";
-			if (Value == uint.MaxValue)
+			if(Value == uint.MaxValue)
 			{
 				result += "*";
 			}

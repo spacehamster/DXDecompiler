@@ -13,7 +13,7 @@ namespace DXDecompiler.DX9Shader
 
 		public DotProductContext TryGetDotProductGroup(HlslTreeNode node, int dimension, bool allowMatrixColumn = false)
 		{
-			switch (dimension)
+			switch(dimension)
 			{
 				case 2:
 					return TryGetDot2ProductGroup(node, allowMatrixColumn);
@@ -29,13 +29,13 @@ namespace DXDecompiler.DX9Shader
 		public DotProductContext TryGetDotProductGroup(HlslTreeNode node, bool allowMatrixColumn = false)
 		{
 			var dot4 = TryGetDot4ProductGroup(node, allowMatrixColumn);
-			if (dot4 != null)
+			if(dot4 != null)
 			{
 				return dot4;
 			}
 
 			var dot3 = TryGetDot3ProductGroup(node, allowMatrixColumn);
-			if (dot3 != null)
+			if(dot3 != null)
 			{
 				return dot3;
 			}
@@ -49,23 +49,23 @@ namespace DXDecompiler.DX9Shader
 			// #1  dot3(abc, xyz) + dw
 			// #2  dw + dot3(abc, xyz)
 
-			if (!(node is AddOperation addition))
+			if(!(node is AddOperation addition))
 			{
 				return null;
 			}
 
 			MultiplyOperation dw;
 			DotProductContext innerAddition = TryGetDot3ProductGroup(addition.Addend1, allowMatrixColumn);
-			if (innerAddition == null)
+			if(innerAddition == null)
 			{
 				innerAddition = TryGetDot3ProductGroup(addition.Addend2, allowMatrixColumn);
-				if (innerAddition == null)
+				if(innerAddition == null)
 				{
 					return null;
 				}
 
 				dw = addition.Addend1 as MultiplyOperation;
-				if (dw == null)
+				if(dw == null)
 				{
 					return null;
 				}
@@ -73,7 +73,7 @@ namespace DXDecompiler.DX9Shader
 			else
 			{
 				dw = addition.Addend2 as MultiplyOperation;
-				if (dw == null)
+				if(dw == null)
 				{
 					return null;
 				}
@@ -87,14 +87,14 @@ namespace DXDecompiler.DX9Shader
 			HlslTreeNode y = innerAddition.Value2[1];
 			HlslTreeNode z = innerAddition.Value2[2];
 			HlslTreeNode w = dw.Factor2;
-			if (CanGroupComponents(c, d, allowMatrixColumn))
+			if(CanGroupComponents(c, d, allowMatrixColumn))
 			{
-				if (allowMatrixColumn && SharesMatrixColumnOrRow(c, d))
+				if(allowMatrixColumn && SharesMatrixColumnOrRow(c, d))
 				{
 					// If one of the arguments is a matrix, allow the other argument to be arbitrary.
 					return new DotProductContext(new[] { a, b, c, d }, new[] { x, y, z, w });
 				}
-				if (CanGroupComponents(z, w, allowMatrixColumn))
+				if(CanGroupComponents(z, w, allowMatrixColumn))
 				{
 					return new DotProductContext(new[] { a, b, c, d }, new[] { x, y, z, w });
 				}
@@ -109,23 +109,23 @@ namespace DXDecompiler.DX9Shader
 			// #1  dot(ab, xy) + c*z
 			// #2  c*z + dot(ab, xy)
 
-			if (!(node is AddOperation addition))
+			if(!(node is AddOperation addition))
 			{
 				return null;
 			}
 
 			MultiplyOperation cz;
 			DotProductContext innerAddition = TryGetDot2ProductGroup(addition.Addend1, allowMatrixColumn);
-			if (innerAddition == null)
+			if(innerAddition == null)
 			{
 				innerAddition = TryGetDot2ProductGroup(addition.Addend2, allowMatrixColumn);
-				if (innerAddition == null)
+				if(innerAddition == null)
 				{
 					return null;
 				}
 
 				cz = addition.Addend1 as MultiplyOperation;
-				if (cz == null)
+				if(cz == null)
 				{
 					return null;
 				}
@@ -133,7 +133,7 @@ namespace DXDecompiler.DX9Shader
 			else
 			{
 				cz = addition.Addend2 as MultiplyOperation;
-				if (cz == null)
+				if(cz == null)
 				{
 					return null;
 				}
@@ -145,14 +145,14 @@ namespace DXDecompiler.DX9Shader
 			HlslTreeNode x = innerAddition.Value2[0];
 			HlslTreeNode y = innerAddition.Value2[1];
 			HlslTreeNode z = cz.Factor2;
-			if (CanGroupComponents(b, c, allowMatrixColumn))
+			if(CanGroupComponents(b, c, allowMatrixColumn))
 			{
-				if (allowMatrixColumn && SharesMatrixColumnOrRow(a, b))
+				if(allowMatrixColumn && SharesMatrixColumnOrRow(a, b))
 				{
 					// If one of the arguments is a matrix, allow the other argument to be arbitrary.
 					return new DotProductContext(new[] { a, b, c }, new[] { x, y, z });
 				}
-				if (CanGroupComponents(y, z, allowMatrixColumn))
+				if(CanGroupComponents(y, z, allowMatrixColumn))
 				{
 					return new DotProductContext(new[] { a, b, c }, new[] { x, y, z });
 				}
@@ -166,7 +166,7 @@ namespace DXDecompiler.DX9Shader
 			// 2 by 2 dot product has a pattern of:
 			// a*x + b*y
 
-			if (!(node is AddOperation addition) ||
+			if(!(node is AddOperation addition) ||
 				!(addition.Addend1 is MultiplyOperation ax) ||
 				!(addition.Addend2 is MultiplyOperation by))
 			{
@@ -177,16 +177,16 @@ namespace DXDecompiler.DX9Shader
 			HlslTreeNode b = by.Factor1;
 			HlslTreeNode x = ax.Factor2;
 			HlslTreeNode y = by.Factor2;
-			if (a is ConstantNode || b is ConstantNode || x is ConstantNode || y is ConstantNode)
+			if(a is ConstantNode || b is ConstantNode || x is ConstantNode || y is ConstantNode)
 			{
 				return null;
 			}
 
-			if (CanGroupComponents(a, b, allowMatrixColumn) == false)
+			if(CanGroupComponents(a, b, allowMatrixColumn) == false)
 			{
-				if (CanGroupComponents(a, y, allowMatrixColumn) == false)
+				if(CanGroupComponents(a, y, allowMatrixColumn) == false)
 				{
-					if (allowMatrixColumn && SharesMatrixColumnOrRow(x, y))
+					if(allowMatrixColumn && SharesMatrixColumnOrRow(x, y))
 					{
 						// If one of the arguments is a matrix, allow the other argument to be arbitrary.
 						return new DotProductContext(new[] { a, b }, new[] { x, y });
@@ -196,11 +196,11 @@ namespace DXDecompiler.DX9Shader
 				Swap(ref b, ref y);
 			}
 
-			if (allowMatrixColumn && SharesMatrixColumnOrRow(a, b))
+			if(allowMatrixColumn && SharesMatrixColumnOrRow(a, b))
 			{
 				// If one of the arguments is a matrix, allow the other argument to be arbitrary.
 			}
-			else if (CanGroupComponents(x, y, allowMatrixColumn) == false)
+			else if(CanGroupComponents(x, y, allowMatrixColumn) == false)
 			{
 				return null;
 			}
@@ -216,7 +216,7 @@ namespace DXDecompiler.DX9Shader
 		private bool SharesMatrixColumnOrRow(HlslTreeNode a, HlslTreeNode b)
 		{
 			return a is RegisterInputNode ar
-				&& b is RegisterInputNode br 
+				&& b is RegisterInputNode br
 				&& _nodeGrouper.SharesMatrixColumnOrRow(ar, br);
 		}
 
@@ -234,7 +234,7 @@ namespace DXDecompiler.DX9Shader
 			HlslTreeNode[] value1,
 			HlslTreeNode[] value2)
 		{
-			if (value1.Length != value2.Length)
+			if(value1.Length != value2.Length)
 			{
 				throw new ArgumentOutOfRangeException(nameof(value1));
 			}
@@ -253,7 +253,7 @@ namespace DXDecompiler.DX9Shader
 		private void OrderByComponent()
 		{
 			int[] components = GetComponentsIfUniqueAndUnordered();
-			if (components == null)
+			if(components == null)
 			{
 				return;
 			}
@@ -261,13 +261,13 @@ namespace DXDecompiler.DX9Shader
 			int dimension = components.Length;
 			var newValue1 = new HlslTreeNode[dimension];
 			var newValue2 = new HlslTreeNode[dimension];
-			for (int i = 0; i < dimension; i++)
+			for(int i = 0; i < dimension; i++)
 			{
 				int min = int.MaxValue;
 				int minIndex = 0;
-				for (int j = 0; j < dimension; j++)
+				for(int j = 0; j < dimension; j++)
 				{
-					if (components[j] < min)
+					if(components[j] < min)
 					{
 						min = components[j];
 						minIndex = j;
@@ -283,26 +283,26 @@ namespace DXDecompiler.DX9Shader
 
 		private int[] GetComponentsIfUniqueAndUnordered()
 		{
-			if (ValuesHaveSameComponents() == false)
+			if(ValuesHaveSameComponents() == false)
 			{
 				return null;
 			}
 
 			bool isUnordered = false;
 			var components = new int[Dimension];
-			for (int i = 0; i < Dimension; i++)
+			for(int i = 0; i < Dimension; i++)
 			{
 				// TODO: get child component index
 
 				var componentIndex = (Value1[i] as IHasComponentIndex).ComponentIndex;
-				if (Array.IndexOf(components, componentIndex, 0, i) != -1)
+				if(Array.IndexOf(components, componentIndex, 0, i) != -1)
 				{
 					return null;
 				}
 
 				components[i] = componentIndex;
 
-				if (componentIndex != i)
+				if(componentIndex != i)
 				{
 					isUnordered = true;
 				}
@@ -313,21 +313,21 @@ namespace DXDecompiler.DX9Shader
 
 		private bool ValuesHaveSameComponents()
 		{
-			for (int i = 0; i < Dimension; i++)
+			for(int i = 0; i < Dimension; i++)
 			{
 				// TODO: get child component index
 
-				if (!(Value1[i] is IHasComponentIndex value1))
+				if(!(Value1[i] is IHasComponentIndex value1))
 				{
 					return false;
 				}
 
-				if (!(Value2[i] is IHasComponentIndex value2))
+				if(!(Value2[i] is IHasComponentIndex value2))
 				{
 					return false;
 				}
 
-				if (value1.ComponentIndex != value2.ComponentIndex)
+				if(value1.ComponentIndex != value2.ComponentIndex)
 				{
 					return false;
 				}

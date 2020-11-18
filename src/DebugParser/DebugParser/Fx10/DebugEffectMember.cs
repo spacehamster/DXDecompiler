@@ -32,11 +32,12 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			result.Name = nameReader.ReadString("Name");
 
 			result.SemanticNameOffset = memberReader.ReadUInt32("SemanticNameOffset");
-			if (result.SemanticNameOffset != 0)
+			if(result.SemanticNameOffset != 0)
 			{
 				var semanticNameReader = reader.CopyAtOffset("SemanticNameReader", memberReader, (int)result.SemanticNameOffset);
 				result.Semantic = semanticNameReader.ReadString("Semantic");
-			} else
+			}
+			else
 			{
 				result.Semantic = "";
 			}

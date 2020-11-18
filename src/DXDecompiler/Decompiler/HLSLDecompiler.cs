@@ -28,7 +28,7 @@ namespace DXDecompiler.Decompiler
 		public static string Decompile(byte[] data)
 		{
 			var container = new BytecodeContainer(data);
-			if (container.Chunks.OfType<LibfChunk>().Any())
+			if(container.Chunks.OfType<LibfChunk>().Any())
 			{
 				var sb = new StringBuilder();
 				foreach(var lib in container.Chunks.OfType<LibfChunk>())
@@ -38,7 +38,7 @@ namespace DXDecompiler.Decompiler
 				}
 				return sb.ToString();
 			}
-			if (container.Chunks.OfType<EffectChunk>().Any())
+			if(container.Chunks.OfType<EffectChunk>().Any())
 			{
 				return container.Chunks
 					.OfType<EffectChunk>()
@@ -54,7 +54,7 @@ namespace DXDecompiler.Decompiler
 			Container = container;
 			m_ConstantBufferLookup = new Dictionary<string, ConstantBuffer>();
 			m_ResourceBindingLookup = new Dictionary<string, ResourceBinding>();
-			if (Container.Interfaces != null)
+			if(Container.Interfaces != null)
 			{
 				Interfaces = new Interfaces(Container);
 				foreach(var kv in Interfaces.GetRegisterMapping())
@@ -63,7 +63,7 @@ namespace DXDecompiler.Decompiler
 				}
 			}
 
-			foreach (var rb in Container.ResourceDefinition.ResourceBindings)
+			foreach(var rb in Container.ResourceDefinition.ResourceBindings)
 			{
 				m_ResourceBindingLookup.Add(rb.GetIDDescription().ToLower(), rb);
 			}
@@ -77,9 +77,10 @@ namespace DXDecompiler.Decompiler
 				var type = typeGroup.Key;
 				var bindingsByName = typeGroup
 					.GroupBy(rb => rb.Name);
-				foreach (var nameGroup in bindingsByName) {
+				foreach(var nameGroup in bindingsByName)
+				{
 					var bindings = nameGroup.ToArray();
-					for (int i = 0; i < bindings.Length; i++)
+					for(int i = 0; i < bindings.Length; i++)
 					{
 						var rb = bindings[i];
 						resourceBindingLookup.Add($"{type}${rb.Name}${i}", rb);
@@ -89,15 +90,15 @@ namespace DXDecompiler.Decompiler
 			var bufferBindingsByType = Container.ResourceDefinition.ConstantBuffers
 				.Where(cb => cb.BufferType != ConstantBufferType.InterfacePointers)
 				.GroupBy(cb => cb.BufferType);
-			foreach (var typeGroup in bufferBindingsByType)
+			foreach(var typeGroup in bufferBindingsByType)
 			{
 				var type = typeGroup.Key;
 				var bindingsByName = typeGroup
 					.GroupBy(cb => cb.Name);
-				foreach (var nameGroup in bindingsByName)
+				foreach(var nameGroup in bindingsByName)
 				{
 					var bindings = nameGroup.ToArray();
-					for (int i = 0; i < bindings.Length; i++)
+					for(int i = 0; i < bindings.Length; i++)
 					{
 						var cb = bindings[i];
 						var key = $"{type}${cb.Name}${i}";
@@ -113,7 +114,7 @@ namespace DXDecompiler.Decompiler
 		}
 		public string GetMainFuncName()
 		{
-			switch (Container.Shader.Version.ProgramType)
+			switch(Container.Shader.Version.ProgramType)
 			{
 				case ProgramType.VertexShader:
 					return "MainVS";
@@ -133,7 +134,7 @@ namespace DXDecompiler.Decompiler
 		}
 		void WriteMainFuncDec()
 		{
-			if (Container.Shader.Version.ProgramType == ProgramType.ComputeShader)
+			if(Container.Shader.Version.ProgramType == ProgramType.ComputeShader)
 			{
 				Output.AppendFormat("void {0}(", GetMainFuncName());
 				WriteComputeParams();
@@ -141,7 +142,7 @@ namespace DXDecompiler.Decompiler
 				Output.AppendLine("{");
 				indent++;
 			}
-			else if (Container.Shader.Version.ProgramType == ProgramType.GeometryShader)
+			else if(Container.Shader.Version.ProgramType == ProgramType.GeometryShader)
 			{
 				Output.AppendFormat("void {0}(", GetMainFuncName());
 				WriteGeometryParams();
@@ -151,7 +152,7 @@ namespace DXDecompiler.Decompiler
 				AddIndent();
 				Output.AppendLine("ShaderOutput output;");
 			}
-			else if (Container.Shader.Version.ProgramType == ProgramType.DomainShader)
+			else if(Container.Shader.Version.ProgramType == ProgramType.DomainShader)
 			{
 				Output.AppendFormat("ShaderOutput {0}(", GetMainFuncName());
 				WriteDomainParams();
@@ -161,7 +162,7 @@ namespace DXDecompiler.Decompiler
 				AddIndent();
 				Output.AppendLine("ShaderOutput output;");
 			}
-			else if (Container.Shader.Version.ProgramType == ProgramType.LibraryShader)
+			else if(Container.Shader.Version.ProgramType == ProgramType.LibraryShader)
 			{
 				var libSignature = Container.LibrarySignature;
 				var functionParam = libSignature.Parameters[0];
@@ -170,7 +171,7 @@ namespace DXDecompiler.Decompiler
 				Output.AppendLine(")");
 				Output.AppendLine("{");
 				indent++;
-				if (functionParam.VariableType != ShaderVariableType.Void)
+				if(functionParam.VariableType != ShaderVariableType.Void)
 				{
 					AddIndent();
 					Output.AppendLine($"{functionParam.TypeName} output;");
@@ -194,14 +195,14 @@ namespace DXDecompiler.Decompiler
 			//Output.AppendLine(RegisterState.Dump());
 #endif
 			RootSignature.WriteRootSignature(Container, Output);
-			if (Container.Shader.Version.ProgramType == ProgramType.HullShader)
+			if(Container.Shader.Version.ProgramType == ProgramType.HullShader)
 			{
 				DecompileHullShader();
 				return Output.ToString();
 			}
 			WriteResoureDefinitions();
 			WriteSignatures();
-			if (Interfaces != null)
+			if(Interfaces != null)
 			{
 				Output.AppendLine(Interfaces.Dump());
 			}
@@ -228,15 +229,17 @@ namespace DXDecompiler.Decompiler
 				if(token.Header.OpcodeType == OpcodeType.HsDecls)
 				{
 					currentPhase = hsDecls;
-				} else if(token.Header.OpcodeType == OpcodeType.HsControlPointPhase)
+				}
+				else if(token.Header.OpcodeType == OpcodeType.HsControlPointPhase)
 				{
 					currentPhase = controlPointPhase;
-				} else if(token.Header.OpcodeType == OpcodeType.HsForkPhase)
+				}
+				else if(token.Header.OpcodeType == OpcodeType.HsForkPhase)
 				{
 					currentPhase = new List<OpcodeToken>();
 					forkPhase.Add(currentPhase);
 				}
-				else if (token.Header.OpcodeType == OpcodeType.HsJoinPhase)
+				else if(token.Header.OpcodeType == OpcodeType.HsJoinPhase)
 				{
 					currentPhase = new List<OpcodeToken>();
 					joinPhase.Add(currentPhase);
@@ -247,28 +250,28 @@ namespace DXDecompiler.Decompiler
 			WriteSignatures();
 			WriteHullMainFunc(hsDecls);
 			WriteHullControlPhase(controlPointPhase);
-			foreach (var phase in forkPhase)
+			foreach(var phase in forkPhase)
 			{
 				WriteHullForkPhase(phase);
 				indent++;
 				var declTokens = phase.OfType<DeclarationToken>();
 				LogDeclaration(declTokens);
 				WriteDeclarationVariables(declTokens);
-				foreach (var token in phase.OfType<InstructionToken>())
+				foreach(var token in phase.OfType<InstructionToken>())
 				{
 					TranslateInstruction(token);
 				}
 				indent--;
 				Output.AppendLine("}");
 			}
-			foreach (var phase in joinPhase)
+			foreach(var phase in joinPhase)
 			{
 				WriteHullJoinPhase(phase);
 				indent++;
 				var declTokens = phase.OfType<DeclarationToken>();
 				LogDeclaration(declTokens);
 				WriteDeclarationVariables(declTokens);
-				foreach (var token in phase.OfType<InstructionToken>())
+				foreach(var token in phase.OfType<InstructionToken>())
 				{
 					TranslateInstruction(token);
 				}
@@ -280,7 +283,7 @@ namespace DXDecompiler.Decompiler
 		{
 			Output.AppendLine("ShaderOutput MainHS(){");
 			indent++;
-			foreach (var token in tokens)
+			foreach(var token in tokens)
 			{
 				DebugLog(token);
 			}
@@ -291,7 +294,7 @@ namespace DXDecompiler.Decompiler
 		{
 			Output.AppendLine("ShaderOutput ControlPhase(){");
 			indent++;
-			foreach (var token in tokens)
+			foreach(var token in tokens)
 			{
 				DebugLog(token);
 			}
@@ -312,12 +315,13 @@ namespace DXDecompiler.Decompiler
 			TempRegisterDeclarationToken temps = Container.Shader.DeclarationTokens
 				.OfType<TempRegisterDeclarationToken>()
 				.FirstOrDefault();
-			if (temps == null) return;
+			if(temps == null) return;
 			AddIndent();
 			Output.Append("float4 ");
-			for (int i = 0; i < temps.TempCount; i++){
+			for(int i = 0; i < temps.TempCount; i++)
+			{
 				Output.AppendFormat("r{0}", i);
-				if (i < temps.TempCount - 1) Output.Append(", ");
+				if(i < temps.TempCount - 1) Output.Append(", ");
 			}
 			Output.AppendLine(";");
 			//Note: CustomDataToken
@@ -329,9 +333,9 @@ namespace DXDecompiler.Decompiler
 				AddIndent();
 				Output.AppendLine("const float4 icb[] = { ");
 				Output.Append(new string(' ', 30));
-				for (int i = 0; i < cb.Data.Length; i += 4)
+				for(int i = 0; i < cb.Data.Length; i += 4)
 				{
-					if (i > 0)
+					if(i > 0)
 						Output.Append("," + Environment.NewLine + new string(' ', 30));
 					Output.AppendFormat("{{ {0}, {1}, {2}, {3}}}",
 						cb.Data[i], cb.Data[i + 1], cb.Data[i + 2], cb.Data[i + 3]);
@@ -344,7 +348,7 @@ namespace DXDecompiler.Decompiler
 			var inputs = Container.Shader.DeclarationTokens
 				.OfType<InputRegisterDeclarationToken>()
 				.ToArray();
-			if (inputs.Length == 0) return;
+			if(inputs.Length == 0) return;
 			Output.AppendLine("");
 			Output.Append("\t");
 			for(int i = 0; i < inputs.Length; i++)
@@ -368,12 +372,12 @@ namespace DXDecompiler.Decompiler
 			Output.AppendLine("");
 			Output.Append("\t");
 			Output.AppendFormat("PatchConstant patchConstant");
-			for (int i = 0; i < inputs.Length; i++)
+			for(int i = 0; i < inputs.Length; i++)
 			{
 				Output.AppendLine(",");
 				Output.Append("\t");
 				var token = inputs[i];
-				if (token.Operand.OperandType == OperandType.InputControlPoint)
+				if(token.Operand.OperandType == OperandType.InputControlPoint)
 				{
 					var controlPointCount = Container.Shader.DeclarationTokens
 						.Single(c => c is ControlPointCountDeclarationToken) as ControlPointCountDeclarationToken;
@@ -387,9 +391,9 @@ namespace DXDecompiler.Decompiler
 				else
 				{
 					var type = "float4";
-					if (token.Operand.OperandType == OperandType.InputDomainPoint)
+					if(token.Operand.OperandType == OperandType.InputDomainPoint)
 						type = "float2";
-					if (token.Operand.OperandType == OperandType.InputPrimitiveID)
+					if(token.Operand.OperandType == OperandType.InputPrimitiveID)
 						type = "uint";
 					Output.AppendFormat("{0} {1} : {2}",
 						type,
@@ -405,12 +409,12 @@ namespace DXDecompiler.Decompiler
 			for(int i = 1; i < libSignature.Parameters.Count; i++)
 			{
 				var param = libSignature.Parameters[i];
-				if (param.InterpolationMode != Chunks.Libf.InterpolationMode.Undefined)
+				if(param.InterpolationMode != Chunks.Libf.InterpolationMode.Undefined)
 				{
 					Output.AppendFormat("{0} ", param.InterpolationMode);
 				}
 				Output.AppendFormat("{0} {1}", param.TypeName, param.Name);
-				if (!string.IsNullOrEmpty(param.SemanticName))
+				if(!string.IsNullOrEmpty(param.SemanticName))
 				{
 					Output.AppendFormat(": {0}", param.SemanticName);
 				}
@@ -424,7 +428,7 @@ namespace DXDecompiler.Decompiler
 		{
 			//Input declares each field seperatly, we only care about the size of the input array
 			var mainInput = Container.Shader.DeclarationTokens
-				.First(t => 
+				.First(t =>
 						t is InputRegisterDeclarationToken &&
 						t.Operand.OperandType == OperandType.Input);
 			var inputPrimitive = Container.Shader.DeclarationTokens
@@ -447,16 +451,16 @@ namespace DXDecompiler.Decompiler
 				"input",
 				mainInput.Operand.Indices[0].Value);
 			var dclTokens = Container.Shader.DeclarationTokens.ToArray();
-			for (int i = 0; i < dclTokens.Length; i++)
+			for(int i = 0; i < dclTokens.Length; i++)
 			{
 				var token = dclTokens[i];
-				if (token is InputRegisterDeclarationToken && token.Operand.OperandType != OperandType.Input)
+				if(token is InputRegisterDeclarationToken && token.Operand.OperandType != OperandType.Input)
 				{
 					Output.Append(",\n\t");
 					var type = "float4";
-					if (token.Operand.OperandType == OperandType.InputPrimitiveID)
+					if(token.Operand.OperandType == OperandType.InputPrimitiveID)
 						type = "uint";
-					if (token.Operand.OperandType == OperandType.InputGSInstanceID)
+					if(token.Operand.OperandType == OperandType.InputGSInstanceID)
 						type = "uint";
 					Output.AppendFormat("{0} {1} : {2}",
 						type,
@@ -484,7 +488,7 @@ namespace DXDecompiler.Decompiler
 			var funcParams = Container.ResourceDefinition.ConstantBuffers.FirstOrDefault(c =>
 				c.BufferType == ConstantBufferType.ConstantBuffer &&
 				c.Name == "$Params");
-			if (funcParams == null) return;
+			if(funcParams == null) return;
 			indent++;
 			foreach(var variable in funcParams.Variables)
 			{
@@ -504,16 +508,17 @@ namespace DXDecompiler.Decompiler
 					.TakeWhile(t => t.Header.OpcodeType != OpcodeType.Label)
 					.ToList();
 			}
-			foreach (var token in tokens)
+			foreach(var token in tokens)
 			{
-				if (token is InstructionToken inst)
+				if(token is InstructionToken inst)
 				{
 					TranslateInstruction(inst);
 				}
-				else if (token is ShaderMessageDeclarationToken message)
+				else if(token is ShaderMessageDeclarationToken message)
 				{
 					WriteShaderMessage(message);
-				} else if (token is CustomDataToken data)
+				}
+				else if(token is CustomDataToken data)
 				{
 					AddIndent();
 					Output.AppendFormat("// {0}\n", data.ToString());
@@ -527,8 +532,8 @@ namespace DXDecompiler.Decompiler
 		}
 		void DebugLog(OpcodeToken token)
 		{
-			var lines  = token.ToString().Replace("\r", "").Split('\n');
-			foreach (var line in lines)
+			var lines = token.ToString().Replace("\r", "").Split('\n');
+			foreach(var line in lines)
 			{
 				AddIndent();
 				Output.AppendLine($"// {line}");

@@ -17,7 +17,8 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		private uint ComponentCount;
 		public static FxlcOperand Parse(BytecodeReader reader, uint componentCount)
 		{
-			var result = new FxlcOperand() {
+			var result = new FxlcOperand()
+			{
 				ComponentCount = componentCount,
 				IsArray = reader.ReadUInt32(),
 				OpType = (FxlcOperandType)reader.ReadUInt32(),
@@ -39,10 +40,10 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 
 		private string FormatComponent(uint componentIndex, uint componentCount)
 		{
-			switch (componentCount)
+			switch(componentCount)
 			{
 				case 1:
-					switch (componentIndex)
+					switch(componentIndex)
 					{
 						case 0:
 							return ".x";
@@ -56,7 +57,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 							return "";
 					}
 				case 2:
-					switch (componentIndex)
+					switch(componentIndex)
 					{
 						case 0:
 							return ".xy";
@@ -68,7 +69,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 							return "";
 					}
 				case 3:
-					switch (componentIndex)
+					switch(componentIndex)
 					{
 						case 0:
 							return ".xyz";
@@ -86,10 +87,10 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 			var elementIndex = index / 4;
 			var componentIndex = index % 4;
 			var component = FormatComponent(componentIndex, ComponentCount);
-			switch (type)
+			switch(type)
 			{
 				case FxlcOperandType.Literal:
-					var literal = string.Join(", ", 
+					var literal = string.Join(", ",
 						Enumerable.Repeat(cli.GetLiteral(index), (int)ComponentCount));
 					return string.Format("({0})", literal);
 				case FxlcOperandType.Temp:
@@ -98,12 +99,13 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					return string.Format("c{0}{1}", elementIndex, component);
 				case FxlcOperandType.Expr:
 					return string.Format("expr{0}", index);
-					if (ComponentCount == 1)
+					if(ComponentCount == 1)
 					{
 						if(componentIndex == 0)
 						{
 							return string.Format("expr{0}", component);
-						} else
+						}
+						else
 						{
 							return string.Format("expr0{0}", component);
 						}
@@ -115,10 +117,10 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		}
 		private string FormatComponent(ConstantTable ctab, Chunks.Fxlvm.Cli4Chunk cli, uint componentIndex, uint componentCount)
 		{
-			switch (componentCount)
+			switch(componentCount)
 			{
 				case 1:
-					switch (componentIndex)
+					switch(componentIndex)
 					{
 						case 0:
 							return ".x";
@@ -132,7 +134,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 							return "";
 					}
 				case 2:
-					switch (componentIndex)
+					switch(componentIndex)
 					{
 						case 0:
 							return ".xy";
@@ -144,7 +146,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 							return "";
 					}
 				case 3:
-					switch (componentIndex)
+					switch(componentIndex)
 					{
 						case 0:
 							return ".xyz";
@@ -162,7 +164,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 			var elementIndex = index / 4;
 			var componentIndex = index % 4;
 			var component = FormatComponent(componentIndex, ComponentCount);
-			switch (type)
+			switch(type)
 			{
 				case FxlcOperandType.Literal:
 					return string.Format("({0})", cli.GetLiteral(index, ComponentCount));
@@ -172,9 +174,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					return string.Format("{0}{1}",
 						ctab.GetVariable(elementIndex), component);
 				case FxlcOperandType.Expr:
-					if (ComponentCount == 1)
+					if(ComponentCount == 1)
 					{
-						if (componentIndex == 0)
+						if(componentIndex == 0)
 						{
 							return string.Format("expr{0}", component);
 						}
@@ -190,7 +192,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		}
 		public string ToString(ConstantTable ctab, CliToken cli)
 		{
-			if (IsArray == 0)
+			if(IsArray == 0)
 			{
 				return FormatOperand(ctab, cli, OpType, OpIndex);
 			}
@@ -203,7 +205,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		}
 		public string ToString(ConstantTable ctab, Chunks.Fxlvm.Cli4Chunk cli)
 		{
-			if (IsArray == 0)
+			if(IsArray == 0)
 			{
 				return FormatOperand(ctab, cli, OpType, OpIndex);
 			}

@@ -30,13 +30,13 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			result.BufferType = (ConstantBufferType)bufferReader.ReadUInt32("BufferType");
 			result.VariableCount = bufferReader.ReadUInt32("VariableCount");
 			result.RegisterNumber = bufferReader.ReadUInt32("RegisterNumber");
-			if (!isShared)
+			if(!isShared)
 			{
 				result.Unknown0 = bufferReader.ReadUInt32("Unknown0");
 			}
 			//TODO: Unknown0
 			//Debug.Assert(result.Unknown0 == 0, $"EffectBuffer.Unknown0: {result.Unknown0}");
-			for (int i = 0; i < result.VariableCount; i++)
+			for(int i = 0; i < result.VariableCount; i++)
 			{
 				bufferReader.AddIndent($"BufferVariable {i}");
 				result.Variables.Add(DebugEffectNumericVariable.Parse(reader, bufferReader, version, isShared));

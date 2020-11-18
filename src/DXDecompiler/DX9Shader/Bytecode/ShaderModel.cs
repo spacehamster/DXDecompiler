@@ -23,7 +23,7 @@ namespace DXDecompiler.DX9Shader
 
 	public class ShaderModel
 	{
-		private static readonly Dictionary<uint, CommentType> KnownCommentTypes = 
+		private static readonly Dictionary<uint, CommentType> KnownCommentTypes =
 			new Dictionary<uint, CommentType>
 		{
 			{ "CTAB".ToFourCc(), CommentType.CTAB },
@@ -62,12 +62,12 @@ namespace DXDecompiler.DX9Shader
 			result.MinorVersion = reader.ReadByte();
 			result.MajorVersion = reader.ReadByte();
 			result.Type = (ShaderType)reader.ReadUInt16();
-			while (true)
+			while(true)
 			{
 				var instruction = result.ReadInstruction(reader);
-				if (instruction == null) continue;
+				if(instruction == null) continue;
 				result.Tokens.Add(instruction);
-				if (instruction.Opcode == Opcode.End) break;
+				if(instruction.Opcode == Opcode.End) break;
 			}
 			return result;
 		}
@@ -76,7 +76,7 @@ namespace DXDecompiler.DX9Shader
 			uint instructionToken = reader.ReadUInt32();
 			Opcode opcode = (Opcode)(instructionToken & 0xffff);
 			int size;
-			if (opcode == Opcode.Comment)
+			if(opcode == Opcode.Comment)
 			{
 				size = (int)((instructionToken >> 16) & 0x7FFF);
 			}
@@ -85,14 +85,14 @@ namespace DXDecompiler.DX9Shader
 				size = (int)((instructionToken >> 24) & 0x0f);
 			}
 			Token token = null;
-			if (opcode == Opcode.Comment)
+			if(opcode == Opcode.Comment)
 			{
 				var fourCC = reader.ReadUInt32();
-				if (KnownCommentTypes.ContainsKey(fourCC))
+				if(KnownCommentTypes.ContainsKey(fourCC))
 				{
 					var commentReader = reader.CopyAtCurrentPosition();
 					reader.ReadBytes(size * 4 - 4);
-					switch (KnownCommentTypes[fourCC])
+					switch(KnownCommentTypes[fourCC])
 					{
 						case CommentType.CTAB:
 							ConstantTable = ConstantTable.Parse(commentReader);
@@ -113,7 +113,7 @@ namespace DXDecompiler.DX9Shader
 				}
 				token = new CommentToken(opcode, size, this);
 				token.Data[0] = fourCC;
-				for (int i = 1; i < size; i++)
+				for(int i = 1; i < size; i++)
 				{
 					token.Data[i] = reader.ReadUInt32();
 				}
@@ -123,16 +123,16 @@ namespace DXDecompiler.DX9Shader
 				token = new InstructionToken(opcode, size, this);
 				var inst = token as InstructionToken;
 
-				for (int i = 0; i < size; i++)
+				for(int i = 0; i < size; i++)
 				{
 					token.Data[i] = reader.ReadUInt32();
-					if (opcode == Opcode.Def || opcode == Opcode.DefB || opcode == Opcode.DefI)
+					if(opcode == Opcode.Def || opcode == Opcode.DefB || opcode == Opcode.DefI)
 					{
 
 					}
-					else if (opcode == Opcode.Dcl)
+					else if(opcode == Opcode.Dcl)
 					{
-						if (i == 0)
+						if(i == 0)
 						{
 							inst.Operands.Add(new DeclarationOperand(token.Data[i]));
 						}
@@ -141,11 +141,11 @@ namespace DXDecompiler.DX9Shader
 							inst.Operands.Add(new DestinationOperand(token.Data[i]));
 						}
 					}
-					else if (i == 0 && opcode != Opcode.BreakC && opcode != Opcode.IfC && opcode != Opcode.If)
+					else if(i == 0 && opcode != Opcode.BreakC && opcode != Opcode.IfC && opcode != Opcode.If)
 					{
 						inst.Operands.Add(new DestinationOperand(token.Data[i]));
 					}
-					else if ((token.Data[i] & (1 << 13)) != 0)
+					else if((token.Data[i] & (1 << 13)) != 0)
 					{
 						//Relative Address mode
 						token.Data[i + 1] = reader.ReadUInt32();
@@ -157,7 +157,7 @@ namespace DXDecompiler.DX9Shader
 						inst.Operands.Add(new SourceOperand(token.Data[i]));
 					}
 				}
-				if (opcode != Opcode.Comment)
+				if(opcode != Opcode.Comment)
 				{
 					token.Modifier = (int)((instructionToken >> 16) & 0xff);
 					token.Predicated = (instructionToken & 0x10000000) != 0;

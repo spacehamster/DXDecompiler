@@ -16,7 +16,7 @@ namespace DXDecompiler.DebugParser
 			byte majorVersion = reader.ReadByte("majorVersion");
 			ushort programTypeValue = reader.ReadUInt16("programTypeValue");
 			ProgramType programType;
-			switch (programTypeValue)
+			switch(programTypeValue)
 			{
 				case 0xFFFF:
 					programType = ProgramType.PixelShader;
@@ -80,7 +80,7 @@ namespace DXDecompiler.DebugParser
 
 		private static ProgramType ParseProgramType(ushort programTypeValue)
 		{
-			switch (programTypeValue)
+			switch(programTypeValue)
 			{
 				case 0xFFFF:
 					return ProgramType.PixelShader;
@@ -109,7 +109,7 @@ namespace DXDecompiler.DebugParser
 			ProgramType programType = ParseProgramType(programTypeValue);
 			byte majorVersion;
 			byte minorVersion;
-			switch (target)
+			switch(target)
 			{
 				case 0x1001:
 					majorVersion = 4;

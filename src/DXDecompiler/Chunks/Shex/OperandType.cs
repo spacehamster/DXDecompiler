@@ -36,7 +36,7 @@
 		/// DWORDS present for the operand.
 		/// </summary>
 		Immediate32 = 4,
-		
+
 		/// <summary>
 		/// // 64bit/comp.imm.val(s)HI:LO
 		/// </summary>
@@ -90,7 +90,7 @@
 		Null = 13,
 
 		// Below are operands new in DX 10.1
-		
+
 		/// <summary>
 		/// DX10.1 Rasterizer register, used to denote the depth/stencil and render target resources
 		/// </summary>

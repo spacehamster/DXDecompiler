@@ -10,7 +10,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		{
 			var result = new FxlcBlock();
 			var tokenCount = reader.ReadUInt32();
-			for (int i = 0; i < tokenCount; i++)
+			for(int i = 0; i < tokenCount; i++)
 			{
 				result.Tokens.Add(FxlcToken.Parse(reader));
 			}

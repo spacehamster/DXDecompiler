@@ -22,7 +22,7 @@ namespace DXDecompiler.Decompiler
 		}
 		internal void WriteDeclarationVariables(IEnumerable<DeclarationToken> tokens)
 		{
-			foreach (var token in tokens)
+			foreach(var token in tokens)
 			{
 				WriteDeclarationVariables(token);
 			}
@@ -32,14 +32,14 @@ namespace DXDecompiler.Decompiler
 		}
 		internal void WriteDeclarationParameters(IEnumerable<DeclarationToken> tokens)
 		{
-			foreach (var token in tokens)
+			foreach(var token in tokens)
 			{
 				WriteDeclarationVariables(token);
 			}
 		}
 		internal void WriteDeclarationParameter(DeclarationToken token)
 		{
-			switch (token.Header.OpcodeType)
+			switch(token.Header.OpcodeType)
 			{
 				case OpcodeType.DclInput:
 					{
@@ -49,7 +49,7 @@ namespace DXDecompiler.Decompiler
 		}
 		string GetSemanticName(Operand operand)
 		{
-			switch (operand.OperandType)
+			switch(operand.OperandType)
 			{
 				case OperandType.InputThreadIDInGroup:
 					return "SV_DispatchThreadID";
@@ -74,7 +74,7 @@ namespace DXDecompiler.Decompiler
 		internal void WriteInputDeclaration(InputRegisterDeclarationToken token)
 		{
 			var type = "float4";
-			switch (token.Operand.OperandType)
+			switch(token.Operand.OperandType)
 			{
 				case OperandType.InputThreadIDInGroup:
 					type = "uint3";
@@ -96,7 +96,7 @@ namespace DXDecompiler.Decompiler
 		}
 		internal void WriteDeclarationAnnotations(IEnumerable<DeclarationToken> tokens)
 		{
-			foreach (var token in tokens)
+			foreach(var token in tokens)
 			{
 				WriteDeclarationAnnotations(token);
 			}
@@ -104,7 +104,7 @@ namespace DXDecompiler.Decompiler
 		internal void WriteDeclarationAnnotations(DeclarationToken token)
 		{
 			var opcodeType = token.Header.OpcodeType;
-			switch (opcodeType)
+			switch(opcodeType)
 			{
 				case OpcodeType.DclTessDomain:
 					{
@@ -133,7 +133,7 @@ namespace DXDecompiler.Decompiler
 						Output.AppendLine("groupshared struct {");
 						for(int i = 0; i < dcl.StructByteStride; i += 4)
 						{
-							Output.AppendLine($"\tfloat4 m{i/4};");
+							Output.AppendLine($"\tfloat4 m{i / 4};");
 						}
 						Output.AppendLine($"}} {dcl.Operand.OperandType.GetDescription()}{dcl.Operand.Indices[0].Value}[{dcl.StructCount}];");
 						break;
@@ -141,7 +141,7 @@ namespace DXDecompiler.Decompiler
 				case OpcodeType.DclThreadGroupSharedMemoryRaw:
 					{
 						var dcl = token as RawThreadGroupSharedMemoryDeclarationToken;
-						if (dcl.ElementCount != 4)
+						if(dcl.ElementCount != 4)
 						{
 							throw new ArgumentException($"Can't handle dcl_tgsm_raw with element count of {dcl.ElementCount}");
 						}

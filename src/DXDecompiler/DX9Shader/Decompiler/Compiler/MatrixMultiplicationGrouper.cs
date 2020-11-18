@@ -22,19 +22,19 @@ namespace DXDecompiler.DX9Shader
 
 			var first = components[0];
 			var firstDotProductNode = _nodeGrouper.DotProductGrouper.TryGetDotProductGroup(first, allowMatrix);
-			if (firstDotProductNode == null)
+			if(firstDotProductNode == null)
 			{
 				return null;
 			}
 
 			int dimension = firstDotProductNode.Dimension;
-			if (components.Count < dimension)
+			if(components.Count < dimension)
 			{
 				return null;
 			}
 
 			HlslTreeNode[] firstMatrixRow = TryGetMatrixRow(firstDotProductNode);
-			if (firstMatrixRow == null)
+			if(firstMatrixRow == null)
 			{
 				return null;
 			}
@@ -45,17 +45,17 @@ namespace DXDecompiler.DX9Shader
 
 			var matrixRows = new HlslTreeNode[dimension][];
 			matrixRows[0] = firstMatrixRow;
-			for (int i = 1; i < dimension; i++)
+			for(int i = 1; i < dimension; i++)
 			{
 				var next = components[i];
 				var dotProductNode = _nodeGrouper.DotProductGrouper.TryGetDotProductGroup(next, dimension, allowMatrix);
-				if (dotProductNode == null)
+				if(dotProductNode == null)
 				{
 					return null;
 				}
 
 				HlslTreeNode[] matrixRow = TryGetMatrixRow(dotProductNode);
-				if (matrixRow == null)
+				if(matrixRow == null)
 				{
 					return null;
 				}
@@ -64,14 +64,14 @@ namespace DXDecompiler.DX9Shader
 				HlslTreeNode[] nextVector = dotProductNode.Value1 == matrixRow
 					? dotProductNode.Value2
 					: dotProductNode.Value1;
-				if (NodeGrouper.IsVectorEquivalent(vector, nextVector) == false)
+				if(NodeGrouper.IsVectorEquivalent(vector, nextVector) == false)
 				{
 					return null;
 				}
 			}
 
 			ConstantDeclaration matrix = TryGetMatrixDeclaration(matrixRows);
-			if (matrix == null)
+			if(matrix == null)
 			{
 				return null;
 			}
@@ -87,32 +87,32 @@ namespace DXDecompiler.DX9Shader
 
 		private void SwizzleVector(HlslTreeNode[] vector, HlslTreeNode[] firstMatrixRow, bool matrixByVector)
 		{
-			if (matrixByVector)
+			if(matrixByVector)
 			{
 				// TODO
 				return;
 			}
 
 			bool needsSwizzle = false;
-			for (int i = 0; i < firstMatrixRow.Length; i++)
+			for(int i = 0; i < firstMatrixRow.Length; i++)
 			{
 				var component = (firstMatrixRow[i] as RegisterInputNode).RegisterComponentKey.ComponentIndex;
-				if (i != component)
+				if(i != component)
 				{
 					needsSwizzle = true;
 					break;
 				}
 			}
 
-			if (needsSwizzle)
+			if(needsSwizzle)
 			{
 				HlslTreeNode[] vectorCopy = new HlslTreeNode[vector.Length];
 				Array.Copy(vector, vectorCopy, vector.Length);
 
-				for (int i = 0; i < firstMatrixRow.Length; i++)
+				for(int i = 0; i < firstMatrixRow.Length; i++)
 				{
 					var component = (firstMatrixRow[i] as RegisterInputNode).RegisterComponentKey.ComponentIndex;
-					if (i != component)
+					if(i != component)
 					{
 						vector[i] = vectorCopy[component];
 					}
@@ -124,11 +124,11 @@ namespace DXDecompiler.DX9Shader
 		{
 			int dimension = dotProductNodes.Length;
 			var first = dotProductNodes[0];
-			if (first[0] is RegisterInputNode register1)
+			if(first[0] is RegisterInputNode register1)
 			{
 				var matrixBaseConstant = _registers.FindConstant(register1);
-				if (matrixBaseConstant != null && 
-					matrixBaseConstant.Rows == dimension && 
+				if(matrixBaseConstant != null &&
+					matrixBaseConstant.Rows == dimension &&
 					matrixBaseConstant.Columns == dimension)
 				{
 					return matrixBaseConstant;
@@ -140,19 +140,19 @@ namespace DXDecompiler.DX9Shader
 
 		private HlslTreeNode[] TryGetMatrixRow(DotProductContext firstDotProductNode)
 		{
-			if (firstDotProductNode.Value1[0] is RegisterInputNode value1)
+			if(firstDotProductNode.Value1[0] is RegisterInputNode value1)
 			{
 				ConstantDeclaration constant = _registers.FindConstant(value1);
-				if( constant != null && constant.Rows > 1)
+				if(constant != null && constant.Rows > 1)
 				{
 					return firstDotProductNode.Value1;
 				}
 			}
 
-			if (firstDotProductNode.Value2[0] is RegisterInputNode value2)
+			if(firstDotProductNode.Value2[0] is RegisterInputNode value2)
 			{
 				ConstantDeclaration constant = _registers.FindConstant(value2);
-				if (constant != null && constant.Rows > 1)
+				if(constant != null && constant.Rows > 1)
 				{
 					return firstDotProductNode.Value2;
 				}

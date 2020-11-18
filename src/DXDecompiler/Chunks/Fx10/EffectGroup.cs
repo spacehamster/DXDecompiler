@@ -22,19 +22,20 @@ namespace DXDecompiler.Chunks.Fx10
 			var nameOffset = groupReader.ReadUInt32();
 			var techniqueCount = groupReader.ReadUInt32();
 			var annotationCount = groupReader.ReadUInt32();
-			if (nameOffset != 0)
+			if(nameOffset != 0)
 			{
 				var nameReader = reader.CopyAtOffset((int)nameOffset);
 				result.Name = nameReader.ReadString();
-			} else
+			}
+			else
 			{
 				result.Name = "";
 			}
-			for (int i = 0; i < techniqueCount; i++)
+			for(int i = 0; i < techniqueCount; i++)
 			{
 				result.Techniques.Add(EffectTechnique.Parse(reader, groupReader, version));
 			}
-			for (int i = 0; i < annotationCount; i++)
+			for(int i = 0; i < annotationCount; i++)
 			{
 				result.Annotations.Add(EffectAnnotation.Parse(reader, groupReader, version));
 			}
@@ -44,7 +45,7 @@ namespace DXDecompiler.Chunks.Fx10
 		{
 			var sb = new StringBuilder();
 			sb.Append("fxgroup");
-			if (!string.IsNullOrEmpty(Name))
+			if(!string.IsNullOrEmpty(Name))
 			{
 				sb.Append(" ");
 				sb.Append(Name);

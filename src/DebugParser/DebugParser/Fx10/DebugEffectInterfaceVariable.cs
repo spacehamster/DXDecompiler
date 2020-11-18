@@ -15,7 +15,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 
 		uint IDebugEffectVariable.AnnotationCount => AnnotationCount;
 		public uint ExplicitBindPoint => 0;
-		IList<IDebugEffectVariable> IDebugEffectVariable.Annotations => 
+		IList<IDebugEffectVariable> IDebugEffectVariable.Annotations =>
 			Annotations.Cast<IDebugEffectVariable>().ToList();
 		public string Semantic => "";
 		public uint BufferOffset => 0;
@@ -46,13 +46,13 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			result.InstanceName = instanceNameReader.ReadString("InstanceName");
 			result.Flags = variableReader.ReadUInt32("Flags");
 			result.AnnotationCount = variableReader.ReadUInt32("AnnotationCount");
-			for (int i = 0; i < result.AnnotationCount; i++)
+			for(int i = 0; i < result.AnnotationCount; i++)
 			{
 				variableReader.AddIndent($"Annotation {i}");
 				result.Annotations.Add(DebugEffectAnnotation.Parse(reader, variableReader, version));
 				variableReader.RemoveIndent();
 			}
-	
+
 			return result;
 		}
 	}

@@ -13,7 +13,7 @@
 			var SODeclOffset = result.SODeclOffset = assignmentReader.ReadUInt32("DODeclOffset");
 			var shaderReader = reader.CopyAtOffset("ShaderReader", assignmentReader, (int)shaderOffset);
 			var shaderSize = shaderReader.ReadUInt32("ShaderSize");
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = BytecodeContainer.Parse(shaderReader.ReadBytes("Shader", (int)shaderSize));
 			}

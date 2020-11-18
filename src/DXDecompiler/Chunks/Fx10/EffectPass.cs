@@ -27,11 +27,11 @@ namespace DXDecompiler.Chunks.Fx10
 			result.Name = nameReader.ReadString();
 			var assignmentCount = passReader.ReadUInt32();
 			var annotationCount = passReader.ReadUInt32();
-			for (int i = 0; i < annotationCount; i++)
+			for(int i = 0; i < annotationCount; i++)
 			{
 				result.Annotations.Add(EffectAnnotation.Parse(reader, passReader, version));
 			}
-			for (int i = 0; i < assignmentCount; i++)
+			for(int i = 0; i < assignmentCount; i++)
 			{
 				result.Assignments.Add(EffectAssignment.Parse(reader, passReader));
 			}
@@ -45,7 +45,7 @@ namespace DXDecompiler.Chunks.Fx10
 			sb.AppendLine(string.Format("{0}{{", indentString));
 			foreach(var assignment in Assignments)
 			{
-				if (assignment is EffectInlineShaderAssignment || assignment is EffectInlineShader5Assignment)
+				if(assignment is EffectInlineShaderAssignment || assignment is EffectInlineShader5Assignment)
 				{
 					var shaderText = assignment.ToString()
 						.Replace(Environment.NewLine, $"{Environment.NewLine}{indentString}");

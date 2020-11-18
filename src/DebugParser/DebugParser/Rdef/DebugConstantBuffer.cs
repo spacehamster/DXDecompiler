@@ -30,7 +30,7 @@ namespace DXDecompiler.DebugParser.Rdef
 			};
 
 			var variableReader = reader.CopyAtOffset("variableReader", constantBufferReader, (int)variableOffset);
-			for (int i = 0; i < variableCount; i++)
+			for(int i = 0; i < variableCount; i++)
 			{
 				variableReader.AddIndent($"Variable {i}");
 				result.Variables.Add(DebugShaderVariable.Parse(reader, variableReader, target, i == 0));

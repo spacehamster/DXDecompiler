@@ -80,8 +80,8 @@ namespace DXDecompiler.Chunks.Rdef
 		{
 			var result = new ShaderType(indent, isFirst)
 			{
-				VariableClass = (ShaderVariableClass) typeReader.ReadUInt16(),
-				VariableType = (ShaderVariableType) typeReader.ReadUInt16(),
+				VariableClass = (ShaderVariableClass)typeReader.ReadUInt16(),
+				VariableType = (ShaderVariableType)typeReader.ReadUInt16(),
 				Rows = typeReader.ReadUInt16(),
 				Columns = typeReader.ReadUInt16(),
 				ElementCount = typeReader.ReadUInt16()
@@ -90,10 +90,10 @@ namespace DXDecompiler.Chunks.Rdef
 			var memberCount = typeReader.ReadUInt16();
 			var memberOffset = typeReader.ReadUInt32();
 
-			if (target.MajorVersion >= 5)
+			if(target.MajorVersion >= 5)
 			{
 				var subTypeOffset = typeReader.ReadUInt32(); // Guessing
-				if (subTypeOffset != 0)
+				if(subTypeOffset != 0)
 				{
 					var parentTypeReader = reader.CopyAtOffset((int)subTypeOffset);
 					result.SubType = ShaderType.Parse(reader, parentTypeReader, target,
@@ -104,7 +104,7 @@ namespace DXDecompiler.Chunks.Rdef
 				}
 
 				var baseClassOffset = typeReader.ReadUInt32();
-				if (baseClassOffset != 0)
+				if(baseClassOffset != 0)
 				{
 					var baseClassReader = reader.CopyAtOffset((int)baseClassOffset);
 					result.BaseClass = ShaderType.Parse(reader, baseClassReader, target,
@@ -116,35 +116,35 @@ namespace DXDecompiler.Chunks.Rdef
 
 				var interfaceCount = typeReader.ReadUInt32();
 				var interfaceSectionOffset = typeReader.ReadUInt32();
-				if (interfaceSectionOffset != 0)
+				if(interfaceSectionOffset != 0)
 				{
 					var interfaceSectionReader = reader.CopyAtOffset((int)interfaceSectionOffset);
-					for (int i = 0; i < interfaceCount; i++)
+					for(int i = 0; i < interfaceCount; i++)
 					{
 						var interfaceTypeOffset = interfaceSectionReader.ReadUInt32();
 						var interfaceReader = reader.CopyAtOffset((int)interfaceTypeOffset);
-						result.Interfaces.Add(ShaderType.Parse(reader, interfaceReader, target, 
+						result.Interfaces.Add(ShaderType.Parse(reader, interfaceReader, target,
 							indent + 4, i == 0, parentOffset));
 					}
 				}
 
 				var parentNameOffset = typeReader.ReadUInt32();
-				if (parentNameOffset > 0)
+				if(parentNameOffset > 0)
 				{
-					var parentNameReader = reader.CopyAtOffset((int) parentNameOffset);
+					var parentNameReader = reader.CopyAtOffset((int)parentNameOffset);
 					result.BaseTypeName = parentNameReader.ReadString();
 				}
 			}
 
-			if (memberCount > 0)
+			if(memberCount > 0)
 			{
-				var memberReader = reader.CopyAtOffset((int) memberOffset);
-				for (int i = 0; i < memberCount; i++)
+				var memberReader = reader.CopyAtOffset((int)memberOffset);
+				for(int i = 0; i < memberCount; i++)
 					result.Members.Add(ShaderTypeMember.Parse(reader, memberReader, target, indent + 4, i == 0,
 						parentOffset));
 			}
 
-			if (target.ProgramType == ProgramType.LibraryShader && target.MajorVersion == 4)
+			if(target.ProgramType == ProgramType.LibraryShader && target.MajorVersion == 4)
 			{
 				var unk1 = typeReader.ReadUInt32();
 				var unk2 = typeReader.ReadUInt32();
@@ -166,45 +166,45 @@ namespace DXDecompiler.Chunks.Rdef
 		{
 			var indentString = "// " + new string(Enumerable.Repeat(' ', _indent).ToArray());
 			var sb = new StringBuilder();
-			if (_isFirst)
+			if(_isFirst)
 				sb.AppendLine(indentString);
-			switch (VariableClass)
+			switch(VariableClass)
 			{
 				case ShaderVariableClass.InterfacePointer:
 				case ShaderVariableClass.MatrixColumns:
 				case ShaderVariableClass.MatrixRows:
-				{
-					sb.Append(indentString);
-					if (!string.IsNullOrEmpty(BaseTypeName)) // BaseTypeName is only populated in SM 5.0
 					{
-						sb.Append(string.Format("{0}{1}", VariableClass.GetDescription(), BaseTypeName));
-					}
-					else
-					{
-						sb.Append(VariableClass.GetDescription());
-						sb.Append(VariableType.GetDescription());
-						if (Columns > 1)
+						sb.Append(indentString);
+						if(!string.IsNullOrEmpty(BaseTypeName)) // BaseTypeName is only populated in SM 5.0
 						{
-							sb.Append(Columns);
-							if (Rows > 1)
-								sb.Append("x" + Rows);
+							sb.Append(string.Format("{0}{1}", VariableClass.GetDescription(), BaseTypeName));
 						}
+						else
+						{
+							sb.Append(VariableClass.GetDescription());
+							sb.Append(VariableType.GetDescription());
+							if(Columns > 1)
+							{
+								sb.Append(Columns);
+								if(Rows > 1)
+									sb.Append("x" + Rows);
+							}
+						}
+						break;
 					}
-					break;
-				}
 				case ShaderVariableClass.Vector:
-				{
-					sb.Append(indentString + VariableType.GetDescription());
-					sb.Append(Columns);
-					break;
-				}
+					{
+						sb.Append(indentString + VariableType.GetDescription());
+						sb.Append(Columns);
+						break;
+					}
 				case ShaderVariableClass.Struct:
 					{
-						if (!_isFirst)
+						if(!_isFirst)
 							sb.AppendLine(indentString);
 						sb.AppendLine(indentString + "struct " + BaseTypeName);
 						sb.AppendLine(indentString + "{");
-						foreach (var member in Members)
+						foreach(var member in Members)
 							sb.AppendLine(member.ToString());
 						sb.AppendLine("//");
 						sb.Append(indentString + "}");

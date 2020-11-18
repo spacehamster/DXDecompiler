@@ -34,14 +34,14 @@ namespace DXDecompiler.Chunks.Fx10
 			var interfaceBindingOffset = variableReader.ReadUInt32();
 			var shaderReader = reader.CopyAtOffset((int)shaderOffset);
 			var shaderSize = shaderReader.ReadUInt32();
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = BytecodeContainer.Parse(shaderReader.ReadBytes((int)shaderSize));
 			}
 			for(int i = 0; i < 4; i++)
 			{
 				var offset = result.SODeclsOffset[i];
-				if (offset != 0)
+				if(offset != 0)
 				{
 					var soDeclReader = reader.CopyAtOffset((int)offset);
 					result.SODecls.Add(soDeclReader.ReadString());
@@ -56,7 +56,7 @@ namespace DXDecompiler.Chunks.Fx10
 		}
 		public override string ToString()
 		{
-			if (Shader == null) return "NULL";
+			if(Shader == null) return "NULL";
 			var sb = new StringBuilder();
 			sb.AppendLine("    asm {");
 			sb.Append("        ");
@@ -64,11 +64,11 @@ namespace DXDecompiler.Chunks.Fx10
 				.Replace(Environment.NewLine, $"{Environment.NewLine}        ");
 			sb.AppendLine(shaderText);
 			sb.Append("}");
-			if (SODecls.Count > 0)
+			if(SODecls.Count > 0)
 			{
-				for (int i = 0; i < SODecls.Count; i++)
+				for(int i = 0; i < SODecls.Count; i++)
 				{
-					if (string.IsNullOrEmpty(SODecls[i]))
+					if(string.IsNullOrEmpty(SODecls[i]))
 					{
 						break;
 					}
@@ -78,7 +78,7 @@ namespace DXDecompiler.Chunks.Fx10
 				sb.AppendLine();
 				sb.Append(string.Format("/* Stream {0} to rasterizer */", RasterizedStream));
 			}
-			for (int i = 0; i < InterfaceBindings.Count; i++)
+			for(int i = 0; i < InterfaceBindings.Count; i++)
 			{
 				var binding = InterfaceBindings[i];
 				sb.AppendLine();

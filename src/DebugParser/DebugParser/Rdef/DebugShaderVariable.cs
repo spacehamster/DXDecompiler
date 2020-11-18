@@ -27,7 +27,7 @@ namespace DXDecompiler.DebugParser.Rdef
 		public int TextureSize { get; private set; }
 		public int StartSampler { get; private set; }
 		public int SamplerSize { get; private set; }
-		internal static DebugShaderVariable Parse(DebugBytecodeReader reader, 
+		internal static DebugShaderVariable Parse(DebugBytecodeReader reader,
 				DebugBytecodeReader variableReader, DebugShaderVersion target, bool isFirst)
 		{
 			uint nameOffset = variableReader.ReadUInt32("nameOffset");
@@ -44,13 +44,13 @@ namespace DXDecompiler.DebugParser.Rdef
 
 			var defaultValueOffset = variableReader.ReadUInt32("defaultValueOffset");
 			List<Number> defaultValue = null;
-			if (defaultValueOffset != 0)
+			if(defaultValueOffset != 0)
 			{
 				defaultValue = new List<Number>();
 				var defaultValueReader = reader.CopyAtOffset("defaultValueReader", variableReader, (int)defaultValueOffset);
-				if (size % 4 != 0)
+				if(size % 4 != 0)
 					throw new ParseException("Can only deal with 4-byte default values at the moment.");
-				for (int i = 0; i < size; i += 4)
+				for(int i = 0; i < size; i += 4)
 					defaultValue.Add(new Number(defaultValueReader.ReadBytes($"defaultValue{i}", 4)));
 			}
 
@@ -69,7 +69,7 @@ namespace DXDecompiler.DebugParser.Rdef
 				Flags = flags
 			};
 
-			if (target.MajorVersion >= 5 || target.ProgramType == ProgramType.LibraryShader)
+			if(target.MajorVersion >= 5 || target.ProgramType == ProgramType.LibraryShader)
 			{
 				result.StartTexture = variableReader.ReadInt32("startTexture");
 				result.TextureSize = variableReader.ReadInt32("textureSize");

@@ -27,7 +27,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 				AccessPattern = token0.DecodeValue<ConstantBufferAccessPattern>(11, 11),
 				Operand = DebugOperand.Parse(reader, token0.DecodeValue<OpcodeType>(0, 10))
 			};
-			if (version.IsSM51)
+			if(version.IsSM51)
 			{
 				result.m_ConstantBufferSize = reader.ReadUInt32("SM51_ConstantBufferSize");
 				result.SpaceIndex = reader.ReadUInt32("SpaceIndex");

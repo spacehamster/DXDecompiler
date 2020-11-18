@@ -22,13 +22,13 @@ namespace DXDecompiler.Decompiler
 			HashSet<string> seen = new HashSet<string>();
 			Output.AppendLine("// ConstantBuffers");
 			WriteCBInnerStructs(ref seen);
-			foreach (var constantBuffer in rdef.ConstantBuffers)
+			foreach(var constantBuffer in rdef.ConstantBuffers)
 			{
 				WriteConstantBuffer(constantBuffer, ref seen);
 			}
 
 			Output.AppendLine("// ResourceBindings");
-			foreach (var resourceBinding in rdef.ResourceBindings)
+			foreach(var resourceBinding in rdef.ResourceBindings)
 			{
 				WriteResourceBinding(resourceBinding);
 			}
@@ -36,7 +36,7 @@ namespace DXDecompiler.Decompiler
 		}
 		void WriteCBInnerStructs(ref HashSet<string> seen)
 		{
-			foreach (var cb in Container.ResourceDefinition.ConstantBuffers)
+			foreach(var cb in Container.ResourceDefinition.ConstantBuffers)
 			{
 				foreach(var variable in cb.Variables)
 				{
@@ -46,31 +46,31 @@ namespace DXDecompiler.Decompiler
 		}
 		void WriteCBInnerStructs(ShaderTypeMember member, ref HashSet<string> seen)
 		{
-			if (member.Type.VariableClass != ShaderVariableClass.Struct) return;
-			if (seen.Contains(member.Type.BaseTypeName)) return;
+			if(member.Type.VariableClass != ShaderVariableClass.Struct) return;
+			if(seen.Contains(member.Type.BaseTypeName)) return;
 			foreach(var child in member.Type.Members)
 			{
 				WriteCBInnerStructs(child, ref seen);
 			}
-			if (member.Type.BaseTypeName == null || member.Type.BaseTypeName.EndsWith("<unnamed>")) return;
+			if(member.Type.BaseTypeName == null || member.Type.BaseTypeName.EndsWith("<unnamed>")) return;
 			seen.Add(member.Type.BaseTypeName);
 			Output.AppendFormat("{0};\n", GetShaderTypeDeclaration(member.Type));
 		}
 		void WriteConstantBuffer(ConstantBuffer constantBuffer, ref HashSet<string> seen)
 		{
-			if (constantBuffer.BufferType == ConstantBufferType.ConstantBuffer ||
+			if(constantBuffer.BufferType == ConstantBufferType.ConstantBuffer ||
 				constantBuffer.BufferType == ConstantBufferType.TextureBuffer)
 			{
-				if (constantBuffer.Name == "$Globals")
+				if(constantBuffer.Name == "$Globals")
 				{
 					Output.AppendLine("// Globals");
-					foreach (var variable in constantBuffer.Variables)
+					foreach(var variable in constantBuffer.Variables)
 					{
-						WriteVariable(variable, 0, packOffset:false);
+						WriteVariable(variable, 0, packOffset: false);
 					}
 					Output.AppendLine("");
 				}
-				else if (constantBuffer.Name == "$Params")
+				else if(constantBuffer.Name == "$Params")
 				{
 				}
 				else
@@ -82,7 +82,7 @@ namespace DXDecompiler.Decompiler
 						"cbuffer" :
 						"tbuffer";
 					Output.Append($"{bufferName} {constantBuffer.Name}");
-					if (EmitRegisterDeclarations)
+					if(EmitRegisterDeclarations)
 					{
 						var registerName = resourceBinding.Type == ShaderInputType.CBuffer ?
 							"b" :
@@ -91,7 +91,7 @@ namespace DXDecompiler.Decompiler
 					}
 					Output.AppendLine("");
 					Output.AppendLine("{");
-					foreach (var variable in constantBuffer.Variables)
+					foreach(var variable in constantBuffer.Variables)
 					{
 						WriteVariable(variable);
 					}
@@ -99,18 +99,18 @@ namespace DXDecompiler.Decompiler
 					Output.AppendLine("");
 				}
 			}
-			else if (constantBuffer.BufferType == ConstantBufferType.ResourceBindInformation)
+			else if(constantBuffer.BufferType == ConstantBufferType.ResourceBindInformation)
 			{
 				Output.AppendLine("// ResourceBindInformation");
 				var element = constantBuffer.Variables.Single();
 				var baseType = element.ShaderType;
-				if (baseType.VariableClass != ShaderVariableClass.Struct)
+				if(baseType.VariableClass != ShaderVariableClass.Struct)
 				{
 					Output.AppendLine(element.ToString());
 					return;
 				}
 				var typeName = element.ShaderType.BaseTypeName;
-				if (string.IsNullOrEmpty(typeName))
+				if(string.IsNullOrEmpty(typeName))
 				{
 					var index = Container.ResourceDefinition.ConstantBuffers
 						.Where(cb => cb.BufferType == ConstantBufferType.ResourceBindInformation)
@@ -118,7 +118,7 @@ namespace DXDecompiler.Decompiler
 						.IndexOf(constantBuffer);
 					typeName = $"struct{index}";
 				}
-				if (seen.Contains(typeName))
+				if(seen.Contains(typeName))
 				{
 					Output.AppendLine($"// {baseType} {typeName}");
 				}
@@ -131,7 +131,7 @@ namespace DXDecompiler.Decompiler
 		}
 		string GetTextureTypeName(ResourceBinding resourceBinding)
 		{
-			switch (resourceBinding.Dimension)
+			switch(resourceBinding.Dimension)
 			{
 				case ShaderResourceViewDimension.Texture1D:
 					return "Texture1D";
@@ -159,7 +159,7 @@ namespace DXDecompiler.Decompiler
 		}
 		string GetUAVTypeName(ResourceBinding resourceBinding)
 		{
-			switch (resourceBinding.Dimension)
+			switch(resourceBinding.Dimension)
 			{
 				case ShaderResourceViewDimension.Buffer:
 					return "RWBuffer";
@@ -179,13 +179,13 @@ namespace DXDecompiler.Decompiler
 		}
 		string GetBindingName(ResourceBinding resourceBinding)
 		{
-			switch (resourceBinding.Type)
+			switch(resourceBinding.Type)
 			{
 				case ShaderInputType.Texture:
 					return GetTextureTypeName(resourceBinding);
 				case ShaderInputType.Sampler:
 					return resourceBinding.Flags.HasFlag(ShaderInputFlags.ComparisonSampler) ?
-						"SamplerComparisonState" : 
+						"SamplerComparisonState" :
 						"SamplerState";
 				case ShaderInputType.ByteAddress:
 					return "ByteAddressBuffer";
@@ -209,7 +209,7 @@ namespace DXDecompiler.Decompiler
 		void WriteResourceBinding(ResourceBinding resourceBinding)
 		{
 			Output.AppendLine(resourceBinding.ToString());
-			if (resourceBinding.Type == ShaderInputType.CBuffer || resourceBinding.Type == ShaderInputType.TBuffer)
+			if(resourceBinding.Type == ShaderInputType.CBuffer || resourceBinding.Type == ShaderInputType.TBuffer)
 			{
 				return;
 			}
@@ -218,27 +218,27 @@ namespace DXDecompiler.Decompiler
 				var dcl = Container.Shader.DeclarationTokens
 					.OfType<UnorderedAccessViewDeclarationTokenBase>()
 					.Single(t => t.Operand.Indices[0].Value == resourceBinding.ID);
-				if (dcl.Coherency == UnorderedAccessViewCoherency.GloballyCoherent)
+				if(dcl.Coherency == UnorderedAccessViewCoherency.GloballyCoherent)
 				{
 					Output.Append("globallycoherent ");
 				}
 			}
 			var type = GetBindingName(resourceBinding);
 			Output.Append(type);
-			if (resourceBinding.Type == ShaderInputType.Texture || resourceBinding.Type == ShaderInputType.UavRwTyped)
+			if(resourceBinding.Type == ShaderInputType.Texture || resourceBinding.Type == ShaderInputType.UavRwTyped)
 			{
-				if (!(resourceBinding.ReturnType == ResourceReturnType.Float &&
+				if(!(resourceBinding.ReturnType == ResourceReturnType.Float &&
 					resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponents) &&
 					!resourceBinding.Dimension.IsMultiSampled()) || resourceBinding.Type == ShaderInputType.UavRwTyped)
 				{
 					string returnType = GetReturnTypeDescription(resourceBinding.ReturnType);
-					if (resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent0) && !resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent1))
+					if(resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent0) && !resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent1))
 						returnType += "2";
-					if (!resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent0) && resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent1))
+					if(!resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent0) && resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent1))
 						returnType += "3";
-					if (resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent0) && resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent1))
+					if(resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent0) && resourceBinding.Flags.HasFlag(ShaderInputFlags.TextureComponent1))
 						returnType += "4";
-					if (resourceBinding.Dimension.IsMultiSampled() && resourceBinding.NumSamples > 0)
+					if(resourceBinding.Dimension.IsMultiSampled() && resourceBinding.NumSamples > 0)
 					{
 						Output.AppendFormat("<{0}, {1}>", returnType, resourceBinding.NumSamples);
 					}
@@ -254,7 +254,7 @@ namespace DXDecompiler.Decompiler
 				Output.AppendFormat("<{0}>", typeName);
 			}
 			Output.Append($" {resourceBinding.Name}");
-			if (EmitRegisterDeclarations)
+			if(EmitRegisterDeclarations)
 			{
 				Output.Append($" : register({resourceBinding.GetBindPointDescription()})");
 			}
@@ -266,10 +266,10 @@ namespace DXDecompiler.Decompiler
 				cb.BufferType == ConstantBufferType.ResourceBindInformation
 				&& cb.Name == resourceBinding.Name);
 			var typeName = "";
-			if (buffer.Variables[0].ShaderType.VariableClass == ShaderVariableClass.Struct)
+			if(buffer.Variables[0].ShaderType.VariableClass == ShaderVariableClass.Struct)
 			{
 				typeName = buffer.Variables[0].ShaderType.BaseTypeName;
-				if (string.IsNullOrEmpty(typeName))
+				if(string.IsNullOrEmpty(typeName))
 				{
 					var index = Container.ResourceDefinition.ConstantBuffers
 						.Where(cb => cb.BufferType == ConstantBufferType.ResourceBindInformation)
@@ -287,7 +287,7 @@ namespace DXDecompiler.Decompiler
 		}
 		string GetReturnTypeDescription(ResourceReturnType resourceReturnType)
 		{
-			switch (resourceReturnType)
+			switch(resourceReturnType)
 			{
 				case ResourceReturnType.SInt:
 					return "int";
@@ -301,29 +301,30 @@ namespace DXDecompiler.Decompiler
 		}
 		void WriteVariable(ShaderVariable variable, int indentLevel = 1, bool packOffset = true)
 		{
-			Output.Append($"{GetShaderTypeDeclaration(variable.ShaderType, indentLevel, root:false)} {variable.Name}");
-			if (variable.ShaderType.ElementCount > 0)
+			Output.Append($"{GetShaderTypeDeclaration(variable.ShaderType, indentLevel, root: false)} {variable.Name}");
+			if(variable.ShaderType.ElementCount > 0)
 			{
 				Output.AppendFormat("[{0}]", variable.ShaderType.ElementCount);
 			}
-			if (variable.DefaultValue != null)
+			if(variable.DefaultValue != null)
 			{
-				if (variable.DefaultValue.Count > 1)
+				if(variable.DefaultValue.Count > 1)
 				{
-					Output.AppendFormat(" = {0}({1})", 
+					Output.AppendFormat(" = {0}({1})",
 						GetShaderTypeDeclaration(variable.ShaderType),
 						string.Join(", ", variable.DefaultValue));
-				} else
+				}
+				else
 				{
 					Output.AppendFormat(" = {0}", variable.DefaultValue[0]);
 				}
 			}
 			// packoffset needs to be disabled for globals
-			if (EmitPackingOffset && packOffset)
+			if(EmitPackingOffset && packOffset)
 			{
 				var componentOffset = variable.StartOffset % 16 / 4;
 				string componentPacking = "";
-				switch (componentOffset)
+				switch(componentOffset)
 				{
 					case 1:
 						componentPacking = ".y";
@@ -338,7 +339,7 @@ namespace DXDecompiler.Decompiler
 				Output.AppendFormat(" : packoffset(c{0}{1})", variable.StartOffset / 16, componentPacking);
 			}
 			Output.Append($"; // Offset {variable.StartOffset} Size {variable.Size} CBSize {variable.Member.GetCBVarSize(true)}");
-			if (variable.Flags.HasFlag(ShaderVariableFlags.Used))
+			if(variable.Flags.HasFlag(ShaderVariableFlags.Used))
 			{
 				Output.Append($" [unused]");
 			}
@@ -346,11 +347,11 @@ namespace DXDecompiler.Decompiler
 		}
 		internal string GetShaderTypeName(ShaderType variable)
 		{
-			switch (variable.VariableClass)
+			switch(variable.VariableClass)
 			{
 				case ShaderVariableClass.InterfacePointer:
 					{
-						if (!string.IsNullOrEmpty(variable.BaseTypeName)) // BaseTypeName is only populated in SM 5.0
+						if(!string.IsNullOrEmpty(variable.BaseTypeName)) // BaseTypeName is only populated in SM 5.0
 						{
 							return variable.BaseTypeName;
 						}
@@ -369,14 +370,14 @@ namespace DXDecompiler.Decompiler
 			var sb = new StringBuilder();
 			string indentString = new string(' ', indent * 4);
 			string baseTypeName = overrideName == null ? type.BaseTypeName : overrideName;
-			switch (type.VariableClass)
+			switch(type.VariableClass)
 			{
 				case ShaderVariableClass.InterfacePointer:
 				case ShaderVariableClass.MatrixColumns:
 				case ShaderVariableClass.MatrixRows:
 					{
 						sb.Append(indentString);
-						if (!string.IsNullOrEmpty(type.BaseTypeName)) // BaseTypeName is only populated in SM 5.0
+						if(!string.IsNullOrEmpty(type.BaseTypeName)) // BaseTypeName is only populated in SM 5.0
 						{
 							sb.Append(string.Format("{0}{1}", type.VariableClass.GetDescription(), baseTypeName));
 						}
@@ -384,10 +385,10 @@ namespace DXDecompiler.Decompiler
 						{
 							sb.Append(type.VariableClass.GetDescription());
 							sb.Append(type.VariableType.GetDescription());
-							if (type.Columns > 1)
+							if(type.Columns > 1)
 							{
 								sb.Append(type.Columns);
-								if (type.Rows > 1)
+								if(type.Rows > 1)
 									sb.Append("x" + type.Rows);
 							}
 						}
@@ -403,10 +404,10 @@ namespace DXDecompiler.Decompiler
 					{
 						//SM4 doesn't include typenames, check by signature
 						//TODO
-						if (root || baseTypeName == null || baseTypeName.EndsWith("<unnamed>"))
+						if(root || baseTypeName == null || baseTypeName.EndsWith("<unnamed>"))
 						{
 							sb.Append(indentString + "struct ");
-							if (baseTypeName == null || baseTypeName.EndsWith("<unnamed>"))
+							if(baseTypeName == null || baseTypeName.EndsWith("<unnamed>"))
 							{
 							}
 							else
@@ -415,10 +416,12 @@ namespace DXDecompiler.Decompiler
 							}
 							sb.AppendLine("");
 							sb.AppendLine(indentString + "{");
-							foreach (var member in type.Members)
+							foreach(var member in type.Members)
 								sb.AppendLine(GetShaderMemberDeclaration(member, indent + 1));
 							sb.Append(indentString + "}");
-						} else {
+						}
+						else
+						{
 							sb.Append(indentString + "struct " + baseTypeName); //struct keyword optional
 						}
 						break;
@@ -435,8 +438,8 @@ namespace DXDecompiler.Decompiler
 		}
 		string GetShaderMemberDeclaration(ShaderTypeMember member, int indent)
 		{
-			string declaration = GetShaderTypeDeclaration(member.Type, indent, root:false) + " " + member.Name;
-			if (member.Type.ElementCount > 0)
+			string declaration = GetShaderTypeDeclaration(member.Type, indent, root: false) + " " + member.Name;
+			if(member.Type.ElementCount > 0)
 				declaration += string.Format("[{0}]", member.Type.ElementCount);
 			declaration += ";";
 			declaration += $" // Offset {member.Offset} CBSize {member.GetCBVarSize(true)}";

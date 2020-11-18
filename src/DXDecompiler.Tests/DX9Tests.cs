@@ -90,27 +90,29 @@ namespace DXDecompiler.Tests
 			// Arrange.
 			// Act.
 			var bytecode = File.ReadAllBytes(file + ".o");
-			
+
 			var reader = new DebugParser.DebugBytecodeReader(bytecode, 0, bytecode.Length);
 			string error = "";
 			try
 			{
-				if (bytecode[2] == 255 && bytecode[3] == 254)
+				if(bytecode[2] == 255 && bytecode[3] == 254)
 				{
 					reader.ReadByte("minorVersion");
 					reader.ReadByte("majorVersion");
 					reader.ReadUInt16("shaderType");
 					DebugEffectChunk.Parse(reader, (uint)(bytecode.Length - 4));
-				} else
+				}
+				else
 				{
 					var shaderModel = DebugShaderModel.Parse(reader);
 				}
-			} catch(Exception ex)
+			}
+			catch(Exception ex)
 			{
 				error = ex.ToString();
 			}
 			var dump = reader.DumpStructure();
-			if (!string.IsNullOrEmpty(error))
+			if(!string.IsNullOrEmpty(error))
 			{
 				dump += "\n" + error;
 			}
@@ -119,12 +121,13 @@ namespace DXDecompiler.Tests
 			try
 			{
 				dumpHtml = reader.DumpHtml();
-			} catch(Exception ex)
+			}
+			catch(Exception ex)
 			{
 
 			}
 			File.WriteAllText($"{file}.d.html", dumpHtml);
-			if (!string.IsNullOrEmpty(error))
+			if(!string.IsNullOrEmpty(error))
 			{
 				Assert.That(false, error);
 			}
@@ -139,12 +142,12 @@ namespace DXDecompiler.Tests
 			var dir = Path.GetDirectoryName(path);
 			var file = Path.GetFileName(path);
 			var parts = file.Split('_');
-			for (int i = parts.Length; i > 0; i--)
+			for(int i = parts.Length; i > 0; i--)
 			{
 				file = string.Join("_", parts.Take(i));
-				if (File.Exists($"{dir}/{file}")) return file;
-				if (File.Exists($"{dir}/{file}.fx")) return $"{file}.fx";
-				if (File.Exists($"{dir}/{file}.hlsl")) return $"{file}.hlsl";
+				if(File.Exists($"{dir}/{file}")) return file;
+				if(File.Exists($"{dir}/{file}.fx")) return $"{file}.fx";
+				if(File.Exists($"{dir}/{file}.hlsl")) return $"{file}.hlsl";
 			}
 			return Path.GetFileName(path);
 		}
@@ -159,8 +162,8 @@ namespace DXDecompiler.Tests
 			var relDir = Path.GetDirectoryName(relPath);
 			Directory.CreateDirectory($"{OutputDir}/{relDir}");
 			var sourceName = GetSourceNameFromObject($"{ShaderDirectory}/{relPath}.o");
-			if (ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relDir}/{sourceName}", $"{OutputDir}/{relDir}/{sourceName}", true);
-			if (ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relPath}.asm", $"{OutputDir}/{relPath}.asm", true);
+			if(ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relDir}/{sourceName}", $"{OutputDir}/{relDir}/{sourceName}", true);
+			if(ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relPath}.asm", $"{OutputDir}/{relPath}.asm", true);
 
 			var asmFileText = string.Join(Environment.NewLine,
 				File.ReadAllLines(file + ".asm").Select(x => x.Trim()));
@@ -171,7 +174,7 @@ namespace DXDecompiler.Tests
 			var decompiledHLSL = HlslWriter.Decompile(shaderModel);
 			File.WriteAllText($"{OutputDir}/{relPath}.d.hlsl", decompiledHLSL);
 
-			using (var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
+			using(var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
 			{
 				var profile = shaderModel.Type == DX9Shader.ShaderType.Pixel ?
 					$"ps_{shaderModel.MajorVersion}_{shaderModel.MinorVersion}" :

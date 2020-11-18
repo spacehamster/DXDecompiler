@@ -36,7 +36,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 				OperandsLength = reader.ReadUInt32("OperandsLength")
 			};
 
-			for (int i = 0; i < result.NumOperands; i++)
+			for(int i = 0; i < result.NumOperands; i++)
 				result.Operands.Add(DebugOperand.Parse(reader, OpcodeType.CustomData));
 
 			result.Format = reader.ReadString("Format");

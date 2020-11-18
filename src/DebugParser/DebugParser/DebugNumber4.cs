@@ -22,7 +22,7 @@ namespace DXDecompiler.DebugParser
 
 		public void SetNumber(int i, DebugNumber value)
 		{
-			switch (i)
+			switch(i)
 			{
 				case 0:
 					Number0 = value;
@@ -42,7 +42,7 @@ namespace DXDecompiler.DebugParser
 		}
 		public void SetDouble(int i, double value)
 		{
-			switch (i)
+			switch(i)
 			{
 				case 0:
 					Double0 = value;

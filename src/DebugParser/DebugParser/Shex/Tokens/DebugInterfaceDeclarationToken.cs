@@ -35,7 +35,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 			reader.AddNote("TableLength", result.TableLength);
 			reader.AddNote("ArrayLength", result.ArrayLength);
 
-			for (int i = 0; i < result.TableLength; i++)
+			for(int i = 0; i < result.TableLength; i++)
 				result.FunctionTableIdentifiers.Add(reader.ReadUInt32($"FunctionTableIdentifiers[{i}]"));
 
 			return result;

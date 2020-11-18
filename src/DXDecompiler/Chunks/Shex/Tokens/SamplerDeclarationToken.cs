@@ -49,7 +49,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				SamplerMode = token0.DecodeValue<SamplerMode>(11, 14),
 				Operand = operand
 			};
-			if (version.IsSM51)
+			if(version.IsSM51)
 			{
 				result.SpaceIndex = reader.ReadUInt32();
 			}
@@ -58,7 +58,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 
 		public override string ToString()
 		{
-			return string.Format("{0} {1}, {2}{3}", 
+			return string.Format("{0} {1}, {2}{3}",
 				TypeDescription, Operand,
 				SamplerMode.GetDescription(),
 				IsSM51 ? $", space={SpaceIndex}" : "");

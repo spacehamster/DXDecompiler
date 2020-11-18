@@ -12,7 +12,7 @@ namespace DXDecompiler.Chunks.Fx10
 		{
 			var result = new EffectExpressionAssignment();
 			var shaderSize = assignmentReader.ReadUInt32();
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = BytecodeContainer.Parse(assignmentReader.ReadBytes((int)shaderSize));
 			}
@@ -23,7 +23,7 @@ namespace DXDecompiler.Chunks.Fx10
 			var sb = new StringBuilder();
 			sb.Append(MemberType.ToString());
 			sb.Append(" = ");
-			if (Shader != null)
+			if(Shader != null)
 			{
 				var chunk = Shader.GetChunk<FxlcChunk>();
 				sb.Append(chunk.ToString());

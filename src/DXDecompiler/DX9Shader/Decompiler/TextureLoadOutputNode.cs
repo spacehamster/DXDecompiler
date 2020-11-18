@@ -8,7 +8,7 @@ namespace DXDecompiler.DX9Shader
 		public TextureLoadOutputNode(RegisterInputNode sampler, IEnumerable<HlslTreeNode> textureCoords, int componentIndex)
 		{
 			AddInput(sampler);
-			foreach (HlslTreeNode textureCoord in textureCoords)
+			foreach(HlslTreeNode textureCoord in textureCoords)
 			{
 				AddInput(textureCoord);
 			}

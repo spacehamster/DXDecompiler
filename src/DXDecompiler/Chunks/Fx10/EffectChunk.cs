@@ -27,11 +27,11 @@ namespace DXDecompiler.Chunks.Fx10
 		{
 			get
 			{
-				foreach (var buffer in LocalBuffers)
+				foreach(var buffer in LocalBuffers)
 				{
 					yield return buffer;
 				}
-				foreach (var buffer in SharedBuffers)
+				foreach(var buffer in SharedBuffers)
 				{
 					yield return buffer;
 				}
@@ -41,25 +41,25 @@ namespace DXDecompiler.Chunks.Fx10
 		{
 			get
 			{
-				foreach (var buffer in LocalBuffers)
+				foreach(var buffer in LocalBuffers)
 				{
-					foreach (var variable in buffer.Variables)
+					foreach(var variable in buffer.Variables)
 					{
 						yield return variable;
 					}
 				}
-				foreach (var variable in LocalVariables)
+				foreach(var variable in LocalVariables)
 				{
 					yield return variable;
 				}
-				foreach (var buffer in SharedBuffers)
+				foreach(var buffer in SharedBuffers)
 				{
-					foreach (var variable in buffer.Variables)
+					foreach(var variable in buffer.Variables)
 					{
 						yield return variable;
 					}
 				}
-				foreach (var variable in SharedVariables)
+				foreach(var variable in SharedVariables)
 				{
 					yield return variable;
 				}
@@ -98,36 +98,36 @@ namespace DXDecompiler.Chunks.Fx10
 			var bodyReader = reader.CopyAtOffset((int)bodyOffset);
 			var footerReader = reader.CopyAtOffset(footerOffset);
 			var version = header.Version;
-			for (int i = 0; i < header.ConstantBuffers; i++)
+			for(int i = 0; i < header.ConstantBuffers; i++)
 			{
 				result.LocalBuffers.Add(EffectBuffer.Parse(bodyReader, footerReader, version, false));
 			}
-			for (int i = 0; i < header.ObjectCount; i++)
+			for(int i = 0; i < header.ObjectCount; i++)
 			{
 				result.LocalVariables.Add(EffectObjectVariable.Parse(bodyReader, footerReader, version, false));
 			}
-			for (int i = 0; i < header.SharedConstantBuffers; i++)
+			for(int i = 0; i < header.SharedConstantBuffers; i++)
 			{
 				result.SharedBuffers.Add(EffectBuffer.Parse(bodyReader, footerReader, version, true));
 			}
-			for (int i = 0; i < header.SharedObjectCount; i++)
+			for(int i = 0; i < header.SharedObjectCount; i++)
 			{
 				result.SharedVariables.Add(EffectObjectVariable.Parse(bodyReader, footerReader, version, true));
 			}
-			if (header.Version.MajorVersion >= 5)
+			if(header.Version.MajorVersion >= 5)
 			{
-				for (int i = 0; i < header.InterfaceVariableCount; i++)
+				for(int i = 0; i < header.InterfaceVariableCount; i++)
 				{
 					result.InterfaceVariables.Add(EffectInterfaceVariable.Parse(bodyReader, footerReader, version));
 				}
-				for (int i = 0; i < header.GroupCount; i++)
+				for(int i = 0; i < header.GroupCount; i++)
 				{
 					result.Groups.Add(EffectGroup.Parse(bodyReader, footerReader, header.Version));
 				}
 			}
 			else
 			{
-				for (int i = 0; i < header.Techniques; i++)
+				for(int i = 0; i < header.Techniques; i++)
 				{
 					result.Techniques.Add(EffectTechnique.Parse(bodyReader, footerReader, header.Version));
 				}
@@ -139,9 +139,9 @@ namespace DXDecompiler.Chunks.Fx10
 			var sb = new StringBuilder();
 			sb.AppendLine("//");
 			sb.AppendLine(string.Format("// FX Version: {0}", Header.Version));
-			if (Header.Version.MajorVersion == 4)
+			if(Header.Version.MajorVersion == 4)
 			{
-				sb.AppendLine(string.Format("// Child effect (requires effect pool): {0}", 
+				sb.AppendLine(string.Format("// Child effect (requires effect pool): {0}",
 						IsChildEffect.ToString().ToLowerInvariant()));
 			}
 			sb.AppendLine("//");
@@ -154,65 +154,65 @@ namespace DXDecompiler.Chunks.Fx10
 					sb.AppendLine(buffer.ToString());
 				}
 			}
-			if (LocalVariables.Count > 0)
+			if(LocalVariables.Count > 0)
 			{
 				sb.AppendLine("//");
 				sb.AppendLine(string.Format("// {0} local object(s)", LocalVariables.Count));
 				sb.AppendLine("//");
-				foreach (var variable in LocalVariables)
+				foreach(var variable in LocalVariables)
 				{
 					sb.AppendLine(variable.ToString());
 				}
 				sb.AppendLine();
 			}
-			if (SharedBuffers.Count > 0)
+			if(SharedBuffers.Count > 0)
 			{
 				sb.AppendLine("//");
 				sb.AppendLine(string.Format("// {0} shared buffer(s)", SharedBuffers.Count));
 				sb.AppendLine("//");
-				foreach (var buffer in SharedBuffers)
+				foreach(var buffer in SharedBuffers)
 				{
 					sb.AppendLine(buffer.ToString());
 				}
 			}
-			if (SharedVariables.Count > 0)
+			if(SharedVariables.Count > 0)
 			{
 				sb.AppendLine("//");
 				sb.AppendLine(string.Format("// {0} shared object(s)", SharedVariables.Count));
 				sb.AppendLine("//");
-				foreach (var variable in SharedVariables)
+				foreach(var variable in SharedVariables)
 				{
 					sb.AppendLine(variable.ToString());
 				}
 				sb.AppendLine();
 			}
-			if (InterfaceVariables.Count > 0)
+			if(InterfaceVariables.Count > 0)
 			{
 				sb.AppendLine("//");
 				sb.AppendLine(string.Format("// {0} local interface(s)", InterfaceVariables.Count));
 				sb.AppendLine("//");
-				foreach (var variable in InterfaceVariables)
+				foreach(var variable in InterfaceVariables)
 				{
 					sb.AppendLine(variable.ToString());
 				}
 				sb.AppendLine();
 			}
-			if (Techniques.Count > 0)
+			if(Techniques.Count > 0)
 			{
 				sb.AppendLine("//");
 				sb.AppendLine(string.Format("// {0} technique(s)", Techniques.Count));
 				sb.AppendLine("//");
-				foreach (var technique in Techniques)
+				foreach(var technique in Techniques)
 				{
 					sb.Append(technique.ToString());
 				}
 			}
-			if (Groups.Count > 0)
+			if(Groups.Count > 0)
 			{
 				sb.AppendLine("//");
 				sb.AppendLine(string.Format("// {0} groups(s)", Groups.Count));
 				sb.AppendLine("//");
-				foreach (var group in Groups)
+				foreach(var group in Groups)
 				{
 					sb.AppendLine(group.ToString());
 				}

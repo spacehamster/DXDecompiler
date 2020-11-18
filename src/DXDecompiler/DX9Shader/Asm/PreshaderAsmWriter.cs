@@ -18,7 +18,7 @@ namespace DXDecompiler.DX9Shader.Asm
 		protected override void Write()
 		{
 			WriteLine("preshader");
-			foreach (var instruction in Preshader.Fxlc.Tokens)
+			foreach(var instruction in Preshader.Fxlc.Tokens)
 			{
 				WriteInstruction(instruction);
 			}

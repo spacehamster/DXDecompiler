@@ -10,11 +10,11 @@ namespace DXDecompiler.Decompiler
 	{
 		void WriteSignatures()
 		{
-			if (Container.InputSignature != null)
+			if(Container.InputSignature != null)
 			{
 				WriteInputSignature();
 			}
-			if (Container.OutputSignature != null)
+			if(Container.OutputSignature != null)
 			{
 				WriteOutputSignature();
 			}
@@ -36,11 +36,11 @@ namespace DXDecompiler.Decompiler
 		}
 		void WritePatchConstant()
 		{
-			if (Container.PatchConstantSignature == null) return;
+			if(Container.PatchConstantSignature == null) return;
 			Output.AppendLine("struct PatchConstant");
 			Output.AppendLine("{");
 			indent++;
-			foreach (var group in Container.PatchConstantSignature.Parameters.GroupBy(p => p.SemanticName))
+			foreach(var group in Container.PatchConstantSignature.Parameters.GroupBy(p => p.SemanticName))
 			{
 				var count = group.Count();
 				var param = group.First();
@@ -57,13 +57,14 @@ namespace DXDecompiler.Decompiler
 		void WriteOutputSignature()
 		{
 			var signature = Container.OutputSignature;
-			if (Container.Shader.Version.ProgramType == ProgramType.GeometryShader)
+			if(Container.Shader.Version.ProgramType == ProgramType.GeometryShader)
 			{
-				foreach(var group in signature.Parameters.GroupBy(p => p.Stream)){
+				foreach(var group in signature.Parameters.GroupBy(p => p.Stream))
+				{
 					Output.AppendLine($"struct Stream{group.Key}Output");
 					Output.AppendLine("{");
 					indent++;
-					foreach (var param in group)
+					foreach(var param in group)
 					{
 						WriteSignatureParamater(param);
 					}
@@ -77,7 +78,7 @@ namespace DXDecompiler.Decompiler
 				Output.AppendLine("struct ShaderOutput");
 				Output.AppendLine("{");
 				indent++;
-				foreach (var param in signature.Parameters)
+				foreach(var param in signature.Parameters)
 				{
 					WriteSignatureParamater(param);
 				}
@@ -88,7 +89,7 @@ namespace DXDecompiler.Decompiler
 		}
 		void WriteSignatureParamater(SignatureParameterDescription param)
 		{
-			
+
 			AddIndent();
 			var fieldType = GetFieldType(param);
 			Output.Append($"{fieldType} {param.GetName()} : {GetSemanticName(param)};");
@@ -105,16 +106,16 @@ namespace DXDecompiler.Decompiler
 		string GetFieldType(SignatureParameterDescription param)
 		{
 			string fieldType = param.ComponentType.GetDescription();
-			if (param.MinPrecision != MinPrecision.None)
+			if(param.MinPrecision != MinPrecision.None)
 			{
 				fieldType = param.MinPrecision.GetTypeName();
 			}
 			int componentCount = 0;
-			if (param.Mask.HasFlag(ComponentMask.X)) componentCount += 1;
-			if (param.Mask.HasFlag(ComponentMask.Y)) componentCount += 1;
-			if (param.Mask.HasFlag(ComponentMask.Z)) componentCount += 1;
-			if (param.Mask.HasFlag(ComponentMask.W)) componentCount += 1;
-			switch (componentCount)
+			if(param.Mask.HasFlag(ComponentMask.X)) componentCount += 1;
+			if(param.Mask.HasFlag(ComponentMask.Y)) componentCount += 1;
+			if(param.Mask.HasFlag(ComponentMask.Z)) componentCount += 1;
+			if(param.Mask.HasFlag(ComponentMask.W)) componentCount += 1;
+			switch(componentCount)
 			{
 				case 1:
 					return $"{fieldType}";

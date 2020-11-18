@@ -67,13 +67,13 @@ namespace DXDecompiler.Chunks.Xsgn
 			get
 			{
 				var result = 0;
-				if (Mask.HasFlag(ComponentMask.X))
+				if(Mask.HasFlag(ComponentMask.X))
 					result++;
-				if (Mask.HasFlag(ComponentMask.Y))
+				if(Mask.HasFlag(ComponentMask.Y))
 					result++;
-				if (Mask.HasFlag(ComponentMask.Z))
+				if(Mask.HasFlag(ComponentMask.Z))
 					result++;
-				if (Mask.HasFlag(ComponentMask.W))
+				if(Mask.HasFlag(ComponentMask.W))
 					result++;
 				return result * sizeof(float);
 			}
@@ -94,14 +94,14 @@ namespace DXDecompiler.Chunks.Xsgn
 
 		public SignatureParameterDescription()
 		{
-			
+
 		}
 
 		public static SignatureParameterDescription Parse(BytecodeReader reader, BytecodeReader parameterReader,
 			ChunkType chunkType, SignatureElementSize size, ProgramType programType)
 		{
 			uint stream = 0;
-			if (size == SignatureElementSize._7 || size == SignatureElementSize._8)
+			if(size == SignatureElementSize._7 || size == SignatureElementSize._8)
 				stream = parameterReader.ReadUInt32();
 			uint nameOffset = parameterReader.ReadUInt32();
 			var nameReader = reader.CopyAtOffset((int)nameOffset);
@@ -120,14 +120,14 @@ namespace DXDecompiler.Chunks.Xsgn
 			result.Mask = mask.DecodeValue<ComponentMask>(0, 7);
 			result.ReadWriteMask = mask.DecodeValue<ComponentMask>(8, 15);
 
-			if (size == SignatureElementSize._8)
+			if(size == SignatureElementSize._8)
 			{
 				MinPrecision minPrecision = (MinPrecision)parameterReader.ReadUInt32();
 				result.MinPrecision = minPrecision;
 			}
 
 			// This is my guesswork, but it works so far...
-			if (chunkType == ChunkType.Osg5 ||
+			if(chunkType == ChunkType.Osg5 ||
 				chunkType == ChunkType.Osgn ||
 				chunkType == ChunkType.Osg1 ||
 				(chunkType == ChunkType.Pcsg && programType == ProgramType.HullShader))
@@ -136,11 +136,11 @@ namespace DXDecompiler.Chunks.Xsgn
 			}
 
 			// Vertex and pixel shaders need special handling for SystemValueType in the output signature.
-			if ((programType == ProgramType.PixelShader || programType == ProgramType.VertexShader)
+			if((programType == ProgramType.PixelShader || programType == ProgramType.VertexShader)
 				&& (chunkType == ChunkType.Osg5 || chunkType == ChunkType.Osgn || chunkType == ChunkType.Osg1))
 			{
-				if (result.Register == 0xffffffff)
-					switch (result.SemanticName.ToUpper())
+				if(result.Register == 0xffffffff)
+					switch(result.SemanticName.ToUpper())
 					{
 						case "SV_DEPTH":
 							result.SystemValueType = Name.Depth;
@@ -158,7 +158,7 @@ namespace DXDecompiler.Chunks.Xsgn
 							result.SystemValueType = Name.StencilRef;
 							break;
 					}
-				else if (programType == ProgramType.PixelShader)
+				else if(programType == ProgramType.PixelShader)
 					result.SystemValueType = Name.Target;
 			}
 
@@ -170,7 +170,7 @@ namespace DXDecompiler.Chunks.Xsgn
 			{
 				return ComponentType.GetDescription();
 			}
-			 else
+			else
 			{
 				return MinPrecision.GetDescription();
 			}
@@ -182,11 +182,11 @@ namespace DXDecompiler.Chunks.Xsgn
 			// TEXCOORD                 0   xyzw        0     NONE   float   xyzw
 			// SV_DepthGreaterEqual     0    N/A oDepthGE  DEPTHGE   float    YES
 			string name = SemanticName;
-			if (includeStreams)
+			if(includeStreams)
 			{
 				name = string.Format("m{0}:{1}", Stream, SemanticName);
 			}
-			if (SystemValueType.RequiresMask())
+			if(SystemValueType.RequiresMask())
 			{
 				return string.Format("{0,-20} {1,5}   {2,-4} {3,8} {4,8} {5,7}   {6,-4}", name, SemanticIndex,
 					Mask.GetDescription(),

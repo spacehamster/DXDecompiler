@@ -6,7 +6,7 @@ namespace DXDecompiler.DX9Shader
 	{
 		public NormalizeOutputNode(IEnumerable<HlslTreeNode> inputs, int componentIndex)
 		{
-			foreach (HlslTreeNode input in inputs)
+			foreach(HlslTreeNode input in inputs)
 			{
 				AddInput(input);
 			}

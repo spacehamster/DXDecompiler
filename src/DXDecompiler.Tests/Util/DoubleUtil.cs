@@ -24,7 +24,7 @@ namespace DXDecompiler.Tests.Util
 
 			// Subnormal numbers; exponent is effectively one higher,
 			// but there's no extra normalisation bit in the mantissa
-			if (exponent == 0)
+			if(exponent == 0)
 			{
 				exponent++;
 			}
@@ -40,14 +40,14 @@ namespace DXDecompiler.Tests.Util
 			// to subtract another 52 from it.
 			exponent -= 1075;
 
-			if (mantissa == 0)
+			if(mantissa == 0)
 			{
 				throw new NotImplementedException();
 				//return "0";
 			}
 
 			/* Normalize */
-			while ((mantissa & 1) == 0)
+			while((mantissa & 1) == 0)
 			{    /*  i.e., Mantissa is even */
 				mantissa >>= 1;
 				exponent++;
@@ -59,40 +59,40 @@ namespace DXDecompiler.Tests.Util
 			// If the exponent is less than 0, we need to repeatedly
 			// divide by 2 - which is the equivalent of multiplying
 			// by 5 and dividing by 10.
-			if (exponent < 0)
+			if(exponent < 0)
 			{
-				for (int i = 0; i < -exponent; i++)
+				for(int i = 0; i < -exponent; i++)
 					ad.MultiplyBy(5);
 				ad.Shift(-exponent);
 			}
 			// Otherwise, we need to repeatedly multiply by 2
 			else
 			{
-				for (int i = 0; i < exponent; i++)
+				for(int i = 0; i < exponent; i++)
 					ad.MultiplyBy(2);
 			}
 			return ad;
 		}
 		public static string FormatFloat(float value)
 		{
-			if (value == 0f) return "0";
+			if(value == 0f) return "0";
 			var result = ((double)value).ToString("G32");
-			if (result.Contains("E"))
+			if(result.Contains("E"))
 			{
 				var parts = result.Split(new char[] { '.', 'E' });
 				var exponent = int.Parse(parts.Last());
-				if (exponent < 6)
+				if(exponent < 6)
 				{
 					string negative = result.StartsWith("-") ? "-" : "";
 					return negative + "0.000000";
 				}
-				else if (exponent < 0)
+				else if(exponent < 0)
 				{
 					string negative = result.StartsWith("-") ? "-" : "";
-					if (parts[0].StartsWith("-")) parts[0] = parts[0].Substring(1, parts[0].Length - 1);
+					if(parts[0].StartsWith("-")) parts[0] = parts[0].Substring(1, parts[0].Length - 1);
 					return negative + "0." + new string('0', exponent * -1 - 1) + parts[0] + parts[1];
 				}
-				else if (exponent < parts[1].Length)
+				else if(exponent < parts[1].Length)
 				{
 					var second = parts[1].Substring(0, exponent);
 					var third = parts[1].Substring(exponent, parts[1].Length - exponent);
@@ -104,7 +104,7 @@ namespace DXDecompiler.Tests.Util
 				}
 
 			}
-			else if (!result.Contains("."))
+			else if(!result.Contains("."))
 			{
 				return result + ".000000";
 			}

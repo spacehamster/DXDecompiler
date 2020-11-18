@@ -13,7 +13,7 @@ namespace DXDecompiler
 		public static BytecodeContainerHeader Parse(BytecodeReader reader)
 		{
 			var fourCc = reader.ReadUInt32();
-			if (fourCc != "DXBC".ToFourCc())
+			if(fourCc != "DXBC".ToFourCc())
 				throw new ParseException("Invalid FourCC");
 
 			var uniqueKey = new uint[4];

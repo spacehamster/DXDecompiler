@@ -76,7 +76,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			var opcodeType = token0.DecodeValue<OpcodeType>(0, 10);
 
 			InputRegisterDeclarationToken result;
-			switch (opcodeType)
+			switch(opcodeType)
 			{
 				case OpcodeType.DclInput:
 				case OpcodeType.DclInputSgv:
@@ -97,7 +97,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 
 			result.Operand = Operand.Parse(reader, opcodeType);
 
-			switch (opcodeType)
+			switch(opcodeType)
 			{
 				case OpcodeType.DclInputSgv:
 				case OpcodeType.DclInputSiv:
@@ -114,7 +114,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 		{
 			string result = string.Format("{0} {1}", TypeDescription, Operand);
 
-			if (Header.OpcodeType == OpcodeType.DclInputSgv || Header.OpcodeType == OpcodeType.DclInputSiv)
+			if(Header.OpcodeType == OpcodeType.DclInputSgv || Header.OpcodeType == OpcodeType.DclInputSiv)
 				result += ", " + SystemValueName.GetDescription();
 
 			return result;

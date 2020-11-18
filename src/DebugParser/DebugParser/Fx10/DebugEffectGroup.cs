@@ -26,7 +26,8 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			{
 				var nameReader = reader.CopyAtOffset("NameReader", groupReader, (int)result.NameOffset);
 				result.Name = nameReader.ReadString("Name");
-			} else
+			}
+			else
 			{
 				result.Name = "";
 			}
@@ -36,7 +37,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 				result.Techniques.Add(DebugEffectTechnique.Parse(reader, groupReader, version));
 				groupReader.RemoveIndent();
 			}
-			for (int i = 0; i < result.AnnotationCount; i++)
+			for(int i = 0; i < result.AnnotationCount; i++)
 			{
 				groupReader.AddIndent($"Annotation {i}");
 				result.Annotations.Add(DebugEffectAnnotation.Parse(reader, groupReader, version));

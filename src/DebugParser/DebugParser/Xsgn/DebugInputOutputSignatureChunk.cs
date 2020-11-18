@@ -18,7 +18,7 @@ namespace DXDecompiler.DebugParser.Xsgn
 			ProgramType programType)
 		{
 			DebugInputOutputSignatureChunk result;
-			switch (chunkType)
+			switch(chunkType)
 			{
 				case ChunkType.Isgn:
 				case ChunkType.Isg1:
@@ -41,7 +41,7 @@ namespace DXDecompiler.DebugParser.Xsgn
 			var uniqueKey = chunkReader.ReadUInt32("UniqueKey");
 
 			SignatureElementSize elementSize;
-			switch (chunkType)
+			switch(chunkType)
 			{
 				case ChunkType.Isgn:
 				case ChunkType.Osgn:
@@ -59,7 +59,7 @@ namespace DXDecompiler.DebugParser.Xsgn
 					throw new ArgumentOutOfRangeException("chunkType", "Unrecognised chunk type: " + chunkType);
 			}
 
-			for (int i = 0; i < elementCount; i++)
+			for(int i = 0; i < elementCount; i++)
 				result.Parameters.Add(DebugSignatureParameterDescription.Parse(reader, chunkReader, chunkType, elementSize,
 					programType));
 

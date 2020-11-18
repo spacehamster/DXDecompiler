@@ -79,7 +79,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			result.TableLength = token3.DecodeValue<ushort>(00, 15);
 			result.ArrayLength = token3.DecodeValue<ushort>(16, 31);
 
-			for (int i = 0; i < result.TableLength; i++)
+			for(int i = 0; i < result.TableLength; i++)
 				result.FunctionTableIdentifiers.Add(reader.ReadUInt32());
 
 			return result;

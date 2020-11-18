@@ -6,7 +6,7 @@ namespace DXDecompiler.DX9Shader
 	{
 		public static string GetDescription(this ParameterType value)
 		{
-			switch (value)
+			switch(value)
 			{
 				case ParameterType.Sampler1D:
 					return "sampler1D";
@@ -28,7 +28,7 @@ namespace DXDecompiler.DX9Shader
 		}
 		public static string GetDescription(this RegisterSet value)
 		{
-			switch (value)
+			switch(value)
 			{
 				case RegisterSet.Bool:
 					return "b";
@@ -44,7 +44,7 @@ namespace DXDecompiler.DX9Shader
 		}
 		public static string GetDescription(this ShaderType value)
 		{
-			switch (value)
+			switch(value)
 			{
 				case ShaderType.Effect:
 					return "fx";

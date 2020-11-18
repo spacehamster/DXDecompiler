@@ -14,7 +14,7 @@ namespace DXDecompiler.DX9Shader.FX9
 		{
 			var result = new SamplerState();
 			var assignmentCount = stateReader.ReadUInt32();
-			for (int j = 0; j < assignmentCount; j++)
+			for(int j = 0; j < assignmentCount; j++)
 			{
 				result.Assignments.Add(Assignment.Parse(reader, stateReader));
 			}

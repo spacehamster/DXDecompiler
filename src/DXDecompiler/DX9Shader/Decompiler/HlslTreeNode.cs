@@ -10,7 +10,7 @@ namespace DXDecompiler.DX9Shader
 
 		public virtual HlslTreeNode Reduce()
 		{
-			for (int i = 0; i < Inputs.Count; i++)
+			for(int i = 0; i < Inputs.Count; i++)
 			{
 				Inputs[i] = Inputs[i].Reduce();
 			}
@@ -19,15 +19,15 @@ namespace DXDecompiler.DX9Shader
 
 		public void Replace(HlslTreeNode with)
 		{
-			foreach (var input in Inputs)
+			foreach(var input in Inputs)
 			{
 				input.Outputs.Remove(this);
 			}
-			foreach (var output in Outputs)
+			foreach(var output in Outputs)
 			{
-				for (int i = 0; i < output.Inputs.Count; i++)
+				for(int i = 0; i < output.Inputs.Count; i++)
 				{
-					if (output.Inputs[i] == this)
+					if(output.Inputs[i] == this)
 					{
 						output.Inputs[i] = with;
 					}
@@ -45,10 +45,10 @@ namespace DXDecompiler.DX9Shader
 
 		private void AssertLoopFree()
 		{
-			foreach (HlslTreeNode output in Outputs)
+			foreach(HlslTreeNode output in Outputs)
 			{
 				AssertLoopFree(output);
-				if (this == output)
+				if(this == output)
 				{
 					throw new InvalidOperationException();
 				}
@@ -57,9 +57,9 @@ namespace DXDecompiler.DX9Shader
 
 		private void AssertLoopFree(HlslTreeNode parent)
 		{
-			foreach (HlslTreeNode upperParent in parent.Outputs)
+			foreach(HlslTreeNode upperParent in parent.Outputs)
 			{
-				if (this == upperParent)
+				if(this == upperParent)
 				{
 					throw new InvalidOperationException();
 				}

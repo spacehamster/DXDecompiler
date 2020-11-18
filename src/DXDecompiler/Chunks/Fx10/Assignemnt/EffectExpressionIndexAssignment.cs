@@ -19,7 +19,7 @@ namespace DXDecompiler.Chunks.Fx10
 			var shaderOffset = assignmentReader.ReadUInt32();
 			var shaderReader = reader.CopyAtOffset((int)shaderOffset);
 			var shaderSize = shaderReader.ReadUInt32();
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = BytecodeContainer.Parse(shaderReader.ReadBytes((int)shaderSize));
 			}
@@ -32,7 +32,7 @@ namespace DXDecompiler.Chunks.Fx10
 			sb.Append(" = ");
 			sb.Append(ArrayName);
 			sb.Append("[");
-			if (Shader != null)
+			if(Shader != null)
 			{
 				var chunk = Shader.GetChunk<FxlcChunk>();
 				sb.Append(chunk.ToString());

@@ -17,15 +17,15 @@ namespace DXDecompiler.Tests
 		private static string ShaderDirectory => $"{TestContext.CurrentContext.TestDirectory}/TestLibraryShader";
 
 		static ParameterDescription ParamDesc(string name, string semanticName, ShaderVariableType type, ShaderVariableClass @class,
-				int rows, int columns, SharpDX.Direct3D.InterpolationMode interpolationMode, 
-				ParameterFlags flags, int firstInRegister, int firstInComponent, 
+				int rows, int columns, SharpDX.Direct3D.InterpolationMode interpolationMode,
+				ParameterFlags flags, int firstInRegister, int firstInComponent,
 				int firstOutRegister, int firstOutComponent)
 		{
 			return new ParameterDescription()
-			{ 
-				Name = name, 
+			{
+				Name = name,
 				SemanticName = semanticName,
-				Type = type, 
+				Type = type,
 				Class = @class,
 				Rows = rows,
 				Columns = columns,
@@ -129,7 +129,7 @@ export float4 Float3ToFloat4SetW1(float3 value)
 			//1. Construct a function-linking-graph for the vertex shader.
 			var vertexShaderGraph = new FunctionLinkingGraph();
 			var vertexShaderInputNode = vertexShaderGraph.SetInputSignature(
-				ParamDesc("inputPos", "POSITION0", ShaderVariableType.Float, ShaderVariableClass.Vector, 
+				ParamDesc("inputPos", "POSITION0", ShaderVariableType.Float, ShaderVariableClass.Vector,
 						1, 3, SharpDX.Direct3D.InterpolationMode.Linear, ParameterFlags.In, 0, 0, 0, 0),
 				ParamDesc("inputTex", "TEXCOORD0", ShaderVariableType.Float, ShaderVariableClass.Vector,
 						1, 2, SharpDX.Direct3D.InterpolationMode.Linear, ParameterFlags.In, 0, 0, 0, 0),
@@ -190,21 +190,21 @@ export float4 Float3ToFloat4SetW1(float3 value)
 			pixelShaderGraph.PassValue(pixelShaderInputNode, 0, colorValueNode, 0);
 			pixelShaderGraph.PassValue(pixelShaderInputNode, 1, colorValueNode, 1);
 
-			if (enableLighting)
+			if(enableLighting)
 			{
 				var tempNode = pixelShaderGraph.CallFunction("", shaderLibrary, "AddLighting");
 				pixelShaderGraph.PassValue(colorValueNode, -1, tempNode, 0);
 				pixelShaderGraph.PassValue(pixelShaderInputNode, 1, tempNode, 1);
 				colorValueNode = tempNode;
 			}
-			if (enableDepthFog)
+			if(enableDepthFog)
 			{
 				var tempNode = pixelShaderGraph.CallFunction("", shaderLibrary, "AddDepthFog");
 				pixelShaderGraph.PassValue(colorValueNode, -1, tempNode, 0);
-				pixelShaderGraph.PassValueWithSwizzle(pixelShaderInputNode, 2, "z",  tempNode, 1, "x");
+				pixelShaderGraph.PassValueWithSwizzle(pixelShaderInputNode, 2, "z", tempNode, 1, "x");
 				colorValueNode = tempNode;
 			}
-			if (enableGreyScale)
+			if(enableGreyScale)
 			{
 				var tempNode = pixelShaderGraph.CallFunction("", shaderLibrary, "AddGrayscale");
 				pixelShaderGraph.PassValue(colorValueNode, -1, tempNode, 0);

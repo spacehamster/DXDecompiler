@@ -57,11 +57,11 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 			result.Type = ConstantType.Parse(reader, typeReader);
 			var memberInfoOffset = typeReader.ReadUInt32();
 
-			if (defaultValueOffset != 0)
+			if(defaultValueOffset != 0)
 			{
 				//Note: thre are corrisponding def instructions. TODO: check that they are the same
 				var defaultValueReader = reader.CopyAtOffset((int)defaultValueOffset);
-				for (int i = 0; i < 4; i++)
+				for(int i = 0; i < 4; i++)
 				{
 					result.DefaultValue.Add(defaultValueReader.ReadSingle());
 				}

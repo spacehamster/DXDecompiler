@@ -33,11 +33,11 @@ namespace DXDecompiler.DebugParser.DX9
 			result.MinorVersion = reader.ReadByte("MinorVersion");
 			result.MajorVersion = reader.ReadByte("MajorVersion");
 			result.Type = reader.ReadEnum16<ShaderType>("ShaderType");
-			while (true)
+			while(true)
 			{
 				var token = reader.PeakUint32();
 				Opcode opcode = (Opcode)(token & 0xffff);
-				if (opcode == Opcode.Comment && result.ReadCommentToken(reader))
+				if(opcode == Opcode.Comment && result.ReadCommentToken(reader))
 				{
 					continue;
 				}
@@ -48,16 +48,18 @@ namespace DXDecompiler.DebugParser.DX9
 				result.Tokens.Add(instruction);
 				indent.Name += $" {instruction.Opcode} {string.Join(" ", instruction.Operands)}";
 				reader.RemoveIndent();
-				if (instruction.Opcode == Opcode.End) break;
+				if(instruction.Opcode == Opcode.End) break;
 			}
 			return result;
 		}
 		bool ReadCommentToken(DebugBytecodeReader reader)
 		{
 			var fourCC = reader.PeakUInt32Ahead(4);
-			if(KnownCommentTypes.ContainsKey(fourCC)){
+			if(KnownCommentTypes.ContainsKey(fourCC))
+			{
 				reader.AddIndent(KnownCommentTypes[fourCC].ToString());
-			} else
+			}
+			else
 			{
 				return false;
 			}
@@ -69,7 +71,7 @@ namespace DXDecompiler.DebugParser.DX9
 			reader.AddNote("TokenSize", size);
 			reader.ReadBytes("FourCC", 4);
 
-			switch (KnownCommentTypes[fourCC])
+			switch(KnownCommentTypes[fourCC])
 			{
 				case CommentType.CTAB:
 					ConstantTable = DebugConstantTable.Parse(reader);
@@ -98,7 +100,7 @@ namespace DXDecompiler.DebugParser.DX9
 			uint instructionToken = reader.ReadUInt32("Token");
 			Opcode opcode = (Opcode)(instructionToken & 0xffff);
 			uint size;
-			if (opcode == Opcode.Comment)
+			if(opcode == Opcode.Comment)
 			{
 				size = (uint)((instructionToken >> 16) & 0x7FFF);
 			}
@@ -110,18 +112,19 @@ namespace DXDecompiler.DebugParser.DX9
 			entry.AddNote("TokenOpcode", opcode.ToString());
 			entry.AddNote("TokenSize", size.ToString());
 			IDebugToken result;
-			if (opcode == Opcode.Comment)
+			if(opcode == Opcode.Comment)
 			{
 				var token = new DebugToken();
 				token.Token = instructionToken;
 				token.Opcode = opcode;
 				token.Data = reader.ReadBytes("CommentData", (int)size * 4);
 				result = token;
-			} else
+			}
+			else
 			{
 				result = DebugInstructionToken.Parse(reader, instructionToken, opcode, size);
 			}
-			if (opcode != Opcode.Comment)
+			if(opcode != Opcode.Comment)
 			{
 				var token = result as DebugInstructionToken;
 				token.Modifier = (int)((instructionToken >> 16) & 0xff);

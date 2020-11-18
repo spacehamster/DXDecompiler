@@ -71,7 +71,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 				AccessPattern = token0.DecodeValue<ConstantBufferAccessPattern>(11, 11),
 				Operand = Operand.Parse(reader, token0.DecodeValue<OpcodeType>(0, 10))
 			};
-			if (version.IsSM51)
+			if(version.IsSM51)
 			{
 				result.m_ConstantBufferSize = reader.ReadUInt32();
 				result.SpaceIndex = reader.ReadUInt32();
@@ -81,7 +81,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 
 		public override string ToString()
 		{
-			if (!IsSM51)
+			if(!IsSM51)
 			{
 				return string.Format("{0} {1}, {2}", TypeDescription,
 					Operand.ToString().ToUpper(), AccessPattern.GetDescription());
@@ -89,7 +89,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 			else
 			{
 				return string.Format("{0} {1}[{2}], {3}, space={4}", TypeDescription,
-					Operand.ToString().ToUpper(), m_ConstantBufferSize, 
+					Operand.ToString().ToUpper(), m_ConstantBufferSize,
 					AccessPattern.GetDescription(), SpaceIndex);
 			}
 		}

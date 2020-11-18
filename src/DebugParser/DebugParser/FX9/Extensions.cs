@@ -8,7 +8,7 @@ namespace DXDecompiler.DebugParser.FX9
 		public static List<Number> ReadParameterValue(this DebugParameter parameter, DebugBytecodeReader valueReader)
 		{
 			var result = new List<Number>();
-			if (parameter.ParameterClass == ParameterClass.Object)
+			if(parameter.ParameterClass == ParameterClass.Object)
 			{
 				var defaultValueCount = parameter.GetSize() / 4;
 				var data = valueReader.ReadBytes("ParameterValue", (int)defaultValueCount * 4);
@@ -18,7 +18,7 @@ namespace DXDecompiler.DebugParser.FX9
 			{
 				var defaultValueCount = parameter.GetSize() / 4;
 				var data = valueReader.ReadBytes("ParameterValue", (int)defaultValueCount * 4);
-				for (int i = 0; i < defaultValueCount; i++)
+				for(int i = 0; i < defaultValueCount; i++)
 				{
 					result.Add(Number.FromByteArray(data, i * 4));
 				}

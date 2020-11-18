@@ -20,7 +20,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 				SamplerMode = token0.DecodeValue<SamplerMode>(11, 14),
 				Operand = operand
 			};
-			if (version.IsSM51)
+			if(version.IsSM51)
 			{
 				result.SpaceIndex = reader.ReadUInt32("SpaceIndex");
 			}

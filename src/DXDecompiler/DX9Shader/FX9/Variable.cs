@@ -22,17 +22,17 @@ namespace DXDecompiler.DX9Shader.FX9
 			var defaultValueOffset = variableReader.ReadUInt32();
 			result.IsShared = variableReader.ReadUInt32();
 			var annotationCount = variableReader.ReadUInt32();
-			for (int i = 0; i < annotationCount; i++)
+			for(int i = 0; i < annotationCount; i++)
 			{
 				result.Annotations.Add(Annotation.Parse(reader, variableReader));
 			}
 			var parameterReader = reader.CopyAtOffset((int)parameterOffset);
 			result.Parameter = Parameter.Parse(reader, parameterReader);
-			if (result.Parameter.ParameterType.IsSampler())
+			if(result.Parameter.ParameterType.IsSampler())
 			{
 				var elementCount = result.Parameter.ElementCount > 0 ? result.Parameter.ElementCount : 1;
 				var samplerStateReader = reader.CopyAtOffset((int)defaultValueOffset);
-				for (int i = 0; i < elementCount; i++)
+				for(int i = 0; i < elementCount; i++)
 				{
 					result.SamplerStates.Add(SamplerState.Parse(reader, samplerStateReader));
 				}
@@ -54,7 +54,7 @@ namespace DXDecompiler.DX9Shader.FX9
 			sb.Append(Parameter.GetTypeName());
 			sb.Append(" ");
 			sb.Append(Parameter.Name);
-			if (!string.IsNullOrEmpty(Parameter.Semantic))
+			if(!string.IsNullOrEmpty(Parameter.Semantic))
 			{
 				sb.Append(string.Format(" : {0}", Parameter.Semantic));
 			}

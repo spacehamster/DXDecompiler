@@ -25,7 +25,7 @@ namespace DXDecompiler
 
 		public static Number4 Abs(Number4 original, NumberType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case NumberType.Float:
 				case NumberType.Int:
@@ -83,7 +83,7 @@ namespace DXDecompiler
 
 		public static Number4 Negate(Number4 original, NumberType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case NumberType.Float:
 					return NegateFloat(original);
@@ -145,10 +145,10 @@ namespace DXDecompiler
 		public static Number4 Swizzle(Number4 original, Operand4ComponentName[] swizzles)
 		{
 			return new Number4(
-				original.GetNumber((int) swizzles[0]),
-				original.GetNumber((int) swizzles[1]),
-				original.GetNumber((int) swizzles[2]),
-				original.GetNumber((int) swizzles[3]));
+				original.GetNumber((int)swizzles[0]),
+				original.GetNumber((int)swizzles[1]),
+				original.GetNumber((int)swizzles[2]),
+				original.GetNumber((int)swizzles[3]));
 		}
 
 		public const int SizeInBytes = sizeof(byte) * 16;
@@ -326,7 +326,7 @@ namespace DXDecompiler
 
 		public double GetDouble(int i)
 		{
-			switch (i)
+			switch(i)
 			{
 				case 0:
 					return Double0;
@@ -339,7 +339,7 @@ namespace DXDecompiler
 
 		public Number GetNumber(int i)
 		{
-			switch (i)
+			switch(i)
 			{
 				case 0:
 					return Number0;
@@ -356,7 +356,7 @@ namespace DXDecompiler
 
 		public void SetNumber(int i, Number value)
 		{
-			switch (i)
+			switch(i)
 			{
 				case 0:
 					Number0 = value;
@@ -370,14 +370,14 @@ namespace DXDecompiler
 				case 3:
 					Number3 = value;
 					break;
-				default :
+				default:
 					throw new ArgumentOutOfRangeException("i", string.Format("Index '{0}' is out of range.", i));
 			}
 		}
 
 		public void SetDouble(int i, double value)
 		{
-			switch (i)
+			switch(i)
 			{
 				case 0:
 					Double0 = value;
@@ -392,20 +392,20 @@ namespace DXDecompiler
 
 		public Number GetMaskedNumber(ComponentMask mask)
 		{
-			if (mask.HasFlag(ComponentMask.X))
+			if(mask.HasFlag(ComponentMask.X))
 				return Number0;
-			if (mask.HasFlag(ComponentMask.Y))
+			if(mask.HasFlag(ComponentMask.Y))
 				return Number1;
-			if (mask.HasFlag(ComponentMask.Z))
+			if(mask.HasFlag(ComponentMask.Z))
 				return Number2;
-			if (mask.HasFlag(ComponentMask.W))
+			if(mask.HasFlag(ComponentMask.W))
 				return Number3;
 			throw new ArgumentOutOfRangeException("mask");
 		}
 
 		public Number GetSwizzledNumber(Operand4ComponentName name)
 		{
-			switch (name)
+			switch(name)
 			{
 				case Operand4ComponentName.X:
 					return Number0;
@@ -422,13 +422,13 @@ namespace DXDecompiler
 
 		public void WriteMaskedValue(Number4 value, ComponentMask mask)
 		{
-			if (mask.HasFlag(ComponentMask.X))
+			if(mask.HasFlag(ComponentMask.X))
 				Number0 = value.Number0;
-			if (mask.HasFlag(ComponentMask.Y))
+			if(mask.HasFlag(ComponentMask.Y))
 				Number1 = value.Number1;
-			if (mask.HasFlag(ComponentMask.Z))
+			if(mask.HasFlag(ComponentMask.Z))
 				Number2 = value.Number2;
-			if (mask.HasFlag(ComponentMask.W))
+			if(mask.HasFlag(ComponentMask.W))
 				Number3 = value.Number3;
 		}
 

@@ -9,7 +9,7 @@ namespace DXDecompiler.DX9Shader.FX9
 	{
 		public static bool IsSampler(this ParameterType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case ParameterType.Sampler:
 				case ParameterType.Sampler1D:
@@ -23,7 +23,7 @@ namespace DXDecompiler.DX9Shader.FX9
 		}
 		public static bool IsObjectType(this ParameterType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case ParameterType.Texture:
 				case ParameterType.PixelShader:
@@ -35,7 +35,7 @@ namespace DXDecompiler.DX9Shader.FX9
 		}
 		public static bool HasVariableBlob(this ParameterType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case ParameterType.Texture:
 				case ParameterType.Texture1D:
@@ -52,7 +52,7 @@ namespace DXDecompiler.DX9Shader.FX9
 		}
 		public static bool HasStateBlob(this StateType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case StateType.Texture:
 				case StateType.Sampler:
@@ -65,7 +65,7 @@ namespace DXDecompiler.DX9Shader.FX9
 		}
 		public static bool RequiresIndex(this StateType type)
 		{
-			switch (type)
+			switch(type)
 			{
 				case StateType.ColorOp:
 				case StateType.ColorArg0:
@@ -128,7 +128,8 @@ namespace DXDecompiler.DX9Shader.FX9
 				}
 				var bytes = reader.ReadBytes((int)length);
 				return Encoding.UTF8.GetString(bytes, 0, bytes.Length - 1);
-			} catch(Exception ex)
+			}
+			catch(Exception ex)
 			{
 				return "Error reading string";
 			}
@@ -136,10 +137,10 @@ namespace DXDecompiler.DX9Shader.FX9
 		public static List<Number> ReadParameterValue(this Parameter parameter, BytecodeReader valueReader)
 		{
 			var result = new List<Number>();
-			if (parameter.ParameterClass == ParameterClass.Object)
+			if(parameter.ParameterClass == ParameterClass.Object)
 			{
 				var elementCount = parameter.ElementCount == 0 ? 1 : parameter.ElementCount;
-				for (int i = 0; i < elementCount; i++)
+				for(int i = 0; i < elementCount; i++)
 				{
 					result.Add(Number.Parse(valueReader));
 				}
@@ -147,7 +148,7 @@ namespace DXDecompiler.DX9Shader.FX9
 			else
 			{
 				var defaultValueCount = parameter.GetSize() / 4;
-				for (int i = 0; i < defaultValueCount; i++)
+				for(int i = 0; i < defaultValueCount; i++)
 				{
 					result.Add(Number.Parse(valueReader));
 				}

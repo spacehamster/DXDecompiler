@@ -34,21 +34,21 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			var interfaceBindingOffset = result.InterfaceBindingOffset = variableReader.ReadUInt32("InterfaceBindinfOffset");
 			var shaderReader = reader.CopyAtOffset("ShaderReader", variableReader, (int)shaderOffset);
 			var shaderSize = shaderReader.ReadUInt32("ShaderSize");
-			if (shaderSize != 0)
+			if(shaderSize != 0)
 			{
 				result.Shader = BytecodeContainer.Parse(shaderReader.ReadBytes("Shader", (int)shaderSize));
 			}
-			for (int i = 0; i < 4; i++)
+			for(int i = 0; i < 4; i++)
 			{
 				var offset = result.SODeclsOffset[i];
-				if (offset != 0)
+				if(offset != 0)
 				{
 					var soDeclReader = reader.CopyAtOffset("SODeclReader", variableReader, (int)offset);
 					result.SODecls.Add(soDeclReader.ReadString($"SODecl{i}"));
 				}
 			}
 			var interfaceReader = reader.CopyAtOffset("InterfaceReader", variableReader, (int)interfaceBindingOffset);
-			for (int i = 0; i < interfaceBindingCount; i++)
+			for(int i = 0; i < interfaceBindingCount; i++)
 			{
 				result.InterfaceBindings.Add(DebugEffectInterfaceInitializer.Parse(reader, interfaceReader));
 			}

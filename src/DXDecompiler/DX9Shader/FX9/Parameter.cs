@@ -25,7 +25,7 @@ namespace DXDecompiler.DX9Shader.FX9
 			result.ParameterClass = (ParameterClass)variableReader.ReadUInt32();
 			var nameOffset = variableReader.ReadUInt32();
 			var semanticOffset = variableReader.ReadUInt32();
-			if (result.ParameterClass == ParameterClass.Scalar ||
+			if(result.ParameterClass == ParameterClass.Scalar ||
 				result.ParameterClass == ParameterClass.Vector ||
 				result.ParameterClass == ParameterClass.MatrixRows ||
 				result.ParameterClass == ParameterClass.MatrixColumns)
@@ -34,7 +34,7 @@ namespace DXDecompiler.DX9Shader.FX9
 				result.Rows = variableReader.ReadUInt32();
 				result.Columns = variableReader.ReadUInt32();
 			}
-			if (result.ParameterClass == ParameterClass.Struct)
+			if(result.ParameterClass == ParameterClass.Struct)
 			{
 				result.ElementCount = variableReader.ReadUInt32();
 				result.StructMemberCount = variableReader.ReadUInt32();
@@ -43,7 +43,7 @@ namespace DXDecompiler.DX9Shader.FX9
 					result.StructMembers.Add(Parameter.Parse(reader, variableReader));
 				}
 			}
-			if (result.ParameterClass == ParameterClass.Object)
+			if(result.ParameterClass == ParameterClass.Object)
 			{
 				result.ElementCount = variableReader.ReadUInt32();
 			}
@@ -58,7 +58,7 @@ namespace DXDecompiler.DX9Shader.FX9
 		public uint GetSize()
 		{
 			var elementCount = Math.Max(1, ElementCount);
-			switch (ParameterClass)
+			switch(ParameterClass)
 			{
 				case ParameterClass.Object:
 					return 4 * elementCount;
@@ -83,7 +83,7 @@ namespace DXDecompiler.DX9Shader.FX9
 			{
 				arrayDecl = string.Format("[{0}]", ElementCount);
 			}
-			if (!string.IsNullOrEmpty(Semantic))
+			if(!string.IsNullOrEmpty(Semantic))
 			{
 				semanticDecl = string.Format(" : {0}", Semantic);
 			}
@@ -94,7 +94,7 @@ namespace DXDecompiler.DX9Shader.FX9
 			var sb = new StringBuilder();
 			string indent = new string(' ', indentLevel * 4);
 			sb.Append(indent);
-			switch (ParameterClass)
+			switch(ParameterClass)
 			{
 				case ParameterClass.Scalar:
 					sb.Append(ParameterType.ToString().ToLower());

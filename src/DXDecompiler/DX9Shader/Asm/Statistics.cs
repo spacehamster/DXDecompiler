@@ -18,7 +18,7 @@ namespace DXDecompiler.DX9Shader
 		//Refer https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx9-graphics-reference-asm-ps-instructions-ps-3-0
 		public static int GetInstructionSlotCount(this Token token)
 		{
-			switch (token.Opcode)
+			switch(token.Opcode)
 			{
 				case Opcode.Dcl:
 				case Opcode.Def:
@@ -94,7 +94,7 @@ namespace DXDecompiler.DX9Shader
 				case Opcode.TexLDL:
 					{
 						var textureType = token.GetDeclSamplerTextureType();
-						if (textureType == SamplerTextureType.Cube)
+						if(textureType == SamplerTextureType.Cube)
 						{
 							return 5;
 						}
@@ -107,7 +107,7 @@ namespace DXDecompiler.DX9Shader
 				case Opcode.Tex:
 					{
 						var textureType = token.GetDeclSamplerTextureType();
-						if (textureType == SamplerTextureType.Cube)
+						if(textureType == SamplerTextureType.Cube)
 						{
 							return 4;
 						}
@@ -125,7 +125,7 @@ namespace DXDecompiler.DX9Shader
 		}
 		public static SlotType GetSlotType(this Token token)
 		{
-			switch (token.Opcode)
+			switch(token.Opcode)
 			{
 				case Opcode.Nop:
 					return SlotType.Arithmetic;

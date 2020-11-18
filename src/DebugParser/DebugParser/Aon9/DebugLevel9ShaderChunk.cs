@@ -18,7 +18,7 @@ namespace DXDecompiler.DebugParser.Aon9
 			Unknown0Mappings = new List<DebugUnknown1Mapping>();
 			SamplerMappings = new List<DebugSamplerMapping>();
 			RuntimeConstantMappings = new List<DebugRuntimeConstantMapping>();
-	}
+		}
 		public static DebugLevel9ShaderChunk Parse(DebugBytecodeReader chunkContentReader, uint chunkSize)
 		{
 			var result = new DebugLevel9ShaderChunk();
@@ -36,34 +36,34 @@ namespace DXDecompiler.DebugParser.Aon9
 			var samplerMappingOffset = chunkContentReader.ReadUInt16("samplerMappingOffset");
 			var runtimeConstantMappingCount = chunkContentReader.ReadUInt16("runtimeConstantMappingCount");
 			var runtimeConstantMappingOffset = chunkContentReader.ReadUInt16("runtimeConstantMappingOffset");
-			if (cbMappingCount > 0)
+			if(cbMappingCount > 0)
 			{
 				var mappingReader = chunkContentReader.CopyAtOffset("mappingReader", chunkContentReader, cbMappingOffset);
-				for (int i = 0; i < cbMappingCount; i++)
+				for(int i = 0; i < cbMappingCount; i++)
 				{
 					result.ConstantBufferMappings.Add(DebugConstantBufferMapping.Parse(mappingReader));
 				}
 			}
-			if (loopRegisterMappingCount > 0)
+			if(loopRegisterMappingCount > 0)
 			{
 				var mappingReader = chunkContentReader.CopyAtOffset("mappingReader", chunkContentReader, loopRegisterMappingOffset);
-				for (int i = 0; i < loopRegisterMappingCount; i++)
+				for(int i = 0; i < loopRegisterMappingCount; i++)
 				{
 					result.LoopRegisterMappings.Add(DebugLoopRegisterMapping.Parse(mappingReader));
 				}
 			}
-			if (unk0MappingCount > 0)
+			if(unk0MappingCount > 0)
 			{
 				var mappingReader = chunkContentReader.CopyAtOffset("mappingReader", chunkContentReader, unk0MappingOffset);
-				for (int i = 0; i < unk0MappingCount; i++)
+				for(int i = 0; i < unk0MappingCount; i++)
 				{
 					result.Unknown0Mappings.Add(DebugUnknown1Mapping.Parse(mappingReader));
 				}
 			}
-			if (samplerMappingCount > 0)
+			if(samplerMappingCount > 0)
 			{
 				var mappingReader = chunkContentReader.CopyAtOffset("mappingReader", chunkContentReader, samplerMappingOffset);
-				for (int i = 0; i < samplerMappingCount; i++)
+				for(int i = 0; i < samplerMappingCount; i++)
 				{
 					result.SamplerMappings.Add(DebugSamplerMapping.Parse(mappingReader));
 				}
@@ -72,10 +72,10 @@ namespace DXDecompiler.DebugParser.Aon9
 					.OrderBy(s => s.TargetSampler)
 					.ToList();
 			}
-			if (runtimeConstantMappingCount > 0)
+			if(runtimeConstantMappingCount > 0)
 			{
 				var mappingReader = chunkContentReader.CopyAtOffset("mappingReader", chunkContentReader, runtimeConstantMappingOffset);
-				for (int i = 0; i < runtimeConstantMappingCount; i++)
+				for(int i = 0; i < runtimeConstantMappingCount; i++)
 				{
 					result.RuntimeConstantMappings.Add(DebugRuntimeConstantMapping.Parse(mappingReader));
 				}

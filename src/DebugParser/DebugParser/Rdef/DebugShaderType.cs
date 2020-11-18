@@ -44,10 +44,10 @@ namespace DXDecompiler.DebugParser.Rdef
 			var memberCount = typeReader.ReadUInt16("memberCount");
 			var memberOffset = typeReader.ReadUInt32("memberOffset");
 
-			if (target.MajorVersion >= 5)
+			if(target.MajorVersion >= 5)
 			{
 				var subTypeOffset = typeReader.ReadInt32("subTypeOffset"); // Guessing
-				if (subTypeOffset != 0)
+				if(subTypeOffset != 0)
 				{
 					var parentInterfaceReader = reader.CopyAtOffset("subtypeReader", typeReader, (int)subTypeOffset);
 					result.SubType = DebugShaderType.Parse(reader, parentInterfaceReader, target,
@@ -55,7 +55,7 @@ namespace DXDecompiler.DebugParser.Rdef
 				}
 
 				var baseClassOffset = typeReader.ReadUInt32("baseClassOffset");
-				if (baseClassOffset != 0)
+				if(baseClassOffset != 0)
 				{
 					var baseClassReader = reader.CopyAtOffset("baseClassReader", typeReader, (int)baseClassOffset);
 					result.BaseClass = DebugShaderType.Parse(reader, baseClassReader, target,
@@ -65,10 +65,10 @@ namespace DXDecompiler.DebugParser.Rdef
 				result.NumberOfInterfaces = typeReader.ReadUInt32("NumberOfInterfaces");
 
 				var interfaceSectionOffset = typeReader.ReadUInt32("InterfaceSectionOffset");
-				if (interfaceSectionOffset != 0)
+				if(interfaceSectionOffset != 0)
 				{
 					var interfaceSectionReader = reader.CopyAtOffset("interfaceSectionReader", typeReader, (int)interfaceSectionOffset);
-					for (int i = 0; i < result.NumberOfInterfaces; i++)
+					for(int i = 0; i < result.NumberOfInterfaces; i++)
 					{
 						var interfaceTypeOffset = interfaceSectionReader.ReadUInt32($"UnkInterface{i}");
 						var interfaceReader = reader.CopyAtOffset($"InterfaceReader {i}", typeReader, (int)interfaceTypeOffset);
@@ -78,18 +78,18 @@ namespace DXDecompiler.DebugParser.Rdef
 				}
 
 				var parentNameOffset = typeReader.ReadUInt32("parentNameOffset");
-				if (parentNameOffset > 0)
+				if(parentNameOffset > 0)
 				{
 					var parentNameReader = reader.CopyAtOffset("parentNameOffset", typeReader, (int)parentNameOffset);
 					result.BaseTypeName = parentNameReader.ReadString("BaseTypeName");
 				}
 			}
 
-			if (memberCount > 0)
+			if(memberCount > 0)
 			{
 
 				var memberReader = reader.CopyAtOffset("memberReader", typeReader, (int)memberOffset);
-				for (int i = 0; i < memberCount; i++)
+				for(int i = 0; i < memberCount; i++)
 				{
 					memberReader.AddIndent($"Member {i}");
 					result.Members.Add(DebugShaderTypeMember.Parse(reader, memberReader, target, indent + 4, i == 0,

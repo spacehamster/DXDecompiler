@@ -9,7 +9,7 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 
 		public static DeclarationToken Parse(BytecodeReader reader, OpcodeType opcodeType, ShaderVersion version)
 		{
-			switch (opcodeType)
+			switch(opcodeType)
 			{
 				case OpcodeType.DclGlobalFlags:
 					return GlobalFlagsDeclarationToken.Parse(reader);
@@ -57,29 +57,29 @@ namespace DXDecompiler.Chunks.Shex.Tokens
 					return HullShaderMaxTessFactorDeclarationToken.Parse(reader);
 				case OpcodeType.DclHsForkPhaseInstanceCount:
 					return HullShaderForkPhaseInstanceCountDeclarationToken.Parse(reader);
-				case OpcodeType.DclFunctionBody :
+				case OpcodeType.DclFunctionBody:
 					return FunctionBodyDeclarationToken.Parse(reader);
-				case OpcodeType.DclFunctionTable :
+				case OpcodeType.DclFunctionTable:
 					return FunctionTableDeclarationToken.Parse(reader);
-				case OpcodeType.DclInterface :
+				case OpcodeType.DclInterface:
 					return InterfaceDeclarationToken.Parse(reader);
 				case OpcodeType.DclThreadGroup:
 					return ThreadGroupDeclarationToken.Parse(reader);
-				case OpcodeType.DclUnorderedAccessViewTyped :
+				case OpcodeType.DclUnorderedAccessViewTyped:
 					return TypedUnorderedAccessViewDeclarationToken.Parse(reader, version);
-				case OpcodeType.DclUnorderedAccessViewRaw :
+				case OpcodeType.DclUnorderedAccessViewRaw:
 					return RawUnorderedAccessViewDeclarationToken.Parse(reader, version);
-				case OpcodeType.DclUnorderedAccessViewStructured :
+				case OpcodeType.DclUnorderedAccessViewStructured:
 					return StructuredUnorderedAccessViewDeclarationToken.Parse(reader, version);
-				case OpcodeType.DclThreadGroupSharedMemoryRaw :
+				case OpcodeType.DclThreadGroupSharedMemoryRaw:
 					return RawThreadGroupSharedMemoryDeclarationToken.Parse(reader);
-				case OpcodeType.DclThreadGroupSharedMemoryStructured :
+				case OpcodeType.DclThreadGroupSharedMemoryStructured:
 					return StructuredThreadGroupSharedMemoryDeclarationToken.Parse(reader);
-				case OpcodeType.DclResourceRaw :
+				case OpcodeType.DclResourceRaw:
 					return RawShaderResourceViewDeclarationToken.Parse(reader, version);
 				case OpcodeType.DclResourceStructured:
 					return StructuredShaderResourceViewDeclarationToken.Parse(reader, version);
-				case OpcodeType.DclStream :
+				case OpcodeType.DclStream:
 					return StreamDeclarationToken.Parse(reader);
 				default:
 					throw new ParseException("OpcodeType '" + opcodeType + "' is not supported.");

@@ -32,13 +32,13 @@ namespace DXDecompiler.Chunks.Fx10
 			result.BufferType = (ConstantBufferType)bufferReader.ReadUInt32();
 			result.VariableCount = bufferReader.ReadUInt32();
 			result.RegisterNumber = bufferReader.ReadUInt32();
-			if (!isShared)
+			if(!isShared)
 			{
 				var unknown0 = bufferReader.ReadUInt32();
 				//TODO: Unknown0
 				//Debug.Assert(result.Unknown0 == 0, $"EffectBuffer.Unknown0: {result.Unknown0}");
 			}
-			for (int i = 0; i < result.VariableCount; i++)
+			for(int i = 0; i < result.VariableCount; i++)
 			{
 				result.Variables.Add(EffectNumericVariable.Parse(reader, bufferReader, version, isShared));
 			}
@@ -49,7 +49,7 @@ namespace DXDecompiler.Chunks.Fx10
 			var sb = new StringBuilder();
 			var bufferType = BufferType.GetDescription();
 			var registerPrefix = BufferType == ConstantBufferType.ConstantBuffer ? "b" : "t";
-			sb.Append(string.Format("{0} {1}", 
+			sb.Append(string.Format("{0} {1}",
 				bufferType, Name));
 			if(RegisterNumber != uint.MaxValue)
 			{
@@ -57,7 +57,7 @@ namespace DXDecompiler.Chunks.Fx10
 			}
 			sb.AppendLine();
 			sb.AppendLine("{");
-			foreach (var variable in Variables)
+			foreach(var variable in Variables)
 			{
 				sb.AppendLine(variable.ToString());
 			}

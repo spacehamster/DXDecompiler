@@ -6,7 +6,7 @@ namespace DXDecompiler.DX9Shader
 	public class InstructionToken : Token
 	{
 		public List<Operand> Operands;
-		public InstructionToken(Opcode opcode, int length, ShaderModel shaderModel) : base(opcode, length, shaderModel) 
+		public InstructionToken(Opcode opcode, int length, ShaderModel shaderModel) : base(opcode, length, shaderModel)
 		{
 			Operands = new List<Operand>();
 		}
@@ -20,7 +20,8 @@ namespace DXDecompiler.DX9Shader
 				if(operand is DestinationOperand)
 				{
 					result += GetDestinationName();
-				} else
+				}
+				else
 				{
 					result += GetSourceName(i);
 				}
@@ -39,7 +40,7 @@ namespace DXDecompiler.DX9Shader
 			const int registerLength = 4;
 			string writeMaskName = instruction.GetDestinationWriteMaskName(registerLength, false);
 			string destinationName = $"{registerName}{writeMaskName}";
-			if (resultModifier != ResultModifier.None)
+			if(resultModifier != ResultModifier.None)
 			{
 				//destinationName += "TODO:Modifier!!!";
 			}
@@ -48,7 +49,7 @@ namespace DXDecompiler.DX9Shader
 
 		static string ApplyModifier(SourceModifier modifier, string value)
 		{
-			switch (modifier)
+			switch(modifier)
 			{
 				case SourceModifier.None:
 					return value;
@@ -88,7 +89,7 @@ namespace DXDecompiler.DX9Shader
 			string sourceRegisterName = instruction.GetParamRegisterName(srcIndex);
 			sourceRegisterName = ApplyModifier(instruction.GetSourceModifier(srcIndex), sourceRegisterName);
 			sourceRegisterName += instruction.GetSourceSwizzleName(srcIndex);
-			if (instruction.IsRelativeAddressMode(srcIndex))
+			if(instruction.IsRelativeAddressMode(srcIndex))
 			{
 				sourceRegisterName += $"[{GetSourceName(srcIndex + 1)}]";
 			}

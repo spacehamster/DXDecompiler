@@ -26,21 +26,22 @@ namespace DXDecompiler.DX9Shader.FX9
 			var blobSize = shaderReader.ReadUInt32();
 			var paddedSize = blobSize + (blobSize % 4 == 0 ? 0 : 4 - blobSize % 4);
 			//Seak ahead
-			var data = shaderReader.ReadBytes((int)paddedSize); 
+			var data = shaderReader.ReadBytes((int)paddedSize);
 			if(result.BlobType == StateBlobType.Shader)
 			{
 				result.Shader = ShaderReader.ReadShader(data);
 			}
-			else if (result.BlobType == StateBlobType.Variable)
+			else if(result.BlobType == StateBlobType.Variable)
 			{
 				result.VariableName = dataReader.TryReadString();
-			} 
+			}
 			else if(result.BlobType == StateBlobType.IndexShader)
 			{
 				var _blobSize = dataReader.ReadUInt32();
 				var variableSize = dataReader.ReadUInt32();
 				result.VariableName = dataReader.ReadString();
-				if (variableSize > (result.VariableName.Length + 1)) {
+				if(variableSize > (result.VariableName.Length + 1))
+				{
 					var paddingCount = variableSize - (result.VariableName.Length + 1);
 					var padding = dataReader.ReadBytes((int)paddingCount);
 				}

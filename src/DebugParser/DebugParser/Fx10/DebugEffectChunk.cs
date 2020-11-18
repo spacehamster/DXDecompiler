@@ -29,11 +29,11 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 		{
 			get
 			{
-				foreach (var buffer in LocalBuffers)
+				foreach(var buffer in LocalBuffers)
 				{
 					yield return buffer;
 				}
-				foreach (var buffer in SharedBuffers)
+				foreach(var buffer in SharedBuffers)
 				{
 					yield return buffer;
 				}
@@ -43,25 +43,25 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 		{
 			get
 			{
-				foreach (var buffer in LocalBuffers)
+				foreach(var buffer in LocalBuffers)
 				{
-					foreach (var variable in buffer.Variables)
+					foreach(var variable in buffer.Variables)
 					{
 						yield return variable;
 					}
 				}
-				foreach (var variable in LocalVariables)
+				foreach(var variable in LocalVariables)
 				{
 					yield return variable;
 				}
-				foreach (var buffer in SharedBuffers)
+				foreach(var buffer in SharedBuffers)
 				{
-					foreach (var variable in buffer.Variables)
+					foreach(var variable in buffer.Variables)
 					{
 						yield return variable;
 					}
 				}
-				foreach (var variable in SharedVariables)
+				foreach(var variable in SharedVariables)
 				{
 					yield return variable;
 				}
@@ -102,39 +102,39 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			dummyReader.ReadUInt32("Zero");
 			var footerReader = reader.CopyAtOffset("Footer", reader, footerOffset);
 			var version = header.Version;
-			for (int i = 0; i < header.ConstantBuffers; i++)
+			for(int i = 0; i < header.ConstantBuffers; i++)
 			{
 				footerReader.AddIndent($"ConstantBuffer {i}");
 				result.LocalBuffers.Add(DebugEffectBuffer.Parse(bodyReader, footerReader, version, false));
 				footerReader.RemoveIndent();
 			}
-			for (int i = 0; i < header.ObjectCount; i++)
+			for(int i = 0; i < header.ObjectCount; i++)
 			{
 				footerReader.AddIndent($"Variable {i}");
 				result.LocalVariables.Add(DebugEffectObjectVariable.Parse(bodyReader, footerReader, version, false));
 				footerReader.RemoveIndent();
 			}
-			for (int i = 0; i < header.SharedConstantBuffers; i++)
+			for(int i = 0; i < header.SharedConstantBuffers; i++)
 			{
 				footerReader.AddIndent($"SharedConstantBuffer {i}");
 				result.SharedBuffers.Add(DebugEffectBuffer.Parse(bodyReader, footerReader, version, true));
 				footerReader.RemoveIndent();
 			}
-			for (int i = 0; i < header.SharedObjectCount; i++)
+			for(int i = 0; i < header.SharedObjectCount; i++)
 			{
 				footerReader.AddIndent($"SharedVariable {i}");
 				result.SharedVariables.Add(DebugEffectObjectVariable.Parse(bodyReader, footerReader, version, true));
 				footerReader.RemoveIndent();
 			}
-			if (header.Version.MajorVersion >= 5)
+			if(header.Version.MajorVersion >= 5)
 			{
-				for (int i = 0; i < header.InterfaceVariableCount; i++)
+				for(int i = 0; i < header.InterfaceVariableCount; i++)
 				{
 					footerReader.AddIndent($"Interface {i}");
 					result.InterfaceVariables.Add(DebugEffectInterfaceVariable.Parse(bodyReader, footerReader, version));
 					footerReader.RemoveIndent();
 				}
-				for (int i = 0; i < header.GroupCount; i++)
+				for(int i = 0; i < header.GroupCount; i++)
 				{
 					footerReader.AddIndent($"Group {i}");
 					result.Groups.Add(DebugEffectGroup.Parse(bodyReader, footerReader, header.Version));
@@ -143,7 +143,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fx10
 			}
 			else
 			{
-				for (int i = 0; i < header.Techniques; i++)
+				for(int i = 0; i < header.Techniques; i++)
 				{
 					footerReader.AddIndent($"Technique {i}");
 					result.Techniques.Add(DebugEffectTechnique.Parse(bodyReader, footerReader, header.Version));

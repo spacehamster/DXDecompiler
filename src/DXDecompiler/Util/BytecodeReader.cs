@@ -70,7 +70,7 @@ namespace DXDecompiler.Util
 		{
 			var sb = new StringBuilder();
 			char nextCharacter;
-			while (!EndOfBuffer && (nextCharacter = _reader.ReadChar()) != 0)
+			while(!EndOfBuffer && (nextCharacter = _reader.ReadChar()) != 0)
 			{
 				sb.Append(nextCharacter);
 			}
@@ -79,12 +79,12 @@ namespace DXDecompiler.Util
 
 		public BytecodeReader CopyAtCurrentPosition(int? count = null)
 		{
-			return CopyAtOffset((int) _reader.BaseStream.Position, count);
+			return CopyAtOffset((int)_reader.BaseStream.Position, count);
 		}
 
 		public BytecodeReader CopyAtOffset(int offset, int? count = null)
 		{
-			count = count ?? (int) (_reader.BaseStream.Length - offset);
+			count = count ?? (int)(_reader.BaseStream.Length - offset);
 			return new BytecodeReader(_buffer, _offset + offset, count.Value);
 		}
 	}
