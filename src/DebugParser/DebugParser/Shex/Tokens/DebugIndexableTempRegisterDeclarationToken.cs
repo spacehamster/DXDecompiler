@@ -1,5 +1,5 @@
 ﻿
-namespace SlimShader.DebugParser.Shex.Tokens
+namespace DXDecompiler.DebugParser.Shex.Tokens
 {
 	public class DebugIndexableTempRegisterDeclarationToken : DebugDeclarationToken
 	{

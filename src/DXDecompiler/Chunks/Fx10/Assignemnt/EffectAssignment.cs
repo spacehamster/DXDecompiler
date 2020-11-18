@@ -1,8 +1,8 @@
-﻿using SlimShader.Chunks.Fx10.Assignemnt;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Fx10.Assignemnt;
+using DXDecompiler.Util;
 using System.Text;
 
-namespace SlimShader.Chunks.Fx10
+namespace DXDecompiler.Chunks.Fx10
 {
 	public class EffectAssignment
 	{

@@ -1,4 +1,4 @@
-﻿namespace SlimShader.Chunks.Shex
+﻿namespace DXDecompiler.Chunks.Shex
 {
 	/// <summary>
 	/// Number of components in data vector referred to by operand

@@ -1,8 +1,8 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Fx10.Assignemnt;
-using SlimShader.Chunks.RTS0;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Fx10.Assignemnt;
+using DXDecompiler.Chunks.RTS0;
 
-namespace SlimShader.Chunks.Fx10
+namespace DXDecompiler.Chunks.Fx10
 {
 	public enum EffectAssignmentType
 	{

@@ -1,6 +1,6 @@
-﻿using SlimShader.Chunks.Aon9;
+﻿using DXDecompiler.Chunks.Aon9;
 
-namespace SlimShader.DebugParser.Aon9
+namespace DXDecompiler.DebugParser.Aon9
 {
 	public class DebugRuntimeConstantMapping
 	{

@@ -1,7 +1,7 @@
-﻿using SlimShader.Chunks.Shex;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Util;
 
-namespace SlimShader.DebugParser.Shex.Tokens
+namespace DXDecompiler.DebugParser.Shex.Tokens
 {
 	public class DebugStructuredThreadGroupSharedMemoryDeclarationToken : DebugDeclarationToken
 	{

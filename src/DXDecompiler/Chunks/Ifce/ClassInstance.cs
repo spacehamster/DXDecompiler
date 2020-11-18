@@ -1,7 +1,7 @@
-using SlimShader.Util;
+using DXDecompiler.Util;
 using System.Diagnostics;
 
-namespace SlimShader.Chunks.Ifce
+namespace DXDecompiler.Chunks.Ifce
 {
 	public class ClassInstance
 	{

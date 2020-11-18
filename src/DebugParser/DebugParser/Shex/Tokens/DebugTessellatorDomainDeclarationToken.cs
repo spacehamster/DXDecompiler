@@ -1,12 +1,12 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SlimShader.DebugParser.Shex.Tokens
+namespace DXDecompiler.DebugParser.Shex.Tokens
 {
 	class DebugTessellatorDomainDeclarationToken : DebugDeclarationToken
 	{

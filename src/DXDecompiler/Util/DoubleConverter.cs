@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 
-namespace SlimShader.Util
+namespace DXDecompiler.Util
 {
 	/// <summary>
 	/// A class to allow the conversion of doubles to string representations of

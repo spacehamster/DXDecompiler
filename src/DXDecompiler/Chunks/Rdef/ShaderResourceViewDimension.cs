@@ -1,4 +1,4 @@
-namespace SlimShader.Chunks.Rdef
+namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// Very similar to Shader.ResourceDimension, but this one is used within the RDEF (Resource Definition) chunk.

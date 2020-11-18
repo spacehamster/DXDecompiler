@@ -2,20 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SlimShader.Chunks;
-using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Fx10;
-using SlimShader.Chunks.Ifce;
-using SlimShader.Chunks.Libf;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Chunks.Sfi0;
-using SlimShader.Chunks.Shex;
-using SlimShader.Chunks.Shex.Tokens;
-using SlimShader.Chunks.Stat;
-using SlimShader.Chunks.Xsgn;
-using SlimShader.Util;
+using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Fx10;
+using DXDecompiler.Chunks.Ifce;
+using DXDecompiler.Chunks.Libf;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.Sfi0;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Chunks.Shex.Tokens;
+using DXDecompiler.Chunks.Stat;
+using DXDecompiler.Chunks.Xsgn;
+using DXDecompiler.Util;
 
-namespace SlimShader
+namespace DXDecompiler
 {
 	public class BytecodeContainer
 	{

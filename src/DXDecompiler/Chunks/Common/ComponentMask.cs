@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.Chunks.Common
+namespace DXDecompiler.Chunks.Common
 {
 	[Flags]
 	public enum ComponentMask

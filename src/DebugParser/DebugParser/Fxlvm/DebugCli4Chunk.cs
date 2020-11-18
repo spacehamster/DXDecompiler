@@ -1,9 +1,9 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Chunks.Fxlvm
+namespace DXDecompiler.DebugParser.Chunks.Fxlvm
 {
 	public class DebugCli4Chunk : DebugBytecodeChunk
 	{

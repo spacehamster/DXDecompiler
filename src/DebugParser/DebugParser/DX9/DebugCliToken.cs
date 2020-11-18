@@ -1,4 +1,4 @@
-﻿using SlimShader.DebugParser;
+﻿using DXDecompiler.DebugParser;
 using System.Collections.Generic;
 using System.Text;
 

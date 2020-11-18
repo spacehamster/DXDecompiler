@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Shex;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Fx10
+namespace DXDecompiler.Chunks.Fx10
 {
 	/// <summary>
 	/// 

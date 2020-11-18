@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.Chunks.RTS0
+namespace DXDecompiler.Chunks.RTS0
 {
 	/// <summary>
 	/// Root Signature Version

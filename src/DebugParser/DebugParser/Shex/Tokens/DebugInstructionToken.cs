@@ -1,9 +1,9 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Shex;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Util;
 using System.Collections.Generic;
 
-namespace SlimShader.DebugParser.Shex.Tokens
+namespace DXDecompiler.DebugParser.Shex.Tokens
 {
 	public class DebugInstructionToken : DebugOpcodeToken
 	{

@@ -1,6 +1,6 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 
-namespace SlimShader.DebugParser
+namespace DXDecompiler.DebugParser
 {
 	public class DebugBytecodeContainerHeader
 	{

@@ -1,22 +1,22 @@
-﻿using SlimShader.Chunks;
-using SlimShader.DebugParser.Aon9;
-using SlimShader.DebugParser.Chunks.Fx10;
-using SlimShader.DebugParser.Chunks.Fxlvm;
-using SlimShader.DebugParser.Chunks.Libf;
-using SlimShader.DebugParser.Icfe;
-using SlimShader.DebugParser.Libf;
-using SlimShader.DebugParser.Rdef;
-using SlimShader.DebugParser.Sfi0;
-using SlimShader.DebugParser.Shex;
-using SlimShader.DebugParser.Stat;
-using SlimShader.DebugParser.Xsgn;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks;
+using DXDecompiler.DebugParser.Aon9;
+using DXDecompiler.DebugParser.Chunks.Fx10;
+using DXDecompiler.DebugParser.Chunks.Fxlvm;
+using DXDecompiler.DebugParser.Chunks.Libf;
+using DXDecompiler.DebugParser.Icfe;
+using DXDecompiler.DebugParser.Libf;
+using DXDecompiler.DebugParser.Rdef;
+using DXDecompiler.DebugParser.Sfi0;
+using DXDecompiler.DebugParser.Shex;
+using DXDecompiler.DebugParser.Stat;
+using DXDecompiler.DebugParser.Xsgn;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser
+namespace DXDecompiler.DebugParser
 {
 	public class DebugBytecodeChunk
 	{
@@ -90,7 +90,7 @@ namespace SlimShader.DebugParser
 				case ChunkType.Osg1:
 					chunk = DebugInputOutputSignatureChunk.Parse(chunkContentReader, chunkType,
 						container.ResourceDefinition?.Target?.ProgramType ??
-						(SlimShader.Chunks.Common.ProgramType)100);
+						(DXDecompiler.Chunks.Common.ProgramType)100);
 					break;
 				case ChunkType.Rdef:
 					chunk = DebugResourceDefinitionChunk.Parse(chunkContentReader);

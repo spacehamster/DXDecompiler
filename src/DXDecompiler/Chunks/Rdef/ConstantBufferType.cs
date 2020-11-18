@@ -1,6 +1,6 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Rdef
+namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// Indicates a constant buffer's type.

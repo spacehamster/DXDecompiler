@@ -1,7 +1,7 @@
 using System;
-using SlimShader.Util;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Shex.Tokens
+namespace DXDecompiler.Chunks.Shex.Tokens
 {
 	/// <summary>
 	/// Input Register Declaration (see separate declarations for Pixel Shaders)

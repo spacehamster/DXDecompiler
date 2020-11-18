@@ -1,4 +1,4 @@
-﻿namespace SlimShader.Chunks.RTS0
+﻿namespace DXDecompiler.Chunks.RTS0
 {
 	/// <summary>
 	/// Root Signature parameter visibility to shader types.

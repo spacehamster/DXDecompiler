@@ -1,12 +1,12 @@
-﻿using SlimShader.Chunks;
-using SlimShader.Chunks.RTS0;
+﻿using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.RTS0;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SlimShader.Decompiler
+namespace DXDecompiler.Decompiler
 {
 	internal class RootSignature
 	{

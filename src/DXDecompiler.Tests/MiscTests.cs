@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using SlimShader.Util;
+using DXDecompiler.Util;
 
-namespace SlimShader.Tests
+namespace DXDecompiler.Tests
 {
 	[TestFixture]
 	class MiscTests

@@ -1,4 +1,4 @@
-namespace SlimShader.Chunks.Xsgn
+namespace DXDecompiler.Chunks.Xsgn
 {
 	public enum SignatureElementSize
 	{

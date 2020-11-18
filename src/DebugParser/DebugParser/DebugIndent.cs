@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser
+namespace DXDecompiler.DebugParser
 {
 	public class DebugIndent : IDumpable
 	{

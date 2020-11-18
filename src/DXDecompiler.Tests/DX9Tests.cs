@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using SharpDX.D3DCompiler;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Chunks.Xsgn;
-using SlimShader.DebugParser.DX9;
-using SlimShader.DebugParser.FX9;
-using SlimShader.Decompiler;
-using SlimShader.DX9Shader;
-using SlimShader.Tests.Util;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.Xsgn;
+using DXDecompiler.DebugParser.DX9;
+using DXDecompiler.DebugParser.FX9;
+using DXDecompiler.Decompiler;
+using DXDecompiler.DX9Shader;
+using DXDecompiler.Tests.Util;
 
-namespace SlimShader.Tests
+namespace DXDecompiler.Tests
 {
 	[TestFixture]
 	public class DX9Tests

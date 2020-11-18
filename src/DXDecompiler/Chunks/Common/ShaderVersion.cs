@@ -1,6 +1,6 @@
-using SlimShader.Util;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Common
+namespace DXDecompiler.Chunks.Common
 {
 	/// <summary>
 	/// Version Token (VerTok)

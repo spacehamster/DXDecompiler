@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using SlimShader.Chunks.Shex.Tokens;
+using DXDecompiler.Chunks.Shex.Tokens;
 
-namespace SlimShader.Chunks.Shex
+namespace DXDecompiler.Chunks.Shex
 {
 	public class RegisterCounts
 	{

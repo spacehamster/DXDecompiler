@@ -1,4 +1,4 @@
-namespace SlimShader.Chunks.Shex.Tokens
+namespace DXDecompiler.Chunks.Shex.Tokens
 {
 	public class OperandIndex
 	{

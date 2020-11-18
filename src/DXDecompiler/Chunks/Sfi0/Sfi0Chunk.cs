@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Shex;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Sfi0
+namespace DXDecompiler.Chunks.Sfi0
 {
 	/// <summary>
 	/// TODO: No idea, but this is present in ParticleDrawVS.asm, which is unique for including

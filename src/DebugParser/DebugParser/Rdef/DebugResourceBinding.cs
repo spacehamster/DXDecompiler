@@ -1,7 +1,7 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Rdef;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Rdef;
 
-namespace SlimShader.DebugParser.Rdef
+namespace DXDecompiler.DebugParser.Rdef
 {
 	public class DebugResourceBinding
 	{

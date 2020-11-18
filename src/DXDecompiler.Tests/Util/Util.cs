@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using static SlimShader.Util.DoubleConverter;
+using static DXDecompiler.Util.DoubleConverter;
 
-namespace SlimShader.Tests
+namespace DXDecompiler.Tests
 {
 	public class FileUtil
 	{

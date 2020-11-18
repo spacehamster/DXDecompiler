@@ -1,10 +1,10 @@
-﻿using SlimShader.DX9Shader.Bytecode.Declaration;
-using SlimShader.Util;
+﻿using DXDecompiler.DX9Shader.Bytecode.Declaration;
+using DXDecompiler.Util;
 using System;
 using System.Diagnostics;
 using System.Linq;
 
-namespace SlimShader.DX9Shader.Bytecode.Fxlvm
+namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 {
 	public class FxlcOperand
 	{

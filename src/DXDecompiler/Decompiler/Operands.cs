@@ -1,16 +1,16 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Shex.Tokens;
-using SlimShader.Chunks;
-using SlimShader.Util;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Chunks.Shex;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Shex.Tokens;
+using DXDecompiler.Chunks;
+using DXDecompiler.Util;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.Shex;
 using System.Linq;
 using System;
 using System.Text;
 
-namespace SlimShader.Decompiler
+namespace DXDecompiler.Decompiler
 {
-	public partial class DXDecompiler
+	public partial class HLSLDecompiler
 	{
 		string GetOperandIndex(Operand operand)
 		{

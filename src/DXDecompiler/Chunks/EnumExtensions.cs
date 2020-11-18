@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace SlimShader.Chunks
+namespace DXDecompiler.Chunks
 {
 	public static class EnumExtensions
 	{

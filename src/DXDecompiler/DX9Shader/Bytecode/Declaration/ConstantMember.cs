@@ -1,6 +1,6 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 
-namespace SlimShader.DX9Shader.Bytecode.Declaration
+namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 {
 	public class ConstantMember
 	{

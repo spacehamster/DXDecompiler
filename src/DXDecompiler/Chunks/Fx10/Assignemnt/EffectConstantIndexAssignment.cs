@@ -1,7 +1,7 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System.Text;
 
-namespace SlimShader.Chunks.Fx10
+namespace DXDecompiler.Chunks.Fx10
 {
 	public class EffectConstantIndexAssignment : EffectAssignment
 	{

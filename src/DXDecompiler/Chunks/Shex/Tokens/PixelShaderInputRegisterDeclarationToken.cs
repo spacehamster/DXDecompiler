@@ -1,4 +1,4 @@
-namespace SlimShader.Chunks.Shex.Tokens
+namespace DXDecompiler.Chunks.Shex.Tokens
 {
 	/// <summary>
 	/// Pixel Shader Input Register Declaration

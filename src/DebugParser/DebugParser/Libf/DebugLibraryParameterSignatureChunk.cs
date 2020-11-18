@@ -1,9 +1,9 @@
-﻿using SlimShader.Chunks.Rdef;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Util;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SlimShader.DebugParser.Chunks.Libf
+namespace DXDecompiler.DebugParser.Chunks.Libf
 {
 	public class DebugLibraryParameterSignatureChunk : DebugBytecodeChunk
 	{

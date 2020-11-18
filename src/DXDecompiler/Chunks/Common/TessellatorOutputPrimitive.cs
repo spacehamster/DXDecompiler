@@ -1,4 +1,4 @@
-﻿namespace SlimShader.Chunks.Common
+﻿namespace DXDecompiler.Chunks.Common
 {
 	public enum TessellatorOutputPrimitive
 	{

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using SlimShader.Util;
+using DXDecompiler.Util;
 
-namespace SlimShader.DX9Shader.Bytecode
+namespace DXDecompiler.DX9Shader.Bytecode
 {
 	public class CliToken
 	{

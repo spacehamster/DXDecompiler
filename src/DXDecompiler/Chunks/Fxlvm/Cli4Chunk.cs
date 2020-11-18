@@ -1,8 +1,8 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SlimShader.Chunks.Fxlvm
+namespace DXDecompiler.Chunks.Fxlvm
 {
 	/* 
 	 * Format

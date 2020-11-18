@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.Chunks.RTS0
+namespace DXDecompiler.Chunks.RTS0
 {
 	/// <summary>
 	/// Flags for descriptor ranges

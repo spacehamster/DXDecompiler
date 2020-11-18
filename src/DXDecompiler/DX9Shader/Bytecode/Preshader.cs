@@ -1,6 +1,6 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 
-namespace SlimShader.DX9Shader.Bytecode
+namespace DXDecompiler.DX9Shader.Bytecode
 {
 	public class Preshader
 	{

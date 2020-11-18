@@ -1,8 +1,8 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 
-namespace SlimShader.DX9Shader.Bytecode.Declaration
+namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 {
 	public class ConstantType
 	{

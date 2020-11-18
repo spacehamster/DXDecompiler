@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Fx10;
-using SlimShader.Chunks.Fx10.Assignemnt;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Fx10;
+using DXDecompiler.Chunks.Fx10.Assignemnt;
 
-namespace SlimShader.Chunks.Shex
+namespace DXDecompiler.Chunks.Shex
 {
 	public static class EnumExtensions
 	{

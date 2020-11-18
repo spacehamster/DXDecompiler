@@ -1,7 +1,7 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System.Collections.Generic;
 
-namespace SlimShader.DX9Shader.Bytecode.Fxlvm
+namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 {
 	public class FxlcBlock
 	{

@@ -1,14 +1,14 @@
-﻿using SlimShader.Chunks.Xsgn;
-using SlimShader.Chunks;
+﻿using DXDecompiler.Chunks.Xsgn;
+using DXDecompiler.Chunks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SlimShader.Chunks.Common;
+using DXDecompiler.Chunks.Common;
 
-namespace SlimShader.Decompiler
+namespace DXDecompiler.Decompiler
 {
-	public partial class DXDecompiler
+	public partial class HLSLDecompiler
 	{
 		void WriteSignatures()
 		{

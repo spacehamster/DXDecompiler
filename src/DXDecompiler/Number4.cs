@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Shex;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Shex;
 
-namespace SlimShader
+namespace DXDecompiler
 {
 	/// <summary>
 	/// Represents four Numbers, or two doubles.

@@ -1,7 +1,7 @@
-﻿using SlimShader.DX9Shader;
+﻿using DXDecompiler.DX9Shader;
 using System.Collections.Generic;
 
-namespace SlimShader.DebugParser.FX9
+namespace DXDecompiler.DebugParser.FX9
 {
 	public static class Extensions
 	{

@@ -1,12 +1,12 @@
-﻿using SlimShader.DX9Shader;
-using SlimShader.DX9Shader.Bytecode.Fxlvm;
-using SlimShader.Util;
+﻿using DXDecompiler.DX9Shader;
+using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.Chunks.Fxlvm
+namespace DXDecompiler.Chunks.Fxlvm
 {
 	public class FxlcChunk : BytecodeChunk
 	{

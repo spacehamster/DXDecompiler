@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SlimShader.Util;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Libf
+namespace DXDecompiler.Chunks.Libf
 {
 	/// <summary>
 	/// Might be related to D3D11_FUNCTION_DESC

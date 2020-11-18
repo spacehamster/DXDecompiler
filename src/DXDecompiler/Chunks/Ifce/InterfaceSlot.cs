@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SlimShader.Util;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Ifce
+namespace DXDecompiler.Chunks.Ifce
 {
 	public class InterfaceSlot
 	{

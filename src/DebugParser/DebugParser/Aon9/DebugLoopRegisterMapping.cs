@@ -1,4 +1,4 @@
-﻿namespace SlimShader.DebugParser.Aon9
+﻿namespace DXDecompiler.DebugParser.Aon9
 {
 	public class DebugLoopRegisterMapping
 	{

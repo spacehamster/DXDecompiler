@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.Chunks
+namespace DXDecompiler.Chunks
 {
 	/// <summary>
 	/// Provided here because Portable Class Libraries don't include

@@ -1,12 +1,12 @@
-﻿using SlimShader.Chunks.Fx10.Assignemnt;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Chunks.Shex;
+﻿using DXDecompiler.Chunks.Fx10.Assignemnt;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.Shex;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.Chunks.Fx10
+namespace DXDecompiler.Chunks.Fx10
 {
 	public static class Extensions
 	{

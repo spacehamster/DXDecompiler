@@ -1,8 +1,8 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 using System.Text;
 
-namespace SlimShader.DebugParser.Chunks.Fx10
+namespace DXDecompiler.DebugParser.Chunks.Fx10
 {
 	public class DebugEffectHeader
 	{

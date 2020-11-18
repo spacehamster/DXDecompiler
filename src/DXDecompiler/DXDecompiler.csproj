@@ -130,7 +130,7 @@
     <Compile Include="Chunks\Xsgn\SignatureParameterDescriptionCollection.cs" />
     <Compile Include="Decompiler\ComparisonType.cs" />
     <Compile Include="Decompiler\Declarations.cs" />
-    <Compile Include="Decompiler\DXDecompiler.cs" />
+    <Compile Include="Decompiler\HLSLDecompiler.cs" />
     <Compile Include="Decompiler\Extensions.cs" />
     <Compile Include="Decompiler\Interfaces.cs" />
     <Compile Include="Decompiler\Register.cs" />

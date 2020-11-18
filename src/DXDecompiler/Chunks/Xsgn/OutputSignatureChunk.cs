@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.Chunks.Xsgn
+namespace DXDecompiler.Chunks.Xsgn
 {
 	public class OutputSignatureChunk : InputOutputSignatureChunk
 	{

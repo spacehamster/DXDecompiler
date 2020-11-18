@@ -1,7 +1,7 @@
-﻿using SlimShader.DebugParser.DX9;
-using SlimShader.DX9Shader;
+﻿using DXDecompiler.DebugParser.DX9;
+using DXDecompiler.DX9Shader;
 
-namespace SlimShader.DebugParser.FX9
+namespace DXDecompiler.DebugParser.FX9
 {
 	public class DebugBinaryData
 	{

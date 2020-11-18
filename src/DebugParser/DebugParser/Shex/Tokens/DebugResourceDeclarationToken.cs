@@ -1,9 +1,9 @@
-﻿using SlimShader.Chunks.Shex;
-using SlimShader.Chunks.Shex.Tokens;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Chunks.Shex.Tokens;
+using DXDecompiler.Util;
 using System.Linq;
 
-namespace SlimShader.DebugParser.Shex.Tokens
+namespace DXDecompiler.DebugParser.Shex.Tokens
 {
 	public class DebugResourceDeclarationToken : DebugDeclarationToken
 	{

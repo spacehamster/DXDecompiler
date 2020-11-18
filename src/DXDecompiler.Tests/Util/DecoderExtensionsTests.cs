@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
-using SlimShader.Chunks.Shex;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Util;
 using System;
 using System.IO;
 
-namespace SlimShader.Tests.Util
+namespace DXDecompiler.Tests.Util
 {
 	[TestFixture]
 	public class DecoderExtensionsTests

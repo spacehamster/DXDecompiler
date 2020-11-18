@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.Tests
+namespace DXDecompiler.Tests
 {
 	/// <summary>
 	/// Refer https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/using-shader-linking

@@ -1,4 +1,4 @@
-﻿using SlimShader.DX9Shader;
+﻿using DXDecompiler.DX9Shader;
 using System;
 using System.Collections.Generic;
 using System.Linq;

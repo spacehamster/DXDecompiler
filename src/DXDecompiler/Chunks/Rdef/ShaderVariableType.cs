@@ -1,6 +1,6 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Rdef
+namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// These flags identify various data, texture, and buffer types that can be assigned to a shader variable.

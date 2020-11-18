@@ -1,11 +1,11 @@
-﻿using SlimShader.Chunks.Fx10;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Fx10;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Chunks.Fx10
+namespace DXDecompiler.DebugParser.Chunks.Fx10
 {
 	public class DebugEffectNumericType
 	{

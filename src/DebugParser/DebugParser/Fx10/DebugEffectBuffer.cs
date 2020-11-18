@@ -1,10 +1,10 @@
-﻿using SlimShader.Chunks;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Util;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SlimShader.DebugParser.Chunks.Fx10
+namespace DXDecompiler.DebugParser.Chunks.Fx10
 {
 	public class DebugEffectBuffer
 	{

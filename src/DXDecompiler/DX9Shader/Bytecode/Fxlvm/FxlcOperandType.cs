@@ -1,4 +1,4 @@
-﻿namespace SlimShader.DX9Shader.Bytecode.Fxlvm
+﻿namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 {
 	public enum FxlcOperandType
 	{

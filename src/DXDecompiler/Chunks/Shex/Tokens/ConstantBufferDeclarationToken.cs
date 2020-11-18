@@ -1,8 +1,8 @@
-using SlimShader.Chunks.Common;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 using System.Diagnostics;
 
-namespace SlimShader.Chunks.Shex.Tokens
+namespace DXDecompiler.Chunks.Shex.Tokens
 {
 	/// <summary>
 	/// Constant Buffer Declaration

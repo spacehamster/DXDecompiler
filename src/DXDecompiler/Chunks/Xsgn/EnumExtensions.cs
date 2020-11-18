@@ -1,8 +1,8 @@
 ﻿using System;
-using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Shex;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Shex;
 
-namespace SlimShader.Chunks.Xsgn
+namespace DXDecompiler.Chunks.Xsgn
 {
 	public static class EnumExtensions
 	{

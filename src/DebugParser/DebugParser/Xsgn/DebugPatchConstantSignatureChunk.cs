@@ -1,4 +1,4 @@
-﻿namespace SlimShader.DebugParser.Xsgn
+﻿namespace DXDecompiler.DebugParser.Xsgn
 {
 	public class DebugPatchConstantSignatureChunk : DebugInputOutputSignatureChunk
 	{

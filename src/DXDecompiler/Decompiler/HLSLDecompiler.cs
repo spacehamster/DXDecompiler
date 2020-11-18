@@ -1,18 +1,18 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Chunks.Shex;
-using SlimShader.Chunks.Shex.Tokens;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Chunks.Shex.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SlimShader.Chunks;
-using SlimShader.Chunks.Libf;
-using SlimShader.Chunks.Fx10;
+using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.Libf;
+using DXDecompiler.Chunks.Fx10;
 
-namespace SlimShader.Decompiler
+namespace DXDecompiler.Decompiler
 {
-	public partial class DXDecompiler
+	public partial class HLSLDecompiler
 	{
 		StringBuilder Output = new StringBuilder();
 		BytecodeContainer Container;
@@ -33,7 +33,7 @@ namespace SlimShader.Decompiler
 				var sb = new StringBuilder();
 				foreach(var lib in container.Chunks.OfType<LibfChunk>())
 				{
-					var libDecompiler = new DXDecompiler(lib.LibraryContainer);
+					var libDecompiler = new HLSLDecompiler(lib.LibraryContainer);
 					sb.AppendLine(libDecompiler.Decompile());
 				}
 				return sb.ToString();
@@ -45,10 +45,10 @@ namespace SlimShader.Decompiler
 					.First()
 					.ToString();
 			}
-			var decompiler = new DXDecompiler(container);
+			var decompiler = new HLSLDecompiler(container);
 			return decompiler.Decompile();
 		}
-		DXDecompiler(BytecodeContainer container)
+		HLSLDecompiler(BytecodeContainer container)
 		{
 			RegisterState = new RegisterState(container);
 			Container = container;

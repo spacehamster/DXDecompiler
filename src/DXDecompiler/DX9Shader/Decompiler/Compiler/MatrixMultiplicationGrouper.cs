@@ -1,9 +1,9 @@
-﻿using SlimShader.DX9Shader.Bytecode.Declaration;
+﻿using DXDecompiler.DX9Shader.Bytecode.Declaration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlimShader.DX9Shader
+namespace DXDecompiler.DX9Shader
 {
 	public class MatrixMultiplicationGrouper
 	{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.Chunks.Common
+namespace DXDecompiler.Chunks.Common
 {
 	/// <summary>
 	/// Based on D3D12_STENCIL_OP

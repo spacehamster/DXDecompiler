@@ -1,8 +1,8 @@
-﻿using SlimShader.Chunks.Shex;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Util;
 using System.Linq;
 
-namespace SlimShader.DebugParser.Shex.Tokens
+namespace DXDecompiler.DebugParser.Shex.Tokens
 {
 	public abstract class DebugCustomDataToken : DebugOpcodeToken
 	{

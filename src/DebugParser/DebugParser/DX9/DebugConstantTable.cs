@@ -1,8 +1,8 @@
-﻿using SlimShader.DX9Shader;
+﻿using DXDecompiler.DX9Shader;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlimShader.DebugParser.DX9
+namespace DXDecompiler.DebugParser.DX9
 {
 	public class DebugConstantTable
 	{

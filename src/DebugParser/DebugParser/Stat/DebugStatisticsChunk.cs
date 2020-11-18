@@ -1,10 +1,10 @@
-﻿using SlimShader.Chunks.Common;
+﻿using DXDecompiler.Chunks.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Stat
+namespace DXDecompiler.DebugParser.Stat
 {
 	public class DebugStatisticsChunk : DebugBytecodeChunk
 	{

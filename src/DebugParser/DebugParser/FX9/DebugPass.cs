@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SlimShader.DebugParser.FX9
+namespace DXDecompiler.DebugParser.FX9
 {
 	public class DebugPass
 	{

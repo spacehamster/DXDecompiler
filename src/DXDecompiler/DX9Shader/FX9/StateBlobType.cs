@@ -1,4 +1,4 @@
-﻿namespace SlimShader.DX9Shader.FX9
+﻿namespace DXDecompiler.DX9Shader.FX9
 {
 	public enum StateBlobType
 	{

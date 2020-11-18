@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace SlimShader.Util
+namespace DXDecompiler.Util
 {
 	public class BytecodeReader
 	{

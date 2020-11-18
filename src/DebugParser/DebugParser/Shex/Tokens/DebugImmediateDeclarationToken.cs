@@ -1,4 +1,4 @@
-﻿namespace SlimShader.DebugParser.Shex.Tokens
+﻿namespace DXDecompiler.DebugParser.Shex.Tokens
 {
 	public abstract class DebugImmediateDeclarationToken : DebugCustomDataToken
 	{

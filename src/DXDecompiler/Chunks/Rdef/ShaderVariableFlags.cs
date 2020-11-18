@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.Chunks.Rdef
+namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// Values that identify information about a shader variable.

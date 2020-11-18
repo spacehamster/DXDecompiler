@@ -1,12 +1,12 @@
 ﻿using NUnit.Framework;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D10;
-using Fx10 = SlimShader.Chunks.Fx10;
+using Fx10 = DXDecompiler.Chunks.Fx10;
 using System.Collections.Generic;
 using System.Linq;
-using SlimShader.Tests.DX10Util;
+using DXDecompiler.Tests.DX10Util;
 
-namespace SlimShader.Tests
+namespace DXDecompiler.Tests
 {
 	class Effects10
 	{

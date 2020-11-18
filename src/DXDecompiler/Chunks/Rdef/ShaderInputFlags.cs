@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.Chunks.Rdef
+namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// Based on _D3D_SHADER_INPUT_FLAGS

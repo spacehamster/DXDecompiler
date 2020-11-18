@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.Chunks.Sfi0
+namespace DXDecompiler.Chunks.Sfi0
 {
 	[Flags]
 	public enum ShaderRequiresFlags

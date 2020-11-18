@@ -1,7 +1,7 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Shex.Tokens
+namespace DXDecompiler.Chunks.Shex.Tokens
 {
 	/// <summary>
 	/// Structured Shader Resource View Declaration

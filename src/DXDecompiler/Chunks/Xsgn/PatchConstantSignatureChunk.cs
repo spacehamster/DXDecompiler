@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace SlimShader.Chunks.Xsgn
+namespace DXDecompiler.Chunks.Xsgn
 {
 	public class PatchConstantSignatureChunk : InputOutputSignatureChunk
 	{

@@ -1,6 +1,6 @@
-using SlimShader.Util;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Shex.Tokens
+namespace DXDecompiler.Chunks.Shex.Tokens
 {
 	/// <summary>
 	/// Hull Shader Declaration Phase: Hull Shader Max Tessfactor

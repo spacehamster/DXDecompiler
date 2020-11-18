@@ -1,7 +1,7 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System.Collections.Generic;
 
-namespace SlimShader.DebugParser.Shex.Tokens
+namespace DXDecompiler.DebugParser.Shex.Tokens
 {
 	public class DebugInterfaceDeclarationToken : DebugDeclarationToken
 	{

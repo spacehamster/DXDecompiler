@@ -1,8 +1,8 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SlimShader.DX9Shader.FX9
+namespace DXDecompiler.DX9Shader.FX9
 {
 	public class SamplerState
 	{

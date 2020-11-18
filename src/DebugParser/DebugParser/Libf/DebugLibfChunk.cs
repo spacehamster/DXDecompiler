@@ -1,4 +1,4 @@
-﻿namespace SlimShader.DebugParser.Libf
+﻿namespace DXDecompiler.DebugParser.Libf
 {
 	public class DebugLibfChunk : DebugBytecodeChunk
 	{

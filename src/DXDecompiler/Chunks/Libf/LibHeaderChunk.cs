@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using SlimShader.Util;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Libf
+namespace DXDecompiler.Chunks.Libf
 {
 	public class LibHeaderChunk : BytecodeChunk
 	{

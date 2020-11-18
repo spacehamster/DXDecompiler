@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace SlimShader.DebugParser.Icfe
+namespace DXDecompiler.DebugParser.Icfe
 {
 	public class DebugClassInstance
 	{

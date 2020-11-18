@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SlimShader.DX9Shader
+namespace DXDecompiler.DX9Shader
 {
 	public class Token
 	{

@@ -1,15 +1,15 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Chunks;
-using SlimShader.Chunks.Shex;
-using SlimShader.Chunks.Shex.Tokens;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Chunks.Shex.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.Decompiler
+namespace DXDecompiler.Decompiler
 {
-	public partial class DXDecompiler
+	public partial class HLSLDecompiler
 	{
 		internal void LogDeclaration(IEnumerable<DeclarationToken> tokens)
 		{

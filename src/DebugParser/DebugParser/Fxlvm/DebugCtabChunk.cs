@@ -1,10 +1,10 @@
-﻿using SlimShader.DebugParser.DX9;
-using SlimShader.DX9Shader;
-using SlimShader.DX9Shader.Bytecode.Declaration;
+﻿using DXDecompiler.DebugParser.DX9;
+using DXDecompiler.DX9Shader;
+using DXDecompiler.DX9Shader.Bytecode.Declaration;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlimShader.DebugParser.Chunks.Fxlvm
+namespace DXDecompiler.DebugParser.Chunks.Fxlvm
 {
 	public class DebugCtabChunk : DebugBytecodeChunk
 	{

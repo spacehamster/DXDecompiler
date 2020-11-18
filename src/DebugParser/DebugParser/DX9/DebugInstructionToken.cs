@@ -1,5 +1,5 @@
-﻿using SlimShader.DebugParser;
-using SlimShader.DX9Shader;
+﻿using DXDecompiler.DebugParser;
+using DXDecompiler.DX9Shader;
 using System.Collections.Generic;
 
 namespace DebugParser.DebugParser.DX9

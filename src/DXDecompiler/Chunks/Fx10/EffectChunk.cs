@@ -1,9 +1,9 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SlimShader.Chunks.Fx10
+namespace DXDecompiler.Chunks.Fx10
 {
 	/// <summary>
 	/// Looks vaguely similar to D3D10_EFFECT_DESC and D3D10_STATE_BLOCK_MASK

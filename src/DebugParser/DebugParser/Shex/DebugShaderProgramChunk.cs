@@ -1,10 +1,10 @@
-﻿using SlimShader.Chunks.Shex;
-using SlimShader.DebugParser.Shex.Tokens;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Shex;
+using DXDecompiler.DebugParser.Shex.Tokens;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 
-namespace SlimShader.DebugParser.Shex
+namespace DXDecompiler.DebugParser.Shex
 {
 	public class DebugShaderProgramChunk : DebugBytecodeChunk
 	{

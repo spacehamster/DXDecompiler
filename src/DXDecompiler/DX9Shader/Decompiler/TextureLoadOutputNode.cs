@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SlimShader.DX9Shader
+namespace DXDecompiler.DX9Shader
 {
 	public class TextureLoadOutputNode : HlslTreeNode, IHasComponentIndex
 	{

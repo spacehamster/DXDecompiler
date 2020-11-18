@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SlimShader.Tests.Util
+namespace DXDecompiler.Tests.Util
 {
 	public class TestUtils
 	{

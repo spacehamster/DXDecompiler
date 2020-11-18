@@ -1,9 +1,9 @@
-﻿using SlimShader;
-using SlimShader.DebugParser;
-using SlimShader.DebugParser.DX9;
-using SlimShader.DebugParser.FX9;
-using SlimShader.Decompiler;
-using SlimShader.Util;
+﻿using DXDecompiler;
+using DXDecompiler.DebugParser;
+using DXDecompiler.DebugParser.DX9;
+using DXDecompiler.DebugParser.FX9;
+using DXDecompiler.Decompiler;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,10 +30,10 @@ namespace DXDecompilerCmd
 			{
 				return ProgramType.DXBC;
 			}
-			var dx9ShaderType = (SlimShader.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
-			if (dx9ShaderType == SlimShader.DX9Shader.ShaderType.Vertex ||
-				dx9ShaderType == SlimShader.DX9Shader.ShaderType.Pixel || 
-				dx9ShaderType == SlimShader.DX9Shader.ShaderType.Effect)
+			var dx9ShaderType = (DXDecompiler.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
+			if (dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Vertex ||
+				dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Pixel || 
+				dx9ShaderType == DXDecompiler.DX9Shader.ShaderType.Effect)
 			{
 				return ProgramType.DX9;
 			}
@@ -121,7 +121,7 @@ namespace DXDecompilerCmd
 					}
 					else if (options.Mode == DecompileMode.Decompile)
 					{
-						var hlsl = DXDecompiler.Decompile(data);
+						var hlsl = HLSLDecompiler.Decompile(data);
 						sw.Write(hlsl);
 					}
 					else if (options.Mode == DecompileMode.Debug)
@@ -142,19 +142,19 @@ namespace DXDecompilerCmd
 				{
 					if (options.Mode == DecompileMode.Dissassemble)
 					{
-						var disasm = SlimShader.DX9Shader.AsmWriter.Disassemble(data);
+						var disasm = DXDecompiler.DX9Shader.AsmWriter.Disassemble(data);
 						sw.Write(disasm);
 					}
 					else if (options.Mode == DecompileMode.Decompile)
 					{
-						var hlsl = SlimShader.DX9Shader.HlslWriter.Decompile(data);
+						var hlsl = DXDecompiler.DX9Shader.HlslWriter.Decompile(data);
 						sw.Write(hlsl);
 					}
 					else if (options.Mode == DecompileMode.Debug)
 					{
 						sw.WriteLine(string.Join(" ", args));
-						var shaderType = (SlimShader.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
-						if (shaderType == SlimShader.DX9Shader.ShaderType.Effect)
+						var shaderType = (DXDecompiler.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
+						if (shaderType == DXDecompiler.DX9Shader.ShaderType.Effect)
 						{
 							var reader = new DebugBytecodeReader(data, 0, data.Length);
 							string error = "";
@@ -198,8 +198,8 @@ namespace DXDecompilerCmd
 					}
 					else if (options.Mode == DecompileMode.DebugHtml)
 					{
-						var shaderType = (SlimShader.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
-						if (shaderType == SlimShader.DX9Shader.ShaderType.Effect)
+						var shaderType = (DXDecompiler.DX9Shader.ShaderType)BitConverter.ToUInt16(data, 2);
+						if (shaderType == DXDecompiler.DX9Shader.ShaderType.Effect)
 						{
 							var reader = new DebugBytecodeReader(data, 0, data.Length);
 							string error = "";

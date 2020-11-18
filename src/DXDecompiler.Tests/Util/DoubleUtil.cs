@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static SlimShader.Util.DoubleConverter;
+using static DXDecompiler.Util.DoubleConverter;
 
-namespace SlimShader.Tests.Util
+namespace DXDecompiler.Tests.Util
 {
 	public class DoubleUtil
 	{

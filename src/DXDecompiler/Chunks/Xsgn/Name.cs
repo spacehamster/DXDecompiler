@@ -1,6 +1,6 @@
-﻿using SlimShader.Chunks.Shex;
+﻿using DXDecompiler.Chunks.Shex;
 
-namespace SlimShader.Chunks.Xsgn
+namespace DXDecompiler.Chunks.Xsgn
 {
 	/// <summary>
 	/// Values that identify shader parameters that use system-value semantics.

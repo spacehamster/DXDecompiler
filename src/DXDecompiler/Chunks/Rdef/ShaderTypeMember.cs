@@ -1,8 +1,8 @@
 using System;
-using SlimShader.Chunks.Common;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Rdef
+namespace DXDecompiler.Chunks.Rdef
 {
 	public class ShaderTypeMember
 	{

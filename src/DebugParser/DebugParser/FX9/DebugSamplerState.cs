@@ -1,8 +1,8 @@
-﻿using SlimShader.DebugParser;
-using SlimShader.DebugParser.FX9;
+﻿using DXDecompiler.DebugParser;
+using DXDecompiler.DebugParser.FX9;
 using System.Collections.Generic;
 
-namespace SlimShader.DebugParser.FX9
+namespace DXDecompiler.DebugParser.FX9
 {
 	public class DebugSamplerState
 	{

@@ -1,10 +1,10 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace SlimShader.DX9Shader.Bytecode
+namespace DXDecompiler.DX9Shader.Bytecode
 {
 	public class PrsiToken
 	{

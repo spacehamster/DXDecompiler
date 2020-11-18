@@ -1,4 +1,4 @@
-﻿namespace SlimShader.DX9Shader
+﻿namespace DXDecompiler.DX9Shader
 {
 	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff569716%28v=vs.85%29.aspx
 	public enum SourceModifier

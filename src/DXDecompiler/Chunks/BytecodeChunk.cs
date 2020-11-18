@@ -1,20 +1,20 @@
 using System.Collections.Generic;
-using SlimShader.Chunks.Aon9;
-using SlimShader.Chunks.Fx10;
-using SlimShader.Chunks.Fxlvm;
-using SlimShader.Chunks.Ifce;
-using SlimShader.Chunks.Libf;
-using SlimShader.Chunks.Priv;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Chunks.RTS0;
-using SlimShader.Chunks.Sfi0;
-using SlimShader.Chunks.Shex;
-using SlimShader.Chunks.Spdb;
-using SlimShader.Chunks.Stat;
-using SlimShader.Chunks.Xsgn;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Aon9;
+using DXDecompiler.Chunks.Fx10;
+using DXDecompiler.Chunks.Fxlvm;
+using DXDecompiler.Chunks.Ifce;
+using DXDecompiler.Chunks.Libf;
+using DXDecompiler.Chunks.Priv;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.RTS0;
+using DXDecompiler.Chunks.Sfi0;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Chunks.Spdb;
+using DXDecompiler.Chunks.Stat;
+using DXDecompiler.Chunks.Xsgn;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks
+namespace DXDecompiler.Chunks
 {
 	public abstract class BytecodeChunk
 	{

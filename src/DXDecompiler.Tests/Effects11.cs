@@ -1,12 +1,12 @@
 ﻿using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.Direct3D;
-using SlimShader.Chunks.Fx10;
+using DXDecompiler.Chunks.Fx10;
 using NUnit.Framework;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace SlimShader.Tests
+namespace DXDecompiler.Tests
 {
 	public class Effects11
 	{

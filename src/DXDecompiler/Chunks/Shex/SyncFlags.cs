@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.Chunks.Shex
+namespace DXDecompiler.Chunks.Shex
 {
 	[Flags]
 	public enum SyncFlags

@@ -1,9 +1,9 @@
-﻿using SlimShader.DX9Shader.Bytecode;
-using SlimShader.DX9Shader.Bytecode.Declaration;
-using SlimShader.DX9Shader.Bytecode.Fxlvm;
+﻿using DXDecompiler.DX9Shader.Bytecode;
+using DXDecompiler.DX9Shader.Bytecode.Declaration;
+using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
 using System.Linq;
 
-namespace SlimShader.DX9Shader.Decompiler
+namespace DXDecompiler.DX9Shader.Decompiler
 {
 	class ExpressionHLSLWriter : DecompileWriter
 	{

@@ -1,10 +1,10 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Chunks.Fx10
+namespace DXDecompiler.DebugParser.Chunks.Fx10
 {
 	public class DebugEffectInlineShaderAssignment : DebugEffectAssignment
 	{

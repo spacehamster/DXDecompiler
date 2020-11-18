@@ -1,13 +1,13 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Rdef
+namespace DXDecompiler.DebugParser.Rdef
 {
 	public class DebugResourceDefinitionChunk : DebugBytecodeChunk
 	{

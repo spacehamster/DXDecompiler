@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using System.Text;
-using SlimShader.Chunks.Common;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Xsgn
+namespace DXDecompiler.Chunks.Xsgn
 {
 	public abstract class InputOutputSignatureChunk : BytecodeChunk
 	{

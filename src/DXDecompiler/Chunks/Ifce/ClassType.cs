@@ -1,6 +1,6 @@
-using SlimShader.Util;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Ifce
+namespace DXDecompiler.Chunks.Ifce
 {
 	public class ClassType
 	{

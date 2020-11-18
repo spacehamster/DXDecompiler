@@ -1,10 +1,10 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace SlimShader.DX9Shader
+namespace DXDecompiler.DX9Shader
 {
 	public class ShaderReader : BinaryReader
 	{

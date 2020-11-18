@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.DebugParser.Icfe
+namespace DXDecompiler.DebugParser.Icfe
 {
 	public class DebugClassType
 	{

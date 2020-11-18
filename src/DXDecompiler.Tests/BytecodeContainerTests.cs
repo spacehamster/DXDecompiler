@@ -5,18 +5,18 @@ using System.Linq;
 using NUnit.Framework;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
-using SlimShader.Chunks;
-using SlimShader.Chunks.Fx10;
-using SlimShader.Chunks.Libf;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Chunks.Shex;
-using SlimShader.Chunks.Shex.Tokens;
-using SlimShader.Chunks.Spdb;
-using SlimShader.Chunks.Xsgn;
-using SlimShader.Decompiler;
-using SlimShader.Tests.Util;
-using SlimShader.Util;
-namespace SlimShader.Tests
+using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.Fx10;
+using DXDecompiler.Chunks.Libf;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Chunks.Shex.Tokens;
+using DXDecompiler.Chunks.Spdb;
+using DXDecompiler.Chunks.Xsgn;
+using DXDecompiler.Decompiler;
+using DXDecompiler.Tests.Util;
+using DXDecompiler.Util;
+namespace DXDecompiler.Tests
 {
 	[TestFixture]
 	public class BytecodeContainerTests
@@ -119,7 +119,7 @@ namespace SlimShader.Tests
 			if(ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relDir}/{sourceName}", $"{OutputDir}/{relDir}/{sourceName}", true);
 
 			// Act.
-			var shaderCode = DXDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
+			var shaderCode = HLSLDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
 			File.WriteAllText($"{OutputDir}/{relPath}.d.hlsl", shaderCode);
 
 			// Assert.
@@ -147,7 +147,7 @@ namespace SlimShader.Tests
 			using (var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
 			{
 				var shaderVersion = shaderBytecode.GetVersion();
-				var shaderCode = DXDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
+				var shaderCode = HLSLDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
 				File.WriteAllText($"{OutputDir}/{relPath}.d.hlsl", shaderCode);
 				var entryPoint = TestUtils.GetShaderEntryPoint(shaderVersion);
 				var profile = TestUtils.GetShaderProfile(shaderVersion);

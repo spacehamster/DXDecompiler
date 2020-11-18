@@ -1,9 +1,9 @@
-﻿using SlimShader.Chunks.Rdef;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Util;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SlimShader.Chunks.Libf
+namespace DXDecompiler.Chunks.Libf
 {
 	public class LibraryParameterSignatureChunk : BytecodeChunk
 	{

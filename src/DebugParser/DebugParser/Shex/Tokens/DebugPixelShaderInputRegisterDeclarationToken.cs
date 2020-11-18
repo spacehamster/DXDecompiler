@@ -1,6 +1,6 @@
-﻿using SlimShader.Chunks.Shex;
+﻿using DXDecompiler.Chunks.Shex;
 
-namespace SlimShader.DebugParser.Shex.Tokens
+namespace DXDecompiler.DebugParser.Shex.Tokens
 {
 	public class DebugPixelShaderInputRegisterDeclarationToken : DebugInputRegisterDeclarationToken
 	{

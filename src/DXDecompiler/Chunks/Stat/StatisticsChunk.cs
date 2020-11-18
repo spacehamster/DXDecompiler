@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using System.Text;
-using SlimShader.Chunks.Common;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Stat
+namespace DXDecompiler.Chunks.Stat
 {
 	/// <summary>
 	/// Statistics chunk

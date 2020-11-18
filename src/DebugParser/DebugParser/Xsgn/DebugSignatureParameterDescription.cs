@@ -1,8 +1,8 @@
-﻿using SlimShader.Chunks;
-using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Xsgn;
+﻿using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Xsgn;
 
-namespace SlimShader.DebugParser.Xsgn
+namespace DXDecompiler.DebugParser.Xsgn
 {
 	public class DebugSignatureParameterDescription
 	{

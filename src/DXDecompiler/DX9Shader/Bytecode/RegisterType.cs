@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DX9Shader
+namespace DXDecompiler.DX9Shader
 {
 	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff569707%28v=vs.85%29.aspx
 	public enum RegisterType

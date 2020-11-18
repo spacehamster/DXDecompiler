@@ -1,14 +1,14 @@
-﻿using SlimShader.Chunks.Rdef;
-using SlimShader.Chunks.Shex;
-using SlimShader.Chunks.Shex.Tokens;
-using SlimShader.Chunks.Xsgn;
-using SlimShader.Chunks;
+﻿using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Chunks.Shex.Tokens;
+using DXDecompiler.Chunks.Xsgn;
+using DXDecompiler.Chunks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.Decompiler
+namespace DXDecompiler.Decompiler
 {
 	public class RegisterState
 	{

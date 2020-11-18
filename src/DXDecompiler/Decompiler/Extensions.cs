@@ -1,15 +1,15 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Chunks.RTS0;
-using SlimShader.Chunks.Shex;
-using SlimShader.Chunks.Shex.Tokens;
-using SlimShader.Chunks.Xsgn;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.RTS0;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Chunks.Shex.Tokens;
+using DXDecompiler.Chunks.Xsgn;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.Decompiler
+namespace DXDecompiler.Decompiler
 {
 	internal static class Extensions
 	{

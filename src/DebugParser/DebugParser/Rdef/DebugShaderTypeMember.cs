@@ -1,4 +1,4 @@
-﻿namespace SlimShader.DebugParser.Rdef
+﻿namespace DXDecompiler.DebugParser.Rdef
 {
 	public class DebugShaderTypeMember
 	{

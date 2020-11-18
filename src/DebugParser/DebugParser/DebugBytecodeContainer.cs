@@ -1,13 +1,13 @@
-﻿using SlimShader.Chunks;
-using SlimShader.DebugParser.Chunks.Fx10;
-using SlimShader.DebugParser.Rdef;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks;
+using DXDecompiler.DebugParser.Chunks.Fx10;
+using DXDecompiler.DebugParser.Rdef;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser
+namespace DXDecompiler.DebugParser
 {
 	public class DebugBytecodeContainer
 	{

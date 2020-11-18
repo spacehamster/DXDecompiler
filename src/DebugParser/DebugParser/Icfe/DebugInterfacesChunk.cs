@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Icfe
+namespace DXDecompiler.DebugParser.Icfe
 {
 	public class DebugInterfacesChunk : DebugBytecodeChunk
 	{

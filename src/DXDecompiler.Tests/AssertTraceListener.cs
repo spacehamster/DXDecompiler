@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Diagnostics;
 
-namespace SlimShader.Tests
+namespace DXDecompiler.Tests
 {
 	class AssertTraceListener : TraceListener
 	{

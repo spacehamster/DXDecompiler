@@ -1,10 +1,10 @@
-﻿using SlimShader.Chunks.Fxlvm;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Fxlvm;
+using DXDecompiler.Util;
 using System;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Chunks.Fx10
+namespace DXDecompiler.DebugParser.Chunks.Fx10
 {
 	public class DebugEffectExpressionAssignment : DebugEffectAssignment
 	{

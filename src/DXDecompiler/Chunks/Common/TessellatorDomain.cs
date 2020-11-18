@@ -1,4 +1,4 @@
-﻿namespace SlimShader.Chunks.Common
+﻿namespace DXDecompiler.Chunks.Common
 {
 	/// <summary>
 	/// Values that identify domain options for tessellator data.

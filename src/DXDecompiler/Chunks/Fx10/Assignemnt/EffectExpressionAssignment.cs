@@ -1,11 +1,11 @@
-﻿using SlimShader.Chunks.Fxlvm;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Fxlvm;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.Chunks.Fx10
+namespace DXDecompiler.Chunks.Fx10
 {
 	public class EffectExpressionAssignment : EffectAssignment
 	{

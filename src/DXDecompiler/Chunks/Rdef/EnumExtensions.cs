@@ -1,7 +1,7 @@
 ﻿using System;
-using SlimShader.Chunks.Common;
+using DXDecompiler.Chunks.Common;
 
-namespace SlimShader.Chunks.Rdef
+namespace DXDecompiler.Chunks.Rdef
 {
 	internal static class EnumExtensions
 	{

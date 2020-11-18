@@ -1,7 +1,7 @@
-﻿using SlimShader.DX9Shader.Bytecode.Fxlvm;
+﻿using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
 using System.Linq;
 
-namespace SlimShader.DX9Shader.Asm
+namespace DXDecompiler.DX9Shader.Asm
 {
 	public class PreshaderAsmWriter : DecompileWriter
 	{

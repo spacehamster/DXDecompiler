@@ -1,6 +1,6 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Priv
+namespace DXDecompiler.Chunks.Priv
 {
 	/// <summary>
 	/// Contains user specified private data.

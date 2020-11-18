@@ -1,13 +1,13 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Chunks.Shex;
-using SlimShader.Chunks.Shex.Tokens;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Chunks.Shex.Tokens;
 using System;
 using System.Linq;
 
-namespace SlimShader.Decompiler
+namespace DXDecompiler.Decompiler
 {
-	public partial class DXDecompiler
+	public partial class HLSLDecompiler
 	{
 		internal void TranslateInstruction(InstructionToken token)
 		{

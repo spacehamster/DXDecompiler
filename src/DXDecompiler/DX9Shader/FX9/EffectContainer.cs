@@ -1,9 +1,9 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlimShader.DX9Shader.FX9
+namespace DXDecompiler.DX9Shader.FX9
 {
 	/// <summary>
 	/// Effects are a collection of techniques and variables and states.

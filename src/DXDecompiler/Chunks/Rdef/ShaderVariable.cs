@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Shex;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Rdef
+namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// Describes a shader variable.

@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using SlimShader.Chunks.Common;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Aon9
+namespace DXDecompiler.Chunks.Aon9
 {
 	public class Level9ShaderChunk : BytecodeChunk
 	{

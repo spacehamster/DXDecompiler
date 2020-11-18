@@ -1,4 +1,4 @@
-namespace SlimShader.Chunks
+namespace DXDecompiler.Chunks
 {
 	public enum ChunkType
 	{

@@ -1,10 +1,10 @@
-﻿using SlimShader.DX9Shader;
+﻿using DXDecompiler.DX9Shader;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace SlimShader.DebugParser.FX9
+namespace DXDecompiler.DebugParser.FX9
 {
 	public class DebugParameter
 	{

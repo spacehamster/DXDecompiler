@@ -1,11 +1,11 @@
-﻿using SlimShader.Chunks.Shex;
+﻿using DXDecompiler.Chunks.Shex;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SlimShader.DebugParser.Shex.Tokens
+namespace DXDecompiler.DebugParser.Shex.Tokens
 {
 	public class DebugShaderMessageDeclarationToken : DebugImmediateDeclarationToken
 	{

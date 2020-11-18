@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace SlimShader.DebugParser.Xsgn
+namespace DXDecompiler.DebugParser.Xsgn
 {
 	public class DebugSignatureParameterDescriptionCollection : Collection<DebugSignatureParameterDescription>
 	{

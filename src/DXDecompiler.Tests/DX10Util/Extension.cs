@@ -1,7 +1,7 @@
 ﻿using SharpDX.Direct3D10;
 using System.Collections.Generic;
 
-namespace SlimShader.Tests.DX10Util
+namespace DXDecompiler.Tests.DX10Util
 {
 	public static class Extension
 	{

@@ -1,12 +1,12 @@
-﻿using SlimShader.Chunks;
-using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Xsgn;
+﻿using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Xsgn;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Xsgn
+namespace DXDecompiler.DebugParser.Xsgn
 {
 	public class DebugInputOutputSignatureChunk : DebugBytecodeChunk
 	{

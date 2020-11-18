@@ -1,4 +1,4 @@
-namespace SlimShader.Chunks.Shex
+namespace DXDecompiler.Chunks.Shex
 {
 	public class OpcodeHeader
 	{

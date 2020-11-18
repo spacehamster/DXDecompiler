@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SlimShader.DebugParser.Chunks.Fx10
+namespace DXDecompiler.DebugParser.Chunks.Fx10
 {
 	public class DebugUnknownObject
 	{

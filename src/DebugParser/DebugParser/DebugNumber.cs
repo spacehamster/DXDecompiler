@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using SlimShader.Chunks.Shex;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Shex;
+using DXDecompiler.Util;
 
-namespace SlimShader.DebugParser
+namespace DXDecompiler.DebugParser
 {
 	[StructLayout(LayoutKind.Explicit, Size = SizeInBytes)]
 	public struct DebugNumber

@@ -1,10 +1,10 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace SlimShader.Chunks.Aon9
+namespace DXDecompiler.Chunks.Aon9
 {
 	public class ConstantBufferMapping
 	{

@@ -1,9 +1,9 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlimShader.DX9Shader.Bytecode.Declaration
+namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 {
 	public class ConstantTable
 	{

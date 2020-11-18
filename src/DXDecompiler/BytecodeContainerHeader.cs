@@ -1,6 +1,6 @@
-using SlimShader.Util;
+using DXDecompiler.Util;
 
-namespace SlimShader
+namespace DXDecompiler
 {
 	public class BytecodeContainerHeader
 	{

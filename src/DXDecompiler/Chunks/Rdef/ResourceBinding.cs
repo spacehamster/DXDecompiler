@@ -1,8 +1,8 @@
-using SlimShader.Chunks.Common;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 using System.Diagnostics;
 
-namespace SlimShader.Chunks.Rdef
+namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// Based on D3D11_SHADER_INPUT_BIND_DESC and D3D12_SHADER_INPUT_BIND_DESC.

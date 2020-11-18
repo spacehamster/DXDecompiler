@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Shex.Tokens;
-using SlimShader.Util;
+using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Shex.Tokens;
+using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Shex
+namespace DXDecompiler.Chunks.Shex
 {
 	public class ShaderProgramChunk : BytecodeChunk
 	{

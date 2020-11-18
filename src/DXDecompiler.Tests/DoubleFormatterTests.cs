@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpDX.D3DCompiler;
-using SlimShader.Tests.Util;
-using SlimShader.Util;
+using DXDecompiler.Tests.Util;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,9 +9,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using static SlimShader.Util.DoubleConverter;
+using static DXDecompiler.Util.DoubleConverter;
 
-namespace SlimShader.Tests
+namespace DXDecompiler.Tests
 {
 	/// <summary>
 	/// FXC float formatting is equivilent to std::to_string ( double value ); and 

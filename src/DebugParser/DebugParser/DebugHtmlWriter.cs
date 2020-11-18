@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace SlimShader.DebugParser
+namespace DXDecompiler.DebugParser
 {
 	public class DebugHtmlWriter
 	{

@@ -1,8 +1,8 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 using System.Diagnostics;
 using System.Text;
 
-namespace SlimShader.Chunks.RTS0
+namespace DXDecompiler.Chunks.RTS0
 {
 	/// <summary>
 	/// Describes a descriptor table entry for the root signature

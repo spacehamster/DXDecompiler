@@ -2,14 +2,14 @@
 using System.Linq;
 using System.Text;
 using System.IO;
-using SlimShader.DX9Shader.FX9;
-using SlimShader.Util;
-using SlimShader.DX9Shader.Bytecode;
-using SlimShader.DX9Shader.Bytecode.Declaration;
-using SlimShader.DX9Shader.Bytecode.Fxlvm;
+using DXDecompiler.DX9Shader.FX9;
+using DXDecompiler.Util;
+using DXDecompiler.DX9Shader.Bytecode;
+using DXDecompiler.DX9Shader.Bytecode.Declaration;
+using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
 using System.Diagnostics;
 
-namespace SlimShader.DX9Shader
+namespace DXDecompiler.DX9Shader
 {
 
 	public enum ShaderType

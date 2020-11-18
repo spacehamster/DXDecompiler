@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using SlimShader.Chunks.Shex;
+using DXDecompiler.Chunks.Shex;
 using System.IO;
 using System.Text;
 using System.Linq;
-using SlimShader.Chunks.Shex.Tokens;
-using SlimShader.Chunks.Rdef;
+using DXDecompiler.Chunks.Shex.Tokens;
+using DXDecompiler.Chunks.Rdef;
 using System;
-using SlimShader.Chunks;
+using DXDecompiler.Chunks;
 
-namespace SlimShader.Decompiler
+namespace DXDecompiler.Decompiler
 {
 	public class Interfaces
 	{

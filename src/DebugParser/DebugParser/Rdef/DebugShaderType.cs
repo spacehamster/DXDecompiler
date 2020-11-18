@@ -1,9 +1,9 @@
-﻿using SlimShader.Chunks.Common;
-using SlimShader.Chunks.Rdef;
+﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Rdef;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace SlimShader.DebugParser.Rdef
+namespace DXDecompiler.DebugParser.Rdef
 {
 	public class DebugShaderType
 	{

@@ -1,4 +1,4 @@
-﻿namespace SlimShader.DX9Shader
+﻿namespace DXDecompiler.DX9Shader
 {
 	public class ReciprocalOperation : UnaryOperation
 	{

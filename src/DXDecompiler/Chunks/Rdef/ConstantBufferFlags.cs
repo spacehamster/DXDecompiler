@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.Chunks.Rdef
+namespace DXDecompiler.Chunks.Rdef
 {
 	/// <summary>
 	/// Values that identify the indended use of a constant-data buffer.

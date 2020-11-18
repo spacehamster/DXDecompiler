@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace SlimShader.DebugParser.DX9
+namespace DXDecompiler.DebugParser.DX9
 {
 	public class DebugPrsiToken
 	{

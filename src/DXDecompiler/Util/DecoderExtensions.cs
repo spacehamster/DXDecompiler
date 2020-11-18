@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.Util
+namespace DXDecompiler.Util
 {
 	public static class DecoderExtensions
 	{

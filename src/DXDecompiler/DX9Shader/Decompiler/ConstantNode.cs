@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace SlimShader.DX9Shader
+namespace DXDecompiler.DX9Shader
 {
 	public class ConstantNode : HlslTreeNode
 	{

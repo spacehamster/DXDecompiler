@@ -1,6 +1,6 @@
-﻿using SlimShader.Util;
+﻿using DXDecompiler.Util;
 
-namespace SlimShader.Chunks.Spdb
+namespace DXDecompiler.Chunks.Spdb
 {
 	/// <summary>
 	/// Contains debugging info in PDB format.

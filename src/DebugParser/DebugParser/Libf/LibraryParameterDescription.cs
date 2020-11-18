@@ -1,12 +1,12 @@
-﻿using SlimShader.Chunks.Libf;
-using SlimShader.Chunks.Rdef;
-using SlimShader.Util;
+﻿using DXDecompiler.Chunks.Libf;
+using DXDecompiler.Chunks.Rdef;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Chunks.Libf
+namespace DXDecompiler.DebugParser.Chunks.Libf
 {
 	/// <summary>
 	/// Describes a library function's input/output parameter

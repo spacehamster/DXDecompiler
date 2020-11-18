@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace SlimShader.DebugParser
+namespace DXDecompiler.DebugParser
 {
 	[StructLayout(LayoutKind.Explicit, Size = DebugNumber.SizeInBytes * 4)]
 	public struct DebugNumber4

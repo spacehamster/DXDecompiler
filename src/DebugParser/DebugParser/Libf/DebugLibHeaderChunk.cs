@@ -1,11 +1,11 @@
-﻿using SlimShader.Chunks;
-using SlimShader.Chunks.Libf;
+﻿using DXDecompiler.Chunks;
+using DXDecompiler.Chunks.Libf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Libf
+namespace DXDecompiler.DebugParser.Libf
 {
 	public class DebugLibHeaderChunk : DebugBytecodeChunk
 	{

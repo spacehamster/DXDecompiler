@@ -1,11 +1,11 @@
-﻿using SlimShader.DebugParser.Chunks.Fxlvm;
-using SlimShader.DX9Shader.Bytecode.Fxlvm;
-using SlimShader.Util;
+﻿using DXDecompiler.DebugParser.Chunks.Fxlvm;
+using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace SlimShader.DebugParser.DX9
+namespace DXDecompiler.DebugParser.DX9
 {
 	public class DebugFxlc
 	{

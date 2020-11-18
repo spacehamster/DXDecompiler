@@ -1,9 +1,9 @@
-﻿using SlimShader.DX9Shader.FX9;
+﻿using DXDecompiler.DX9Shader.FX9;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DX9Shader
+namespace DXDecompiler.DX9Shader
 {
 	public class EffectAsmWriter : DecompileWriter
 	{

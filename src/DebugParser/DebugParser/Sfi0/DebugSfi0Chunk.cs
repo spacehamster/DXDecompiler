@@ -1,11 +1,11 @@
-﻿using SlimShader.Chunks.Sfi0;
+﻿using DXDecompiler.Chunks.Sfi0;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace SlimShader.DebugParser.Sfi0
+namespace DXDecompiler.DebugParser.Sfi0
 {
 	public class DebugSfi0Chunk : DebugBytecodeChunk
 	{

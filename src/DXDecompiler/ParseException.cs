@@ -1,6 +1,6 @@
 using System;
 
-namespace SlimShader
+namespace DXDecompiler
 {
 	public class ParseException : Exception
 	{

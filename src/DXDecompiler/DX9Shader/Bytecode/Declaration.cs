@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SlimShader.DX9Shader
+namespace DXDecompiler.DX9Shader
 {
 	// D3DXREGISTER_SET
 	public enum RegisterSet
