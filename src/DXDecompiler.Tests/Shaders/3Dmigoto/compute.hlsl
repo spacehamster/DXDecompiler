@@ -22,7 +22,7 @@ groupshared struct {
 	uint bar;
 } gstruct[3];
 
-  [numthreads(4, 2, 1)]
+[numthreads(4, 2, 1)]
 void main()
 {
 	uint tally = 0; // Used to thwart compiler optimisations

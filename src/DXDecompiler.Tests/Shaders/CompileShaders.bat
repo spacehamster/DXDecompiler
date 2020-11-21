@@ -40,6 +40,14 @@ CALL CompileShader.bat Internal RasterOrderViews.hlsl RasterOrderViews ps_5_1 ma
 CALL CompileShader.bat Internal SM51_test.hlsl SM51_test ps_5_1 main /enable_unbounded_descriptor_tables  || GOTO :error
 CALL CompileShader.bat Internal TypeInference.hlsl TypeInference ps_5_0 main || GOTO :error
 
+CALL CompileShader.bat Internal/General AdvancedHLSL.fx AdvancedHLSL_VS vs_5_0 VSMain || GOTO :error
+CALL CompileShader.bat Internal/General AdvancedHLSL.fx AdvancedHLSL_PS ps_5_0 PSMain || GOTO :error
+CALL CompileShader.bat Internal/General AdvancedHLSL.fx AdvancedHLSL_GS gs_5_0 GSMain || GOTO :error
+CALL CompileShader.bat Internal/General AdvancedHLSL.fx AdvancedHLSL_HS hs_5_0 HSMain || GOTO :error
+CALL CompileShader.bat Internal/General AdvancedHLSL.fx AdvancedHLSL_DS ds_5_0 DSMain || GOTO :error
+CALL CompileShader.bat Internal/General AdvancedHLSL.fx AdvancedHLSL_CS cs_5_0 CSMain || GOTO :error
+CALL CompileShader2.bat Internal/General AdvancedHLSL.fx AdvancedHLSL_FX fx_5_0 || GOTO :error
+
 CALL CompileShader.bat Internal/Operations Texture_Buffer.hlsl Texture_Buffer ps_5_0 main /Od || GOTO :error
 CALL CompileShader.bat Internal/Operations Texture_ByteAddressBuffer.hlsl Texture_ByteAddressBuffer ps_5_0 main /Od || GOTO :error
 CALL CompileShader.bat Internal/Operations Texture_StructuredBuffer.hlsl Texture_StructuredBuffer ps_5_0 main /Od || GOTO :error
