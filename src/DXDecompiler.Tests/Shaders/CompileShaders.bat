@@ -81,7 +81,7 @@ CALL CompileShader.bat Internal/HullShaders HullShader_TriCCW.hlsl HullShader_Tr
 CALL CompileShader.bat Internal/HullShaders HullShader_TriCW.hlsl HullShader_TriCW hs_5_0 main  || GOTO :error
 CALL CompileShader.bat Internal/HullShaders HullShader_TriPoint.hlsl HullShader_TriPoint hs_5_0 main  || GOTO :error
 CALL CompileShader.bat Internal/HullShaders HullShader_PartitioningFractionalEven.hlsl HullShader_PartitioningFractionalEven hs_5_0 main  || GOTO :error
-CALL CompileShader.bat Internal/HullShaders HullShader_PartitioningFractionalEven.hlsl HullShader_PartitioningFractionalOdd hs_5_0 main  || GOTO :error
+CALL CompileShader.bat Internal/HullShaders HullShader_PartitioningFractionalOdd.hlsl HullShader_PartitioningFractionalOdd hs_5_0 main  || GOTO :error
 CALL CompileShader.bat Internal/HullShaders HullShader_PartitioningPow2.hlsl HullShader_PartitioningPow2 hs_5_0 main  || GOTO :error
 
 CALL CompileShader2.bat Internal/Effects BasicEffect.fx BasicEffect_5_0_FX fx_5_0 || GOTO :error
@@ -179,7 +179,7 @@ CALL CompileShader.bat HlslCrossCompiler/vs5 sincos.hlsl sincos vs_5_0 main || G
 CALL CompileShader.bat HlslCrossCompiler/apps Extrude.fx Extrude_GS gs_5_0 GS || GOTO :error
 CALL CompileShader.bat HlslCrossCompiler/apps Extrude.fx Extrude_PS ps_5_0 PS || GOTO :error
 CALL CompileShader.bat HlslCrossCompiler/apps Extrude.fx Extrude_VS vs_5_0 VS || GOTO :error
-CALL CompileShader.bat HlslCrossCompiler/apps Integer.fx Integer_VS vs_5_0 main|| GOTO :error
+CALL CompileShader.bat HlslCrossCompiler/apps Integer.fx Integer_VS vs_5_0 main || GOTO :error
 CALL CompileShader.bat HlslCrossCompiler/apps LambertLit.fx LambertLit_PS ps_5_0 PS || GOTO :error
 CALL CompileShader.bat HlslCrossCompiler/apps LambertLit.fx LambertLit_PSSolid ps_5_0 PSSolid || GOTO :error
 CALL CompileShader.bat HlslCrossCompiler/apps LambertLit.fx LambertLit_VS vs_5_0 VS || GOTO :error
@@ -405,7 +405,7 @@ CALL CompileShader.bat Sdk/Direct3D11/NBodyGravityCS11 ParticleDraw.hlsl Particl
 CALL CompileShader.bat Sdk/Direct3D11/OIT11 OIT_CS.hlsl OIT_CreatePrefixSum_Pass0_CS cs_5_0 CreatePrefixSum_Pass0_CS || GOTO :error
 CALL CompileShader.bat Sdk/Direct3D11/OIT11 OIT_CS.hlsl OIT_CreatePrefixSum_Pass1_CS cs_5_0 CreatePrefixSum_Pass1_CS || GOTO :error
 CALL CompileShader.bat Sdk/Direct3D11/OIT11 OIT_CS.hlsl OIT_SortAndRender_CS cs_5_0 SortAndRenderCS || GOTO :error
-CALL CompileShader.bat Sdk/Direct3D11/OIT11 OIT_PS.hlsl OIT_FillDeepBuffer_PS ps_5_0 FillDeepBufferPS || GOTO :error
+CALL CompileShader.bat Sdk/Direct3D11/OIT11 OIT_PS.hlsl OIT_SortAndRender_CS cs_5_0 SortAndRenderCS || GOTO :error
 
 CALL CompileShader.bat Sdk/Direct3D11/PNTriangles11 PNTriangles11.hlsl PNTriangles11_VS vs_5_0 VS_RenderScene || GOTO :error
 CALL CompileShader.bat Sdk/Direct3D11/PNTriangles11 PNTriangles11.hlsl PNTriangles11_VS_WithTessellation vs_5_0 VS_RenderSceneWithTessellation || GOTO :error
