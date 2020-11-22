@@ -1,3 +1,5 @@
+#pragma FXC FinalPass_PS ps_3_0 main
+
 //======================================================================
 //
 //      HIGH DYNAMIC RANGE RENDERING DEMONSTRATION

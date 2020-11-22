@@ -1,3 +1,5 @@
+#pragma FXC vs_length vs_3_0 main
+
 struct VS_IN
 {
 	float4 position : POSITION;

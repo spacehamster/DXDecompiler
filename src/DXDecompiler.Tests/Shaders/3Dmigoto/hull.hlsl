@@ -1,3 +1,5 @@
+#pragma FXC hull hs_5_0 main
+
 // Compile with fxc /T hs_5_0 /Fo hull.bin
 // https://msdn.microsoft.com/en-us/library/windows/desktop/ff476339(v=vs.85).aspx
 

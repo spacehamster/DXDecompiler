@@ -1,3 +1,4 @@
+#pragma FXC any vs_5_0 main
 
 struct VS_OUTPUT
 {

@@ -1,3 +1,6 @@
+#pragma FXC PP_ColorCombine4 ps_2_0 Combine
+#pragma FXC PP_ColorCombine4_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_ColorCombine4.fx
 //

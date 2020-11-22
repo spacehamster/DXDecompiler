@@ -1,3 +1,5 @@
+#pragma FXC MultiStreamRendering_FX fx_4_0
+
 //--------------------------------------------------------------------------------------
 // File: SimpleSample.fx
 //

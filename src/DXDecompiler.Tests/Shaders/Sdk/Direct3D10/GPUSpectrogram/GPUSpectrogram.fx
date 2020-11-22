@@ -1,3 +1,5 @@
+#pragma FXC GPUSpectrogram_FX fx_4_0
+
 // Splash.fx
 // Copyright (c) 2005 Microsoft Corporation. All rights reserved.
 //

@@ -1,3 +1,4 @@
+#pragma FXC switch vs_4_0 main
 
 struct VS_OUTPUT
 {

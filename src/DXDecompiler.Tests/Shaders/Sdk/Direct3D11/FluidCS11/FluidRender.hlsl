@@ -1,3 +1,7 @@
+#pragma FXC FluidRender_VS vs_5_0 ParticleVS
+#pragma FXC FluidRender_GS gs_5_0 ParticleGS
+#pragma FXC FluidRender_PS ps_5_0 ParticlePS
+
 //--------------------------------------------------------------------------------------
 // File: FluidRender.hlsl
 //

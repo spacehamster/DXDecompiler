@@ -1,3 +1,5 @@
+#pragma FXC ReduceToSingleCS cs_5_0 CSMain
+
 //-----------------------------------------------------------------------------
 // File: ReduceToSingleCS.hlsl
 //

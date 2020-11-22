@@ -1,3 +1,5 @@
+#pragma FXC ps_tex2d_two_samplers ps_3_0 main
+
 sampler sampler0;
 sampler sampler1;
 

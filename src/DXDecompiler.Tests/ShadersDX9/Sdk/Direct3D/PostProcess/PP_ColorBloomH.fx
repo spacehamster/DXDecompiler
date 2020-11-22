@@ -1,3 +1,6 @@
+#pragma FXC PP_ColorBloomH ps_2_0 PostProcessPS
+#pragma FXC PP_ColorBloomH_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_ColorBloomH.fx
 //

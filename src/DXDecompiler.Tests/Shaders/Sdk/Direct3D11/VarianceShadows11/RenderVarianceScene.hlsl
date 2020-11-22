@@ -1,3 +1,8 @@
+#pragma FXC RenderVarianceScene_VS vs_5_0 VSMain
+#pragma FXC RenderVarianceScene_PS ps_5_0 PSMain
+#pragma FXC RenderVarianceShadow_VS vs_5_0 VSMain
+#pragma FXC RenderVarianceShadow_PS ps_5_0 PSMain
+
 //--------------------------------------------------------------------------------------
 // File: RenderCascadeScene.hlsl
 //

@@ -1,3 +1,5 @@
+#pragma FXC vs_matrix33_vector3_multiply vs_3_0 main
+
 float3x3 matrix_3x3;
 
 struct VS_OUT

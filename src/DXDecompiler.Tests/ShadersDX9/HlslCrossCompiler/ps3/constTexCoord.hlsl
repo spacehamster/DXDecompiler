@@ -1,3 +1,4 @@
+#pragma FXC constTexCoord ps_3_0 main
 sampler2D Texture0 : register(s0) : register(t0);
 void main(out float4 Color : COLOR0)
 {

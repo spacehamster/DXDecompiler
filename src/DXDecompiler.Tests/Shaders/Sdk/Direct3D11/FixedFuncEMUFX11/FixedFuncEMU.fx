@@ -1,3 +1,5 @@
+#pragma FXC FixedFuncEMU_FX fx_5_0
+
 // FixedFuncEMU.fx
 // Copyright (c) 2005 Microsoft Corporation. All rights reserved.
 //

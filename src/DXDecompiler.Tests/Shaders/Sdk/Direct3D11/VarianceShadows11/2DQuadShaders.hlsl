@@ -1,3 +1,7 @@
+#pragma FXC 2DQuadShaders_VS vs_5_0 VSMain
+#pragma FXC 2DQuadShaders_PS_BlurX ps_5_0 PSBlurX
+#pragma FXC 2DQuadShaders_PS_BlurY ps_5_0 PSBlurY
+
 //--------------------------------------------------------------------------------------
 // File: Skinning10.fx
 //

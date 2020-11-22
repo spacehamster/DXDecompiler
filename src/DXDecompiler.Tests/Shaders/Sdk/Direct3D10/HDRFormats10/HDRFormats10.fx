@@ -1,4 +1,8 @@
+#pragma FXC HDRFormats10_FX fx_4_0
+
 //-----------------------------------------------------------------------------
+#pragma FXC Skybox10_FX fx_4_0
+
 // File: HDRFormats.fx
 //
 // Desc: 

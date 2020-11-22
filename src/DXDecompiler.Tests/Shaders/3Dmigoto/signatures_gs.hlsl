@@ -1,3 +1,5 @@
+#pragma FXC signatures_gs gs_4_0 main
+
 struct PSSceneIn {
 	float4 pos : SV_Position;
 	float4 coord : TEXCOORD0;

@@ -1,4 +1,10 @@
-	//--------------------------------------------------------------------------------------
+#pragma FXC ParallaxOcclusionMapping_VS vs_3_0 RenderSceneVS
+#pragma FXC ParallaxOcclusionMapping_PS ps_3_0 RenderScenePS
+#pragma FXC ParallaxOcclusionMapping_BumpPS ps_2_0 RenderSceneBumpMapPS
+#pragma FXC ParallaxOcclusionMapping_ParallaxPS ps_2_0 RenderSceneParallaxMappingPS
+#pragma FXC ParallaxOcclusionMapping_FX fx_2_0
+
+//--------------------------------------------------------------------------------------
 // File: ParallaxOcclusionMapping.fx
 //
 // Parallax occlusion mapping implementation

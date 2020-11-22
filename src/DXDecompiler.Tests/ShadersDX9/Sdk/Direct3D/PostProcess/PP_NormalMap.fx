@@ -1,3 +1,6 @@
+#pragma FXC PP_NormalMap ps_2_0 PostProcessPS
+#pragma FXC PP_NormalMap_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_NormalMap.fx
 //

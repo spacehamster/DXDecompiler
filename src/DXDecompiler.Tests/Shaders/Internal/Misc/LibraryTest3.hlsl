@@ -1,3 +1,7 @@
+#pragma FXC LibraryTest3_4_0 lib_4_0
+#pragma FXC LibraryTest3_4_1 lib_4_1
+#pragma FXC LibraryTest3_5_0 lib_5_0
+
 float4 TestGlobal1 = 5;
 int4 TestGlobal2 = 6;
 struct TestStruct {

@@ -1,3 +1,6 @@
+#pragma FXC PP_ColorInverse ps_2_0 PostProcessPS
+#pragma FXC PP_ColorInverse_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_ColorInverse.fx
 //

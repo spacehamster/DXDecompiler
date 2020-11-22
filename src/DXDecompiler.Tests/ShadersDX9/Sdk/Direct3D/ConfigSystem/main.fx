@@ -1,3 +1,7 @@
+#pragma FXC main_VS vs_3_0 VS20
+#pragma FXC main_PS ps_3_0 PS20
+#pragma FXC main_FX fx_2_0 /Gec
+
 //--------------------------------------------------------------------------------------
 // File: ConfigSystem.fx
 //

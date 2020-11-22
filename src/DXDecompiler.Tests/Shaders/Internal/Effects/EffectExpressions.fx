@@ -1,3 +1,8 @@
+#pragma FXC EffectExpressions_4_0_FX fx_4_0 /Gdp
+#pragma FXC EffectExpressions_5_0_FX fx_5_0 /Gdp
+#pragma FXC EffectExpressions_4_0_no_opt_FX fx_4_0 /Gdp /Od
+#pragma FXC EffectExpressions_5_0_no_opt_FX fx_5_0 /Gdp /Od
+
 //Test fx expressions such as i + 2 and i * 3 + j
 
 int i;

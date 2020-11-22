@@ -1,3 +1,5 @@
+#pragma FXC ShaderWithRootSignature_1_0 ps_5_0 main /force_rootsig_ver rootsig_1_0 /DRS1_0
+
 #define RS1 "RootFlags( ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT | DENY_VERTEX_SHADER_ROOT_ACCESS " \
                          "), " \
               "CBV(b13, space=4095), " \

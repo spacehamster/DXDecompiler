@@ -1,3 +1,9 @@
+#pragma FXC Instancing_HWInstancingVS vs_2_0 VS_HWInstancing
+#pragma FXC Instancing_ShaderInstancingVS vs_2_0 VS_ShaderInstancing
+#pragma FXC Instancing_ConstantsVS vs_2_0 VS_ConstantsInstancing
+#pragma FXC Instancing_PS ps_2_0 PS
+#pragma FXC Instancing_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 // File: Instancing.fx
 //

@@ -1,3 +1,5 @@
+#pragma FXC sv_gsinstanceid gs_5_0 main
+
 struct PSSceneIn {
 	float4 pos : SV_Position;
 	float4 coord : TEXCOORD0;

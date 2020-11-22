@@ -1,3 +1,6 @@
+#pragma FXC DebugTest ps_5_0 PSMain /Zi
+//Note: Debug info is not deterministic
+
 cbuffer cbPerFrame : register(b1)
 {
 	float3		g_vLightDir				: packoffset(c0);

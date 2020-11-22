@@ -1,3 +1,14 @@
+#pragma FXC AntiAlias_ColorVS vs_2_0 ColorVS
+#pragma FXC AntiAlias_ColorPS ps_2_0 ColorPS
+#pragma FXC AntiAlias_TextureVS vs_2_0 TextureVS
+#pragma FXC AntiAlias_TexturePointPS ps_2_0 TexturePointPS
+#pragma FXC AntiAlias_TexturePointCentroidPS ps_2_0 TexturePointCentroidPS
+#pragma FXC AntiAlias_TextureLinearPS ps_2_0 TextureLinearPS
+#pragma FXC AntiAlias_TextureLinearCentroidPS ps_2_0 TextureLinearCentroidPS
+#pragma FXC AntiAlias_TextureAnisotropicPS ps_2_0 TextureAnisotropicPS
+#pragma FXC AntiAlias_TextureAnisotropicCentroidPS ps_2_0 TextureAnisotropicCentroidPS
+#pragma FXC AntiAlias_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 // File: AntiAlias.fx
 //

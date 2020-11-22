@@ -1,3 +1,4 @@
+#pragma FXC boolconst vs_2_0 main /Od
 
 //Compile with /Od to use b0 constant
 

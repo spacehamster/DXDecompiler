@@ -1,3 +1,9 @@
+#pragma FXC HDRFormats_SceneVS vs_2_0 SceneVS
+#pragma FXC HDRFormats_ScenePS ps_2_0 ScenePS
+#pragma FXC HDRFormats_BloomPS ps_2_0 BloomPS
+#pragma FXC HDRFormats_FinalPassPS ps_2_0 FinalPass
+#pragma FXC HDRFormats_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: HDRFormats.fx
 //

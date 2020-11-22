@@ -1,3 +1,7 @@
+#pragma FXC Wireframe_VS vs_2_0 WireframeVS
+#pragma FXC Wireframe_PS ps_2_0 WireframePS
+#pragma FXC Wireframe_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: Scene.fx
 //

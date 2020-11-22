@@ -1,3 +1,6 @@
+#pragma FXC ResourceDefinitions ps_5_0 main
+#pragma FXC ResourceDefinitions_5_1 ps_5_1 main
+
 cbuffer cbuffer1 {
 	float4 cValue;
 }

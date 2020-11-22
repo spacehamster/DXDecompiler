@@ -1,3 +1,5 @@
+#pragma FXC PSApproach_PS ps_5_0 DownScale3x3_BrightPass
+
 //--------------------------------------------------------------------------------------
 // File: PSApproach.hlsl
 //

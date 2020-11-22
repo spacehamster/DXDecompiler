@@ -1,3 +1,5 @@
+#pragma FXC HullShader_PartitioningPow2 hs_5_0 main
+
 // Input control point
 struct VS_CONTROL_POINT_OUTPUT
 {

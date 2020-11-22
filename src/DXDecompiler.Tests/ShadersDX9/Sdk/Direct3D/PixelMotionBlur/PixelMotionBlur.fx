@@ -1,3 +1,9 @@
+#pragma FXC PixelMotionBlur_WorldVS vs_2_0 WorldVertexShader
+#pragma FXC PixelMotionBlur_WorldPS ps_2_0 WorldPixelShader
+#pragma FXC PixelMotionBlur_WorldVelocityPS ps_2_0 WorldPixelShaderVelocity
+#pragma FXC PixelMotionBlur_MotionBlurPS ps_2_0 PostProcessMotionBlurPS
+#pragma FXC PixelMotionBlur_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PixelMotionBlur.fx
 //

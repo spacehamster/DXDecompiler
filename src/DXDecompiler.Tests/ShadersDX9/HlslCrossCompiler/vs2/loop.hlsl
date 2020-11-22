@@ -1,3 +1,4 @@
+#pragma FXC loop vs_2_0 main /Od
 
 //Compile with /Od to use loop opcode.
 

@@ -1,3 +1,8 @@
+#pragma FXC structured_buffers_4 ps_4_0 main
+#pragma FXC structured_buffers_5 ps_5_0 main
+#pragma FXC structured_buffers_extra_4 ps_4_0 main /DUSE_INNER_STRUCT=1 /DUSE_DUP_NAME=1 /DUSE_PRIMITIVE_TYPES=1 /DUSE_DYNAMICALLY_INDEXED_ARRAYS=1
+#pragma FXC structured_buffers_extra_5 ps_5_0 main /DUSE_INNER_STRUCT=1 /DUSE_DUP_NAME=1 /DUSE_PRIMITIVE_TYPES=1 /DUSE_DYNAMICALLY_INDEXED_ARRAYS=1 /DUSE_RW_STRUCTURED_BUFFER=1 /DUSE_DOUBLES=1
+
 struct foo {
 	float foo;
 	uint bar;

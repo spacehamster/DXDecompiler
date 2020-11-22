@@ -1,3 +1,7 @@
+#pragma FXC OptimizedMesh_VS vs_2_0 VertScene
+#pragma FXC OptimizedMesh_PS ps_2_0 PixScene
+#pragma FXC OptimizedMesh_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 // File: OptimizedMesh.fx
 //

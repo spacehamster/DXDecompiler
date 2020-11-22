@@ -1,3 +1,7 @@
+#pragma FXC skybox01_VS vs_2_0 VS
+#pragma FXC skybox01_PS ps_2_0 PS
+#pragma FXC skybox01_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 //
 // Skybox Lighting Model

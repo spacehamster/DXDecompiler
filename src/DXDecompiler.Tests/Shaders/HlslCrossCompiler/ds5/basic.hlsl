@@ -1,3 +1,5 @@
+#pragma FXC basic ds_5_0 main
+
 struct HS_CONSTANT_OUTPUT
 {
     float edges[2] : SV_TessFactor;

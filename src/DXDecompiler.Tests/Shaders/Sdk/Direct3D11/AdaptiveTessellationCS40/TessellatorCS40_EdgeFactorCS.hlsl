@@ -1,3 +1,5 @@
+#pragma FXC TessellatorCS40_EdgeFactorCS cs_4_0 CSEdgeFactor
+
 //--------------------------------------------------------------------------------------
 // File: TessellatorCS40_EdgeFactorCS.hlsl
 //

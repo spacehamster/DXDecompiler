@@ -1,3 +1,6 @@
+#pragma FXC PP_ColorToneMap ps_2_0 ToneMapFilter
+#pragma FXC PP_ColorToneMap_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_ColorToneMap.fx
 //

@@ -1,3 +1,7 @@
+#pragma FXC TransparencyAA10_1_VS vs_4_1 VsRenderScene
+#pragma FXC TransparencyAA10_1_PS ps_4_1 PsTransparencyAA /DDX10_1_ENABLED=1 /DMSAA_SAMPLES=4
+#pragma FXC TransparencyAA10_1_FX fx_4_1
+
 //--------------------------------------------------------------------------------------
 // File: TransparencyAA10.1.fx
 //

@@ -1,3 +1,6 @@
+#pragma FXC FilterCS_Vertical cs_5_0 CSVerticalFilter
+#pragma FXC FilterCS_Horizontal cs_5_0 CSHorizFilter
+
 //--------------------------------------------------------------------------------------
 // File: FilterCS.hlsl
 //

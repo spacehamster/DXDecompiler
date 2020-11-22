@@ -1,3 +1,6 @@
+#pragma FXC DDSWithoutD3DX_VS vs_5_0 RenderSceneVS
+#pragma FXC DDSWithoutD3DX_PS ps_5_0 RenderScenePS
+
 //--------------------------------------------------------------------------------------
 // File: DDSWithoutD3DX.hlsl
 //

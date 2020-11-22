@@ -1,3 +1,5 @@
+#pragma FXC Texture_Texture2DArray ps_5_0 main /Od
+
 SamplerState samp0;
 SamplerComparisonState samp1;
 

@@ -1,3 +1,6 @@
+#pragma FXC Subroutines_VS vs_5_0 VS
+#pragma FXC Subroutines_PS ps_5_0 PS
+
 cbuffer cbConstant
 {
     float3 vLightDir = float3(-0.577,0.577,-0.577);

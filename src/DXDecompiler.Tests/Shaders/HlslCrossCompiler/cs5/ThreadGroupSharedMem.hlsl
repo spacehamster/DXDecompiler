@@ -1,3 +1,4 @@
+#pragma FXC ThreadGroupSharedMem cs_5_0 main
 
 //From http://www.nvidia.com/content/GTC-2010/pdfs/2260_GTC2010.pdf
 

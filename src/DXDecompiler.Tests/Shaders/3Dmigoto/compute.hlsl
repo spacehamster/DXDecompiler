@@ -1,3 +1,5 @@
+#pragma FXC compute cs_5_0 main /Od
+
 // Compile with fxc /T cs_5_0 /Od /Fo compute.bin
 // Disable optimisations to make sure all 6 sync instructions are used
 

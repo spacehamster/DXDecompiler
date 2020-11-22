@@ -1,3 +1,5 @@
+#pragma FXC EffectInterfaces_FX fx_5_0
+
 float4 g1;
 interface iInterface1
 {

@@ -1,3 +1,5 @@
+#pragma FXC vs_constant_struct vs_3_0 main
+
 struct VS_OUT
 {
 	float4 position : POSITION;

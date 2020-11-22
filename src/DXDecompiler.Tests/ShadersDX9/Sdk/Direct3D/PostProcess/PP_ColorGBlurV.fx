@@ -1,3 +1,6 @@
+#pragma FXC PP_ColorGBlurV ps_2_0 PostProcessPS
+#pragma FXC PP_ColorGBlurV_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_ColorGBlurV.fx
 //

@@ -1,3 +1,5 @@
+#pragma FXC Effect_Structs_FX fx_2_0
+
 texture tex1;
 texture tex2;
 texture tex3;

@@ -1,3 +1,5 @@
+#pragma FXC TypeInference ps_5_0 main
+
 // FXC disassembler will interepret 1065353216 as 1.0 for mov instructions
 int loop_max;
 float4 main( ) : SV_Target

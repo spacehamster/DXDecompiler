@@ -6,7 +6,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //--------------------------------------------------------------------------------------
 
-#include "TessellatorCS40_defines.h"
+#define MAX_FACTOR 16
 
 cbuffer cbNeverChanges : register(b0)
 {

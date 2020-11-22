@@ -1,3 +1,10 @@
+#pragma FXC AdvancedHLSL_FX fx_5_0
+#pragma FXC AdvancedHLSL_VS vs_5_0 VSMain
+#pragma FXC AdvancedHLSL_PS ps_5_0 PSMain
+#pragma FXC AdvancedHLSL_PS gs_5_0 GSMain
+#pragma FXC AdvancedHLSL_HS hs_5_0 HSMain
+#pragma FXC AdvancedHLSL_CS cs_5_0 CSMain
+
 cbuffer cbPerObject
 {
     matrix		g_mWorldViewProjection	: packoffset(c0);

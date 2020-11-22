@@ -1,3 +1,4 @@
+#pragma FXC interfaces ps_5_0 main
 
 interface iChangeColour
 {

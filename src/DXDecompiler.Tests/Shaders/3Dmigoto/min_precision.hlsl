@@ -1,3 +1,5 @@
+#pragma FXC min_precision ps_5_0 main
+
 // Compile with fxc /T ps_5_0 /Fo min_precision.bin
 
 // HLSL scalar types:

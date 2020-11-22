@@ -1,3 +1,5 @@
+#pragma FXC vs_dot_product vs_3_0 main
+
 float2 constant2;
 float3 constant3;
 float4 constant4;

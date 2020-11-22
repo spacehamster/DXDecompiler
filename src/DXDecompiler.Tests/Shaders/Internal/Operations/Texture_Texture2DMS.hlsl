@@ -1,3 +1,5 @@
+#pragma FXC Texture_Texture2DMS ps_5_0 main /Od
+
 Texture2DMS<float4, 4> tex;
 
 float4 main(int index : POSITION) : SV_Target

@@ -1,3 +1,8 @@
+#pragma FXC BasicCompute11_Raw cs_5_0 CSMain
+#pragma FXC BasicCompute11_Raw_Double cs_5_0 CSMain /DTEST_DOUBLE=1
+#pragma FXC BasicCompute11_Structured cs_5_0 CSMain /DUSE_STRUCTURED_BUFFERS=1
+#pragma FXC BasicCompute11_Structured_Double cs_5_0 CSMain /DUSE_STRUCTURED_BUFFERS=1 /DTEST_DOUBLE=1
+
 //--------------------------------------------------------------------------------------
 // File: BasicCompute11.hlsl
 //

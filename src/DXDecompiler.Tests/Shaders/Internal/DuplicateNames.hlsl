@@ -1,3 +1,5 @@
+#pragma FXC DuplicateNames ps_5_0 main
+
 cbuffer Test {
 	float4 a[5];
 }

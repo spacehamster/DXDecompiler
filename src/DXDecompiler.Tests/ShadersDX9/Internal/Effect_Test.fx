@@ -1,3 +1,5 @@
+#pragma FXC Effect_Test_FX fx_2_0
+
 shared float4x4 g_mWorld;                     // World view matrix
 shared float4x4 g_mView; // World * View * Projection matrix
 shared float4x4 g_mProj; // World * View * Projection matrix

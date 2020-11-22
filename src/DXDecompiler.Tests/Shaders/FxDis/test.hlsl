@@ -1,3 +1,6 @@
+#pragma FXC test_VS vs_5_0 VS
+#pragma FXC test_PS ps_5_0 PS
+
 cbuffer cbuf0
 {
    float4 cool;

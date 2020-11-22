@@ -1,3 +1,5 @@
+#pragma FXC Interfaces ps_5_0 main
+
 float4 g1;
 interface iInterface1
 {

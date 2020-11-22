@@ -1,3 +1,7 @@
+#pragma FXC specular_VS vs_2_0 VertScene
+#pragma FXC specular_PS ps_2_0 PixScene
+#pragma FXC specular_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: Flyer.fx
 //

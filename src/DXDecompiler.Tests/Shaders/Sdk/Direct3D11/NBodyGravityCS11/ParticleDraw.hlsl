@@ -1,3 +1,7 @@
+#pragma FXC ParticleDraw_GS gs_5_0 GSParticleDraw
+#pragma FXC ParticleDraw_PS ps_5_0 PSParticleDraw
+#pragma FXC ParticleDraw_VS vs_5_0 VSParticleDraw
+
 //--------------------------------------------------------------------------------------
 // File: ParticleDraw.hlsl
 //

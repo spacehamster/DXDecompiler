@@ -1,3 +1,5 @@
+#pragma FXC PrivateDataTest ps_5_0 PSMain /setprivate PrivateData.txt
+
 cbuffer cbPerFrame : register(b1)
 {
 	float3		g_vLightDir				: packoffset(c0);

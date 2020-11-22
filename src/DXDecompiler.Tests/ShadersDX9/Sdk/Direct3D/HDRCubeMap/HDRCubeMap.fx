@@ -1,3 +1,16 @@
+#pragma FXC HDRCubeMap_SceneVS vs_2_0 HDRVertScene
+#pragma FXC HDRCubeMap_ScenePS ps_2_0 HDRPixScene
+#pragma FXC HDRCubeMap_SceneFirstHalfPS ps_2_0 HDRPixScene_FirstHalf
+#pragma FXC HDRCubeMap_SceneSecondHalfPS ps_2_0 HDRPixScene_SecondHalf
+#pragma FXC HDRCubeMap_LightVS vs_2_0 HDRVertLight
+#pragma FXC HDRCubeMap_LightPS ps_2_0 HDRPixLight
+#pragma FXC HDRCubeMap_LightFirstHalfPS ps_2_0 HDRPixLight_FirstHalf
+#pragma FXC HDRCubeMap_LightSecondHalfPS ps_2_0 HDRPixLight_SecondHalf
+#pragma FXC HDRCubeMap_EnvMapVS vs_2_0 HDRVertEnvMap
+#pragma FXC HDRCubeMap_EnvMapPS ps_2_0 HDRPixEnvMap
+#pragma FXC HDRCubeMap_EnvMap2TexPS ps_2_0 HDRPixEnvMap2Tex
+#pragma FXC HDRCubeMap_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: HDRCubeMap.fx
 //

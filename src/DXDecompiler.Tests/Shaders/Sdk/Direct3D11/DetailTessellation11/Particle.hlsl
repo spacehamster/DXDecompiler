@@ -1,3 +1,7 @@
+#pragma FXC Particle_VS vs_5_0 VSPassThrough
+#pragma FXC Particle_GS gs_5_0 GSPointSprite
+#pragma FXC Particle_PS ps_5_0 PSConstantColor
+
 //--------------------------------------------------------------------------------------
 // File: Particle.hlsl
 //

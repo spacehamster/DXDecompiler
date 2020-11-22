@@ -1,3 +1,5 @@
+#pragma FXC stream gs_5_0 main
+
 struct InVertex
 {
     float3 pos          : POSITION;

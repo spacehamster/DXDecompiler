@@ -1,3 +1,5 @@
+#pragma FXC NBodyGravityCS11 cs_5_0 CSMain
+
 //--------------------------------------------------------------------------------------
 // File: NBodyGravityCS11.hlsl
 //

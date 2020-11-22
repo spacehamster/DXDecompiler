@@ -1,3 +1,4 @@
+#pragma FXC multiple_const_buffers vs_4_0 main
 
 struct VS_OUTPUT
 {

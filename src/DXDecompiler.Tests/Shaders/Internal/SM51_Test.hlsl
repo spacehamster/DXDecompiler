@@ -1,3 +1,5 @@
+#pragma FXC SM51_test ps_5_1 main /enable_unbounded_descriptor_tables
+
 SamplerState samp0 : register(s0);
 SamplerState samp1[5] : register(s0, space2);
 SamplerState samp2[] : register(s10, space2);

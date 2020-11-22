@@ -1,3 +1,5 @@
+#pragma FXC BrightPassAndHorizFilterCS cs_5_0 CSMain
+
 //--------------------------------------------------------------------------------------
 // File: BrightPassAndHorizFilterCS.hlsl
 //

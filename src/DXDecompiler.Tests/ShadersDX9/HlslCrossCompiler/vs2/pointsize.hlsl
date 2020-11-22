@@ -1,3 +1,4 @@
+#pragma FXC pointsize vs_2_0 main
 
 void main( float4 vPos : POSITION,
 		   out float4 oPos : POSITION,

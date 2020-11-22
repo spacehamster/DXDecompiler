@@ -1,3 +1,5 @@
+#pragma FXC TessellatorCS40_ScatterIDCS_Vertex cs_4_0 CSScatterVertexTriIDIndexID
+
 //--------------------------------------------------------------------------------------
 // File: TessellatorCS40_ScatterIDCS.hlsl
 //

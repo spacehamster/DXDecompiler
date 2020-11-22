@@ -1,3 +1,9 @@
+#pragma FXC DetailTessellation11_VS_NoTessellation vs_5_0 VS_NoTessellation
+#pragma FXC DetailTessellation11_VS vs_5_0 VS
+#pragma FXC DetailTessellation11_HS hs_5_0 HS
+#pragma FXC DetailTessellation11_DS ds_5_0 DS
+#pragma FXC DetailTessellation11_PS ps_5_0 BumpMapPS
+
 //--------------------------------------------------------------------------------------
 // File: DetailTessellation.hlsl
 //

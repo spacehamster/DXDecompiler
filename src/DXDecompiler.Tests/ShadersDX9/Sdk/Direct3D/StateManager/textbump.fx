@@ -1,3 +1,7 @@
+#pragma FXC textbump_VS vs_2_0 VS
+#pragma FXC textbump_PS ps_2_0 PS
+#pragma FXC textbump_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 //
 // Texture w/Bumpmap Lighting Model

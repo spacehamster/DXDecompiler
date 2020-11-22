@@ -1,3 +1,5 @@
+#pragma FXC PipesGS_FX fx_4_0
+
 // ParticlesGS.fx
 // Copyright (c) 2005 Microsoft Corporation. All rights reserved.
 //

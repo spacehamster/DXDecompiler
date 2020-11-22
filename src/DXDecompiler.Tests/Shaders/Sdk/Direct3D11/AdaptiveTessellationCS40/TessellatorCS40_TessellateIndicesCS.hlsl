@@ -1,3 +1,5 @@
+#pragma FXC TessellatorCS40_TessellateIndicesCS cs_4_0 CSTessellationIndices
+
 //--------------------------------------------------------------------------------------
 // File: TessellatorCS40_TessellateIndicesCS.hlsl
 //

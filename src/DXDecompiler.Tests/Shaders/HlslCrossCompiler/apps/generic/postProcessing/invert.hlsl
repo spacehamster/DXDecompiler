@@ -1,3 +1,5 @@
+#pragma FXC invert_PS ps_5_0 PS
+
 //Post Processing
 Texture2D g_txColourBuffer;
 Texture2D g_txDepthBuffer;

@@ -1,3 +1,5 @@
+#pragma FXC UbfeTest vs_5_0 VSMain
+
 struct TestOut
 {
     float4 color1 : COLOR1;

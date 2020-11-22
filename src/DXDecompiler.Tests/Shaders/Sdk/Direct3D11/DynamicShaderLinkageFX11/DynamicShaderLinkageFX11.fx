@@ -1,3 +1,5 @@
+#pragma FXC DynamicShaderLinkageFX11_FX fx_5_0
+
 //--------------------------------------------------------------------------------------
 // File: DynamicShaderLinkageFX11.fx
 //

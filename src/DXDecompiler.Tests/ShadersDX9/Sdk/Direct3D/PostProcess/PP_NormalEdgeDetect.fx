@@ -1,3 +1,6 @@
+#pragma FXC PP_NormalEdgeDetect ps_2_0 PostProcessPS
+#pragma FXC PP_NormalEdgeDetect_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_NormalEdgeDetect.fx
 //

@@ -1,3 +1,6 @@
+#pragma FXC RenderCascadeScene_PS ps_5_0 PSMain
+#pragma FXC RenderCascadeScene_VS vs_5_0 VSMain
+
 //--------------------------------------------------------------------------------------
 // File: RenderCascadeScene.hlsl
 //

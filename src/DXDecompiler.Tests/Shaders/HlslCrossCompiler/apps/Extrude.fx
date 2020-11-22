@@ -1,3 +1,7 @@
+#pragma FXC Extrude_GS gs_5_0 GS
+#pragma FXC Extrude_PS ps_5_0 PS
+#pragma FXC Extrude_VS vs_5_0 VS
+
 //--------------------------------------------------------------------------------------
 // This is essentially the shader from DirectX SDK D3D10 Tutorial13
 //--------------------------------------------------------------------------------------

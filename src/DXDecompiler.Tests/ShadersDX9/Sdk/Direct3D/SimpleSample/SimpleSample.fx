@@ -1,3 +1,16 @@
+CALL #pragma FXC SimpleSample_VS_2 vs_2_0 RenderSceneVS
+CALL #pragma FXC SimpleSample_PS_2 ps_2_0 RenderScenePS
+CALL #pragma FXC SimpleSample_VS_2a vs_2_a RenderSceneVS
+CALL #pragma FXC SimpleSample_VS_2sw vs_2_sw RenderSceneVS
+CALL #pragma FXC SimpleSample_VS_3 vs_3_0 RenderSceneVS
+CALL #pragma FXC SimpleSample_VS_3sw vs_3_sw RenderSceneVS
+CALL #pragma FXC SimpleSample_PS_2a ps_2_a RenderScenePS
+CALL #pragma FXC SimpleSample_PS_2b ps_2_b RenderScenePS
+CALL #pragma FXC SimpleSample_PS_2sw ps_2_sw RenderScenePS
+CALL #pragma FXC SimpleSample_PS_3 ps_3_0 RenderScenePS
+CALL #pragma FXC SimpleSample_PS_3sw ps_3_sw RenderScenePS
+CALL #pragma FXC SimpleSample_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 // File: SimpleSample.fx
 //

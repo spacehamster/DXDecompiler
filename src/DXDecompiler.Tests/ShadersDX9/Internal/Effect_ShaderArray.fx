@@ -1,3 +1,5 @@
+#pragma FXC Effect_ShaderArray_FX fx_2_0
+
 int CurNumBones;
 float light;
 struct VS_OUTPUT {

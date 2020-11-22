@@ -1,3 +1,7 @@
+#pragma FXC NdotL_VS vs_2_0 SimpleLightingVS
+#pragma FXC NdotL_PS ps_2_0 StandardPS
+#pragma FXC NdotL_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: NdotL.fx
 //

@@ -1,3 +1,7 @@
+#pragma FXC FinalPass_VS vs_5_0 QuadVS
+#pragma FXC FinalPass_PS ps_5_0 PSFinalPass
+#pragma FXC FinalPass_PS_CPUReduction ps_5_0 PSFinalPassForCPUReduction
+
 //--------------------------------------------------------------------------------------
 // File: FinalPass.hlsl
 //

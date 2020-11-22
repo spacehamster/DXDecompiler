@@ -1,3 +1,6 @@
+#pragma FXC PRT_VS vs_2_0 PRTDiffuseVS /DNUM_CLUSTERS=10 /DNUM_PCA=10
+#pragma FXC PRT_PS ps_2_0 StandardPS /DNUM_CLUSTERS=10 /DNUM_PCA=10
+#pragma FXC PRT_FX fx_2_0 /DNUM_CLUSTERS=10 /DNUM_PCA=10
 //-----------------------------------------------------------------------------
 // File: PRT.fx
 //

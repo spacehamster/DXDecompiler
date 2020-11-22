@@ -1,3 +1,5 @@
+#pragma FXC Effect_StateBlock_FX fx_2_0
+
 struct VS_OUTPUT {
     float4 Pos : POSITION;
 };

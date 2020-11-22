@@ -1,3 +1,5 @@
+#pragma FXC StreamOutEffect_5_FX fx_5_0
+
 struct GSOutput
 {
 	float4 Pos : POSITION;

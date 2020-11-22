@@ -1,3 +1,6 @@
+#pragma FXC PP_ColorEdgeDetect ps_2_0 PostProcessPS
+#pragma FXC PP_ColorEdgeDetect_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_ColorEdgeDetect.fx
 //

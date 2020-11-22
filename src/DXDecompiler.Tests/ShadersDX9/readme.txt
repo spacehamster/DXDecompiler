@@ -1,1 +1,0 @@
-These shaders are used to verify that SlimShader can parse DirectX Bytecode, and output disassembly in the same format as fxc.exe.

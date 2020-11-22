@@ -1,3 +1,7 @@
+#pragma FXC CompiledEffect_VS vs_2_0 RenderSceneVS
+#pragma FXC CompiledEffect_PS ps_2_0 RenderScenePS
+#pragma FXC CompiledEffect_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: CompiledEffect.fx
 //

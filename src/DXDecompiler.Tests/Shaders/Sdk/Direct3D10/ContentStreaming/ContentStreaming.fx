@@ -1,3 +1,5 @@
+#pragma FXC ContentStreaming_FX fx_4_0 /Gec
+
 //--------------------------------------------------------------------------------------
 // ContentStreaming.fx
 // Copyright (c) Microsoft Corporation. All rights reserved.

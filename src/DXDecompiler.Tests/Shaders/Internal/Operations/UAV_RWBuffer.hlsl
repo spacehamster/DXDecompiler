@@ -1,3 +1,5 @@
+#pragma FXC UAV_RWBuffer ps_5_0 main /Od
+
 RWBuffer<float4> uav;
 
 float4 main(int index : POSITION) : SV_Target

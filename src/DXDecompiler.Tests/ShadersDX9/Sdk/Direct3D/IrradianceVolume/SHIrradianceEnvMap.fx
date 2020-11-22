@@ -1,3 +1,7 @@
+#pragma FXC SHIrradianceEnvMap_VS vs_2_0 SHIrradianceEnvironmentMapVS
+#pragma FXC SHIrradianceEnvMap_PS ps_2_0 StandardPS
+#pragma FXC SHIrradianceEnvMap_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: SHIrradianceEnvMap.fx
 //

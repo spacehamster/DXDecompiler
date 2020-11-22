@@ -1,3 +1,6 @@
+#pragma FXC SimpleSample_PS ps_5_0 RenderScenePS
+#pragma FXC SimpleSample_VS vs_5_0 RenderSceneVS
+
 //--------------------------------------------------------------------------------------
 // File: SimpleSample.hlsl
 //

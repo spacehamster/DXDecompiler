@@ -1,3 +1,8 @@
+#pragma FXC template_VS vs_5_0 VS
+#pragma FXC template_PS ps_5_0 PS
+#pragma FXC template_VS_PostFX vs_5_0 VS_PostFX
+#pragma FXC template_PS_PostFx ps_5_0 PS_PostFX
+
 cbuffer cbConstant
 {
     float3 vLightDir = float3(-0.577,0.577,-0.577);

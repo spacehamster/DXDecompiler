@@ -1,3 +1,5 @@
+#pragma FXC ps_float4_construct2 ps_3_0 main
+
 struct PS_IN
 {
 	float2 texcoord : TEXCOORD;

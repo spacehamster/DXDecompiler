@@ -1,3 +1,11 @@
+#pragma FXC DepthOfField_WorldVertexShaderVS vs_2_0 WorldVertexShader
+#pragma FXC DepthOfField_WorldVertexShaderPS ps_2_0 WorldPixelShader
+#pragma FXC DepthOfField_UnmodifiedPS ps_2_0 RenderUnmodified
+#pragma FXC DepthOfField_BlurFactorPS ps_2_0 RenderBlurFactor
+#pragma FXC DepthOfField_DepthOfFieldWithSixTexcoordsPS ps_2_0 DepthOfFieldWithSixTexcoords
+#pragma FXC DepthOfField_DepthOfFieldManySamplesPS ps_3_0 DepthOfFieldManySamples
+#pragma FXC DepthOfField_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: DepthOfField.fx
 //

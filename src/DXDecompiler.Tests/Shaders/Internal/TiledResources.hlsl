@@ -1,3 +1,5 @@
+#pragma FXC TiledResources ps_5_0 main
+
 SamplerState samp0;
 SamplerComparisonState samp1;
 struct foo {

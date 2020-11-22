@@ -1,3 +1,5 @@
+#pragma FXC Effect_Expression2_FX fx_2_0
+
 float4 g1;
 float4 g2;
 float4 g3;

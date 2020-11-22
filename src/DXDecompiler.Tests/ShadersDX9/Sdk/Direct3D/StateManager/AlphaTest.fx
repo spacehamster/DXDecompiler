@@ -1,3 +1,7 @@
+#pragma FXC AlphaTest_VS vs_2_0 VS
+#pragma FXC AlphaTest_PS ps_2_0 PS
+#pragma FXC AlphaTest_VS fx_2_0
+
 //--------------------------------------------------------------------------------------
 //
 // Alpha-Tested Pine Lighting Model

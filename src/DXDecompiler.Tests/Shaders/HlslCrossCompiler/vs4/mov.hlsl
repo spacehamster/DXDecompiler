@@ -1,3 +1,4 @@
+#pragma FXC mov vs_4_0 main
 
 struct VS_OUTPUT
 {

@@ -1,3 +1,7 @@
+#pragma FXC MeshFromObj_VS vs_2_0 Projection
+#pragma FXC MeshFromObj_PS ps_2_0 Lighting
+#pragma FXC MeshFromObj_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 // File: MeshFromOBJ.fx
 //

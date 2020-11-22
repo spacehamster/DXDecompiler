@@ -1,3 +1,6 @@
+#pragma FXC SkinnedMesh_VS vs_2_0 VShade
+#pragma FXC SkinnedMesh_FX fx_2_0
+
 //
 // Skinned Mesh Effect file 
 // Copyright (c) 2000-2002 Microsoft Corporation. All rights reserved.

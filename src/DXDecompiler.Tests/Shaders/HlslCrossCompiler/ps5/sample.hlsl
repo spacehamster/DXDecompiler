@@ -1,3 +1,4 @@
+#pragma FXC sample ps_5_0 main 
 
 struct PS_INPUT
 {

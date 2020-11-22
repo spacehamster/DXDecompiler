@@ -1,3 +1,5 @@
+#pragma FXC MultithreadedRendering11_VS vs_5_0 VSMain
+
 //--------------------------------------------------------------------------------------
 // File: MultithreadedRendering11_VS.hlsl
 //

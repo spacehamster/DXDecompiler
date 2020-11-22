@@ -1,3 +1,5 @@
+#pragma FXC ParallaxOcclusionMapping ps_3_0 RenderSceneParallaxMappingPS
+
 //--------------------------------------------------------------------------------------
 // File: ParallaxOcclusionMapping.fx
 //

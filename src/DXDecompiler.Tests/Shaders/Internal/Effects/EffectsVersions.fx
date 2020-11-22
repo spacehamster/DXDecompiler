@@ -1,3 +1,6 @@
+#pragma FXC EffectsVersions_4_FX fx_4_0
+#pragma FXC EffectsVersions_5_FX fx_5_0
+
 //--------------------------------------------------------------------------------------
 // File: BasicHLSL11.fx
 //

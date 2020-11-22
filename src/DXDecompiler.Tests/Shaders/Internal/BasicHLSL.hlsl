@@ -1,3 +1,7 @@
+#pragma FXC BasicHLSL_VS vs_5_0 VSMain
+#pragma FXC BasicHLSL_PS ps_5_0 PSMain
+#pragma FXC BasicHLSL_VS_5_1 vs_5_1 VSMain
+#pragma FXC BasicHLSL_PS_5_1 ps_5_1 PSMain
 //--------------------------------------------------------------------------------------
 // File: BasicHLSL11.hlsl
 //

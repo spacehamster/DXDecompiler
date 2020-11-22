@@ -1,3 +1,5 @@
+#pragma FXC vs_vector4_matrix44_multiply vs_3_0 main
+
 float4x4 matrix_4x4;
 
 struct VS_OUT

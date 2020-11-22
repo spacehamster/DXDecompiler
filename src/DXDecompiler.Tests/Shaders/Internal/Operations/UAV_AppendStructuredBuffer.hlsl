@@ -1,3 +1,5 @@
+#pragma FXC UAV_AppendStructuredBuffer ps_5_0 main /Od
+
 struct foo {
 	float4 sValue1;
 	float4 sValue2;

@@ -1,3 +1,5 @@
+#pragma FXC Effect_ArrayIndex_FX fx_2_0
+
 float4 array[10];
 int index;
 

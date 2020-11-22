@@ -1,3 +1,5 @@
+#pragma FXC DeferredParticles_FX fx_4_0 /DMAX_INSTANCES=4 /DMAX_GLOWLIGHTS=4
+
 //--------------------------------------------------------------------------------------
 // File: BasicHLSL10.fx
 //

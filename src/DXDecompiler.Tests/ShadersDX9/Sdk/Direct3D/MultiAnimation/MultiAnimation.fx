@@ -1,3 +1,8 @@
+#pragma FXC MultiAnimation_VS vs_2_0 VertScene
+#pragma FXC MultiAnimation_SkinningVS vs_2_0 VertSkinning
+#pragma FXC PixScene_PS ps_2_0 PixScene
+#pragma FXC MultiAnimation_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 // File: ShadowVolume.fx
 //

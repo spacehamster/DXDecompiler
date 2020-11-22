@@ -1,3 +1,9 @@
+#pragma FXC LDPRT_CubicVS vs_3_0 LDPRTCubicVS
+#pragma FXC LDPRT_CubicPS ps_3_0 LDPRTCubicPS
+#pragma FXC LDPRT_VS vs_3_0 LDPRTVertexShader
+#pragma FXC LDPRT_PS ps_3_0 LDPRTPixelShader
+#pragma FXC LDPRT_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: LDPRT.fx
 //

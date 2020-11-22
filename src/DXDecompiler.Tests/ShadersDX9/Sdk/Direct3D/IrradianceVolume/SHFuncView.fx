@@ -1,3 +1,6 @@
+#pragma FXC SHFuncView_VS vs_2_0 RenderSphere
+#pragma FXC SHFuncView_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: SHFuncView.fx
 //

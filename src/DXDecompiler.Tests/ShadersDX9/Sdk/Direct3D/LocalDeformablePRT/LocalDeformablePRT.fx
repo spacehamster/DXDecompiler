@@ -1,3 +1,7 @@
+#pragma FXC LocalDeformablePRT_VS vs_2_0 VS
+#pragma FXC LocalDeformablePRT_PS ps_2_0 PS
+#pragma FXC LocalDeformablePRT_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 // File: LocalDeformablePRT.fx
 //

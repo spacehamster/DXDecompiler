@@ -1,3 +1,5 @@
+#pragma FXC HullShader_IsolinePoint hs_5_0 main
+
 // Input control point
 struct VS_CONTROL_POINT_OUTPUT
 {

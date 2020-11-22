@@ -1,3 +1,5 @@
+#pragma FXC signatures_vs vs_5_0 main
+
 void main(
 	float4 ipos : SV_Position,
 	uint id : SV_VertexID,

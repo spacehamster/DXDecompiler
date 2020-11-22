@@ -1,3 +1,5 @@
+#pragma FXC RasterOrderViews ps_5_1 main
+
 struct foo {
 	float4 sValue1;
 	float4 sValue2;

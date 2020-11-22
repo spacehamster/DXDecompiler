@@ -1,3 +1,5 @@
+#pragma FXC signatures_ds ds_5_0 main
+
 // Input control point
 struct BEZIER_CONTROL_POINT
 {

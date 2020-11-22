@@ -1,3 +1,6 @@
+#pragma FXC PP_PositionMap ps_2_0 PostProcessPS
+#pragma FXC PP_PositionMap_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_PositionMap.fx
 //

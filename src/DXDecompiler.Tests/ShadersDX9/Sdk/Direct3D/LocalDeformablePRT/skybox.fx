@@ -1,3 +1,7 @@
+#pragma FXC skybox_VS vs_2_0 SkyboxVS
+#pragma FXC skybox_PS ps_2_0 SkyboxPS
+#pragma FXC skybox_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: SkyBox.fx
 //

@@ -1,3 +1,11 @@
+#pragma FXC ShadowMap_SceneVS vs_2_0 VertScene
+#pragma FXC ShadowMap_ScenePS ps_2_0 PixScene
+#pragma FXC ShadowMap_LightVS vs_2_0 VertLight
+#pragma FXC ShadowMap_LightPS ps_2_0 PixLight
+#pragma FXC ShadowMap_ShadowVS vs_2_0 VertShadow
+#pragma FXC ShadowMap_ShadowPS ps_2_0 PixShadow
+#pragma FXC ShadowMap_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: ShadowMap.fx
 //

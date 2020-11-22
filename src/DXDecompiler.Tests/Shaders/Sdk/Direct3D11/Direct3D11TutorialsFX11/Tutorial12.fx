@@ -1,3 +1,5 @@
+#pragma FXC Tutorial12_FX fx_5_0
+
 //
 // Constant Buffer Variables
 //

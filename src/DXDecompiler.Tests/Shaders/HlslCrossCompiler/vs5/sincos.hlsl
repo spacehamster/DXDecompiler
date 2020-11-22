@@ -1,3 +1,4 @@
+#pragma FXC sincos vs_5_0 main
 
 struct VS_OUTPUT
 {

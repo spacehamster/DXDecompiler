@@ -1,3 +1,6 @@
+#pragma FXC Skybox11_VS vs_5_0 SkyboxVS
+#pragma FXC Skybox11_PS ps_5_0 SkyboxPS
+
 //-----------------------------------------------------------------------------
 // File: SkyBox11.hlsl
 //

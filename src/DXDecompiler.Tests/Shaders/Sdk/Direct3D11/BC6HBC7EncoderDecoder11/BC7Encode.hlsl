@@ -1,3 +1,7 @@
+#pragma FXC BC7Encode_456 cs_5_0 TryMode456CS
+#pragma FXC BC7Encode_137 cs_5_0 TryMode137CS
+#pragma FXC BC7Encode_02 cs_5_0 TryMode02CS
+
 //--------------------------------------------------------------------------------------
 // File: BC7Encode.hlsl
 //

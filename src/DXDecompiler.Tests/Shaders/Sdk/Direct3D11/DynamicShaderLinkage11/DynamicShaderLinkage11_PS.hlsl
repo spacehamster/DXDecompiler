@@ -1,3 +1,5 @@
+#pragma FXC DynamicShaderLinkage11_PS ps_5_0 PSMain
+
 //--------------------------------------------------------------------------------------
 // File: DynamicShaderLinkage11.psh
 //

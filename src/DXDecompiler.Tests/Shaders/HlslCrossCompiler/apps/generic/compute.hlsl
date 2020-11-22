@@ -1,3 +1,5 @@
+#pragma FXC compute cs_5_0 main
+
 RWTexture2D<float4> Output;
 
 float Time;

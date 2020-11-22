@@ -1,3 +1,4 @@
+#pragma FXC tex2d ps_2_0 main
 
 texture g_txScene : TEXTURE;		// texture for scene rendering
 

@@ -1,3 +1,5 @@
+#pragma FXC TessellatorCS40_TessellateVerticesCS cs_4_0 CSTessellationVertices
+
 //--------------------------------------------------------------------------------------
 // File: TessellatorCS40_TessellateVerticesCS.hlsl
 //

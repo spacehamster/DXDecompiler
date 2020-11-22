@@ -1,3 +1,7 @@
+#pragma FXC OIT_CreatePrefixSum_Pass0_CS cs_5_0 CreatePrefixSum_Pass0_CS
+#pragma FXC OIT_CreatePrefixSum_Pass1_CS cs_5_0 CreatePrefixSum_Pass1_CS
+#pragma FXC OIT_SortAndRender_CS cs_5_0 SortAndRenderCS
+
 //-----------------------------------------------------------------------------
 // File: OIT_CS.hlsl
 //

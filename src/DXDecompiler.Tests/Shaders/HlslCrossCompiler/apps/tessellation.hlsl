@@ -1,3 +1,8 @@
+#pragma FXC tesselation_DS ds_5_0 DS
+#pragma FXC tesselation_HS hs_5_0 HS
+#pragma FXC tesselation_PS ps_5_0 PS
+#pragma FXC tesselation_VS vs_5_0 VS
+
 struct IA_OUTPUT
 {
     float4 cpoint : CPOINT;

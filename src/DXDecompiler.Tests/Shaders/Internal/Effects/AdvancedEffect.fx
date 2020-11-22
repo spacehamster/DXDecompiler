@@ -1,3 +1,10 @@
+#pragma FXC AdvancedEffect_5_0_FX fx_5_0
+#pragma FXC AdvancedEffect_4_0_FX fx_4_0
+#pragma FXC AdvancedEffect_4_1_FX fx_4_1
+#pragma FXC AdvancedEffect_5_0_Child_FX fx_5_0 /Gch
+#pragma FXC AdvancedEffect_4_0_Child_FX fx_4_0 /Gch
+#pragma FXC AdvancedEffect_4_1_Child_FX fx_4_1 /Gch
+
 // Global variables
 float4 g_MaterialAmbientColor;      // Material's ambient color
 float    g_fTime;                   // App's time in seconds

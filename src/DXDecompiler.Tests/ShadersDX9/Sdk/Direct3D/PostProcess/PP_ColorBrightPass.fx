@@ -1,3 +1,6 @@
+#pragma FXC PP_ColorBrightPass ps_2_0 BrightPassFilter
+#pragma FXC PP_ColorBrightPass_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_ColorBrightPass.fx
 //

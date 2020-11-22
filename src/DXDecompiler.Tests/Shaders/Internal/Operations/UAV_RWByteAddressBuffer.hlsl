@@ -1,3 +1,5 @@
+#pragma FXC UAV_RWByteAddressBuffer ps_5_0 main /Od
+
 RWByteAddressBuffer uav;
 
 float4 main(int index : POSITION) : SV_Target

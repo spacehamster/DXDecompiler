@@ -1,3 +1,13 @@
+#pragma FXC LibraryTest_4_0 lib_4_0
+#pragma FXC LibraryTest_4_1 lib_4_1
+#pragma FXC LibraryTest_5_0 lib_5_0
+#pragma FXC LibraryTest_4_Level_9_1 lib_4_0_level_9_1
+#pragma FXC LibraryTest_4_Level_9_3 lib_4_0_level_9_3
+#pragma FXC LibraryTest_4_Level_9_1_VS lib_4_0_level_9_1_vs_only
+#pragma FXC LibraryTest_4_Level_9_1_PS lib_4_0_level_9_1_ps_only
+#pragma FXC LibraryTest_4_Level_9_3_VS lib_4_0_level_9_3_vs_only
+#pragma FXC LibraryTest_4_Level_9_3_PS lib_4_0_level_9_3_ps_only
+
 export float3 TestFunction(float3 input,
 	float1 in2 : COLOR,
 	inout float2x3 val3,

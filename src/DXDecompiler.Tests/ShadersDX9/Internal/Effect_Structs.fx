@@ -1,3 +1,5 @@
+#pragma FXC Effect_Structs_FX fx_2_0
+
 
 int index;
 struct Simple {

@@ -1,3 +1,6 @@
+#pragma FXC PP_ColorMonochrome ps_2_0 PostProcessPS
+#pragma FXC PP_ColorMonochrome_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_ColorMonochrome.fx
 //

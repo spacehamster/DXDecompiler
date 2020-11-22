@@ -1,3 +1,13 @@
+#pragma FXC ShadowVolume_SceneAmbientVS vs_2_0 VertSceneAmbient
+#pragma FXC ShadowVolume_SceneAmbientPS ps_2_0 PixSceneAmbient
+#pragma FXC ShadowVolume_ShadowVolumeVS vs_2_0 VertShadowVolume
+#pragma FXC ShadowVolume_ShadowVolumePS ps_2_0 PixShadowVolume
+#pragma FXC ShadowVolume_SceneVS vs_2_0 VertScene
+#pragma FXC ShadowVolume_ScenePS ps_2_0 PixScene
+#pragma FXC ShadowVolume_ShowDirtyStencilPS ps_2_0 ShowDirtyStencil
+#pragma FXC ShadowVolume_PixComplexityPS ps_2_0 PixComplexity
+#pragma FXC ShadowVolume_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 // File: ShadowVolume.fx
 //

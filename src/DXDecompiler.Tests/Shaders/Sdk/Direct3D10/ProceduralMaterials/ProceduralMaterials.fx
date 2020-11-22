@@ -1,3 +1,5 @@
+#pragma FXC ProceduralMaterials_FX fx_4_0 "/DNUM_SLIDERS=4"
+
 //--------------------------------------------------------------------------------------
 // File: ProceduralMaterials.fx
 //

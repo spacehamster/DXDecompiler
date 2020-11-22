@@ -1,3 +1,6 @@
+#pragma FXC resource_types_5 ps_5_0 main
+#pragma FXC resource_types_4 ps_4_0 main
+
 // To test ld_indexable and co:
 //   Compile with fxc /T ps_5_0 /Fo resource_types.bin
 // To test ld and co:

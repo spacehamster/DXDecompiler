@@ -1,3 +1,7 @@
+#pragma FXC LambertLit_PS ps_5_0 PS
+#pragma FXC LambertLit_PSSolid ps_5_0 PSSolid
+#pragma FXC LambertLit_VS vs_5_0 VS
+
 //--------------------------------------------------------------------------------------
 // File: Tutorial06.fx
 //

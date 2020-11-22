@@ -1,3 +1,8 @@
+#pragma FXC SimpleBezier11_DS ds_5_0 BezierDS
+#pragma FXC SimpleBezier11_HS hs_5_0 BezierHS
+#pragma FXC SimpleBezier11_PS ps_5_0 BezierPS
+#pragma FXC SimpleBezier11_VS vs_5_0 BezierVS
+
 //--------------------------------------------------------------------------------------
 // File: SimpleBezier11.hlsl
 //

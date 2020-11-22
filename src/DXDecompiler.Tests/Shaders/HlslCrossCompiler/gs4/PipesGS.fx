@@ -1,3 +1,5 @@
+#pragma FXC PipesGS gs_4_0 GSCrawlPipesMain
+
 // ParticlesGS.fx
 // Copyright (c) 2005 Microsoft Corporation. All rights reserved.
 //

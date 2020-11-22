@@ -1,3 +1,6 @@
+#pragma FXC PP_ColorDownFilter4 ps_2_0 DownFilter
+#pragma FXC PP_ColorDownFilter4_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_ColorDownFilter4.fx
 //

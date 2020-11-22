@@ -1,3 +1,5 @@
+#pragma FXC Clipping_VS vs_5_0 VS
+
 cbuffer cbConstant
 {
     float3 vLightDir;

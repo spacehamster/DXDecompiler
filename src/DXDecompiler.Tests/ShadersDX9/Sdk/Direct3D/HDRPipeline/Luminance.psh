@@ -1,3 +1,6 @@
+#pragma FXC Luminance_GreyScaleDownSamplePS ps_3_0 GreyScaleDownSample
+#pragma FXC Luminance_DownSamplePS ps_3_0 DownSample
+
 //======================================================================
 //
 //      HIGH DYNAMIC RANGE RENDERING DEMONSTRATION

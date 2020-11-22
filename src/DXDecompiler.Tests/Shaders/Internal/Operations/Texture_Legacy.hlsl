@@ -1,3 +1,5 @@
+#pragma FXC Texture_Legacy ps_5_0 main /Od /Gec
+
 sampler tex0;
 sampler1D tex1;
 sampler2D tex2;

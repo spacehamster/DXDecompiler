@@ -1,3 +1,5 @@
+#pragma FXC OIT_SortAndRender_CS cs_5_0 SortAndRenderCS
+
 //-----------------------------------------------------------------------------
 // File: OITPS.hlsl
 //

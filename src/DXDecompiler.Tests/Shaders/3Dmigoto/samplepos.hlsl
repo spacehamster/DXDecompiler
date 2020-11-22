@@ -1,3 +1,5 @@
+#pragma FXC samplepos ps_5_0 main
+
 Texture2DMS<float4> t0 : register(t0);
 Texture2DMS<float4, 8> t1 : register(t1);
 Texture2DMSArray<float4, 8> t2 : register(t2);

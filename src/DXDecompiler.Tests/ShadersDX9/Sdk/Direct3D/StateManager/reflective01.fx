@@ -1,3 +1,7 @@
+#pragma FXC Reflective01_VS vs_2_0 VS
+#pragma FXC Reflective01_PS ps_2_0 PS
+#pragma FXC Reflective01_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 //
 // Reflective Lighting Model

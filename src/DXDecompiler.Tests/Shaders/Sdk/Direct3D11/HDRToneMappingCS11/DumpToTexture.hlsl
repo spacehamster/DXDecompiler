@@ -1,3 +1,5 @@
+#pragma FXC DumpToTexture ps_5_0 PSDump
+
 //--------------------------------------------------------------------------------------
 // File: DumpToTexture.hlsl
 //

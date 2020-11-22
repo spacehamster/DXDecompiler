@@ -1,3 +1,4 @@
+#pragma FXC intrep vs_2_0 main
 
 struct VS_OUTPUT
 {

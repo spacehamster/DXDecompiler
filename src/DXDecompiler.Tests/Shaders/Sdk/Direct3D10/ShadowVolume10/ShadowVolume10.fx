@@ -1,3 +1,5 @@
+#pragma FXC ShadowVolume10_FX fx_4_0
+
 // ShadowVolume10.fx
 // Copyright (c) 2005 Microsoft Corporation. All rights reserved.
 //

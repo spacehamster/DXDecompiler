@@ -1,3 +1,7 @@
+#pragma FXC CustomUI_VS vs_2_0 VertScene
+#pragma FXC CustomUI_PS ps_2_0 PixScene
+#pragma FXC CustomUI_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 // File: CustomUI.fx
 //

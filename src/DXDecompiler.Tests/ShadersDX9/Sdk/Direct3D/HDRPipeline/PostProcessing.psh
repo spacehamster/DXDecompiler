@@ -1,3 +1,8 @@
+#pragma FXC PostProcessing_PS ps_3_0 BrightPass
+#pragma FXC PostProcessing_PS ps_3_0 DownSample
+#pragma FXC PostProcessing_PS ps_3_0 HorizontalBlur
+#pragma FXC PostProcessing_PS ps_3_0 VerticalBlur
+
 //======================================================================
 //
 //      HIGH DYNAMIC RANGE RENDERING DEMONSTRATION

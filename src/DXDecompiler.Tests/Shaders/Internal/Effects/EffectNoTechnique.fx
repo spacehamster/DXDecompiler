@@ -1,3 +1,10 @@
+#pragma FXC EffectNoTechnique_5_0_FX fx_5_0
+#pragma FXC EffectNoTechnique_4_0_FX fx_4_0
+#pragma FXC EffectNoTechnique_4_1_FX fx_4_1
+#pragma FXC EffecEffectNoTechnique_5_0_Child_FX fx_5_0 /Gch
+#pragma FXC EffectNoTechnique_4_0_Child_FX fx_4_0 /Gch
+#pragma FXC EffectNoTechnique_4_1_Child_FX fx_4_1 /Gch
+
 // Global variables
 float4 g_MaterialAmbientColor;      // Material's ambient color
 

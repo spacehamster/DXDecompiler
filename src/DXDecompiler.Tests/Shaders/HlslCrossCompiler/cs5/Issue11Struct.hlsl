@@ -1,3 +1,5 @@
+#pragma FXC Issue11Struct cs_5_0 main
+
 Texture2D<float4> Input;
 RWTexture2D<float4> Result;
 

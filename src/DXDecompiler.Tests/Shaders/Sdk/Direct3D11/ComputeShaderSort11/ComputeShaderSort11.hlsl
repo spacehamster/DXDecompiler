@@ -1,3 +1,6 @@
+#pragma FXC ComputeShaderSort11_BitonicSort cs_5_0 BitonicSort
+#pragma FXC ComputeShaderSort11_MatrixTranspose cs_5_0 MatrixTranspose
+
 //--------------------------------------------------------------------------------------
 // File: ComputeShaderSort11.hlsl
 //

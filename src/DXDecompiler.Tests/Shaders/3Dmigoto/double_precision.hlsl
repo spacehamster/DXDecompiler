@@ -1,3 +1,5 @@
+#pragma FXC double_precision ps_5_0 main
+
 // Compile with fxc /T ps_5_0 /Fo double_precision.bin
 
 // HLSL scalar types:

@@ -1,3 +1,6 @@
+#pragma FXC POM_VS vs_5_0 RenderSceneVS
+#pragma FXC POM_PS ps_5_0 RenderScenePS
+
 //--------------------------------------------------------------------------------------
 // File: POM.hlsl
 //

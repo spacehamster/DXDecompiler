@@ -1,3 +1,5 @@
+#pragma FXC Effect_EmbedAssembly_FX fx_2_0
+
 PixelShader baz = asm {
     ps_2_0
     dcl v0

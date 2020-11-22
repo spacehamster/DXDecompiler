@@ -1,3 +1,15 @@
+#pragma FXC FluidCS11_BuildGridCS cs_5_0 BuildGridCS
+#pragma FXC FluidCS11_ClearGridIndicesCS cs_5_0 ClearGridIndicesCS
+#pragma FXC FluidCS11_BuildGridIndicesCS cs_5_0 BuildGridIndicesCS
+#pragma FXC FluidCS11_RearrangeParticlesCS cs_5_0 RearrangeParticlesCS
+#pragma FXC FluidCS11_DensityCS_Simple cs_5_0 DensityCS_Simple
+#pragma FXC FluidCS11_DensityCS_Shared cs_5_0 DensityCS_Shared
+#pragma FXC FluidCS11_DensityCS_Grid cs_5_0 DensityCS_Grid
+#pragma FXC FluidCS11_ForceCS_Simple cs_5_0 ForceCS_Simple
+#pragma FXC FluidCS11_ForceCS_Shared cs_5_0 ForceCS_Shared
+#pragma FXC FluidCS11_ForceCS_Grid cs_5_0 ForceCS_Grid
+#pragma FXC FluidCS11_IntegrateCS cs_5_0 IntegrateCS
+
 //--------------------------------------------------------------------------------------
 // File: FluidCS11.hlsl
 //

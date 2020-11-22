@@ -1,3 +1,7 @@
+#pragma FXC LibraryTest2_4_0 lib_4_0
+#pragma FXC LibraryTest2_4_1 lib_4_1
+#pragma FXC LibraryTest2_5_0 lib_5_0
+
 // This file defines the defaults for the editor.
 
 // This is the default code in the fixed header section.

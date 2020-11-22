@@ -1,3 +1,7 @@
+#pragma FXC ContactHardeningShadows11_PS ps_5_0 PS_RenderScene
+#pragma FXC ContactHardeningShadows11_VS vs_5_0 VS_RenderScene
+#pragma FXC ContactHardeningShadows11_VSSM vs_5_0 VS_RenderSceneSM
+
 //--------------------------------------------------------------------------------------
 // File: ContactHardeningShadows11.hlsl
 //

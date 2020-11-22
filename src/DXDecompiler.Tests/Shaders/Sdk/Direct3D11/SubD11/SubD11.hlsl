@@ -1,3 +1,10 @@
+#pragma FXC SubD11_VS_PatchSkinning vs_5_0 PatchSkinningVS
+#pragma FXC SubD11_VS_MeshSkinning vs_5_0 MeshSkinningVS
+#pragma FXC SubD11_HS hs_5_0 SubDToBezierHS
+#pragma FXC SubD11_HS_4444 hs_5_0 SubDToBezierHS4444
+#pragma FXC SubD11_DS ds_5_0 BezierEvalDS
+#pragma FXC SubD11_PS ps_5_0 SmoothPS
+
 //--------------------------------------------------------------------------------------
 // File: SubD11.hlsl
 //

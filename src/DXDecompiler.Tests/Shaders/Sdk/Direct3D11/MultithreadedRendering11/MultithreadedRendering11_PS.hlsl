@@ -1,3 +1,5 @@
+#pragma FXC MultithreadedRendering11_PS ps_5_0 PSMain
+
 //--------------------------------------------------------------------------------------
 // File: MultithreadedRendering11_PS.hlsl
 //

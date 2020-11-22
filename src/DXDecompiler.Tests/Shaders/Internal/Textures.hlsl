@@ -1,3 +1,6 @@
+#pragma FXC Textures_VS vs_5_0 VS
+#pragma FXC Textures_PS ps_5_0 PS
+
 struct VertexShaderInput
 {
 	float4 pos : POSITION;

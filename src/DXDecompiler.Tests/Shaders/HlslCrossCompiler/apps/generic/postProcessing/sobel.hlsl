@@ -1,3 +1,5 @@
+#pragma FXC sobel_PS ps_5_0 PS
+
 Texture2D g_txColourBuffer;
 Texture2D g_txDepthBuffer;
 

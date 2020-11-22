@@ -1,3 +1,5 @@
+#pragma FXC TessellatorCS40_NumVerticesIndicesCS cs_4_0 CSNumVerticesIndices
+
 //--------------------------------------------------------------------------------------
 // File: TessellatorCS40_NumVerticesIndicesCS.hlsl
 //

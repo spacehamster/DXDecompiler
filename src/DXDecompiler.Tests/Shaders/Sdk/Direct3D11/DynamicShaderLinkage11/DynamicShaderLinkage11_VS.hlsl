@@ -1,3 +1,5 @@
+#pragma FXC DynamicShaderLinkage11_VS vs_5_0 VSMain
+
 //--------------------------------------------------------------------------------------
 // File: DynamicShaderLinkage11_VS.hlsl
 //

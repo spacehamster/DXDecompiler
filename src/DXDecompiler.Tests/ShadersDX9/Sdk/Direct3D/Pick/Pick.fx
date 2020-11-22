@@ -1,3 +1,7 @@
+#pragma FXC Pick_VS vs_2_0 RenderSceneVS
+#pragma FXC Pick_PS ps_2_0 RenderScenePS
+#pragma FXC Pick_FX fx_2_0
+
 //--------------------------------------------------------------------------------------
 // File: Pick.fx
 //

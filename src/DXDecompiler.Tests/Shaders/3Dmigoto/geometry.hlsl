@@ -1,3 +1,5 @@
+#pragma FXC geometry gs_5_0 main
+
 struct vs2gs {
 	uint idx : TEXCOORD0;
 };

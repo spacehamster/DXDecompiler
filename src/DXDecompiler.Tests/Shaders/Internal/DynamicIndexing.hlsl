@@ -1,3 +1,5 @@
+#pragma FXC DynamicIndexing ps_5_0 main
+
 cbuffer cbuffer1 {
 	float4 cValue1[5];
 	float4 cValue2[5];

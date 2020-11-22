@@ -1,3 +1,5 @@
+#pragma FXC HDRSource_VS vs_3_0 main
+
 //======================================================================
 //
 //      HIGH DYNAMIC RANGE RENDERING DEMONSTRATION

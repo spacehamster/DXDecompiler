@@ -1,4 +1,4 @@
-
+#pragma FXC signatures_hs hs_5_0 main
 
 
 // Input control point

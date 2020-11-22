@@ -1,3 +1,5 @@
+#pragma FXC AdvancedParticles_FX fx_4_0
+
 //--------------------------------------------------------------------------------------
 // File: AdvancedParticles.fx
 //

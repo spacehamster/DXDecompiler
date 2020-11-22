@@ -1,3 +1,5 @@
+#pragma FXC fxaa ps_3_0 main /DFXAA_HLSL_3=1
+
 // Copyright (c) 2011 NVIDIA Corporation. All rights reserved.
 //
 // TO  THE MAXIMUM  EXTENT PERMITTED  BY APPLICABLE  LAW, THIS SOFTWARE  IS PROVIDED

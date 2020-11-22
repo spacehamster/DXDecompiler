@@ -1,3 +1,7 @@
+signatures_ps_0 ps_5_0 main /DTEST_DEPTH=0
+signatures_ps_1 ps_5_0 main /DTEST_DEPTH=1
+signatures_ps_2 ps_5_0 main /DTEST_DEPTH=2
+
 // Set to 0, 1 or 2 to test different depth semantics:
 //#define TEST_DEPTH 0
 

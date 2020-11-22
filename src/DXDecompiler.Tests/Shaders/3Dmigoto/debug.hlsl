@@ -1,3 +1,5 @@
+#pragma FXC debug cs_5_0 main /Od
+
 // Test case for the debug layer instructions
 //   Compile with fxc /T cs_5_0 /Od /Fo debug.bin
 

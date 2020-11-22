@@ -1,3 +1,7 @@
+#pragma FXC Sprite_VS vs_4_0 VsSprite
+#pragma FXC Sprite_PS ps_4_0 PsSprite
+#pragma FXC Sprite_FX fx_4_0
+
 //--------------------------------------------------------------------------------------
 // File: Sprite.fx
 //

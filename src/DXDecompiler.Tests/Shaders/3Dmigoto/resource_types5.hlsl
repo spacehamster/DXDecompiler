@@ -1,3 +1,5 @@
+#pragma FXC resource_types5 ps_5_0 main
+
 // Resource type tests that require shader model 5
 // Compile with fxc /T ps_5_0 /Fo resource_types5.bin
 

@@ -1,3 +1,5 @@
+#pragma FXC ps_constant_struct ps_3_0 main
+
 struct PS_OUT
 {
 	float4 color : COLOR;

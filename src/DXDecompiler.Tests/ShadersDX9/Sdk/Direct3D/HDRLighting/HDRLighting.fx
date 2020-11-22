@@ -1,3 +1,13 @@
+#pragma FXC HDRLighting_TransformSceneVS vs_2_0 TransformScene
+#pragma FXC HDRLighting_PointLightPS ps_2_0 PointLight
+#pragma FXC HDRLighting_BloomPS ps_2_0 BloomPS
+#pragma FXC HDRLighting_StarPS ps_2_0 StarPS
+#pragma FXC HDRLighting_SampleLumInitialPS ps_2_0 SampleLumInitial
+#pragma FXC HDRLighting_DownScale4x4PS ps_2_0 DownScale4x4PS
+#pragma FXC HDRLighting_GaussBlur5x5PS ps_2_0 GaussBlur5x5PS
+#pragma FXC HDRLighting_MergeTextures_8PS ps_2_0 MergeTextures_8PS
+#pragma FXC HDRLighting_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: HDRLighting.fx
 //

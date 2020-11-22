@@ -1,3 +1,5 @@
+#pragma FXC signatures_cs cs_5_0 main
+
 RWByteAddressBuffer buf : register(u0);
 
 [numthreads(4, 2, 1)]

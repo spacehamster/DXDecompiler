@@ -1,3 +1,4 @@
+#pragma FXC primID ps_4_0 main
 
 struct PS_INPUT
 {

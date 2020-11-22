@@ -1,3 +1,5 @@
+#pragma FXC Texture_ByteAddressBuffer ps_5_0 main /Od
+
 ByteAddressBuffer tex;
 
 float4 main(int index : POSITION) : SV_Target

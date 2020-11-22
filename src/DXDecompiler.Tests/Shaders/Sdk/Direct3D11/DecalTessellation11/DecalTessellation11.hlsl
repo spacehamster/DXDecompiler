@@ -1,3 +1,9 @@
+#pragma FXC DecalTessellation11_VS_NoTessellation vs_5_0 VS_NoTessellation
+#pragma FXC DecalTessellation11_VS vs_5_0 VS
+#pragma FXC DecalTessellation11_PS ps_5_0 PS
+#pragma FXC DecalTessellation11_HS hs_5_0 HS
+#pragma FXC DecalTessellation11_DS ds_5_0 DS
+
 //--------------------------------------------------------------------------------------
 // File: DecalTessellation.hlsl
 //

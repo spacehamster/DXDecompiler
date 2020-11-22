@@ -1,3 +1,5 @@
+#pragma FXC basic hs_5_0 main
+
 struct VS_OUTPUT
 {
     float3 cpoint : CPOINT;

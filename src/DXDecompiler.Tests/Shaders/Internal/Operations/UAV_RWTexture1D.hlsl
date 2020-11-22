@@ -1,3 +1,5 @@
+#pragma FXC UAV_RWTexture1D ps_5_0 main /Od
+
 RWTexture1D<float4> uav;
 
 float4 main(int index : POSITION) : SV_Target

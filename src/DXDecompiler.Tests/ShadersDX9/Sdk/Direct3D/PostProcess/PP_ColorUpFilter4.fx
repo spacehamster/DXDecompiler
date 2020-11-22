@@ -1,3 +1,6 @@
+#pragma FXC PP_ColorUpFilter4 ps_2_0 UpFilterPS
+#pragma FXC PP_ColorUpFilter4_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_ColorUpFilter.fx
 //

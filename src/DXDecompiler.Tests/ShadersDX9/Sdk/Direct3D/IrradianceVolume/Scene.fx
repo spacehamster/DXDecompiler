@@ -1,3 +1,7 @@
+#pragma FXC Scene_VS vs_2_0 SceneVS
+#pragma FXC Scene_PS ps_2_0 ScenePS
+#pragma FXC Scene_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: Scene.fx
 //

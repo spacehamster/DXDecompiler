@@ -1,3 +1,6 @@
+#pragma FXC snow_VS vs_2_0 VS
+#pragma FXC snow_PS ps_2_0 PS
+#pragma FXC snow_FX fx_2_0
 //--------------------------------------------------------------------------------------
 //
 // Snow Lighting Model

@@ -1,3 +1,9 @@
+#pragma FXC PNTriangles11_VS vs_5_0 VS_RenderScene
+#pragma FXC PNTriangles11_VS_WithTessellation vs_5_0 VS_RenderSceneWithTessellation
+#pragma FXC PNTriangles11_HS hs_5_0 HS_PNTriangles
+#pragma FXC PNTriangles11_DS ds_5_0 DS_PNTriangles
+#pragma FXC PNTriangles11_PS ps_5_0 PS_RenderScene
+
 //--------------------------------------------------------------------------------------
 // File: PNTriangles11.hlsl
 //

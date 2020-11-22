@@ -1,3 +1,5 @@
+#pragma FXC Texture_Buffer ps_5_0 main /Od
+
 Buffer<float4> tex;
 
 float4 main(int index : POSITION) : SV_Target

@@ -1,3 +1,5 @@
+#pragma FXC conservative_depth_ge ps_5_0 DepthGreaterThan
+#pragma FXC conservative_depth_le ps_5_0 DepthLessThan
 
 struct PS_INPUT
 {

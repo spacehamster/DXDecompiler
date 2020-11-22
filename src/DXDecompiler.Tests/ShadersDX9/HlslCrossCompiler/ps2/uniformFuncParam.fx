@@ -1,3 +1,4 @@
+#pragma FXC uniformFuncParam ps_2_0 main
 
 float4 main(  float2 vTex0 : TEXCOORD0,
               uniform sampler2D diffuseMap      : register(S0),

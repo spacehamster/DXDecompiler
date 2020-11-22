@@ -1,3 +1,5 @@
+#pragma FXC SparseMorphTargets_FX fx_4_0
+
 //--------------------------------------------------------------------------------------
 // File: SparseMorphTargets.fx
 //

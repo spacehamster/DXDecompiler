@@ -1,3 +1,8 @@
+#pragma FXC HLSLSample_VS vs_5_0 RenderSceneVS
+#pragma FXC HLSLSample_PS ps_5_0 RenderScenePS
+#pragma FXC HLSLSample_VS_5_1 vs_5_1 RenderSceneVS
+#pragma FXC BasicHLSL_PS_5_1 ps_5_1 PSMain
+
 //--------------------------------------------------------------------------------------
 // File: BasicHLSL.fx
 //

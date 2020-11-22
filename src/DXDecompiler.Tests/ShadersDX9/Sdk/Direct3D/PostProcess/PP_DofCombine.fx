@@ -1,3 +1,6 @@
+#pragma FXC PP_DofCombine ps_2_0 DofCombine
+#pragma FXC PP_DofCombine_FX fx_2_0
+
 //-----------------------------------------------------------------------------
 // File: PP_DofCombine.fx
 //

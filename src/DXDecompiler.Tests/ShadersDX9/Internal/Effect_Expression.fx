@@ -1,3 +1,5 @@
+#pragma FXC Effect_Expression_FX fx_2_0
+
 int i;
 int j;
 uint k;
