@@ -21,11 +21,6 @@ namespace DXDecompiler
 	{
 		private readonly byte[] _rawBytes;
 
-		public byte[] RawBytes
-		{
-			get { return _rawBytes; }
-		}
-
 		public BytecodeContainerHeader Header { get; private set; }
 		public List<BytecodeChunk> Chunks { get; private set; }
 
