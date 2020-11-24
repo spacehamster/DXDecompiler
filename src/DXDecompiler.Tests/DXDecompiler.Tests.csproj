@@ -83,6 +83,12 @@
     <Compile Include="ShaderCompiler.cs" />
     <Compile Include="DX10Util\Extension.cs" />
     <Compile Include="TestFixtures\DX9Tests.cs" />
+    <Content Include="FXC\D3DCompiler_43.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FXC\d3dcompiler_47.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="FXC\fxc10.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

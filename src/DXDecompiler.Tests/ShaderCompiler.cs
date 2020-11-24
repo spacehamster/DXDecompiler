@@ -10,6 +10,12 @@ namespace DXDecompiler.Tests
 {
 	public class ShaderCompiler
 	{
+		public class CommandResult
+		{
+			public int ResultCode;
+			public string Stdout;
+			public string Stderr;
+		}
 		public class CompileConfig
 		{
 			public string Name;
@@ -53,7 +59,7 @@ namespace DXDecompiler.Tests
 				}
 			}
 		}
-		public static int Command(string exe, string args, string pwd)
+		public static CommandResult Command(string exe, string args, string pwd)
 		{
 			Log($"    Command {exe} {args}");
 			var stdout = new StringBuilder();
@@ -81,7 +87,12 @@ namespace DXDecompiler.Tests
 				Log("STDERR");
 				Log(stderr.ToString());
 			}
-			return process.ExitCode;
+			return new CommandResult()
+			{
+				ResultCode = process.ExitCode,
+				Stdout = stdout.ToString(),
+				Stderr = stderr.ToString()
+			};
 		}
 		public static void CompileShader(string sourcePath, CompileConfig config)
 		{
@@ -106,8 +117,10 @@ namespace DXDecompiler.Tests
 			if(config.EntryPoint != "") sb.AppendFormat(" /E {0}", config.EntryPoint); 
 			if(config.ExtraArgs != "") sb.AppendFormat(" {0}", config.ExtraArgs);
 			var result = Command(fxc10, sb.ToString(), targetDirectory);
-			if(result != 0) throw new InvalidOperationException($"fxc {sb} returned error code {result}");
-			
+			if(result.ResultCode != 0)
+			{
+				throw new InvalidOperationException($"fxc {sb} returned error code {result}");
+			}
 			//FXC 10.1 cannot disassemble fx_2_0 shaders
 			if(config.EntryPoint != "") return;
 			var profileMatch = ProfilePatten.Match(config.Profile);
@@ -119,7 +132,10 @@ namespace DXDecompiler.Tests
 			sb.AppendFormat(" /T {0}", config.Profile);
 			sb.Append(" /nologo");
 			result = Command(fxc9, sb.ToString(), targetDirectory);
-			if(result != 0) throw new InvalidOperationException($"fxc {sb} returned error code {result}");
+			if(result.ResultCode != 0)
+			{
+				throw new InvalidOperationException($"fxc {sb} returned error code {result}");
+			}
 		}
 		public static void ProcessShaders(string directory)
 		{
