@@ -119,7 +119,7 @@ namespace DXDecompiler.Tests
 			var result = Command(fxc10, sb.ToString(), targetDirectory);
 			if(result.ResultCode != 0)
 			{
-				throw new InvalidOperationException($"fxc {sb} returned error code {result}");
+				throw new InvalidOperationException($"fxc {sb} returned error code {result.ResultCode}");
 			}
 			//FXC 10.1 cannot disassemble fx_2_0 shaders
 			if(config.EntryPoint != "") return;
@@ -134,7 +134,7 @@ namespace DXDecompiler.Tests
 			result = Command(fxc9, sb.ToString(), targetDirectory);
 			if(result.ResultCode != 0)
 			{
-				throw new InvalidOperationException($"fxc {sb} returned error code {result}");
+				throw new InvalidOperationException($"fxc {sb} returned error code {result.ResultCode}");
 			}
 		}
 		public static void ProcessShaders(string directory)

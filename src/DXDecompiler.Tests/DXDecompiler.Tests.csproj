@@ -130,6 +130,9 @@
     <Content Include="Shaders\Internal\Effects\EffectExpressions.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Shaders\Internal\Effects\EffectInterfaces3.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\Internal\Effects\EffectInterfaces.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
