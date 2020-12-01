@@ -2,6 +2,11 @@
 
 namespace DXDecompiler.DX9Shader
 {
+	/// <summary>
+	/// Base Token Type
+	/// Refer https://docs.microsoft.com/en-us/windows-hardware/drivers/display/shader-code-tokens
+	/// TODO: This should be made abstract
+	/// </summary>
 	public class Token
 	{
 		public Opcode Opcode { get; private set; }

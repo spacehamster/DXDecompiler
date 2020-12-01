@@ -1,7 +1,13 @@
 ﻿namespace DXDecompiler.DX9Shader
 {
-	// D3DSIO_X
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff569706
+	/// <summary>
+	/// D3DSHADER_INSTRUCTION_OPCODE_TYPE - d3d9types.h
+	/// https://msdn.microsoft.com/en-us/library/windows/hardware/ff569706
+	/// Also known as D3DSIO_* codes
+	/// </summary>
+	// D3DSHADER_INSTRUCTION_OPCODE_TYPE - d3d9types.h
+	// 
+	// 
 	public enum Opcode
 	{
 		Nop,

@@ -8,9 +8,9 @@ namespace DXDecompiler.DX9Shader.Bytecode
 {
 	public class PrsiToken
 	{
-		public uint OutputRegisterOffset;
-		public uint OutputRegisterCount;
-		public List<Tuple<uint, uint>> Mapping = new List<Tuple<uint, uint>>();
+		public uint OutputRegisterOffset { get; private set; }
+		public uint OutputRegisterCount { get; private set; }
+		public List<Tuple<uint, uint>> Mapping { get; private set; } = new List<Tuple<uint, uint>>();
 
 		private uint Unknown1;
 		private uint Unknown2;

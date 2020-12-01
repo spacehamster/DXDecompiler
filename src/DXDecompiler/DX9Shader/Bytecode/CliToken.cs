@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace DXDecompiler.DX9Shader.Bytecode
 {
+	/// <summary>
+	/// The CliToken stores constant literal values for Fxlc operands
+	/// </summary>
 	public class CliToken
 	{
 		List<double> Numbers = new List<double>();

@@ -1,6 +1,9 @@
 ﻿namespace DXDecompiler.DX9Shader
 {
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff569707%28v=vs.85%29.aspx
+	/// <summary>
+	/// D3DSHADER_PARAM_REGISTER_TYPE d3d9types.h
+	/// https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/d3d9types/ne-d3d9types-_d3dshader_param_register_type
+	/// </summary>
 	public enum RegisterType
 	{
 		Temp,

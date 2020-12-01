@@ -3,6 +3,31 @@ using System.Collections.Generic;
 
 namespace DXDecompiler.DX9Shader
 {
+	/// <summary>
+	/// Instruction Token 
+	/// https://docs.microsoft.com/en-us/windows-hardware/drivers/display/instruction-token
+	/// 
+	/// Bits
+	/// 
+	/// [15:00] Bits 0 through 15 indicate an operation code. D3DSIO_* is an example of an operation code, where* represents the instruction. For example, the following code snippet shows an ADD instruction:
+	/// 
+	/// [23:16] Bits 16 through 23 indicate specific controls related to the operation code.
+	///
+	/// [27:24] For pixel and vertex shader versions earlier than 2_0, bits 24 through 27 are reserved and set to 0x0.
+	///
+	/// For pixel and vertex shader versions 2_0 and later, bits 24 through 27 specify the size in DWORDs of the instruction excluding the instruction token itself (that is, the number of tokens that comprise the instruction excluding the instruction token).
+	/// 
+	/// [28] For pixel and vertex shader versions earlier than 2_0, bit 28 is reserved and set to 0x0.
+	///
+	/// For pixel and vertex shader versions 2_0 and later, bit 28 indicates whether the instruction is predicated(that is, contains an extra predicate source token at the end of the shader code.If this bit is set to 0x1, the instruction is predicated.
+	///
+	/// [29] Reserved. This value is set to 0x0.
+	///
+	/// [30] For pixel shader versions earlier than 2_0, bit 30 is the co-issue bit. If set to 1, execute this instruction with previous instructions; otherwise, execute separately.
+	/// For pixel shader version 2_0 and later and all vertex shader versions, bit 30 is reserved and set to 0x0.
+	/// 
+	/// [31] Bit 31 is zero (0x0).
+	/// </summary>
 	public class InstructionToken : Token
 	{
 		public List<Operand> Operands;
