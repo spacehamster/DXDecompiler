@@ -98,7 +98,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 				case FxlcOperandType.Variable:
 					return string.Format("c{0}{1}", elementIndex, component);
 				case FxlcOperandType.Expr:
-					return string.Format("c{0}{1}", index / 4, component);
+					return string.Format("c{0}{1}", elementIndex, component);
 				default:
 					return string.Format("unknown{0}{1}", elementIndex, component);
 			}
@@ -178,7 +178,13 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					return string.Format("unknown{0}{1}", elementIndex, component);
 			}
 		}
-		public string ToString(ConstantTable ctab, CliToken cli)
+		/// <summary>
+		/// Format operand for FX9 preshaders
+		/// </summary>
+		/// <param name="ctab"></param>
+		/// <param name="cli"></param>
+		/// <returns></returns>
+		public string FormatOperand(ConstantTable ctab, CliToken cli)
 		{
 			if(IsArray == 0)
 			{
@@ -191,7 +197,13 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					FormatOperand(ctab, cli, OpType, OpIndex));
 			}
 		}
-		public string ToString(ConstantTable ctab, Chunks.Fxlvm.Cli4Chunk cli)
+		/// <summary>
+		/// Format operand for FX10 expressions
+		/// </summary>
+		/// <param name="ctab"></param>
+		/// <param name="cli"></param>
+		/// <returns></returns>
+		public string FormatOperand(ConstantTable ctab, Chunks.Fxlvm.Cli4Chunk cli)
 		{
 			if(IsArray == 0)
 			{
@@ -202,6 +214,45 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 				return string.Format("{0}[{1}]",
 					FormatOperand(ctab, cli, ArrayType, ArrayIndex),
 					FormatOperand(ctab, cli, OpType, OpIndex));
+			}
+		}
+
+		private string FormatOperand(FxlcOperandType type, uint index)
+		{
+			var elementIndex = index / 4;
+			var componentIndex = index % 4;
+			var component = FormatComponent(componentIndex, ComponentCount);
+			switch(type)
+			{
+				case FxlcOperandType.Literal:
+					var literal = string.Join(", ",
+						Enumerable.Repeat(index, (int)ComponentCount));
+					return string.Format("l({0})", literal);
+				case FxlcOperandType.Temp:
+					return string.Format("r{0}{1}", elementIndex, component);
+				case FxlcOperandType.Variable:
+					return string.Format("c{0}{1}", elementIndex, component);
+				case FxlcOperandType.Expr:
+					return string.Format("expr{0}{1}", elementIndex, component);
+				default:
+					return string.Format("unknown{0}{1}", elementIndex, component);
+			}
+		}
+		/// <summary>
+		/// Display a debug representation of the operand. Displays indexes instead of values for literals
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			if(IsArray == 0)
+			{
+				return FormatOperand(OpType, OpIndex);
+			}
+			else
+			{
+				return string.Format("{0}[{1}]",
+					FormatOperand(ArrayType, ArrayIndex),
+					FormatOperand(OpType, OpIndex));
 			}
 		}
 	}

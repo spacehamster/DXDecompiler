@@ -54,14 +54,14 @@ namespace DXDecompiler.DX9Shader.Decompiler
 				case Bytecode.Fxlvm.FxlcOpcode.Mov:
 					WriteIndent();
 					WriteLine("{0} = {1};",
-						token.Operands[0].ToString(Ctab, Cli),
-						token.Operands[1].ToString(Ctab, Cli));
+						token.Operands[0].FormatOperand(Ctab, Cli),
+						token.Operands[1].FormatOperand(Ctab, Cli));
 					break;
 				case Bytecode.Fxlvm.FxlcOpcode.Neg:
 					WriteIndent();
 					WriteLine("{0} = -{1};",
-						token.Operands[0].ToString(Ctab, Cli),
-						token.Operands[1].ToString(Ctab, Cli));
+						token.Operands[0].FormatOperand(Ctab, Cli),
+						token.Operands[1].FormatOperand(Ctab, Cli));
 					break;
 				case Bytecode.Fxlvm.FxlcOpcode.Frc:
 					WriteFunction("frac", token);
@@ -149,19 +149,19 @@ namespace DXDecompiler.DX9Shader.Decompiler
 		{
 			WriteIndent();
 			WriteLine("{0} = {1} {2} {3};",
-				token.Operands[0].ToString(Ctab, Cli),
-				token.Operands[1].ToString(Ctab, Cli),
+				token.Operands[0].FormatOperand(Ctab, Cli),
+				token.Operands[1].FormatOperand(Ctab, Cli),
 				op,
-				token.Operands[2].ToString(Ctab, Cli));
+				token.Operands[2].FormatOperand(Ctab, Cli));
 		}
 		void WriteFunction(string func, FxlcToken token)
 		{
 			WriteIndent();
 			var operands = token.Operands
 				.Skip(1)
-				.Select(o => o.ToString(Ctab, Cli));
+				.Select(o => o.FormatOperand(Ctab, Cli));
 			WriteLine("{0} = {1}({2});",
-				token.Operands[0].ToString(Ctab, Cli),
+				token.Operands[0].FormatOperand(Ctab, Cli),
 				func,
 				string.Join(", ", operands));
 		}

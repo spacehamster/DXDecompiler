@@ -33,7 +33,7 @@ namespace DXDecompiler.DX9Shader.Asm
 		}
 		string FormatOperand(FxlcOperand operand)
 		{
-			return operand.ToString(Preshader.ConstantTable, Preshader.Cli);
+			return operand.FormatOperand(Preshader.ConstantTable, Preshader.Cli);
 		}
 	}
 }
