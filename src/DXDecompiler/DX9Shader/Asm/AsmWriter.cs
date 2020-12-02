@@ -96,21 +96,34 @@ namespace DXDecompiler.DX9Shader
 		}
 		string Version()
 		{
-			if(shader.ConstantTable != null)
+			string minor;
+			switch(shader.MinorVersion)
 			{
-				return shader.ConstantTable.VersionString;
+				case 0:
+					minor = "0";
+					break;
+				case 255:
+					minor = "sw";
+					break;
+				default:
+					minor = "x";
+					break;
 			}
-			else if(shader.Type == ShaderType.Vertex)
+			if(shader.Type == ShaderType.Vertex)
 			{
-				return $"vs_{shader.MajorVersion}_{shader.MinorVersion}";
+				return $"vs_{shader.MajorVersion}_{minor}";
 			}
 			else if(shader.Type == ShaderType.Pixel)
 			{
-				return $"ps_{shader.MajorVersion}_{shader.MinorVersion}";
+				return $"ps_{shader.MajorVersion}_{minor}";
+			}
+			else if(shader.Type == ShaderType.Effect)
+			{
+				return $"fx_{shader.MajorVersion}_{minor}";
 			}
 			else
 			{
-				return $"{shader.Type}_{shader.MajorVersion}_{shader.MinorVersion}";
+				return $"{shader.Type}_{shader.MajorVersion}_{minor}";
 			}
 		}
 		protected override void Write()
