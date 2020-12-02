@@ -211,7 +211,8 @@ technique RenderScenePS20
     }
 }
 
-
+//SM1 shaders not supported
+/*
 technique RenderScenePS14
 {
     pass P0
@@ -249,7 +250,7 @@ technique RenderScenePS11
         VertexShader = compile vs_1_1 VS();
         PixelShader = compile ps_1_1 PS();
     }
-}
+}*/
 
 
 technique FFRenderScene

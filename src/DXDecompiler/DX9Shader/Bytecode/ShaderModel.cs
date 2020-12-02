@@ -62,6 +62,9 @@ namespace DXDecompiler.DX9Shader
 			result.MinorVersion = reader.ReadByte();
 			result.MajorVersion = reader.ReadByte();
 			result.Type = (ShaderType)reader.ReadUInt16();
+			//SM1 shaders do not encode instruction size which rely on for reading operands.
+			//So we won't support SM1
+			if(result.MajorVersion == 1) throw new ParseException("Shader Model 1 is not supported");
 			while(true)
 			{
 				var instruction = result.ReadInstruction(reader);
