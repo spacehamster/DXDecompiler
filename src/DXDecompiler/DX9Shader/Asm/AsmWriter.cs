@@ -516,7 +516,7 @@ namespace DXDecompiler.DX9Shader
 						GetInstructionModifier(instruction), GetDestinationName(instruction), GetSourceName(instruction, 1));
 					break;
 				case Opcode.TexLDD:
-					WriteLine("texldd {0}, {1}", GetDestinationName(instruction), GetSourceName(instruction, 1),
+					WriteLine("texldd {0}, {1}, {2}, {3}, {4}", GetDestinationName(instruction), GetSourceName(instruction, 1),
 						GetSourceName(instruction, 2), GetSourceName(instruction, 3),
 						GetSourceName(instruction, 4));
 					break;
