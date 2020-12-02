@@ -98,19 +98,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 				case FxlcOperandType.Variable:
 					return string.Format("c{0}{1}", elementIndex, component);
 				case FxlcOperandType.Expr:
-					return string.Format("expr{0}", index);
-					if(ComponentCount == 1)
-					{
-						if(componentIndex == 0)
-						{
-							return string.Format("expr{0}", component);
-						}
-						else
-						{
-							return string.Format("expr0{0}", component);
-						}
-					}
-					return string.Format("expr{0}", component);
+					return string.Format("c{0}{1}", index / 4, component);
 				default:
 					return string.Format("unknown{0}{1}", elementIndex, component);
 			}
