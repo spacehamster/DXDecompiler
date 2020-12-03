@@ -10,6 +10,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 	public class FxlcToken
 	{
 		public FxlcOpcode Opcode { get; private set; }
+		public bool IsScalarInstruction { get; private set; }
 		public List<FxlcOperand> Operands { get; private set; }
 
 		public FxlcToken()
@@ -23,7 +24,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 			var token = reader.ReadUInt32();
 			var tokenComponentCount = token.DecodeValue(0, 2);
 			result.Opcode = (FxlcOpcode)token.DecodeValue(20, 30);
-			var singleFirstComponent = token.DecodeValue(31, 31);
+			result.IsScalarInstruction = token.DecodeValue<bool>(31, 31);
 
 			Debug.Assert(Enum.IsDefined(typeof(FxlcOpcode), result.Opcode),
 				$"Unknown FxlcOpcode {result.Opcode}");
@@ -34,12 +35,11 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 			var operandCount = reader.ReadUInt32();
 			for(int i = 0; i < operandCount; i++)
 			{
-				var componentCount = i == 0 && singleFirstComponent == 1 ?
-					1 : tokenComponentCount;
-				result.Operands.Add(FxlcOperand.Parse(reader, componentCount));
+				var isScalarOp = i == 0 && result.IsScalarInstruction;
+				result.Operands.Add(FxlcOperand.Parse(reader, tokenComponentCount, isScalarOp));
 			}
 			// destination operand
-			result.Operands.Insert(0, FxlcOperand.Parse(reader, tokenComponentCount));
+			result.Operands.Insert(0, FxlcOperand.Parse(reader, tokenComponentCount, false));
 			return result;
 		}
 

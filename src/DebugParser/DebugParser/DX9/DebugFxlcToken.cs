@@ -13,6 +13,7 @@ namespace DXDecompiler.DebugParser.DX9
 
 		public uint Token0;
 		public uint OperandCount;
+		public bool IsScalarInstruction;
 
 		public DebugFxlcToken()
 		{
@@ -26,7 +27,7 @@ namespace DXDecompiler.DebugParser.DX9
 			var token = reader.ReadUInt32($"Token");
 			var tokenComponentCount = token.DecodeValue(0, 2);
 			result.Type = (FxlcOpcode)token.DecodeValue(20, 30);
-			var singleFirstComponent = token.DecodeValue(31, 31);
+			result.IsScalarInstruction = token.DecodeValue<bool>(31, 31);
 
 			Debug.Assert(Enum.IsDefined(typeof(FxlcOpcode), result.Type),
 				$"Unknown FxlcTokenType {result.Type}");
@@ -36,17 +37,16 @@ namespace DXDecompiler.DebugParser.DX9
 
 			reader.AddNote("Token", result.Type);
 			reader.AddNote("TokenComponentCount", tokenComponentCount);
-			reader.AddNote("SingleFirstComponent", singleFirstComponent);
+			reader.AddNote("IsScalarInstruction", result.IsScalarInstruction);
 
 			var operandCount = result.OperandCount = reader.ReadUInt32("OperandCount");
 			for(int i = 0; i < operandCount; i++)
 			{
-				var componentCount = i == 0 && singleFirstComponent == 1 ?
-					1 : tokenComponentCount;
-				result.Operands.Add(DebugFxlcOperand.Parse(reader, componentCount));
+				var isScalarOp = i == 0 && result.IsScalarInstruction;
+				result.Operands.Add(DebugFxlcOperand.Parse(reader, tokenComponentCount, isScalarOp));
 			}
 			// destination operand
-			result.Operands.Insert(0, DebugFxlcOperand.Parse(reader, tokenComponentCount));
+			result.Operands.Insert(0, DebugFxlcOperand.Parse(reader, tokenComponentCount, false));
 			return result;
 		}
 	}

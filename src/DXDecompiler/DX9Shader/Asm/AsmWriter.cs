@@ -189,7 +189,8 @@ namespace DXDecompiler.DX9Shader
 		{
 			if(shader.Preshader == null) return;
 			WriteConstantTable(shader.Preshader.Shader.ConstantTable);
-			WriteLine(PreshaderAsmWriter.Disassemble(shader.Preshader.Shader));
+			var preshader = PreshaderAsmWriter.Disassemble(shader.Preshader.Shader);
+			Write(preshader);
 		}
 		public void WriteStatistics()
 		{

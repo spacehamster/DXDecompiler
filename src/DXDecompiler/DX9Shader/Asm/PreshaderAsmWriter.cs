@@ -22,6 +22,14 @@ namespace DXDecompiler.DX9Shader.Asm
 			{
 				WriteInstruction(instruction);
 			}
+			WriteLine();
+			if(Preshader.Fxlc.Tokens.Count > 1)
+			{
+				WriteLine("// approximately {0} instructions used", Preshader.Fxlc.Tokens.Count);
+			} else
+			{
+				WriteLine("// approximately {0} instruction used", Preshader.Fxlc.Tokens.Count);
+			}
 		}
 		private void WriteInstruction(FxlcToken instruction)
 		{

@@ -13,15 +13,15 @@ namespace DXDecompiler.DebugParser.DX9
 		public uint ArrayIndex { get; private set; }
 
 		private uint ComponentCount;
-		public static DebugFxlcOperand Parse(DebugBytecodeReader reader, uint componentCount)
+		public static DebugFxlcOperand Parse(DebugBytecodeReader reader, uint componentCount, bool isScalarOp)
 		{
 			var result = new DebugFxlcOperand()
 			{
-				ComponentCount = componentCount,
 				IsArray = reader.ReadUInt32("IsArray"),
 				OpType = reader.ReadEnum32<FxlcOperandType>("OpType"),
 				OpIndex = reader.ReadUInt32("OpIndex"),
 			};
+			result.ComponentCount = isScalarOp && result.OpType != FxlcOperandType.Literal ? 1 : componentCount;
 			Debug.Assert(Enum.IsDefined(typeof(FxlcOperandType), result.OpType),
 				$"Unexpected FxlcOperandType OpType {result.OpType}");
 			if(result.IsArray == 1)
