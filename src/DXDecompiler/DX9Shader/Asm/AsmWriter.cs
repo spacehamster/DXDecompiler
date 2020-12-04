@@ -549,6 +549,36 @@ namespace DXDecompiler.DX9Shader
 						GetInstructionModifier(instruction), GetDestinationName(instruction),
 						GetSourceName(instruction, 1));
 					break;
+				case Opcode.LogP:
+					WriteLine("logp{0} {1}, {2}",
+						GetInstructionModifier(instruction), GetDestinationName(instruction),
+						GetSourceName(instruction, 1));
+					break;
+				case Opcode.M4x4:
+					WriteLine("m4x4{0} {1}, {2}, {3}",
+						GetInstructionModifier(instruction), GetDestinationName(instruction),
+						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					break;
+				case Opcode.M4x3:
+					WriteLine("m4x3{0} {1}, {2}, {3}",
+						GetInstructionModifier(instruction), GetDestinationName(instruction),
+						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					break;
+				case Opcode.M3x3:
+					WriteLine("m3x3{0} {1}, {2}, {3}",
+						GetInstructionModifier(instruction), GetDestinationName(instruction),
+						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					break;
+				case Opcode.Call:
+					WriteLine("call {0}",
+						GetSourceName(instruction, 0));
+					break;
+				case Opcode.Ret:
+					WriteLine("ret");
+					break;
+				case Opcode.Label:
+					WriteLine("label", GetSourceName(instruction, 0));
+					break;
 				case Opcode.Comment:
 				case Opcode.End:
 					break;

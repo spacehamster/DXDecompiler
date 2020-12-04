@@ -231,6 +231,9 @@ namespace DXDecompiler.DX9Shader
 					}
 				case RegisterType.Loop:
 					return "aL";
+				case RegisterType.Label:
+					registerTypeName = "l";
+					break;
 				default:
 					throw new NotImplementedException();
 			}
