@@ -66,7 +66,7 @@ namespace DXDecompiler.DX9Shader
 			}
 		}
 
-		string GetDestinationName(Token instruction)
+		string GetDestinationName(InstructionToken instruction)
 		{
 			var resultModifier = instruction.GetDestinationResultModifier();
 
@@ -83,7 +83,7 @@ namespace DXDecompiler.DX9Shader
 			return destinationName;
 		}
 
-		string GetSourceName(Token instruction, int srcIndex)
+		string GetSourceName(InstructionToken instruction, int srcIndex)
 		{
 			string sourceRegisterName = instruction.GetParamRegisterName(srcIndex);
 			sourceRegisterName = ApplyModifier(instruction.GetSourceModifier(srcIndex), sourceRegisterName);
@@ -133,9 +133,12 @@ namespace DXDecompiler.DX9Shader
 			Indent++;
 			WriteIndent();
 			WriteLine("{0}", Version());
-			foreach(Token instruction in shader.Tokens)
+			foreach(Token token in shader.Tokens)
 			{
-				WriteInstruction(instruction);
+				if(token is InstructionToken instruction)
+				{
+					WriteInstruction(instruction);
+				}
 			}
 			Indent--;
 			WriteLine();
@@ -199,7 +202,7 @@ namespace DXDecompiler.DX9Shader
 			int instructionCount = 0;
 			int arithmeticCount = 0;
 			int textureCount = 0;
-			foreach(var token in instructions)
+			foreach(var token in instructions.OfType<InstructionToken>())
 			{
 				var size = token.GetInstructionSlotCount();
 				instructionCount += size;
@@ -228,7 +231,7 @@ namespace DXDecompiler.DX9Shader
 					instructionCount > 1 ? "slots" : "slot");
 			}
 		}
-		bool ShouldDeclareSemantics(Token instruction, RegisterType registerType)
+		bool ShouldDeclareSemantics(InstructionToken instruction, RegisterType registerType)
 		{
 			if(registerType == RegisterType.MiscType) return false;
 			if(registerType == RegisterType.Addr) return false;
@@ -249,7 +252,7 @@ namespace DXDecompiler.DX9Shader
 			}
 			return true;
 		}
-		private string GetInstructionModifier(Token instruction)
+		private string GetInstructionModifier(InstructionToken instruction)
 		{
 			string result = "";
 			var modifer = instruction.GetDestinationResultModifier();
@@ -300,7 +303,7 @@ namespace DXDecompiler.DX9Shader
 			}
 			return false;
 		}
-		private void WriteInstruction(Token instruction)
+		private void WriteInstruction(InstructionToken instruction)
 		{
 			if(RemoveIndentInstruction(instruction))
 			{

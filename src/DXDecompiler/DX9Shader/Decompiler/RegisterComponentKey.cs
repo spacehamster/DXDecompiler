@@ -4,7 +4,7 @@ namespace DXDecompiler.DX9Shader
 {
 	public class RegisterComponentKey : IHasComponentIndex
 	{
-		public RegisterComponentKey(RegisterType registerType, int registerNumber, int componentIndex)
+		public RegisterComponentKey(RegisterType registerType, uint registerNumber, int componentIndex)
 		{
 			RegisterKey = new RegisterKey(registerType, registerNumber);
 			ComponentIndex = componentIndex;
@@ -19,7 +19,7 @@ namespace DXDecompiler.DX9Shader
 		public RegisterKey RegisterKey { get; }
 		public int ComponentIndex { get; }
 
-		public int Number => RegisterKey.Number;
+		public uint Number => RegisterKey.Number;
 		public RegisterType Type => RegisterKey.Type;
 
 		private string Component

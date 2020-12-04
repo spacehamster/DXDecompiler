@@ -173,7 +173,6 @@
     <Compile Include="DX9Shader\Bytecode\EnumExtensions.cs" />
     <Compile Include="DX9Shader\Bytecode\InstructionToken.cs" />
     <Compile Include="DX9Shader\Bytecode\Operand.cs" />
-    <Compile Include="DX9Shader\Bytecode\Parameter.cs" />
     <Compile Include="DX9Shader\Bytecode\SourceOperand.cs" />
     <Compile Include="DX9Shader\Asm\Statistics.cs" />
     <Compile Include="DX9Shader\Bytecode\Token.cs" />

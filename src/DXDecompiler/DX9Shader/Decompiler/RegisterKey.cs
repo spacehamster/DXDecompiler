@@ -2,13 +2,13 @@
 {
 	public class RegisterKey
 	{
-		public RegisterKey(RegisterType registerType, int registerNumber)
+		public RegisterKey(RegisterType registerType, uint registerNumber)
 		{
 			Type = registerType;
 			Number = registerNumber;
 		}
 
-		public int Number { get; }
+		public uint Number { get; }
 		public RegisterType Type { get; }
 
 

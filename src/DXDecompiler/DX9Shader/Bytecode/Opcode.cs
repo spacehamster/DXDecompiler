@@ -2,7 +2,7 @@
 {
 	/// <summary>
 	/// D3DSHADER_INSTRUCTION_OPCODE_TYPE - d3d9types.h
-	/// https://msdn.microsoft.com/en-us/library/windows/hardware/ff569706
+	/// https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/d3d9types/ne-d3d9types-_d3dshader_instruction_opcode_type
 	/// Also known as D3DSIO_* codes
 	/// </summary>
 	// D3DSHADER_INSTRUCTION_OPCODE_TYPE - d3d9types.h

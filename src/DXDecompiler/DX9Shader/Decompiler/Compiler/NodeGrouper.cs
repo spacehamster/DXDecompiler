@@ -196,8 +196,8 @@ namespace DXDecompiler.DX9Shader
 				return false;
 			}
 
-			int constIndex1 = input1.RegisterComponentKey.Number;
-			int constIndex2 = input2.RegisterComponentKey.Number;
+			var constIndex1 = input1.RegisterComponentKey.Number;
+			var constIndex2 = input2.RegisterComponentKey.Number;
 			var constantRegister = _registers.FindConstant(ParameterType.Float, constIndex1);
 			return constantRegister != null
 				&& constantRegister.ContainsIndex(constIndex2)
@@ -212,7 +212,7 @@ namespace DXDecompiler.DX9Shader
 				return false;
 			}
 
-			int constIndex = input1.RegisterComponentKey.Number;
+			var constIndex = input1.RegisterComponentKey.Number;
 			var constantRegister = _registers.FindConstant(ParameterType.Float, constIndex);
 			return constantRegister != null
 				&& IsMatrixConstantRegister(constantRegister);

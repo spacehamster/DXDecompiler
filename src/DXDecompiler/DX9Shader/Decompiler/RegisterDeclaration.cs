@@ -7,7 +7,7 @@ namespace DXDecompiler.DX9Shader
 	{
 		private readonly int _maskedLength;
 
-		public RegisterDeclaration(Token declInstruction)
+		public RegisterDeclaration(InstructionToken declInstruction)
 		{
 			RegisterKey = declInstruction.GetParamRegisterKey(1);
 			Semantic = declInstruction.GetDeclSemantic();

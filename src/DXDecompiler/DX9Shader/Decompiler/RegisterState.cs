@@ -54,7 +54,7 @@ namespace DXDecompiler.DX9Shader
 					// Use declaration from declaration instruction instead
 					continue;
 				}
-				for(int r = 0; r < constantDeclaration.RegisterCount; r++)
+				for(uint r = 0; r < constantDeclaration.RegisterCount; r++)
 				{
 					var registerKey = new RegisterKey(registerType, constantDeclaration.RegisterIndex + r);
 					var registerDeclaration = new RegisterDeclaration(registerKey);
@@ -62,7 +62,7 @@ namespace DXDecompiler.DX9Shader
 				}
 			}
 
-			foreach(var instruction in shader.Tokens.Where(i => i.HasDestination))
+			foreach(var instruction in shader.Tokens.OfType<InstructionToken>().Where(i => i.HasDestination))
 			{
 				if(instruction.Opcode == Opcode.Dcl)
 				{
@@ -112,7 +112,7 @@ namespace DXDecompiler.DX9Shader
 					// Find all assignments to color outputs, because pixel shader outputs are not declared.
 					int destIndex = instruction.GetDestinationParamIndex();
 					RegisterType registerType = instruction.GetParamRegisterType(destIndex);
-					int registerNumber = instruction.GetParamRegisterNumber(destIndex);
+					var registerNumber = instruction.GetParamRegisterNumber(destIndex);
 					var registerKey = new RegisterKey(registerType, registerNumber);
 					if(_registerDeclarations.ContainsKey(registerKey) == false)
 					{
@@ -131,7 +131,7 @@ namespace DXDecompiler.DX9Shader
 			}
 		}
 
-		public string GetDestinationName(Token instruction)
+		public string GetDestinationName(InstructionToken instruction)
 		{
 			int destIndex = instruction.GetDestinationParamIndex();
 			RegisterKey registerKey = instruction.GetParamRegisterKey(destIndex);
@@ -144,7 +144,7 @@ namespace DXDecompiler.DX9Shader
 			return string.Format("{0}{1}", registerName, writeMaskName);
 		}
 
-		public string GetSourceName(Token instruction, int srcIndex)
+		public string GetSourceName(InstructionToken instruction, int srcIndex)
 		{
 			string sourceRegisterName;
 			RegisterKey registerKey = instruction.GetParamRegisterKey(srcIndex);
@@ -181,7 +181,7 @@ namespace DXDecompiler.DX9Shader
 						default:
 							throw new NotImplementedException();
 					}
-					int registerNumber = instruction.GetParamRegisterNumber(srcIndex);
+					var registerNumber = instruction.GetParamRegisterNumber(srcIndex);
 					ConstantDeclaration decl = FindConstant(registerNumber);
 					if(decl == null)
 					{
@@ -302,14 +302,14 @@ namespace DXDecompiler.DX9Shader
 			return FindConstant(ParameterType.Float, register.RegisterComponentKey.Number);
 		}
 
-		public ConstantDeclaration FindConstant(RegisterSet set, int index)
+		public ConstantDeclaration FindConstant(RegisterSet set, uint index)
 		{
 			return ConstantDeclarations.FirstOrDefault(c =>
 				c.RegisterSet == set &&
 				c.ContainsIndex(index));
 		}
 
-		public ConstantDeclaration FindConstant(ParameterType type, int index)
+		public ConstantDeclaration FindConstant(ParameterType type, uint index)
 		{
 			return ConstantDeclarations.FirstOrDefault(c =>
 				c.ParameterType == type &&
@@ -317,15 +317,15 @@ namespace DXDecompiler.DX9Shader
 		}
 
 
-		public ConstantDeclaration FindConstant(int index)
+		public ConstantDeclaration FindConstant(uint index)
 		{
 			return ConstantDeclarations.FirstOrDefault(c => c.ContainsIndex(index));
 		}
 
-		private string GetSourceConstantName(Token instruction, int srcIndex)
+		private string GetSourceConstantName(InstructionToken instruction, int srcIndex)
 		{
 			var registerType = instruction.GetParamRegisterType(srcIndex);
-			int registerNumber = instruction.GetParamRegisterNumber(srcIndex);
+			var registerNumber = instruction.GetParamRegisterNumber(srcIndex);
 
 			switch(registerType)
 			{

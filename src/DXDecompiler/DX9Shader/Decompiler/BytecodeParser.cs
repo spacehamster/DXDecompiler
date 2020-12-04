@@ -18,7 +18,8 @@ namespace DXDecompiler.DX9Shader
 			bool ifBlock = false;
 			while(instructionPointer < shader.Tokens.Count)
 			{
-				var instruction = shader.Tokens[instructionPointer];
+				var instruction = shader.Tokens[instructionPointer] as InstructionToken;
+				if(instruction == null) continue;
 				if(ifBlock)
 				{
 					if(instruction.Opcode == Opcode.Else)
@@ -87,7 +88,7 @@ namespace DXDecompiler.DX9Shader
 				}
 				else
 				{
-					for(int r = 0; r < constant.RegisterCount; r++)
+					for(uint r = 0; r < constant.RegisterCount; r++)
 					{
 						if(constant.ParameterType != ParameterType.Float)
 						{
@@ -105,7 +106,7 @@ namespace DXDecompiler.DX9Shader
 			}
 		}
 
-		private void ParseInstruction(Token instruction)
+		private void ParseInstruction(InstructionToken instruction)
 		{
 			if(instruction.HasDestination)
 			{
@@ -125,7 +126,7 @@ namespace DXDecompiler.DX9Shader
 			}
 		}
 
-		private static IEnumerable<RegisterComponentKey> GetDestinationKeys(Token instruction)
+		private static IEnumerable<RegisterComponentKey> GetDestinationKeys(InstructionToken instruction)
 		{
 			int index = instruction.GetDestinationParamIndex();
 			RegisterKey registerKey = instruction.GetParamRegisterKey(index);
@@ -144,7 +145,7 @@ namespace DXDecompiler.DX9Shader
 			}
 		}
 
-		private HlslTreeNode CreateInstructionTree(Token instruction, RegisterComponentKey destinationKey)
+		private HlslTreeNode CreateInstructionTree(InstructionToken instruction, RegisterComponentKey destinationKey)
 		{
 			int componentIndex = destinationKey.ComponentIndex;
 
@@ -244,7 +245,7 @@ namespace DXDecompiler.DX9Shader
 			}
 		}
 
-		private TextureLoadOutputNode CreateTextureLoadOutputNode(Token instruction, int outputComponent)
+		private TextureLoadOutputNode CreateTextureLoadOutputNode(InstructionToken instruction, int outputComponent)
 		{
 			const int TextureCoordsIndex = 1;
 			const int SamplerIndex = 2;
@@ -268,7 +269,7 @@ namespace DXDecompiler.DX9Shader
 			return new TextureLoadOutputNode(samplerRegisterInput, texCoords, outputComponent);
 		}
 
-		private HlslTreeNode CreateDotProduct2AddNode(Token instruction)
+		private HlslTreeNode CreateDotProduct2AddNode(InstructionToken instruction)
 		{
 			var vector1 = GetInputComponents(instruction, 1, 2);
 			var vector2 = GetInputComponents(instruction, 2, 2);
@@ -281,7 +282,7 @@ namespace DXDecompiler.DX9Shader
 			return new AddOperation(dp2, add);
 		}
 
-		private HlslTreeNode CreateDotProductNode(Token instruction)
+		private HlslTreeNode CreateDotProductNode(InstructionToken instruction)
 		{
 			var addends = new List<HlslTreeNode>();
 			int numComponents = instruction.Opcode == Opcode.Dp3 ? 3 : 4;
@@ -295,7 +296,7 @@ namespace DXDecompiler.DX9Shader
 			return addends.Aggregate((addition, addend) => new AddOperation(addition, addend));
 		}
 
-		private HlslTreeNode CreateNormalizeOutputNode(Token instruction, int outputComponent)
+		private HlslTreeNode CreateNormalizeOutputNode(InstructionToken instruction, int outputComponent)
 		{
 			var inputs = new List<HlslTreeNode>();
 			for(int component = 0; component < 3; component++)
@@ -307,7 +308,7 @@ namespace DXDecompiler.DX9Shader
 			return new NormalizeOutputNode(inputs, outputComponent);
 		}
 
-		private HlslTreeNode[] GetInputs(Token instruction, int componentIndex)
+		private HlslTreeNode[] GetInputs(InstructionToken instruction, int componentIndex)
 		{
 			int numInputs = GetNumInputs(instruction.Opcode);
 			var inputs = new HlslTreeNode[numInputs];
@@ -323,7 +324,7 @@ namespace DXDecompiler.DX9Shader
 			return inputs;
 		}
 
-		private HlslTreeNode[] GetInputComponents(Token instruction, int inputParameterIndex, int numComponents)
+		private HlslTreeNode[] GetInputComponents(InstructionToken instruction, int inputParameterIndex, int numComponents)
 		{
 			var components = new HlslTreeNode[numComponents];
 			for(int i = 0; i < numComponents; i++)
@@ -387,7 +388,7 @@ namespace DXDecompiler.DX9Shader
 			}
 		}
 
-		private static RegisterComponentKey GetParamRegisterComponentKey(Token instruction, int paramIndex, int component)
+		private static RegisterComponentKey GetParamRegisterComponentKey(InstructionToken instruction, int paramIndex, int component)
 		{
 			RegisterKey registerKey = instruction.GetParamRegisterKey(paramIndex);
 			byte[] swizzle = instruction.GetSourceSwizzleComponents(paramIndex);

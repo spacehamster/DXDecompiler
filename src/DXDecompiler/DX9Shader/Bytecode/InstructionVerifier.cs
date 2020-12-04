@@ -5,7 +5,7 @@ namespace DXDecompiler.DX9Shader
 	public class InstructionVerifier
 	{
 		[System.Diagnostics.Conditional("DEBUG")]
-		public static void Verify(Token instruction)
+		public static void Verify(InstructionToken instruction)
 		{
 			//Assert(currentInstruction.Modifier == 0);
 

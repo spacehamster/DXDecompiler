@@ -25,13 +25,13 @@
 	/// </summary>
 	class SourceOperand : Operand
 	{
-		public uint RegisterNumber;
-		public RegisterType RegisterType;
-		public bool IsRelativeAddressMode;
-		public uint MinPrecision;
-		public uint SwizzleComponents;
-		public SourceModifier SourceModifier;
-		public SourceOperand ChildOperand;
+		public uint RegisterNumber { get; private set; }
+		public RegisterType RegisterType { get; private set; }
+		public bool IsRelativeAddressMode { get; private set; }
+		public uint MinPrecision { get; private set; }
+		public uint SwizzleComponents { get; private set; }
+		public SourceModifier SourceModifier { get; private set; }
+		public SourceOperand ChildOperand { get; private set; }
 		public SourceOperand(uint value)
 		{
 			Parse(value);
@@ -46,13 +46,13 @@
 			RegisterNumber = (value & 0x7FF);
 			RegisterType = (RegisterType)(((value >> 28) & 0x7) | ((value >> 8) & 0x18));
 			IsRelativeAddressMode = (value & (1 << 13)) != 0;
-			MinPrecision = ((value >> 12) & 0XC);
-			SwizzleComponents = ((value >> 16) & 0xFF);
+			MinPrecision = (value >> 12) & 0XC;
+			SwizzleComponents = (value >> 16) & 0xFF;
 			SourceModifier = (SourceModifier)((value >> 24) & 0xF);
 		}
 		public override string ToString()
 		{
-			return GetParamRegisterName(RegisterType, (int)RegisterNumber);
+			return GetParamRegisterName(RegisterType, RegisterNumber);
 		}
 	}
 }

@@ -69,7 +69,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 			return result;
 		}
 
-		public bool ContainsIndex(int index)
+		public bool ContainsIndex(uint index)
 		{
 			return (index >= RegisterIndex) && (index < RegisterIndex + RegisterCount);
 		}

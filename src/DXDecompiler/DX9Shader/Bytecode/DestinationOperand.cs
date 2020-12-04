@@ -30,7 +30,17 @@
 		public uint MinPrecision { get; private set; }
 		public ComponentFlags DestinationWriteMask { get; private set; }
 		public ResultModifier ResultModifier { get; private set; }
+		public DestinationOperand Child { get; private set; }
 		public DestinationOperand(uint value)
+		{
+			Parse(value);
+		}
+		public DestinationOperand(uint value, uint child)
+		{
+			Parse(value);
+			Child = new DestinationOperand(child);
+		}
+		private void Parse(uint value)
 		{
 			RegisterNumber = value & 0x7FF;
 			RegisterType = (RegisterType)(((value >> 28) & 0x7) | ((value >> 8) & 0x18));
@@ -40,8 +50,62 @@
 		}
 		public override string ToString()
 		{
-			return GetParamRegisterName(RegisterType, (int)RegisterNumber);
+			return GetParamRegisterName(RegisterType, RegisterNumber);
 		}
 
+		public string GetDestinationName()
+		{
+			var resultModifier = ResultModifier;
+
+			string registerName = GetParamRegisterName(RegisterType, RegisterNumber);
+			const int registerLength = 4;
+			string writeMaskName = GetDestinationWriteMaskName(registerLength, false);
+			string destinationName = $"{registerName}{writeMaskName}";
+			if(resultModifier != ResultModifier.None)
+			{
+				//destinationName += "TODO:Modifier!!!";
+			}
+			return destinationName;
+		}
+
+		// Length of ".yw" = 2
+		public int GetDestinationMaskLength()
+		{
+			ComponentFlags writeMask = DestinationWriteMask;
+			int length = 0;
+			for(int i = 0; i < 4; i++)
+			{
+				var mask = (ComponentFlags)(1 << i);
+				if((writeMask & mask) != ComponentFlags.None)
+				{
+					length++;
+				}
+			}
+			return length;
+		}
+
+		public string GetDestinationWriteMaskName(uint destinationLength, bool hlsl)
+		{
+			ComponentFlags writeMask = DestinationWriteMask;
+			var writeMaskLength = GetDestinationMaskLength();
+
+			if(!hlsl)
+			{
+				destinationLength = 4; // explicit mask in assembly
+			}
+			// Check if mask is the same length and of the form .xyzw
+			if(writeMaskLength == destinationLength && writeMask == (ComponentFlags)((1 << writeMaskLength) - 1))
+			{
+				return "";
+			}
+
+			string writeMaskName =
+				string.Format(".{0}{1}{2}{3}",
+				((writeMask & ComponentFlags.X) != 0) ? "x" : "",
+				((writeMask & ComponentFlags.Y) != 0) ? "y" : "",
+				((writeMask & ComponentFlags.Z) != 0) ? "z" : "",
+				((writeMask & ComponentFlags.W) != 0) ? "w" : "");
+			return writeMaskName;
+		}
 	}
 }

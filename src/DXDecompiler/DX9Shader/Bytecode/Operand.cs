@@ -2,7 +2,7 @@
 {
 	public class Operand
 	{
-		public static string GetParamRegisterName(RegisterType registerType, int registerNumber)
+		public static string GetParamRegisterName(RegisterType registerType, uint registerNumber)
 		{
 			string registerTypeName;
 			switch(registerType)

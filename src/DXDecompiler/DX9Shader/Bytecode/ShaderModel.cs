@@ -56,6 +56,14 @@ namespace DXDecompiler.DX9Shader
 		{
 			Tokens = new List<Token>();
 		}
+		/*
+		 * There are a few token types:
+		 * comment_token fourCC data
+		 * def_token dest_param literal_param literal_param literal_param literal_param
+		 * dcl_token decl_param dest_param
+		 * inst_token dest_param [src_param ...]
+		 * end_token
+		 */
 		public static ShaderModel Parse(BytecodeReader reader)
 		{
 			var result = new ShaderModel();
@@ -131,7 +139,10 @@ namespace DXDecompiler.DX9Shader
 					token.Data[i] = reader.ReadUInt32();
 					if(opcode == Opcode.Def || opcode == Opcode.DefB || opcode == Opcode.DefI)
 					{
-
+						if(i == 0)
+						{
+							inst.Operands.Add(new DestinationOperand(token.Data[i]));
+						}
 					}
 					else if(opcode == Opcode.Dcl)
 					{
@@ -144,8 +155,19 @@ namespace DXDecompiler.DX9Shader
 							inst.Operands.Add(new DestinationOperand(token.Data[i]));
 						}
 					}
-					else if(i == 0 && opcode != Opcode.BreakC && opcode != Opcode.IfC && opcode != Opcode.If)
+					else if(i == 0 && opcode.HasDestination())
 					{
+						if((token.Data[i] & (1 << 13)) != 0)
+						{
+							//Relative Address mode
+							token.Data[i + 1] = reader.ReadUInt32();
+							inst.Operands.Add(new DestinationOperand(token.Data[i], token.Data[i + 1]));
+							i++;
+						}
+						else
+						{
+							inst.Operands.Add(new DestinationOperand(token.Data[i]));
+						}
 						inst.Operands.Add(new DestinationOperand(token.Data[i]));
 					}
 					else if((token.Data[i] & (1 << 13)) != 0)

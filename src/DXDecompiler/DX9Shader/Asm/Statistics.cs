@@ -16,7 +16,7 @@ namespace DXDecompiler.DX9Shader
 		}
 		//Refer https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx9-graphics-reference-asm-vs-instructions-vs-3-0
 		//Refer https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx9-graphics-reference-asm-ps-instructions-ps-3-0
-		public static int GetInstructionSlotCount(this Token token)
+		public static int GetInstructionSlotCount(this InstructionToken token)
 		{
 			switch(token.Opcode)
 			{

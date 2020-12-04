@@ -55,7 +55,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 		public string GetVariable(uint elementIndex)
 		{
 			var decl = ConstantDeclarations
-				.FirstOrDefault(d => d.ContainsIndex((int)elementIndex));
+				.FirstOrDefault(d => d.ContainsIndex(elementIndex));
 			if(decl.ParameterClass == ParameterClass.MatrixColumns ||
 				decl.ParameterClass == ParameterClass.MatrixRows ||
 				decl.ParameterClass == ParameterClass.Struct ||

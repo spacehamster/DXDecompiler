@@ -44,12 +44,12 @@ namespace DXDecompiler.DX9Shader
 			return hlslWriter.Decompile();
 		}
 
-		private string GetDestinationName(Token instruction)
+		private string GetDestinationName(InstructionToken instruction)
 		{
 			return _registers.GetDestinationName(instruction);
 		}
 
-		private string GetSourceName(Token instruction, int srcIndex)
+		private string GetSourceName(InstructionToken instruction, int srcIndex)
 		{
 			return _registers.GetSourceName(instruction, srcIndex);
 		}
@@ -83,7 +83,7 @@ namespace DXDecompiler.DX9Shader
 			throw new NotImplementedException();
 		}
 
-		private void WriteInstruction(Token instruction)
+		private void WriteInstruction(InstructionToken instruction)
 		{
 			WriteIndent();
 			WriteLine($"// {instruction}");
@@ -288,7 +288,7 @@ namespace DXDecompiler.DX9Shader
 						if(dest.RegisterType == RegisterType.Temp)
 						{
 
-							var registerKey = new RegisterKey(dest.RegisterType, (int)dest.RegisterNumber);
+							var registerKey = new RegisterKey(dest.RegisterType, dest.RegisterNumber);
 							if(!tempRegisters.ContainsKey(registerKey))
 							{
 								var reg = new RegisterDeclaration(registerKey);
@@ -482,7 +482,7 @@ namespace DXDecompiler.DX9Shader
 			Indent++;
 			foreach(var output in _registers.MethodOutputRegisters.Values)
 			{
-				WriteLine($"// {output.RegisterKey} {Operand.GetParamRegisterName(output.RegisterKey.Type, output.RegisterKey.Number)}");
+				WriteLine($"// {output.RegisterKey} {Operand.GetParamRegisterName(output.RegisterKey.Type, (uint)output.RegisterKey.Number)}");
 				WriteLine($"{output.TypeName} {output.Name} : {output.Semantic};");
 			}
 			Indent--;
@@ -568,7 +568,7 @@ namespace DXDecompiler.DX9Shader
 		private void WriteInstructionList()
 		{
 
-			foreach(Token instruction in _shader.Tokens)
+			foreach(InstructionToken instruction in _shader.Tokens.OfType< InstructionToken>())
 			{
 				WriteInstruction(instruction);
 			}
