@@ -69,6 +69,7 @@
 		/// <summary>
 		/// Label
 		/// </summary>
+		[Description("label")]
 		Label = 10,
 
 		/// <summary>
