@@ -43,7 +43,7 @@ namespace DXDecompiler.DebugParser.DX9
 				}
 				reader.AddIndent($"T{result.Tokens.Count}");
 
-				var indent = reader.Members.OfType<DebugIndent>().Last();
+				var indent = reader.LocalMembers.OfType<DebugIndent>().Last();
 				IDebugToken instruction = result.ReadInstruction(reader);
 				result.Tokens.Add(instruction);
 				indent.Name += $" {instruction.Opcode} {string.Join(" ", instruction.Operands)}";
@@ -108,7 +108,7 @@ namespace DXDecompiler.DebugParser.DX9
 			{
 				size = (uint)((instructionToken >> 24) & 0x0f);
 			}
-			var entry = reader.Members.Last();
+			var entry = reader.LocalMembers.Last();
 			entry.AddNote("TokenOpcode", opcode.ToString());
 			entry.AddNote("TokenSize", size.ToString());
 			IDebugToken result;

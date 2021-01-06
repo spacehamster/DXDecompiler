@@ -12,7 +12,7 @@ using System.Text;
 
 namespace DXDecompiler.Decompiler
 {
-	public partial class HLSLDecompiler
+	public partial class OldHLSLDecompiler
 	{
 		StringBuilder Output = new StringBuilder();
 		BytecodeContainer Container;
@@ -33,7 +33,7 @@ namespace DXDecompiler.Decompiler
 				var sb = new StringBuilder();
 				foreach(var lib in container.Chunks.OfType<LibfChunk>())
 				{
-					var libDecompiler = new HLSLDecompiler(lib.LibraryContainer);
+					var libDecompiler = new OldHLSLDecompiler(lib.LibraryContainer);
 					sb.AppendLine(libDecompiler.Decompile());
 				}
 				return sb.ToString();
@@ -45,10 +45,10 @@ namespace DXDecompiler.Decompiler
 					.First()
 					.ToString();
 			}
-			var decompiler = new HLSLDecompiler(container);
+			var decompiler = new OldHLSLDecompiler(container);
 			return decompiler.Decompile();
 		}
-		HLSLDecompiler(BytecodeContainer container)
+		OldHLSLDecompiler(BytecodeContainer container)
 		{
 			RegisterState = new RegisterState(container);
 			Container = container;

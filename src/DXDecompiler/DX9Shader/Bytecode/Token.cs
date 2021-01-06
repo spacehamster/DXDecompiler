@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DXDecompiler.DX9Shader
+﻿namespace DXDecompiler.DX9Shader
 {
 	/// <summary>
 	/// Base Token Type

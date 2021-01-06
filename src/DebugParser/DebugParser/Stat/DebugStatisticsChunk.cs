@@ -1,4 +1,5 @@
 ﻿using DXDecompiler.Chunks.Common;
+using DXDecompiler.Util;
 
 namespace DXDecompiler.DebugParser.Stat
 {
@@ -39,10 +40,14 @@ namespace DXDecompiler.DebugParser.Stat
 		public uint MovCInstructionCount { get; private set; }
 		public uint ConversionInstructionCount { get; private set; }
 
-		public static DebugStatisticsChunk Parse(DebugBytecodeReader reader, uint chunkSize)
+		public static DebugBytecodeChunk Parse(DebugBytecodeReader reader, uint chunkSize)
 		{
 			var size = chunkSize / sizeof(uint);
-
+			var magic = reader.PeakUInt32Ahead(8);
+			if(magic == "DXIL".ToFourCc())
+			{
+				return Dxil.DebugDxilReflectionChunk.Parse(reader, chunkSize);
+			}
 			var result = new DebugStatisticsChunk
 			{
 				InstructionCount = reader.ReadUInt32("InstructionCount"),

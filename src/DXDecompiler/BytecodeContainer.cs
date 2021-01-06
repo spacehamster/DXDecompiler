@@ -1,8 +1,10 @@
 using DXDecompiler.Chunks;
 using DXDecompiler.Chunks.Common;
+using DXDecompiler.Chunks.Dxil;
 using DXDecompiler.Chunks.Fx10;
 using DXDecompiler.Chunks.Ifce;
 using DXDecompiler.Chunks.Libf;
+using DXDecompiler.Chunks.Psv0;
 using DXDecompiler.Chunks.Rdef;
 using DXDecompiler.Chunks.Sfi0;
 using DXDecompiler.Chunks.Shex;
@@ -73,13 +75,13 @@ namespace DXDecompiler
 		{
 			get { return Chunks.OfType<InterfacesChunk>().SingleOrDefault(); }
 		}
+
 		/// <summary>
 		/// Version is stored in both Resource Definition and Shader chunks.
 		/// Generally the resource definition chunk is the first chunk in the container
 		/// but in the case of library linked functions, it can be near the end. 
 		/// Version is needed for parsing certain chunks, such as input/output
 		/// </summary>
-
 		public ShaderVersion Version
 		{
 			get
@@ -91,6 +93,18 @@ namespace DXDecompiler
 				if(Shader != null)
 				{
 					return Shader.Version;
+				}
+				if(Chunks.OfType<LibfChunk>().Any())
+				{
+					return Chunks.OfType<LibfChunk>().First().LibraryContainer.Version;
+				}
+				if(Chunks.OfType<EffectChunk>().Any())
+				{
+					return Chunks.OfType<EffectChunk>().First().Header.Version;
+				}
+				if(Chunks.OfType<DxilChunk>().Any())
+				{
+					return Chunks.OfType<DxilChunk>().First().Version;
 				}
 				return null;
 			}
@@ -118,6 +132,18 @@ namespace DXDecompiler
 				var chunk = BytecodeChunk.ParseChunk(chunkReader, this);
 				if(chunk != null)
 					Chunks.Add(chunk);
+			}
+			foreach(var chunk in Chunks.OfType<InputOutputSignatureChunk>())
+			{
+				chunk.UpdateVersion(Version);
+			}
+			foreach(var chunk in Chunks.OfType<Sfi0Chunk>())
+			{
+				chunk.UpdateVersion(Version);
+			}
+			foreach(var chunk in Chunks.OfType<PipelineStateValidationChunk>())
+			{
+				chunk.UpdateVersion(Version);
 			}
 		}
 		internal BytecodeContainer()
@@ -167,7 +193,7 @@ namespace DXDecompiler
 			sb.AppendLine("//");
 			sb.AppendLine("//");
 
-			if(Shader.Tokens.Any(x => x.Header.OpcodeType == OpcodeType.Abort)) // TODO
+			if(Shader != null && Shader.Tokens.Any(x => x.Header.OpcodeType == OpcodeType.Abort)) // TODO
 			{
 				sb.AppendLine("// Note: SHADER WILL ONLY WORK WITH THE DEBUG SDK LAYER ENABLED.");
 				sb.AppendLine("//");
@@ -211,7 +237,7 @@ namespace DXDecompiler
 				sb.AppendLine(@"//");
 			}
 
-			sb.Append(Statistics);
+			if(Version.MajorVersion <= 5) sb.Append(Statistics);
 
 			if(Interfaces != null)
 				sb.Append(Interfaces);

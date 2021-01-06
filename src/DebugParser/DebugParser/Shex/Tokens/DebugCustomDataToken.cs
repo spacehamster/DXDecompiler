@@ -12,7 +12,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 		{
 			DebugOpcodeHeader.AddNotes(reader, token0);
 			var customDataClass = token0.DecodeValue<CustomDataClass>(11, 31);
-			var member = reader.Members.Last();
+			var member = reader.LocalMembers.Last();
 			DebugCustomDataToken token;
 			switch(customDataClass)
 			{

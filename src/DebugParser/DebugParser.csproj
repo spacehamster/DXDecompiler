@@ -75,6 +75,9 @@
     <Compile Include="DebugParser\DX9\DebugFxlc.cs" />
     <Compile Include="DebugParser\DX9\IDebugToken.cs" />
     <Compile Include="DebugParser\DX9\DebugInstructionToken.cs" />
+    <Compile Include="DebugParser\Dxil\DebugDxilBaseChunk.cs" />
+    <Compile Include="DebugParser\Dxil\DebugDxilReflectionChunk.cs" />
+    <Compile Include="DebugParser\Dxil\DebugDxilChunk.cs" />
     <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectAssignment.cs" />
     <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectConstantAssignment.cs" />
     <Compile Include="DebugParser\Fx10\Assignemnt\DebugEffectConstantIndexAssignment.cs" />
@@ -120,15 +123,27 @@
     <Compile Include="DebugParser\Fxlvm\DebugCtabChunk.cs" />
     <Compile Include="DebugParser\Fxlvm\DebugFxlcChunk.cs" />
     <Compile Include="DebugParser\DX9\DebugConstantTable.cs" />
+    <Compile Include="DebugParser\Hash\DebugHashChunk.cs" />
     <Compile Include="DebugParser\Icfe\DebugClassInstance.cs" />
     <Compile Include="DebugParser\Icfe\DebugClassType.cs" />
     <Compile Include="DebugParser\Icfe\DebugInterfacesChunk.cs" />
     <Compile Include="DebugParser\Icfe\DebugInterfaceSlot.cs" />
     <Compile Include="DebugParser\IDumpable.cs" />
+    <Compile Include="DebugParser\Ildb\DebugDebugInfoDXILChunk.cs" />
+    <Compile Include="DebugParser\Ildb\DebugDebugNameChunk.cs" />
     <Compile Include="DebugParser\Libf\DebugLibfChunk.cs" />
     <Compile Include="DebugParser\Libf\DebugLibHeaderChunk.cs" />
     <Compile Include="DebugParser\Libf\DebugLibraryParameterSignatureChunk.cs" />
     <Compile Include="DebugParser\Libf\LibraryParameterDescription.cs" />
+    <Compile Include="DebugParser\Psv0\DebugMSInfo.cs" />
+    <Compile Include="DebugParser\Psv0\DebugASInfo.cs" />
+    <Compile Include="DebugParser\Psv0\DebugVSInfo.cs" />
+    <Compile Include="DebugParser\Psv0\DebugDSInfo.cs" />
+    <Compile Include="DebugParser\Psv0\DebugGSInfo.cs" />
+    <Compile Include="DebugParser\Psv0\DebugPSInfo.cs" />
+    <Compile Include="DebugParser\Psv0\DebugHSInfo.cs" />
+    <Compile Include="DebugParser\Psv0\DebugPipelineStateValidationChunk.cs" />
+    <Compile Include="DebugParser\Psv0\DebugValidationInfo.cs" />
     <Compile Include="DebugParser\Rdef\DebugConstantBuffer.cs" />
     <Compile Include="DebugParser\Rdef\DebugResourceBinding.cs" />
     <Compile Include="DebugParser\Rdef\DebugResourceDefinitionChunk.cs" />
@@ -212,8 +227,6 @@
   <ItemGroup>
     <Content Include="Resources\DebugJavascript.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Shex\Tokens\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,6 @@
 ﻿using DXDecompiler.DebugParser.Chunks.Fx10;
+using DXDecompiler.DebugParser.Dxil;
+using DXDecompiler.DebugParser.Psv0;
 using DXDecompiler.DebugParser.Rdef;
 using DXDecompiler.Util;
 using System;
@@ -54,6 +56,10 @@ namespace DXDecompiler.DebugParser
 					var chunk = DebugBytecodeChunk.ParseChunk(chunkReader, this);
 					if(chunk != null)
 						Chunks.Add(chunk);
+				}
+				foreach(var chunk in Chunks.OfType<DebugPipelineStateValidationChunk>())
+				{
+					chunk.UpdateVersion(Chunks.OfType<DebugDxilChunk>().First().Version);
 				}
 			}
 			catch(Exception ex)

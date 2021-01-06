@@ -59,6 +59,15 @@ namespace DXDecompiler.Chunks.Xsgn
 		[Description("LINEDEN")]
 		FinalLineDensityTessFactor = 16,
 
+		[Description("BARYCEN")]
+		Barycentrics = 23,
+
+		[Description("SHDINGRATE")]
+		ShadingRate = 24,
+
+		[Description("CULLPRIM")]
+		CullPrimitive = 25,
+
 		[Description("TARGET")]
 		Target = 64,
 

@@ -62,7 +62,11 @@ namespace DXDecompiler.DebugParser
 		public static DebugShaderVersion ParseShex(DebugBytecodeReader reader)
 		{
 			uint versionToken = reader.ReadUInt32("Version");
-			return FromShexToken(versionToken);
+			var version = FromShexToken(versionToken);
+			reader.AddNote("MajorVersion", version.MajorVersion);
+			reader.AddNote("MinorVersion", version.MinorVersion);
+			reader.AddNote("ProgramType", version.ProgramType);
+			return version;
 		}
 
 		public static DebugShaderVersion ParseAon9(DebugBytecodeReader reader)

@@ -1,6 +1,5 @@
 using DXDecompiler.Chunks.Common;
 using DXDecompiler.Util;
-using System.Diagnostics;
 using System.Text;
 
 namespace DXDecompiler.Chunks.Stat
@@ -180,10 +179,15 @@ namespace DXDecompiler.Chunks.Stat
 		public uint MovCInstructionCount { get; private set; }
 		public uint ConversionInstructionCount { get; private set; }
 
-		public static StatisticsChunk Parse(BytecodeReader reader, uint chunkSize)
+		public static BytecodeChunk Parse(BytecodeReader reader, uint chunkSize)
 		{
+			var magicReader = reader.CopyAtOffset((int)reader.CurrentPosition + 8);
+			var magic = magicReader.ReadUInt32();
+			if(magic == "DXIL".ToFourCc())
+			{
+				return Dxil.DxilReflectionChunk.Parse(reader, chunkSize);
+			}
 			var size = chunkSize / sizeof(uint);
-
 			var result = new StatisticsChunk
 			{
 				InstructionCount = reader.ReadUInt32(),
@@ -212,7 +216,7 @@ namespace DXDecompiler.Chunks.Stat
 
 			//TODO
 			var unknown0 = reader.ReadUInt32();
-			Debug.Assert(unknown0 == 0, $"Statistics unknown1 is {unknown0}");
+			//Debug.Assert(unknown0 == 0, $"Statistics unknown1 is {unknown0}");
 
 			result.InputPrimitive = (Primitive)reader.ReadUInt32();
 			result.GeometryShaderOutputTopology = (PrimitiveTopology)reader.ReadUInt32();
@@ -241,7 +245,9 @@ namespace DXDecompiler.Chunks.Stat
 			if(size == 37)
 				return result;
 
-			throw new ParseException("Unhandled stat size: " + chunkSize);
+			return result;
+			//TODO
+			//throw new ParseException("Unhandled stat size: " + chunkSize);
 		}
 
 		public override string ToString()

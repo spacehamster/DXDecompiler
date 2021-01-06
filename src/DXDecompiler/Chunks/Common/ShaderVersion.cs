@@ -14,6 +14,18 @@ namespace DXDecompiler.Chunks.Common
 		public byte MinorVersion { get; private set; }
 		public ProgramType ProgramType { get; private set; }
 
+		public ShaderVersion(ProgramType type, byte majorVersion, byte minorVersion)
+		{
+			ProgramType = type;
+			MajorVersion = majorVersion;
+			MinorVersion = minorVersion;
+		}
+
+		public ShaderVersion()
+		{
+
+		}
+
 		public static ShaderVersion ParseShex(BytecodeReader reader)
 		{
 			uint versionToken = reader.ReadUInt32();
@@ -26,7 +38,7 @@ namespace DXDecompiler.Chunks.Common
 			{
 				MinorVersion = versionToken.DecodeValue<byte>(0, 3),
 				MajorVersion = versionToken.DecodeValue<byte>(4, 7),
-				ProgramType = versionToken.DecodeValue<ProgramType>(16, 31)
+				ProgramType = ParseShexProgramType(versionToken.DecodeValue<ushort>(16, 31))
 			};
 		}
 
@@ -42,7 +54,7 @@ namespace DXDecompiler.Chunks.Common
 				ProgramType = shaderType == 0xFFFF ? ProgramType.PixelShader : ProgramType.VertexShader
 			};
 		}
-		private static ProgramType ParseProgramType(ushort programTypeValue)
+		private static ProgramType ParseRdefProgramType(ushort programTypeValue)
 		{
 			switch(programTypeValue)
 			{
@@ -66,11 +78,51 @@ namespace DXDecompiler.Chunks.Common
 					throw new ParseException(string.Format("Unknown program type: 0x{0:X}", programTypeValue));
 			}
 		}
+		private static ProgramType ParseShexProgramType(ushort programTypeValue)
+		{
+			switch(programTypeValue)
+			{
+				case 0:
+					return ProgramType.PixelShader;
+				case 1:
+					return ProgramType.VertexShader;
+				case 2:
+					return ProgramType.GeometryShader;
+				case 3:
+					return ProgramType.HullShader;
+				case 4:
+					return ProgramType.DomainShader;
+				case 5:
+					return ProgramType.ComputeShader;
+				case 6:
+				case 0xFFF0:
+					return ProgramType.LibraryShader;
+				case 7:
+					return ProgramType.RayGeneration;
+				case 8:
+					return ProgramType.Intersection;
+				case 9:
+					return ProgramType.AnyHit;
+				case 10:
+					return ProgramType.ClosestHit;
+				case 11:
+					return ProgramType.Miss;
+				case 12:
+					return ProgramType.Callable;
+				case 13:
+					return ProgramType.Mesh;
+				case 14:
+					return ProgramType.Amplification;
+				default:
+					throw new ParseException(string.Format("Unknown program type: 0x{0:X}", programTypeValue));
+			}
+		}
+
 		public static ShaderVersion ParseRdef(BytecodeReader reader)
 		{
 			uint target = reader.ReadUInt32();
 			var programTypeValue = target.DecodeValue<ushort>(16, 31);
-			ProgramType programType = ParseProgramType(programTypeValue);
+			ProgramType programType = ParseRdefProgramType(programTypeValue);
 			return new ShaderVersion
 			{
 				MajorVersion = target.DecodeValue<byte>(8, 15),
@@ -78,11 +130,12 @@ namespace DXDecompiler.Chunks.Common
 				ProgramType = programType
 			};
 		}
+
 		public static ShaderVersion ParseFX(BytecodeReader reader)
 		{
 			uint target = reader.ReadUInt16();
 			var programTypeValue = reader.ReadUInt16();
-			ProgramType programType = ParseProgramType(programTypeValue);
+			ProgramType programType = ParseRdefProgramType(programTypeValue);
 			byte majorVersion;
 			byte minorVersion;
 			switch(target)
@@ -113,6 +166,7 @@ namespace DXDecompiler.Chunks.Common
 				ProgramType = programType
 			};
 		}
+
 		public bool IsSM51 => MajorVersion == 5 && MinorVersion == 1;
 
 		public override string ToString()

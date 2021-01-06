@@ -23,7 +23,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 		{
 			var token0 = reader.ReadUInt32("token0");
 			DebugOpcodeHeader.AddNotes(reader, token0);
-			var member = reader.Members.Last();
+			var member = reader.LocalMembers.Last();
 			var length = reader.ReadUInt32("length") - 2;
 
 			var result = new DebugShaderMessageDeclarationToken

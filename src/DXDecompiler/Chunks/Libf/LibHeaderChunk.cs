@@ -23,15 +23,14 @@ namespace DXDecompiler.Chunks.Libf
 			var unknown1 = chunkReader.ReadUInt32();
 			Debug.Assert(unknown1 == 1, $"LibraryHeader.unknown1 is {unknown1}");
 			var creatorStringOffset = chunkReader.ReadUInt32();
+			var creatorStringReader = chunkReader.CopyAtOffset((int)creatorStringOffset);
+			result.CreatorString = creatorStringReader.ReadString();
 			//guessing flags, library chunk never seems to flags set.
 			var unknown0 = chunkReader.ReadUInt32();
 			Debug.Assert(unknown0 == 0, "Unexpected value for LibHeaderChunk.Unknown0");
 			var functionCount = chunkReader.ReadUInt32();
 			//Contains function strings and function flags
 			var functionInfoOffset = chunkReader.ReadUInt32();
-
-			var creatorStringReader = chunkReader.CopyAtOffset((int)creatorStringOffset);
-			result.CreatorString = creatorStringReader.ReadString();
 			var functionInfoReader = reader.CopyAtOffset((int)functionInfoOffset);
 			for(int i = 0; i < functionCount; i++)
 			{

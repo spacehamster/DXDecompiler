@@ -76,6 +76,18 @@ namespace DXDecompiler.Chunks.Sfi0
 		/// <summary>
 		/// Shader requires that the graphics driver and hardware support viewport and render target array index values from any shader-feeding rasterizer.
 		/// </summary>
-		SVArrayIndexFromFeedingRasterizer = 0x2000
+		SVArrayIndexFromFeedingRasterizer = 0x2000,
+
+		WaveOps = 0x4000,
+		Int64Ops = 0x8000,
+		ViewID = 0x10000,
+		Barycentrics = 0x20000,
+		NativeLowPrecision = 0x40000,
+		ShadingRate = 0x80000,
+		Raytracing_Tier_1_1 = 0x100000,
+		SamplerFeedback = 0x200000,
+		AtomicInt64OnTypedResource = 0x400000,
+		AtomicInt64OnGroupShared = 0x800000,
+		DerivativesInMeshAndAmpShaders = 0x1000000
 	}
 }

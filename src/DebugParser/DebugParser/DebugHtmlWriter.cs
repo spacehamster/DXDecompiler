@@ -149,10 +149,10 @@ namespace DXDecompiler.DebugParser
 				{
 					var labelText = dr.Name;
 					var value = "";
-					if(dr.Members.Count == 1 && dr.Members.First().Type == "String")
+					if(dr.LocalMembers.Count == 1 && dr.LocalMembers.First().Type == "String")
 					{
 						var valueLength = 10;
-						var child = dr.Members.First();
+						var child = dr.LocalMembers.First();
 						var truncatedValue = child.Value.Length > valueLength ?
 							(child.Value.Substring(0, valueLength - 3) + "...") :
 							child.Value;

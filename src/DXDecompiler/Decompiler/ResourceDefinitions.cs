@@ -10,7 +10,7 @@ using System.Text;
 
 namespace DXDecompiler.Decompiler
 {
-	public partial class HLSLDecompiler
+	public partial class OldHLSLDecompiler
 	{
 		/*
 		 * This should be merged with Declrations

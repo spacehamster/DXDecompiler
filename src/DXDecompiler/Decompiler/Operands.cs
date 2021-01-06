@@ -9,7 +9,7 @@ using System.Text;
 
 namespace DXDecompiler.Decompiler
 {
-	public partial class HLSLDecompiler
+	public partial class OldHLSLDecompiler
 	{
 		string GetOperandIndex(Operand operand)
 		{

@@ -27,9 +27,9 @@ namespace DXDecompiler.DebugParser
 				{
 					return (uint)Count;
 				}
-				if(Members.Count == 0) return 0;
-				if(Members.Count == 1) return Members.First().Size;
-				var last = Members.Last();
+				if(LocalMembers.Count == 0) return 0;
+				if(LocalMembers.Count == 1) return LocalMembers.First().Size;
+				var last = LocalMembers.Last();
 				return last.AbsoluteIndex - AbsoluteIndex + last.Size;
 			}
 		}
@@ -38,7 +38,8 @@ namespace DXDecompiler.DebugParser
 		internal readonly BinaryReader _reader;
 		private int _parentOffset;
 
-		public List<IDumpable> Members = new List<IDumpable>();
+		public List<IDumpable> LocalMembers = new List<IDumpable>();
+		public List<IDumpable> AllMembers = new List<IDumpable>();
 		DebugBytecodeReader Root = null;
 		Stack<DebugIndent> Indents = new Stack<DebugIndent>();
 		public static bool DumpOffsets = true;
@@ -74,6 +75,53 @@ namespace DXDecompiler.DebugParser
 			Count = count;
 			InheritSize = inheritSize;
 		}
+		private void AddMember(IDumpable member)
+		{
+			if(Indents.Count > 0)
+			{
+				Indents.Peek().Members.Add(member);
+			}
+			else
+			{
+				LocalMembers.Add(member);
+			}
+			AllMembers.Add(member);
+		}
+		private IEnumerable<IDumpable> GetMembersRecursive()
+		{
+			foreach(var member in LocalMembers)
+			{
+				foreach(var submember in GetMembersRecursive(member))
+				{
+					yield return submember;
+				}
+			}
+		}
+		private static IEnumerable<IDumpable> GetMembersRecursive(IDumpable dumpable)
+		{
+			yield return dumpable;
+			if(dumpable is DebugIndent indent)
+			{
+				foreach(var member in indent.Members)
+				{
+					foreach(var submember in GetMembersRecursive(member))
+					{
+						yield return submember;
+					}
+				}
+			}
+			if(dumpable is DebugBytecodeReader reader)
+			{
+				foreach(var member in reader.LocalMembers)
+				{
+					foreach(var submember in GetMembersRecursive(member))
+					{
+						yield return submember;
+					}
+				}
+			}
+			yield break;
+		}
 		DebugEntry AddEntry(string name, uint size)
 		{
 			var result = new DebugEntry()
@@ -89,26 +137,21 @@ namespace DXDecompiler.DebugParser
 			{
 				ReadCount = currentReadCount;
 			}
-			if(Indents.Count > 0)
-			{
-				Indents.Peek().Members.Add(result);
-			}
-			if(this != Root) Members.Add(result);
-			Root.Members.Add(result);
+			AddMember(result);
 			return result;
 		}
 
-		internal void AddIndent(string name)
+		internal DebugIndent AddIndent(string name)
 		{
 			var result = new DebugIndent()
 			{
 				Name = name,
 				Indent = Indent
 			};
+			AddMember(result);
 			Indents.Push(result);
-			if(this != Root) Members.Add(result);
-			Root.Members.Add(result);
 			Indent++;
+			return result;
 		}
 		internal void RemoveIndent()
 		{
@@ -308,17 +351,17 @@ namespace DXDecompiler.DebugParser
 		}
 		public string DumpHtml()
 		{
-			return new DebugHtmlWriter(this, _buffer, Members).ToHtml();
+			return new DebugHtmlWriter(this, _buffer, GetMembersRecursive().ToList()).ToHtml();
 		}
 		public string DumpStructure()
 		{
 			var sb = new StringBuilder();
-			foreach(var member in Members)
+			foreach(var member in LocalMembers)
 			{
 				sb.Append(member.Dump());
 			}
 			sb.AppendLine();
-			var entries = Members.OfType<DebugEntry>();
+			var entries = LocalMembers.OfType<DebugEntry>();
 			var used = new bool[_buffer.Length];
 			foreach(var entry in entries)
 			{
@@ -403,21 +446,13 @@ namespace DXDecompiler.DebugParser
 			bool inheritOffset = count == null;
 			count = count ?? (int)(_reader.BaseStream.Length - offset);
 			var result = new DebugBytecodeReader(_buffer, Offset + offset, count.Value, Offset, parent.Indent + 1, name, Root, inheritOffset);
-			Root.Members.Add(result);
-			if(this != Root)
-			{
-				Members.Add(result);
-			}
-			if(Indents.Count > 0)
-			{
-				Indents.Peek().Members.Add(result);
-			}
+			AddMember(result);
 			return result;
 		}
 
 		public void AddNote(string key, object value)
 		{
-			var debugEntry = Members.Last();
+			var debugEntry = AllMembers.Last();
 			debugEntry.AddNote(key, value);
 		}
 	}

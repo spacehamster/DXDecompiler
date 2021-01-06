@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace DXDecompiler.Decompiler
 {
-	public partial class HLSLDecompiler
+	public partial class OldHLSLDecompiler
 	{
 		internal void LogDeclaration(IEnumerable<DeclarationToken> tokens)
 		{

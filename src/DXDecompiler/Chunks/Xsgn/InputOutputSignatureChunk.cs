@@ -15,8 +15,7 @@ namespace DXDecompiler.Chunks.Xsgn
 			Parameters = new SignatureParameterDescriptionCollection();
 		}
 
-		public static InputOutputSignatureChunk Parse(BytecodeReader reader, ChunkType chunkType,
-			ProgramType programType)
+		public static InputOutputSignatureChunk Parse(BytecodeReader reader, ChunkType chunkType)
 		{
 			InputOutputSignatureChunk result;
 			switch(chunkType)
@@ -31,6 +30,7 @@ namespace DXDecompiler.Chunks.Xsgn
 					result = new OutputSignatureChunk();
 					break;
 				case ChunkType.Pcsg:
+				case ChunkType.Psg1:
 					result = new PatchConstantSignatureChunk();
 					break;
 				default:
@@ -54,6 +54,7 @@ namespace DXDecompiler.Chunks.Xsgn
 					break;
 				case ChunkType.Osg1:
 				case ChunkType.Isg1:
+				case ChunkType.Psg1:
 					elementSize = SignatureElementSize._8;
 					break;
 				default:
@@ -61,10 +62,17 @@ namespace DXDecompiler.Chunks.Xsgn
 			}
 
 			for(int i = 0; i < elementCount; i++)
-				result.Parameters.Add(SignatureParameterDescription.Parse(reader, chunkReader, chunkType, elementSize,
-					programType));
+				result.Parameters.Add(SignatureParameterDescription.Parse(reader, chunkReader, chunkType, elementSize));
 
 			return result;
+		}
+
+		internal void UpdateVersion(ShaderVersion version)
+		{
+			foreach(var param in Parameters)
+			{
+				param.UpdateVersion(ChunkType, version);
+			}
 		}
 
 		public override string ToString()

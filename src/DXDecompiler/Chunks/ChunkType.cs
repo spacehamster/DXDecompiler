@@ -75,6 +75,11 @@ namespace DXDecompiler.Chunks
 		Osg1,
 
 		/// <summary>
+		/// ?
+		/// </summary>
+		Psg1,
+
+		/// <summary>
 		/// Level 9 Shader Chunk
 		/// </summary>
 		Aon9,
@@ -132,6 +137,36 @@ namespace DXDecompiler.Chunks
 		/// <summary>
 		/// Effects expression chunk
 		/// </summary>
-		Fxlc
+		Fxlc,
+
+		/// <summary>
+		/// DXIL bitcode chunk
+		/// </summary>
+		Dxil,
+
+		/// <summary>
+		/// DXIL shader hash chunk
+		/// </summary>
+		Hash,
+
+		/// <summary>
+		/// Pipeline validation chunk
+		/// </summary>
+		Psv0,
+
+		/// <summary>
+		/// Runtime data chunk
+		/// </summary>
+		Rdat,
+
+		/// <summary>
+		/// Shader Debug Info DXIL chunk
+		/// </summary>
+		Ildb,
+
+		/// <summary>
+		/// Shader Debug Name chunk
+		/// </summary>
+		Ildn
 	}
 }

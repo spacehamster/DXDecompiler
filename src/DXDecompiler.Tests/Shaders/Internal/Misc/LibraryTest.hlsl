@@ -50,3 +50,13 @@ export float4 TestFunction6(uint input)
 {
 	return input * 2.0f + TestGlobal + TestGlobal2 + TestBuffer1.xyzx + TestBuffer2.xyzx;
 }
+
+int4 TestGlobal3 = 9;
+cbuffer Bar
+{
+	float3 TestBuffer3 = 10;
+}
+export float4 TestFunction7(uint input)
+{
+	return input * 2.0f + TestGlobal + TestGlobal3 + TestBuffer1.xyzx + TestBuffer3.xyzx;
+}

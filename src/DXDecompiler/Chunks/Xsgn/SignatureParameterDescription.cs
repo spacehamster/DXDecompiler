@@ -98,7 +98,7 @@ namespace DXDecompiler.Chunks.Xsgn
 		}
 
 		public static SignatureParameterDescription Parse(BytecodeReader reader, BytecodeReader parameterReader,
-			ChunkType chunkType, SignatureElementSize size, ProgramType programType)
+			ChunkType chunkType, SignatureElementSize size)
 		{
 			uint stream = 0;
 			if(size == SignatureElementSize._7 || size == SignatureElementSize._8)
@@ -129,40 +129,47 @@ namespace DXDecompiler.Chunks.Xsgn
 			// This is my guesswork, but it works so far...
 			if(chunkType == ChunkType.Osg5 ||
 				chunkType == ChunkType.Osgn ||
-				chunkType == ChunkType.Osg1 ||
-				(chunkType == ChunkType.Pcsg && programType == ProgramType.HullShader))
+				chunkType == ChunkType.Osg1)
 			{
 				result.ReadWriteMask = (ComponentMask)(ComponentMask.All - result.ReadWriteMask);
 			}
 
+			return result;
+		}
+		internal void UpdateVersion(ChunkType chunkType, ShaderVersion version)
+		{
+			ProgramType programType = version.ProgramType;
+
+			if(chunkType == ChunkType.Pcsg && programType == ProgramType.HullShader)
+			{
+				ReadWriteMask = (ComponentMask)(ComponentMask.All - ReadWriteMask);
+			}
 			// Vertex and pixel shaders need special handling for SystemValueType in the output signature.
 			if((programType == ProgramType.PixelShader || programType == ProgramType.VertexShader)
 				&& (chunkType == ChunkType.Osg5 || chunkType == ChunkType.Osgn || chunkType == ChunkType.Osg1))
 			{
-				if(result.Register == 0xffffffff)
-					switch(result.SemanticName.ToUpper())
+				if(Register == 0xffffffff)
+					switch(SemanticName.ToUpper())
 					{
 						case "SV_DEPTH":
-							result.SystemValueType = Name.Depth;
+							SystemValueType = Name.Depth;
 							break;
 						case "SV_COVERAGE":
-							result.SystemValueType = Name.Coverage;
+							SystemValueType = Name.Coverage;
 							break;
 						case "SV_DEPTHGREATEREQUAL":
-							result.SystemValueType = Name.DepthGreaterEqual;
+							SystemValueType = Name.DepthGreaterEqual;
 							break;
 						case "SV_DEPTHLESSEQUAL":
-							result.SystemValueType = Name.DepthLessEqual;
+							SystemValueType = Name.DepthLessEqual;
 							break;
 						case "SV_STENCILREF":
-							result.SystemValueType = Name.StencilRef;
+							SystemValueType = Name.StencilRef;
 							break;
 					}
 				else if(programType == ProgramType.PixelShader)
-					result.SystemValueType = Name.Target;
+					SystemValueType = Name.Target;
 			}
-
-			return result;
 		}
 		public string GetTypeFormat()
 		{

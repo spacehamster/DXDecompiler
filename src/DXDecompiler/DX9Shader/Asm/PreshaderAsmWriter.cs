@@ -26,7 +26,8 @@ namespace DXDecompiler.DX9Shader.Asm
 			if(Preshader.Fxlc.Tokens.Count > 1)
 			{
 				WriteLine("// approximately {0} instructions used", Preshader.Fxlc.Tokens.Count);
-			} else
+			}
+			else
 			{
 				WriteLine("// approximately {0} instruction used", Preshader.Fxlc.Tokens.Count);
 			}

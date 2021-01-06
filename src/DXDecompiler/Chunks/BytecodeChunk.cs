@@ -1,9 +1,14 @@
 using DXDecompiler.Chunks.Aon9;
+using DXDecompiler.Chunks.Dxil;
 using DXDecompiler.Chunks.Fx10;
 using DXDecompiler.Chunks.Fxlvm;
+using DXDecompiler.Chunks.Hash;
 using DXDecompiler.Chunks.Ifce;
+using DXDecompiler.Chunks.Ildb;
 using DXDecompiler.Chunks.Libf;
 using DXDecompiler.Chunks.Priv;
+using DXDecompiler.Chunks.Psv0;
+using DXDecompiler.Chunks.Rdat;
 using DXDecompiler.Chunks.Rdef;
 using DXDecompiler.Chunks.RTS0;
 using DXDecompiler.Chunks.Sfi0;
@@ -25,6 +30,7 @@ namespace DXDecompiler.Chunks
 			{ "OSGN".ToFourCc(), ChunkType.Osgn },
 			{ "OSG5".ToFourCc(), ChunkType.Osg5 },
 			{ "PCSG".ToFourCc(), ChunkType.Pcsg },
+			{ "PSG1".ToFourCc(), ChunkType.Psg1 },
 			{ "RDEF".ToFourCc(), ChunkType.Rdef },
 			{ "SDBG".ToFourCc(), ChunkType.Sdbg },
 			{ "SFI0".ToFourCc(), ChunkType.Sfi0 },
@@ -45,7 +51,13 @@ namespace DXDecompiler.Chunks
 			{ "FX10".ToFourCc(), ChunkType.Fx10 },
 			{ "CTAB".ToFourCc(), ChunkType.Ctab },
 			{ "CLI4".ToFourCc(), ChunkType.Cli4 },
-			{ "FXLC".ToFourCc(), ChunkType.Fxlc }
+			{ "FXLC".ToFourCc(), ChunkType.Fxlc },
+			{ "DXIL".ToFourCc(), ChunkType.Dxil },
+			{ "HASH".ToFourCc(), ChunkType.Hash },
+			{ "PSV0".ToFourCc(), ChunkType.Psv0 },
+			{ "RDAT".ToFourCc(), ChunkType.Rdat },
+			{ "ILDB".ToFourCc(), ChunkType.Ildb },
+			{ "ILDN".ToFourCc(), ChunkType.Ildn }
 		};
 
 		public BytecodeContainer Container { get; private set; }
@@ -86,8 +98,8 @@ namespace DXDecompiler.Chunks
 				case ChunkType.Pcsg:
 				case ChunkType.Isg1:
 				case ChunkType.Osg1:
-					chunk = InputOutputSignatureChunk.Parse(chunkContentReader, chunkType,
-						container.Version.ProgramType);
+				case ChunkType.Psg1:
+					chunk = InputOutputSignatureChunk.Parse(chunkContentReader, chunkType);
 					break;
 				case ChunkType.Rdef:
 					chunk = ResourceDefinitionChunk.Parse(chunkContentReader);
@@ -97,7 +109,7 @@ namespace DXDecompiler.Chunks
 					chunk = DebuggingChunk.Parse(chunkContentReader, chunkType, chunkSize);
 					break;
 				case ChunkType.Sfi0:
-					chunk = Sfi0Chunk.Parse(chunkContentReader, container.Version, chunkSize);
+					chunk = Sfi0Chunk.Parse(chunkContentReader, chunkSize);
 					break;
 				case ChunkType.Shdr:
 				case ChunkType.Shex:
@@ -137,6 +149,24 @@ namespace DXDecompiler.Chunks
 					break;
 				case ChunkType.Fxlc:
 					chunk = FxlcChunk.Parse(chunkContentReader, chunkSize, container);
+					break;
+				case ChunkType.Dxil:
+					chunk = DxilChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Hash:
+					chunk = HashChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Psv0:
+					chunk = PipelineStateValidationChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Rdat:
+					chunk = RuntimeDataChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Ildb:
+					chunk = DebugInfoDXILChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Ildn:
+					chunk = DebugNameChunk.Parse(chunkContentReader, chunkSize);
 					break;
 				default:
 					throw new ParseException("Invalid chunk type: " + chunkType);

@@ -7,8 +7,8 @@ namespace DXDecompiler.Tests
 	{
 		public static void Init()
 		{
-			Debug.Listeners.Clear();
-			Debug.Listeners.Add(new AssertTraceListener());
+			Trace.Listeners.Clear();
+			Trace.Listeners.Add(new AssertTraceListener());
 		}
 		public override void Fail(string msg, string detailedMsg)
 		{

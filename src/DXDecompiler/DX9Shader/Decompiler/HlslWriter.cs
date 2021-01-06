@@ -568,7 +568,7 @@ namespace DXDecompiler.DX9Shader
 		private void WriteInstructionList()
 		{
 
-			foreach(InstructionToken instruction in _shader.Tokens.OfType< InstructionToken>())
+			foreach(InstructionToken instruction in _shader.Tokens.OfType<InstructionToken>())
 			{
 				WriteInstruction(instruction);
 			}

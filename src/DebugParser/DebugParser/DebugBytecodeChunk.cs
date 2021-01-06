@@ -3,8 +3,11 @@ using DXDecompiler.DebugParser.Aon9;
 using DXDecompiler.DebugParser.Chunks.Fx10;
 using DXDecompiler.DebugParser.Chunks.Fxlvm;
 using DXDecompiler.DebugParser.Chunks.Libf;
+using DXDecompiler.DebugParser.Dxil;
 using DXDecompiler.DebugParser.Icfe;
+using DXDecompiler.DebugParser.Ildb;
 using DXDecompiler.DebugParser.Libf;
+using DXDecompiler.DebugParser.Psv0;
 using DXDecompiler.DebugParser.Rdef;
 using DXDecompiler.DebugParser.Sfi0;
 using DXDecompiler.DebugParser.Shex;
@@ -25,6 +28,7 @@ namespace DXDecompiler.DebugParser
 			{ "OSGN".ToFourCc(), ChunkType.Osgn },
 			{ "OSG5".ToFourCc(), ChunkType.Osg5 },
 			{ "PCSG".ToFourCc(), ChunkType.Pcsg },
+			{ "PSG1".ToFourCc(), ChunkType.Psg1 },
 			{ "RDEF".ToFourCc(), ChunkType.Rdef },
 			{ "SDBG".ToFourCc(), ChunkType.Sdbg },
 			{ "SFI0".ToFourCc(), ChunkType.Sfi0 },
@@ -45,7 +49,13 @@ namespace DXDecompiler.DebugParser
 			{ "FX10".ToFourCc(), ChunkType.Fx10 },
 			{ "CTAB".ToFourCc(), ChunkType.Ctab },
 			{ "CLI4".ToFourCc(), ChunkType.Cli4 },
-			{ "FXLC".ToFourCc(), ChunkType.Fxlc }
+			{ "FXLC".ToFourCc(), ChunkType.Fxlc },
+			{ "DXIL".ToFourCc(), ChunkType.Dxil },
+			{ "HASH".ToFourCc(), ChunkType.Hash },
+			{ "PSV0".ToFourCc(), ChunkType.Psv0 },
+			{ "RDAT".ToFourCc(), ChunkType.Rdat },
+			{ "ILDB".ToFourCc(), ChunkType.Ildb },
+			{ "ILDN".ToFourCc(), ChunkType.Ildn }
 		};
 
 		public DebugBytecodeContainer Container { get; private set; }
@@ -68,8 +78,10 @@ namespace DXDecompiler.DebugParser
 			}
 			else
 			{
-				System.Diagnostics.Debug.Assert(false, "Chunk type '" + fourCc.ToFourCcString() + "' is not yet supported.");
+				//System.Diagnostics.Debug.Assert(false, "Chunk type '" + fourCc.ToFourCcString() + "' is not yet supported.");
 				System.Diagnostics.Debug.WriteLine("Chunk type '" + fourCc.ToFourCcString() + "' is not yet supported.");
+				var unknownChunkReader = chunkReader.CopyAtCurrentPosition($"{fourCc.ToFourCcString()}", chunkReader, (int)chunkSize);
+				unknownChunkReader.ReadBytes("UnknownChunk", (int)chunkSize);
 				return null;
 			}
 
@@ -105,7 +117,14 @@ namespace DXDecompiler.DebugParser
 					chunk = DebugShaderProgramChunk.Parse(chunkContentReader);
 					break;
 				case ChunkType.Stat:
-					chunk = DebugStatisticsChunk.Parse(chunkContentReader, chunkSize);
+					try
+					{
+						chunk = DebugStatisticsChunk.Parse(chunkContentReader, chunkSize);
+					}
+					catch(ParseException ex)
+					{
+						return null;
+					}
 					break;
 				case ChunkType.Xnas:
 				case ChunkType.Xnap:
@@ -134,6 +153,18 @@ namespace DXDecompiler.DebugParser
 					break;
 				case ChunkType.Fxlc:
 					chunk = DebugFxlcChunk.Parse(chunkContentReader, chunkSize, container);
+					break;
+				case ChunkType.Dxil:
+					chunk = DebugDxilChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Psv0:
+					chunk = DebugPipelineStateValidationChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Ildn:
+					chunk = DebugDebugNameChunk.Parse(chunkContentReader, chunkSize);
+					break;
+				case ChunkType.Ildb:
+					chunk = DebugDebugInfoDXILChunk.Parse(chunkContentReader, chunkSize);
 					break;
 					//default:
 					//	throw new ParseException("Invalid chunk type: " + chunkType);

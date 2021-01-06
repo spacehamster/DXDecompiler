@@ -39,7 +39,7 @@ namespace DXDecompiler.DebugParser.Shex.Tokens
 			uint token0 = reader.ReadUInt32("operandToken");
 			if(token0 == 0)
 				return null;
-			var member = reader.Members.Last();
+			var member = reader.LocalMembers.Last();
 			var operand = new DebugOperand(parentType);
 
 			var numComponents = token0.DecodeValue<OperandNumComponents>(0, 1);

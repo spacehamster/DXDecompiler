@@ -23,9 +23,19 @@ namespace DXDecompiler.Chunks.Common
 		ComputeShader = 5,
 
 		[Description("lib")]
-		LibraryShader = 0xFFF0,
+		LibraryShader = 6,
+
+		RayGeneration = 7,
+		Intersection = 8,
+		AnyHit = 9,
+		ClosestHit = 10,
+		Miss = 11,
+		Callable = 12,
+		Mesh = 13,
+		Amplification = 14,
+		Invalid = 15,
 
 		[Description("fx")]
-		EffectsShader = 6
+		EffectsShader = 16
 	}
 }

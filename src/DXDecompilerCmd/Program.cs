@@ -120,7 +120,7 @@ namespace DXDecompilerCmd
 					}
 					else if(options.Mode == DecompileMode.Decompile)
 					{
-						var hlsl = HLSLDecompiler.Decompile(data);
+						var hlsl = OldHLSLDecompiler.Decompile(data);
 						sw.Write(hlsl);
 					}
 					else if(options.Mode == DecompileMode.Debug)

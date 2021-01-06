@@ -20,7 +20,7 @@ namespace DXDecompiler.DebugParser.Chunks.Fxlvm
 			for(int i = 0; i < count; i++)
 			{
 				chunkReader.AddIndent($"Number {i}");
-				var info = chunkReader.Members.Last();
+				var info = chunkReader.LocalMembers.Last();
 				var number = DebugNumber.Parse(chunkReader);
 				result.Numbers.Add(number);
 				info.AddNote("Int", number.Int);

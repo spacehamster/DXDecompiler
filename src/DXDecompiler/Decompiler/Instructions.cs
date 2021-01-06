@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace DXDecompiler.Decompiler
 {
-	public partial class HLSLDecompiler
+	public partial class OldHLSLDecompiler
 	{
 		internal void TranslateInstruction(InstructionToken token)
 		{

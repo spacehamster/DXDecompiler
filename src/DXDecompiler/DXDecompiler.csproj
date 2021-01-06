@@ -52,6 +52,9 @@
     <Compile Include="Chunks\Common\DepthWriteMask.cs" />
     <Compile Include="Chunks\Common\FillMode.cs" />
     <Compile Include="Chunks\Common\StencilOp.cs" />
+    <Compile Include="Chunks\Dxil\DxilBaseChunk.cs" />
+    <Compile Include="Chunks\Dxil\DxilChunk.cs" />
+    <Compile Include="Chunks\Dxil\DxilReflectionChunk.cs" />
     <Compile Include="Chunks\Fx10\Assignemnt\AssignmentType.cs" />
     <Compile Include="Chunks\Fx10\Assignemnt\EffectExpressionAssignment.cs" />
     <Compile Include="Chunks\Fx10\Assignemnt\EffectExpressionIndexAssignment.cs" />
@@ -92,6 +95,10 @@
     <Compile Include="Chunks\Fx10\EffectInterfaceInitializer.cs" />
     <Compile Include="Chunks\Fx10\NumericLayout.cs" />
     <Compile Include="Chunks\Fx10\VariableFlags.cs" />
+    <Compile Include="Chunks\Hash\HashChunk.cs" />
+    <Compile Include="Chunks\Hash\HashFlags.cs" />
+    <Compile Include="Chunks\Ildb\DebugNameChunk.cs" />
+    <Compile Include="Chunks\Ildb\DebugInfoDXILChunk.cs" />
     <Compile Include="Chunks\Libf\FunctionInfo.cs" />
     <Compile Include="Chunks\Libf\InterpolationMode.cs" />
     <Compile Include="Chunks\Libf\LibraryParameterDescription.cs" />
@@ -101,6 +108,17 @@
     <Compile Include="Chunks\Libf\ParameterFlags.cs" />
     <Compile Include="Chunks\Libf\ProfileMode.cs" />
     <Compile Include="Chunks\Priv\PrivateChunk.cs" />
+    <Compile Include="Chunks\Psv0\ASInfo.cs" />
+    <Compile Include="Chunks\Psv0\DSInfo.cs" />
+    <Compile Include="Chunks\Psv0\GSInfo.cs" />
+    <Compile Include="Chunks\Psv0\HSInfo.cs" />
+    <Compile Include="Chunks\Psv0\MSInfo.cs" />
+    <Compile Include="Chunks\Psv0\PSInfo.cs" />
+    <Compile Include="Chunks\Psv0\ValidationInfo.cs" />
+    <Compile Include="Chunks\Psv0\VSInfo.cs" />
+    <Compile Include="Chunks\Psv0\PipelineStateValidationChunk.cs" />
+    <Compile Include="Chunks\Psv0\PSVShaderKind.cs" />
+    <Compile Include="Chunks\Rdat\RuntimeDataChunk.cs" />
     <Compile Include="Chunks\RTS0\ComparisonFunc.cs" />
     <Compile Include="Chunks\RTS0\RootConstants.cs" />
     <Compile Include="Chunks\RTS0\RootDescriptor.cs" />
@@ -123,6 +141,7 @@
     <Compile Include="Chunks\Shex\MinPrecision.cs" />
     <Compile Include="Chunks\Shex\Number4Type.cs" />
     <Compile Include="Chunks\Shex\ResInfoReturnType.cs" />
+    <Compile Include="Chunks\Shex\Tokens\OpcodeToken.cs" />
     <Compile Include="Chunks\Shex\Tokens\StreamDeclarationToken.cs" />
     <Compile Include="Chunks\Spdb\DebuggingChunk.cs" />
     <Compile Include="Chunks\Sfi0\Sfi0Chunk.cs" />
@@ -130,7 +149,7 @@
     <Compile Include="Chunks\Xsgn\SignatureParameterDescriptionCollection.cs" />
     <Compile Include="Decompiler\ComparisonType.cs" />
     <Compile Include="Decompiler\Declarations.cs" />
-    <Compile Include="Decompiler\HLSLDecompiler.cs" />
+    <Compile Include="Decompiler\OldHLSLDecompiler.cs" />
     <Compile Include="Decompiler\Extensions.cs" />
     <Compile Include="Decompiler\Interfaces.cs" />
     <Compile Include="Decompiler\Register.cs" />
@@ -140,7 +159,6 @@
     <Compile Include="Decompiler\Signatures.cs" />
     <Compile Include="Decompiler\Instructions.cs" />
     <Compile Include="Decompiler\Operands.cs" />
-    <Compile Include="Decompiler\ConversionFlags.cs" />
     <Compile Include="DX9Shader\Asm\AsmWriter.cs" />
     <Compile Include="DX9Shader\Asm\EffectAsmWriter.cs" />
     <Compile Include="DX9Shader\Asm\PreshaderAsmWriter.cs" />
@@ -340,7 +358,6 @@
     <Compile Include="Chunks\Shex\Tokens\InstructionToken.cs" />
     <Compile Include="Chunks\Shex\Tokens\InterfaceDeclarationToken.cs" />
     <Compile Include="Chunks\Shex\Tokens\NameToken.cs" />
-    <Compile Include="Chunks\Shex\Tokens\OpcodeToken.cs" />
     <Compile Include="Chunks\Shex\Tokens\Operand.cs" />
     <Compile Include="Chunks\Shex\Tokens\OperandIndex.cs" />
     <Compile Include="Chunks\Shex\Tokens\OutputRegisterDeclarationToken.cs" />

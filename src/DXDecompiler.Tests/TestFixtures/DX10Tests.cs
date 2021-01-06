@@ -127,7 +127,7 @@ namespace DXDecompiler.Tests
 			if(ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relDir}/{sourceName}", $"{OutputDir}/{relDir}/{sourceName}", true);
 
 			// Act.
-			var shaderCode = HLSLDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
+			var shaderCode = OldHLSLDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
 			File.WriteAllText($"{OutputDir}/{relPath}.d.hlsl", shaderCode);
 
 			// Assert.
@@ -155,7 +155,7 @@ namespace DXDecompiler.Tests
 			using(var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
 			{
 				var shaderVersion = shaderBytecode.GetVersion();
-				var shaderCode = HLSLDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
+				var shaderCode = OldHLSLDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
 				File.WriteAllText($"{OutputDir}/{relPath}.d.hlsl", shaderCode);
 				var entryPoint = TestUtils.GetShaderEntryPoint(shaderVersion);
 				var profile = TestUtils.GetShaderProfile(shaderVersion);
