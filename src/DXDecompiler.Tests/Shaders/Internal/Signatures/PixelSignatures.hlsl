@@ -28,7 +28,6 @@ struct PS_INPUT {
     uint svInstanceID : SV_InstanceID;
     bool svIsFrontFace : SV_IsFrontFace;
     uint svSampleIndex : SV_SampleIndex;
-
 };
 struct PS_OUTPUT {
     uint SV_Coverage : SV_Coverage;

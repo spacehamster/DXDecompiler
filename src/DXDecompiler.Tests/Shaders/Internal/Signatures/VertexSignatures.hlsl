@@ -44,14 +44,30 @@ struct VS_OUTPUT {
     uint SV_RenderTargetArrayIndex : SV_RenderTargetArrayIndex;
     uint svViewportArrayIndex : SV_ViewportArrayIndex;
 };
-#define INPUT_COUNT 52
 VS_OUTPUT main(VS_INPUT input)
 {
     float accumulator = 0;
-    for (int i = 0; i < INPUT_COUNT; i++)
-    {
-        accumulator += ((float[INPUT_COUNT])input)[i].x;
-    }
+    accumulator += input.binomial;
+    accumulator += input.blendincies;
+    accumulator += input.blendweights;
+    accumulator += input.color;
+    accumulator += input.normal;
+    accumulator += input.position;
+    accumulator += input.positionT;
+    accumulator += input.psize;
+    accumulator += input.tangent;
+    accumulator += input.texcoord;
+    accumulator += input.color1;
+    accumulator += input.texcoord1;
+    accumulator += input.vface;
+    accumulator += input.vpos;
+    accumulator += input.svClipDistance;
+    accumulator += input.svCullDistance;
+    accumulator += input.svInstanceID;
+    accumulator += input.svPosition;
+    accumulator += input.SV_RenderTargetArrayIndex;
+    accumulator += input.svVertexID;
+    accumulator += input.svViewportArrayIndex;
     VS_OUTPUT output = (VS_OUTPUT)accumulator;
     return output;
 }
