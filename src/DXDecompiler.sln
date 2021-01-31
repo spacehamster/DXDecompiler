@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DXDecompiler", "DXDecompiler\DXDecompiler.csproj", "{D75528F5-54F9-4E31-94F6-03C194F74CF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DXDecompiler", "DXDecompiler\DXDecompiler.csproj", "{D75528F5-54F9-4E31-94F6-03C194F74CF2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DXDecompiler.Tests", "DXDecompiler.Tests\DXDecompiler.Tests.csproj", "{3D19DAC1-E727-43BA-A264-A64408B4D598}"
 EndProject
