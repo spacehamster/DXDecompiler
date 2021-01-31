@@ -9,7 +9,10 @@ struct TestOut
     float4 color5 : COLOR5;
 };
 float4 colorFromUInt(uint color){
-    return float4(color & 255, (color >> 8) & 255, (color >> 16) & 255, (color >> 24) & 255) * (1.0f / 255);
+    return float4(color & 255, 
+        (color >> 8) & 255, 
+        (color >> 16) & 255, 
+        (color >> 24) & 255) * (1.0f / 255);
 }
 cbuffer buff {
     uint color1 : packoffset(c0);

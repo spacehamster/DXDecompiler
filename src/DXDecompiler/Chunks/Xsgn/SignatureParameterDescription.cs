@@ -168,7 +168,9 @@ namespace DXDecompiler.Chunks.Xsgn
 							break;
 					}
 				else if(programType == ProgramType.PixelShader)
+				{
 					SystemValueType = Name.Target;
+				}
 			}
 		}
 		public string GetTypeFormat()
@@ -182,6 +184,32 @@ namespace DXDecompiler.Chunks.Xsgn
 				return MinPrecision.GetDescription();
 			}
 		}
+
+		string GetSVRegisterName()
+		{
+			switch(SemanticName)
+			{
+				case "SV_Depth":
+					return "oDepth";
+				case "SV_DepthGreaterEqual":
+					return "oDepthGE";
+				case "SV_DepthLessEqual":
+					return "oDepthLE";
+				case "SV_Coverage":
+					return "oMask";
+				case "SV_StencilRef":
+					return "oStencilRef";
+			}
+			if(SystemValueType == Name.PrimitiveID)
+			{
+				return "primID";
+			}
+			else
+			{
+				return "special";
+			}
+		}
+
 		public string ToString(bool includeStreams)
 		{
 			// For example:
@@ -193,16 +221,26 @@ namespace DXDecompiler.Chunks.Xsgn
 			{
 				name = string.Format("m{0}:{1}", Stream, SemanticName);
 			}
-			if(SystemValueType.RequiresMask())
+			if(Register != uint.MaxValue)
 			{
-				return string.Format("{0,-20} {1,5}   {2,-4} {3,8} {4,8} {5,7}   {6,-4}", name, SemanticIndex,
+				return string.Format("{0,-20} {1,5}   {2,-4} {3,8} {4,8} {5,7}   {6,-4}", 
+					name, SemanticIndex,
 					Mask.GetDescription(),
 					Register, SystemValueType.GetDescription(),
 					GetTypeFormat(), ReadWriteMask.GetDescription());
 			}
-			return string.Format("{0,-20} {1,5}   {2,4}    {3,4} {4,8} {5,7}   {6,4}", name, SemanticIndex,
-				"N/A", SystemValueType.GetRegisterName(), SystemValueType.GetDescription(),
-				GetTypeFormat(), "YES");
+			else
+			{
+				var registerName = GetSVRegisterName();
+				if(registerName.Length > 8)
+				{
+					registerName = "    " + registerName;
+				}
+				return string.Format("{0,-20} {1,5}   {2,4}{3,9} {4,8} {5,7}   {6,4}",
+					name, SemanticIndex,
+					"N/A", registerName, SystemValueType.GetDescription(),
+					GetTypeFormat(), ReadWriteMask == 0 ? "NO" : "YES");
+			}
 		}
 		public override string ToString()
 		{

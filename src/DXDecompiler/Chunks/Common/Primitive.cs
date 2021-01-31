@@ -16,6 +16,7 @@ namespace DXDecompiler.Chunks.Common
 		// Adjacency values should be equal to (0x4 & non-adjacency):
 		[Description("lineadj", ChunkType.Shex)]
 		LineAdj = 6,
+		[Description("triangleadj", ChunkType.Shex)]
 		TriangleAdj = 7,
 
 		_1ControlPointPatch = 8,

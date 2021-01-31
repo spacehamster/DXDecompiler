@@ -171,25 +171,17 @@ namespace DXDecompiler.Chunks.Rdef
 			switch(VariableClass)
 			{
 				case ShaderVariableClass.InterfacePointer:
+					sb.Append(indentString);
+					sb.Append(string.Format("{0}{1}", VariableClass.GetDescription(), BaseTypeName));
+					break;
 				case ShaderVariableClass.MatrixColumns:
 				case ShaderVariableClass.MatrixRows:
 					{
 						sb.Append(indentString);
-						if(!string.IsNullOrEmpty(BaseTypeName)) // BaseTypeName is only populated in SM 5.0
-						{
-							sb.Append(string.Format("{0}{1}", VariableClass.GetDescription(), BaseTypeName));
-						}
-						else
-						{
-							sb.Append(VariableClass.GetDescription());
-							sb.Append(VariableType.GetDescription());
-							if(Columns > 1)
-							{
-								sb.Append(Columns);
-								if(Rows > 1)
-									sb.Append("x" + Rows);
-							}
-						}
+						sb.Append(VariableClass.GetDescription());
+						sb.Append(VariableType.GetDescription());
+						sb.Append(Rows);
+						sb.Append("x" + Columns);
 						break;
 					}
 				case ShaderVariableClass.Vector:

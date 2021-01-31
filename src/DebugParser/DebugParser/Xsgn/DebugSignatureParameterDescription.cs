@@ -47,8 +47,8 @@ namespace DXDecompiler.DebugParser.Xsgn
 			{
 				SemanticName = nameReader.ReadString("SemanticName"),
 				SemanticIndex = parameterReader.ReadUInt32("SemanticIndex"),
-				SystemValueType = (Name)parameterReader.ReadUInt32("SystemValueType"),
-				ComponentType = (RegisterComponentType)parameterReader.ReadUInt32("ComponentType"),
+				SystemValueType = parameterReader.ReadEnum32<Name>("SystemValueType"),
+				ComponentType = parameterReader.ReadEnum32<RegisterComponentType>("ComponentType"),
 				Register = parameterReader.ReadUInt32("Register"),
 				Stream = stream,
 			};

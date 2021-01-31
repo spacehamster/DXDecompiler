@@ -61,11 +61,11 @@ namespace DXDecompiler.DebugParser.Xsgn
 
 			for(int i = 0; i < elementCount; i++)
 			{
-				var indent = reader.AddIndent($"{i}");
+				var indent = chunkReader.AddIndent($"{i}");
 				var parameter = DebugSignatureParameterDescription.Parse(reader, chunkReader, chunkType, elementSize,
 					programType);
 				result.Parameters.Add(parameter);
-				reader.RemoveIndent();
+				chunkReader.RemoveIndent();
 				indent.Name += $": {parameter.SemanticName}";
 			}
 
