@@ -53,7 +53,7 @@ namespace DXDecompiler.Chunks.Rdef
 		public override string ToString()
 		{
 			string declaration = Type + " " + Name;
-			if(Type.ElementCount > 0)
+			if(Type.ElementCount > 1)
 				declaration += string.Format("[{0}]", Type.ElementCount);
 			declaration += ";";
 			var memberOffset = _parentOffset + Offset;

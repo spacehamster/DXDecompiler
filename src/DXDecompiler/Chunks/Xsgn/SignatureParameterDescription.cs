@@ -187,17 +187,17 @@ namespace DXDecompiler.Chunks.Xsgn
 
 		string GetSVRegisterName()
 		{
-			switch(SemanticName)
+			switch(SemanticName.ToUpper())
 			{
-				case "SV_Depth":
+				case "SV_DEPTH":
 					return "oDepth";
-				case "SV_DepthGreaterEqual":
+				case "SV_DEPTHGREATEREQUAL":
 					return "oDepthGE";
-				case "SV_DepthLessEqual":
+				case "SV_DEPTHLESSEQUAL":
 					return "oDepthLE";
-				case "SV_Coverage":
+				case "SV_COVERAGE":
 					return "oMask";
-				case "SV_StencilRef":
+				case "SV_STENCILREF":
 					return "oStencilRef";
 			}
 			if(SystemValueType == Name.PrimitiveID)
