@@ -57,6 +57,7 @@ namespace DXDecompiler.Tests.Util
 		public static string NormalizeAssembly(string assembly)
 		{
 			assembly = assembly.Trim();
+			//Normalize Floats
 			assembly = Regex.Replace(assembly, @"([^\w\n]|^)([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?)", match =>
 			{
 				if(match.Groups[2].Value == "-0")
@@ -78,6 +79,10 @@ namespace DXDecompiler.Tests.Util
 			{
 				return string.Format("{{min{0}}}", match.Groups[1].Value);
 			});
+			//Remove empty comments
+			assembly = Regex.Replace(assembly, @"^\/\/\r?\n", "", RegexOptions.Multiline);
+			//Remove empty lines
+			assembly = Regex.Replace(assembly, @"(\r?\n)\r?\n", "$1");
 			//TODO: Compare hex literals and floats
 			/*assembly = Regex.Replace(assembly, @"0x(\d+)", match =>
 			{

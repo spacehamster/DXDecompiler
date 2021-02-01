@@ -210,7 +210,7 @@ namespace DXDecompiler.Chunks.Libf
 				outNum = Rows.ToString();
 				outMask = GetMask();
 			}
-			var result = string.Format("// {0,-20} {1,-19}  {2,3} {3,4}   {4,-4} {5,4} {6,4}   {7,-4} {8}",
+			var result = string.Format("// {0,-20} {1,-19}   {2,-3}{3,4}   {4,-4} {5,4} {6,4}   {7,-4} {8}",
 				Name, SemanticName, inDesc, inNum, inMask, outDesc, outNum, outMask, TypeName);
 			return result;
 		}

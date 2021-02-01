@@ -446,7 +446,7 @@ namespace DXDecompiler.DebugParser
 			bool inheritOffset = count == null;
 			count = count ?? (int)(_reader.BaseStream.Length - offset);
 			var result = new DebugBytecodeReader(_buffer, Offset + offset, count.Value, Offset, parent.Indent + 1, name, Root, inheritOffset);
-			AddMember(result);
+			parent.AddMember(result);
 			return result;
 		}
 

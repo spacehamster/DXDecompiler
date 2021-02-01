@@ -121,6 +121,14 @@ namespace DXDecompiler.DX9Shader
 			{
 				return $"fx_{shader.MajorVersion}_{minor}";
 			}
+			else if(shader.Type == ShaderType.Lib4Vertex)
+			{
+				return $"lib_4_0_vs_{shader.MajorVersion}_{minor}";
+			}
+			else if(shader.Type == ShaderType.Lib4Pixel)
+			{
+				return $"lib_4_0_ps_{shader.MajorVersion}_{minor}";
+			}
 			else
 			{
 				return $"{shader.Type}_{shader.MajorVersion}_{minor}";

@@ -18,7 +18,9 @@ namespace DXDecompiler.DX9Shader
 		/// <summary>
 		/// Represents a Fxlc expression chunk that contains FXLVM tokens
 		/// </summary>
-		Expression = 0x4658
+		Expression = 0x4658,
+		Lib4Vertex = 0x4c56,
+		Lib4Pixel = 0x4c50
 	}
 
 	public class ShaderModel

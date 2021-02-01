@@ -91,7 +91,6 @@ namespace DXDecompiler.DebugParser.Rdef
 				result.ResourceBindings.Add(DebugResourceBinding.Parse(reader, resourceBindingReader, target));
 
 			var constantBufferReader = reader.CopyAtOffset("ContantBuffers", headerReader, (int)constantBufferOffset);
-			constantBufferReader.Indent++;
 			for(int i = 0; i < constantBufferCount; i++)
 				result.ConstantBuffers.Add(DebugConstantBuffer.Parse(reader, constantBufferReader, result.Target));
 

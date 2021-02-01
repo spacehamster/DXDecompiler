@@ -152,7 +152,7 @@ namespace DXDecompiler.Chunks.Rdef
 				var unk4 = typeReader.ReadUInt32();
 				var typeNameOffset = typeReader.ReadUInt32();
 				var typeNameReader = reader.CopyAtOffset((int)typeNameOffset);
-				typeNameReader.ReadString();
+				result.BaseTypeName =  typeNameReader.ReadString();
 				Debug.Assert(unk1 == 0, $"ShaderType.Unk1={unk1}");
 				Debug.Assert(unk2 == 0, $"ShaderType.Unk2={unk2}");
 				Debug.Assert(unk3 == 0, $"ShaderType.Unk3={unk3}");
