@@ -237,7 +237,8 @@ namespace DXDecompiler.Decompiler
 			uint size;
 			if(member.Type.VariableClass == ShaderVariableClass.Struct)
 			{
-				size = member.Type.Members.Last().Offset + GetCBVarSize(member.Type.Members.Last(), true);
+				var last = member.Type.Members.Last();
+				size = last.Offset + GetCBVarSize(last, true);
 			}
 			else if(member.Type.VariableClass == ShaderVariableClass.MatrixRows)
 			{

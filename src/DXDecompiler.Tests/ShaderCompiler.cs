@@ -10,13 +10,13 @@ namespace DXDecompiler.Tests
 {
 	public class ShaderCompiler
 	{
-		public class CommandResult
+		private class CommandResult
 		{
 			public int ResultCode;
 			public string Stdout;
 			public string Stderr;
 		}
-		public class CompileConfig
+		private class CompileConfig
 		{
 			public string Name;
 			public string Profile;
@@ -35,7 +35,7 @@ namespace DXDecompiler.Tests
 		{
 			File.AppendAllText(LogFilePath, string.Format(msg, args) + "\n");
 		}
-		public static IEnumerable<CompileConfig> ExtractDirectives(string filePath)
+		private static IEnumerable<CompileConfig> ExtractDirectives(string filePath)
 		{
 			using(var file = new StreamReader(filePath))
 			{
@@ -59,7 +59,7 @@ namespace DXDecompiler.Tests
 				}
 			}
 		}
-		public static CommandResult Command(string exe, string args, string pwd)
+		private static CommandResult Command(string exe, string args, string pwd)
 		{
 			Log($"    Command {exe} {args}");
 			var stdout = new StringBuilder();
@@ -94,7 +94,7 @@ namespace DXDecompiler.Tests
 				Stderr = stderr.ToString()
 			};
 		}
-		public static void CompileShader(string sourcePath, CompileConfig config)
+		private static void CompileShader(string sourcePath, CompileConfig config)
 		{
 			var targetDirectory = Path.GetDirectoryName(sourcePath);
 			var objectPath = Path.Combine(targetDirectory, $"{config.Name}.o");

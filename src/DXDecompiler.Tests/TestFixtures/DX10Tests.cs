@@ -127,7 +127,7 @@ namespace DXDecompiler.Tests
 			if(ShaderDirectory != OutputDir) File.Copy($"{ShaderDirectory}/{relDir}/{sourceName}", $"{OutputDir}/{relDir}/{sourceName}", true);
 
 			// Act.
-			var shaderCode = OldHLSLDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
+			var shaderCode = HLSLDecompiler.Decompile(File.ReadAllBytes(file + ".o"));
 			File.WriteAllText($"{OutputDir}/{relPath}.d.hlsl", shaderCode);
 
 			// Assert.
