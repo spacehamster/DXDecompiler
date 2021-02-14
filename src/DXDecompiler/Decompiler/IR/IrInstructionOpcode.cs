@@ -819,7 +819,9 @@ namespace DXDecompiler.Decompiler.IR
 		D3DWDDM1_3Count,
 
 
-		Comment = 1000,
+		NotImplemented = 1000,
+		Comment,
+		Saturate,
 		DxilBranch,
 		DxilLabel,
 	}

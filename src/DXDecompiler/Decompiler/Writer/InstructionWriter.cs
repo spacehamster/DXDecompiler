@@ -38,6 +38,14 @@ namespace DXDecompiler.Decompiler.Writer
 				default:
 					switch(instruction.Opcode)
 					{
+						case IrInstructionOpcode.Comment:
+							WriteIndent();
+							WriteLineFormat("// Comment: {0}", instruction.AsmDebug);
+							break;
+						case IrInstructionOpcode.NotImplemented:
+							WriteIndent();
+							WriteLineFormat("// Not Implemented: {0}", instruction.AsmDebug);
+							break;
 						case IrInstructionOpcode.Dfma:
 						case IrInstructionOpcode.IMad:
 						case IrInstructionOpcode.Mad:

@@ -47,6 +47,7 @@
 				case IrInstructionOpcode.FirstBitLo:
 				case IrInstructionOpcode.SampleInfo:
 				case IrInstructionOpcode.CheckAccessFullyMapped:
+				case IrInstructionOpcode.Saturate:
 					return IrInstructionType.IntrinsicCall;
 				case IrInstructionOpcode.Abort:
 					return IrInstructionType.IntrinsicCallNoDest;
