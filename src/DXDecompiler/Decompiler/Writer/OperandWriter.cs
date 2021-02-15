@@ -36,6 +36,10 @@ namespace DXDecompiler.Decompiler.Writer
 			{
 				WriteOperand(constantBuffer);
 			}
+			else if(operand is IrIndexOperand indexOperand)
+			{
+				WriteOperand(indexOperand);
+			}
 			else if(operand is IrDebugOperand unknownOperand)
 			{
 				Write($"DBG_{unknownOperand.DebugText}");
@@ -74,7 +78,21 @@ namespace DXDecompiler.Decompiler.Writer
 		}
 		public void WriteOperand(IrConstantOperand operand)
 		{
-			Write($"l({operand.Value})");
+			if(operand.Type.VariableType == IR.ResourceDefinitions.IrShaderVariableType.I32)
+			{
+				Write($"l({operand.Value.Int0}, {operand.Value.Int1}, {operand.Value.Int2}, {operand.Value.Int3})");
+			}
+			else
+			{
+				Write($"l({operand.Value})");
+			}
+		}
+		public void WriteOperand(IrIndexOperand operand)
+		{
+			WriteOperand(operand.Base);
+			Write("[");
+			WriteOperand(operand.Index);
+			Write("]");
 		}
 	}
 }
