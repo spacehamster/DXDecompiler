@@ -170,7 +170,6 @@ namespace DXDecompiler.DX9Shader
 						{
 							inst.Operands.Add(new DestinationOperand(token.Data[i]));
 						}
-						inst.Operands.Add(new DestinationOperand(token.Data[i]));
 					}
 					else if((token.Data[i] & (1 << 13)) != 0)
 					{
