@@ -300,7 +300,7 @@ namespace DXDecompiler.DX9Shader
 					return i + 1;
 				}
 			}
-			return 0;
+			return 1; // I think it can't be zero...
 		}
 
 		// Length of ".yw" = 2
