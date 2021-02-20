@@ -75,10 +75,12 @@ namespace DXDecompiler.DX9Shader
 					{
 						case RegisterType.Input:
 						case RegisterType.MiscType:
+						case RegisterType.Texture when shader.Type == ShaderType.Pixel:
 							MethodInputRegisters.Add(registerKey, registerDeclaration);
 							break;
 						case RegisterType.Output:
 						case RegisterType.ColorOut:
+						case RegisterType.AttrOut when shader.MajorVersion == 3 && shader.Type == ShaderType.Vertex:
 							MethodOutputRegisters.Add(registerKey, registerDeclaration);
 							break;
 						case RegisterType.Sampler:
@@ -118,12 +120,16 @@ namespace DXDecompiler.DX9Shader
 					{
 						var reg = new RegisterDeclaration(registerKey);
 						_registerDeclarations[registerKey] = reg;
-						if(registerType == RegisterType.ColorOut ||
-								registerType == RegisterType.RastOut ||
-								registerType == RegisterType.Output ||
-								registerType == RegisterType.AttrOut)
-						{
-							MethodOutputRegisters[registerKey] = reg;
+						switch(registerType)
+						{	
+							case RegisterType.AttrOut:
+							case RegisterType.ColorOut:
+							case RegisterType.DepthOut:
+							case RegisterType.Output:
+							case RegisterType.RastOut:
+								MethodOutputRegisters[registerKey] = reg;
+								break;
+
 						}
 					}
 
@@ -182,7 +188,7 @@ namespace DXDecompiler.DX9Shader
 							throw new NotImplementedException();
 					}
 					var registerNumber = instruction.GetParamRegisterNumber(srcIndex);
-					ConstantDeclaration decl = FindConstant(registerNumber);
+					ConstantDeclaration decl = FindConstant(parameterType, registerNumber);
 					if(decl == null)
 					{
 						// Constant register not found in def statements nor the constant table
@@ -241,7 +247,6 @@ namespace DXDecompiler.DX9Shader
 			switch(registerKey.Type)
 			{
 				case RegisterType.Texture:
-					return decl.Name;
 				case RegisterType.Input:
 					return (MethodInputRegisters.Count == 1) ? decl.Name : ("i." + decl.Name);
 				case RegisterType.RastOut:

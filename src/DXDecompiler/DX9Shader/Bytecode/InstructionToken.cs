@@ -431,10 +431,13 @@ namespace DXDecompiler.DX9Shader
 		public string GetDeclSemantic()
 		{
 			var registerType = GetParamRegisterType(1);
+			var declIndexString = GetDeclIndex() == 0
+				? string.Empty
+				: GetDeclIndex().ToString();
 			switch(registerType)
 			{
 				case RegisterType.Input:
-				case RegisterType.Output:
+				case RegisterType.Output when _shaderModel.Type == ShaderType.Vertex && _shaderModel.MajorVersion >= 3:
 					string name;
 					switch(GetDeclUsage())
 					{
@@ -457,11 +460,7 @@ namespace DXDecompiler.DX9Shader
 						default:
 							throw new NotImplementedException();
 					}
-					if(GetDeclIndex() != 0)
-					{
-						name += GetDeclIndex().ToString();
-					}
-					return name;
+					return name + declIndexString;
 				case RegisterType.Sampler:
 					var samplerTexturetype = GetDeclSamplerTextureType();
 					switch(samplerTexturetype)
@@ -485,8 +484,11 @@ namespace DXDecompiler.DX9Shader
 						return "vPos";
 					}
 					throw new NotImplementedException();
-				case RegisterType.Addr:
-					return "tex";
+				case RegisterType.Texture when _shaderModel.Type == ShaderType.Pixel && _shaderModel.MajorVersion <= 2:
+					var registerNumber = GetParamRegisterNumber(1);
+					return "TEXCOORD" + (registerNumber == 0 ? string.Empty : registerNumber.ToString());
+				case RegisterType.TexCoordOut:
+					return "TEXCOORD" + declIndexString;
 				default:
 					//return "Warning - Not Implemented register type";
 					throw new NotImplementedException();
