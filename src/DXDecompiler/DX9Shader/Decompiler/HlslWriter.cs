@@ -355,6 +355,7 @@ namespace DXDecompiler.DX9Shader
 						break;
 						//throw new NotImplementedException();
 				}
+				WriteIndent();
 				WriteLine("{0} {1};", writeMaskName, string.Join(", ", group));
 			}
 
@@ -406,6 +407,7 @@ namespace DXDecompiler.DX9Shader
 			else
 			{
 				var output = _registers.MethodOutputRegisters.First().Value;
+				WriteIndent();
 				WriteLine("{0} {1};", methodReturnType, _registers.GetRegisterName(output.RegisterKey));
 			}
 			WriteTemps();
@@ -424,11 +426,13 @@ namespace DXDecompiler.DX9Shader
 
 				if(_registers.MethodOutputRegisters.Count > 1)
 				{
+					WriteIndent();
 					WriteLine($"return o;");
 				}
 				else
 				{
 					var output = _registers.MethodOutputRegisters.First().Value;
+					WriteIndent();
 					WriteLine($"return {_registers.GetRegisterName(output.RegisterKey)};");
 				}
 
@@ -493,6 +497,7 @@ namespace DXDecompiler.DX9Shader
 			Indent++;
 			foreach(var input in _registers.MethodInputRegisters.Values)
 			{
+				WriteIndent();
 				WriteLine($"{input.TypeName} {input.Name} : {input.Semantic};");
 			}
 			Indent--;
@@ -508,7 +513,9 @@ namespace DXDecompiler.DX9Shader
 			Indent++;
 			foreach(var output in _registers.MethodOutputRegisters.Values)
 			{
+				WriteIndent();
 				WriteLine($"// {output.RegisterKey} {Operand.GetParamRegisterName(output.RegisterKey.Type, (uint)output.RegisterKey.Number)}");
+				WriteIndent();
 				WriteLine($"{output.TypeName} {output.Name} : {output.Semantic};");
 			}
 			Indent--;
@@ -613,9 +620,8 @@ namespace DXDecompiler.DX9Shader
 			{
 				WriteLine(shader.Prsi.Dump());
 			}
-			Indent++;
+			Indent--;
 			WriteLine("}");
-
 		}
 	}
 }
