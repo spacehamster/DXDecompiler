@@ -59,20 +59,20 @@ namespace DXDecompiler.DX9Shader
 				WriteTechnique(technique);
 			}
 		}
-		void WriteShader(StateBlob blob)
+		void WriteShader(StateBlob blob) => WriteShader(ShaderNames[blob], blob.Shader);
+		void WriteShader(string shaderName, ShaderModel shader)
 		{
-			var shader = blob.Shader;
-			WriteLine($"// {ShaderNames[blob]} {shader.Type}_{shader.MajorVersion}_{shader.MinorVersion} Has PRES {shader.Preshader != null}");
-			var funcName = ShaderNames[blob];
+			WriteLine($"// {shaderName} {shader.Type}_{shader.MajorVersion}_{shader.MinorVersion} Has PRES {shader.Preshader != null}");
+			var funcName = shaderName;
 			var text = "";
-			if(blob.Shader.Type == ShaderType.Expression)
+			if(shader.Type == ShaderType.Expression)
 			{
-				text = ExpressionHLSLWriter.Decompile(blob.Shader, funcName);
+				text = ExpressionHLSLWriter.Decompile(shader, funcName);
 			}
 			else
 			{
-				text = HlslWriter.Decompile(blob.Shader);
-				text = text.Replace("main(", $"{funcName}(");
+				text = HlslWriter.Decompile(shader, funcName);
+				// text = text.Replace("main(", $"{funcName}(");
 			}
 			WriteLine(text);
 		}
@@ -147,6 +147,22 @@ namespace DXDecompiler.DX9Shader
 		{
 			var param = variable.Parameter;
 			WriteIndent();
+			var isShaderArray = param.ParameterClass == ParameterClass.Object &&
+				(param.ParameterType == ParameterType.PixelShader || param.ParameterType == ParameterType.VertexShader);
+			Dictionary<uint, string> shaderArrayElements = null;
+			if(isShaderArray)
+			{
+				shaderArrayElements = new Dictionary<uint, string>();
+				var blobs = EffectChunk.VariableBlobLookup[param];
+				var index = 0;
+				foreach(var blob in blobs)
+				{
+					var name = $"{variable.Parameter.Name}_Shader_{index}";
+					shaderArrayElements.Add(blob.Index, name);
+					WriteShader(name, blob.Shader);
+					++index;
+				}
+			}
 			Write(param.GetDecleration());
 			if(variable.Annotations.Count > 0)
 			{
@@ -209,15 +225,30 @@ namespace DXDecompiler.DX9Shader
 			{
 				if(param.ParameterType.HasVariableBlob())
 				{
-					var data = VariableBlobToString(variable.Parameter);
-					if(string.IsNullOrEmpty(data))
+					if(isShaderArray)
 					{
-						WriteLine("; // {0}", variable.DefaultValue[0].UInt);
+						WriteLine(" = {");
+						Indent++;
+						foreach(var idx in variable.DefaultValue)
+						{
+							WriteIndent();
+							WriteLine("{0}, // {1}", shaderArrayElements[idx.UInt], idx.UInt);
+						}
+						Indent--;
+						WriteLine("};");
 					}
 					else
 					{
-						WriteLine(" = {0}; // {1}", data, variable.DefaultValue[0].UInt);
-					}
+						var data = VariableBlobToString(variable.Parameter);
+						if(string.IsNullOrEmpty(data))
+						{
+							WriteLine("; // {0}", variable.DefaultValue[0].UInt);
+						}
+						else
+						{
+							WriteLine(" = {0}; // {1}", data, variable.DefaultValue[0].UInt);
+						}
+					}	
 				}
 				else if(variable.DefaultValue.All(d => d.UInt == 0))
 				{

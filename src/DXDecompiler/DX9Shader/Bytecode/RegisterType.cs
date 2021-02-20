@@ -13,7 +13,8 @@
 		Addr = Texture,
 		RastOut,
 		AttrOut,
-		Output,
+		TexCoordOut, // used in vs_2_0 and below
+		Output = TexCoordOut,
 		ConstInt,
 		ColorOut,
 		DepthOut,
