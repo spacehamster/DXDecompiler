@@ -6,46 +6,30 @@ namespace DXDecompiler.DX9Shader
 	public class RegisterDeclaration
 	{
 		private readonly int _maskedLength;
+		private readonly string _semantic;
 
 		public RegisterDeclaration(InstructionToken declInstruction)
 		{
 			RegisterKey = declInstruction.GetParamRegisterKey(1);
-			Semantic = declInstruction.GetDeclSemantic();
+			_semantic = declInstruction.GetDeclSemantic();
 			_maskedLength = declInstruction.GetDestinationMaskedLength();
 		}
 
 		public RegisterDeclaration(RegisterKey registerKey)
 		{
 			RegisterType type = registerKey.Type;
-			if(type != RegisterType.ColorOut &&
-				type != RegisterType.Const &&
-				type != RegisterType.Temp &&
-				type != RegisterType.RastOut &&
-				type != RegisterType.ConstInt &&
-				type != RegisterType.Addr &&
-				type != RegisterType.Output &&
-				type != RegisterType.AttrOut &&
-				type != RegisterType.ConstBool)
-			{
-				throw new ArgumentException($"Register type {type} requires declaration instruction,", nameof(registerKey));
-			}
-
+			_semantic = GuessSemanticByRegisterType(type);
 			RegisterKey = registerKey;
-			switch(registerKey.Number)
+			if(_semantic != null && RegisterKey.Number != 0)
 			{
-				case 0:
-					Semantic = "COLOR";
-					break;
-				default:
-					Semantic = "COLOR" + registerKey.Number;
-					break;
+				_semantic += registerKey.Number;
 			}
 			_maskedLength = 4;
 		}
 
 		public RegisterKey RegisterKey { get; }
-		public string Semantic { get; }
-		public string Name => Semantic.ToLower();
+		public string Semantic => _semantic ?? throw new NotSupportedException();
+		public string Name => _semantic?.ToLower() ?? RegisterKey.ToString();
 
 		public string TypeName
 		{
@@ -70,6 +54,28 @@ namespace DXDecompiler.DX9Shader
 		public override string ToString()
 		{
 			return RegisterKey.Type + " " + Name;
+		}
+
+		private static string GuessSemanticByRegisterType(RegisterType type)
+		{
+			switch(type)
+			{
+				case RegisterType.ColorOut:
+				case RegisterType.AttrOut: // in vs_2_0 (and / or below?), as output color register
+					return "COLOR";
+				case RegisterType.RastOut: // in vs_2_0 (and / or below?), as output position register
+					return "POSITION";
+				case RegisterType.Const:
+				case RegisterType.Temp:
+				case RegisterType.ConstInt:
+				case RegisterType.Addr:
+				case RegisterType.ConstBool:
+					return null;
+				case RegisterType.TexCoordOut:
+					return "TEXCOORD";
+				default:
+					throw new ArgumentException($"Register type {type} requires declaration instruction");
+			}
 		}
 	}
 }
