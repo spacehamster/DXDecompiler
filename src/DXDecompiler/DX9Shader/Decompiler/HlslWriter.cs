@@ -10,6 +10,7 @@ namespace DXDecompiler.DX9Shader
 	{
 		private readonly ShaderModel _shader;
 		private readonly bool _doAstAnalysis;
+		private int _iterationDepth = 0;
 
 		public RegisterState _registers;
 		string _entryPoint;
@@ -87,6 +88,32 @@ namespace DXDecompiler.DX9Shader
 		{
 			WriteIndent();
 			WriteLine($"// {instruction}");
+			switch(instruction.Opcode)
+			{
+				case Opcode.Def:
+				case Opcode.DefI:
+				case Opcode.Dcl:
+				case Opcode.End:
+					return;
+				// these opcodes doesn't need indents:
+				case Opcode.Else:
+					Indent--;
+					WriteIndent();
+					WriteLine("} else {");
+					Indent++;
+					return;
+				case Opcode.Endif:
+					Indent--;
+					WriteIndent();
+					WriteLine("}");
+					return;
+				case Opcode.EndRep:
+					Indent--;
+					_iterationDepth--;
+					WriteIndent();
+					WriteLine("}");
+					return;
+			}
 			WriteIndent();
 			switch(instruction.Opcode)
 			{
@@ -114,15 +141,6 @@ namespace DXDecompiler.DX9Shader
 				case Opcode.Dp4:
 					WriteLine("{0} = dot({1}, {2});", GetDestinationName(instruction),
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
-					break;
-				case Opcode.Else:
-					Indent--;
-					WriteLine("} else {");
-					Indent++;
-					break;
-				case Opcode.Endif:
-					Indent--;
-					WriteLine("}");
 					break;
 				case Opcode.Exp:
 					WriteLine("{0} = exp2({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
@@ -272,8 +290,16 @@ namespace DXDecompiler.DX9Shader
 						WriteLine($"// Comment: {ascii}");
 						break;
 					}
-				case Opcode.End:
+				case Opcode.Rep:
+					WriteLine("for (int it{0} = 0; it{0} < {1}; ++it{0}) {{", _iterationDepth, GetSourceName(instruction, 0));
+					_iterationDepth++;
+					Indent++;
 					break;
+				case Opcode.TexKill:
+					WriteLine("clip({0});", GetDestinationName(instruction));
+					break;
+				default:
+					throw new NotImplementedException(instruction.Opcode.ToString());
 			}
 		}
 		void WriteTemps()
