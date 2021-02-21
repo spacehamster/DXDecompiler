@@ -221,8 +221,17 @@ namespace DXDecompiler.DX9Shader
 		{
 			if(registerKey.Type == RegisterType.Const)
 			{
-				var constant = FindConstant(ParameterType.Float, registerKey.Number);
-				return constant.Columns;
+				var constant = FindConstant(registerKey.Number);
+				var data = constant.GetRegisterTypeByOffset(registerKey.Number - constant.RegisterIndex);
+				if(data.Type.ParameterType != ParameterType.Float)
+				{
+					throw new NotImplementedException();
+				}
+				if(data.Type.ParameterClass == ParameterClass.MatrixColumns)
+				{
+					return data.Type.Rows;
+				}
+				return data.Type.Columns;
 			}
 
 			RegisterDeclaration decl = _registerDeclarations[registerKey];
@@ -255,22 +264,34 @@ namespace DXDecompiler.DX9Shader
 				case RegisterType.ColorOut:
 					return (MethodOutputRegisters.Count == 1) ? decl.Name : ("o." + decl.Name);
 				case RegisterType.Const:
-					var constDecl = FindConstant(ParameterType.Float, registerKey.Number);
-					if(ColumnMajorOrder)
+					var constDecl = FindConstant(/*ParameterType.Float, */ registerKey.Number);
+					var relativeOffset = registerKey.Number - constDecl.RegisterIndex;
+					var name = constDecl.GetMemberNameByOffset(relativeOffset);
+					var data = constDecl.GetRegisterTypeByOffset(relativeOffset);
+
+					// sanity check
+					var registersOccupied = data.Type.ParameterClass == ParameterClass.MatrixColumns
+						? data.Type.Columns
+						: data.Type.Rows;
+					if(registersOccupied == 1 && data.RegisterIndex != registerKey.Number)
 					{
-						if(constDecl.Rows == 1)
-						{
-							return constDecl.Name;
-						}
-						string col = (registerKey.Number - constDecl.RegisterIndex).ToString();
-						return $"transpose({constDecl.Name})[{col}]";
+						throw new InvalidOperationException();
 					}
-					if(constDecl.Rows == 1)
+
+					switch(data.Type.ParameterType)
 					{
-						return constDecl.Name;
+						case ParameterType.Float:
+							if(registersOccupied == 1)
+							{
+								return name;
+							}
+							var subElement = (registerKey.Number - data.RegisterIndex).ToString();
+							return ColumnMajorOrder
+								? $"transpose({name})[{subElement}]" // subElement = col
+								: $"{name}[{subElement}]"; // subElement = row;
+						default:
+							throw new NotImplementedException();
 					}
-					string row = (registerKey.Number - constDecl.RegisterIndex).ToString();
-					return constDecl.Name + $"[{row}]";
 				case RegisterType.Sampler:
 					ConstantDeclaration samplerDecl = FindConstant(RegisterSet.Sampler, registerKey.Number);
 					if(samplerDecl != null)

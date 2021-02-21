@@ -90,7 +90,8 @@ namespace DXDecompiler.DX9Shader
 				{
 					for(uint r = 0; r < constant.RegisterCount; r++)
 					{
-						if(constant.ParameterType != ParameterType.Float)
+						var data = constant.GetRegisterTypeByOffset(r);
+						if(data.Type.ParameterType != ParameterType.Float)
 						{
 							throw new NotImplementedException();
 						}

@@ -79,6 +79,7 @@
     <Compile Include="AssertTraceListener.cs" />
     <Compile Include="ShaderCompiler.cs" />
     <Compile Include="DX10Util\Extension.cs" />
+    <Compile Include="TestFixtures\TestDX9Effects.cs" />
     <Compile Include="TestFixtures\CompileShadersFixture.cs" />
     <Compile Include="TestFixtures\DX9Tests.cs" />
     <Content Include="FXC\D3DCompiler_43.dll">
