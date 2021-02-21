@@ -43,6 +43,19 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 			return result;
 		}
 
+		/// <summary>
+		/// ToString method for debugging purposes. We are not not able to properly represent
+		/// the instruction's assembly without access to the ctab and cli chunks.
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			var operands = string.Join(", ", Operands.Select(o => o.ToString()));
+			return string.Format("{0} {1}",
+					Opcode.ToString().ToLowerInvariant(),
+					operands);
+		}
+
 		public string ToString(ConstantTable ctab, CliToken cli)
 		{
 			var operands = string.Join(", ", Operands.Select(o => o.FormatOperand(ctab, cli)));

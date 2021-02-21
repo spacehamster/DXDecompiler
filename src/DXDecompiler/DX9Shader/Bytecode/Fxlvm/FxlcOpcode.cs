@@ -54,6 +54,7 @@
 		Ishl = 564,
 		Ishr = 565,
 		Ushr = 566,
+		Cmp = 768,
 		Movc = 769,
 		Dot = 1280,
 		D3ds_dotswiz = 1806
