@@ -26,7 +26,7 @@ namespace DXDecompiler.DebugParser.Shex
 			while(!reader.EndOfBuffer)
 			{
 				var opcodeIndex = program.Tokens.Count;
-				var opcodeToken0 = reader.PeakUint32();
+				var opcodeToken0 = reader.PeekUint32();
 				var opcodeHeader = new DebugOpcodeHeader
 				{
 					OpcodeType = opcodeToken0.DecodeValue<OpcodeType>(0, 10),

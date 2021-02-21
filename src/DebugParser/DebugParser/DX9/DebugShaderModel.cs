@@ -35,7 +35,7 @@ namespace DXDecompiler.DebugParser.DX9
 			result.Type = reader.ReadEnum16<ShaderType>("ShaderType");
 			while(true)
 			{
-				var token = reader.PeakUint32();
+				var token = reader.PeekUint32();
 				Opcode opcode = (Opcode)(token & 0xffff);
 				if(opcode == Opcode.Comment && result.ReadCommentToken(reader))
 				{
@@ -54,7 +54,7 @@ namespace DXDecompiler.DebugParser.DX9
 		}
 		bool ReadCommentToken(DebugBytecodeReader reader)
 		{
-			var fourCC = reader.PeakUInt32Ahead(4);
+			var fourCC = reader.PeekUInt32Ahead(4);
 			if(KnownCommentTypes.ContainsKey(fourCC))
 			{
 				reader.AddIndent(KnownCommentTypes[fourCC].ToString());

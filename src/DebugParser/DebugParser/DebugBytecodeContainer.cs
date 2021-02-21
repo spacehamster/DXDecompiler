@@ -38,7 +38,7 @@ namespace DXDecompiler.DebugParser
 				Chunks = new List<DebugBytecodeChunk>();
 
 				_reader = reader;
-				var magicNumber = reader.PeakUint32();
+				var magicNumber = reader.PeekUint32();
 				if(magicNumber == 0xFEFF2001)
 				{
 					Chunks.Add(DebugEffectChunk.Parse(reader, (uint)rawBytes.Length));
@@ -50,7 +50,7 @@ namespace DXDecompiler.DebugParser
 				for(uint i = 0; i < Header.ChunkCount; i++)
 				{
 					uint chunkOffset = reader.ReadUInt32("chunkOffset");
-					var fourCC = DebugUtil.ToReadable(reader.PeakUInt32At((int)chunkOffset).ToFourCcString());
+					var fourCC = DebugUtil.ToReadable(reader.PeekUInt32At((int)chunkOffset).ToFourCcString());
 					var chunkReader = reader.CopyAtOffset($"Chunk{fourCC}", reader, (int)chunkOffset);
 
 					var chunk = DebugBytecodeChunk.ParseChunk(chunkReader, this);
@@ -75,7 +75,7 @@ namespace DXDecompiler.DebugParser
 				Chunks = new List<DebugBytecodeChunk>();
 
 				_reader = reader;
-				var magicNumber = reader.PeakUint32();
+				var magicNumber = reader.PeekUint32();
 				if(magicNumber == 0xFEFF2001)
 				{
 					Chunks.Add(DebugEffectChunk.Parse(reader, (uint)reader.Count));
@@ -86,7 +86,7 @@ namespace DXDecompiler.DebugParser
 				for(uint i = 0; i < Header.ChunkCount; i++)
 				{
 					uint chunkOffset = reader.ReadUInt32("chunkOffset");
-					var fourCC = DebugUtil.ToReadable(reader.PeakUInt32At((int)chunkOffset).ToFourCcString());
+					var fourCC = DebugUtil.ToReadable(reader.PeekUInt32At((int)chunkOffset).ToFourCcString());
 					var chunkReader = reader.CopyAtOffset($"Chunk{fourCC}", reader, (int)chunkOffset);
 
 					var chunk = DebugBytecodeChunk.ParseChunk(chunkReader, this);

@@ -16,7 +16,7 @@ namespace DXDecompiler.DebugParser.DX9
 			var tokenCount = reader.ReadUInt32("TokenCount");
 			for(int i = 0; i < tokenCount; i++)
 			{
-				var token = reader.PeakUint32();
+				var token = reader.PeekUint32();
 				var type = (FxlcOpcode)token.DecodeValue(20, 30);
 				reader.AddIndent($"Token{i}({type})");
 				result.Tokens.Add(DebugFxlcToken.Parse(reader));
