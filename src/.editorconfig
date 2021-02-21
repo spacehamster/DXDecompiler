@@ -4,6 +4,7 @@ root = true
 # Cs files
 [*.cs]
 indent_style = tab
+indent_size = 4
 csharp_space_after_cast = false
 csharp_space_after_keywords_in_control_flow_statements = false
 csharp_space_before_colon_in_inheritance_clause = true
