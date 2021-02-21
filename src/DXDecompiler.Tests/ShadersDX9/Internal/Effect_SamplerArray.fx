@@ -1,4 +1,4 @@
-#pragma FXC Effect_Structs_FX fx_2_0
+#pragma FXC Effect_SamplerArray_FX fx_2_0
 
 texture tex1;
 texture tex2;
@@ -22,8 +22,18 @@ sampler samp3[2] = {
         texture = <tex3>;
     }
 };
+float4 RenderScenePS(float2 textureUV : TEXCOORD0) : COLOR0
+{
+    float4 Output = 0;
+    Output += tex2D(samp3[0], textureUV);
+    Output += tex2D(samp3[1], textureUV);
+    //Dynamic indexing not allowed
+    //Output += tex2D(samp3[index], textureUV);
+    return Output;
+}
 technique Tech1 {
     pass P0 {
+        PixelShader = compile ps_2_0 RenderScenePS();
         Sampler[0] = <samp1>;
         Sampler[1] = <samp2>;
         //Not Supported
