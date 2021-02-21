@@ -228,14 +228,26 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 							}
 						}
 						continue;
-					case ParameterClass.MatrixColumns:
-					case ParameterClass.MatrixRows:
-					case ParameterClass.Scalar:
-					case ParameterClass.Vector:
+					case ParameterClass.Object:
 						// sanity check
 						if(type.Members.Any())
 						{
-							throw new NotImplementedException();
+							throw new InvalidOperationException();
+						}
+						if(remainedOffset == 0)
+						{
+							return true;
+						}
+						remainedOffset -= 1;
+						continue;
+					case ParameterClass.MatrixColumns:
+					case ParameterClass.MatrixRows:
+					case ParameterClass.Vector:
+					case ParameterClass.Scalar:
+						// sanity check
+						if(type.Members.Any())
+						{
+							throw new InvalidOperationException();
 						}
 						registersOccupied = type.ParameterClass == ParameterClass.MatrixColumns
 							? type.Columns
@@ -245,6 +257,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 						throw new NotImplementedException();
 				}
 
+				// ParameterClass.MatrixColumns / ParameterClass.Rows
+				// ParameterClass.Vector
+				// ParameterClass.Scalar:
 				switch(type.ParameterType)
 				{
 					case ParameterType.Bool:

@@ -63,45 +63,43 @@ namespace DXDecompiler.DX9Shader
 
 			foreach(var constant in constantTable)
 			{
-				if(constant.RegisterSet == RegisterSet.Sampler)
+				for(uint r = 0; r < constant.RegisterCount; r++)
 				{
-					var registerKey = new RegisterKey(RegisterType.Sampler, constant.RegisterIndex);
-					var destinationKey = new RegisterComponentKey(registerKey, 0);
+					var data = constant.GetRegisterTypeByOffset(r);
 					int samplerTextureDimension;
-					switch(constant.ParameterType)
+					switch(data.Type.ParameterType)
 					{
 						case ParameterType.Sampler1D:
 							samplerTextureDimension = 1;
-							break;
+							goto SamplerCommon;
 						case ParameterType.Sampler2D:
 							samplerTextureDimension = 2;
-							break;
+							goto SamplerCommon;
 						case ParameterType.Sampler3D:
 						case ParameterType.SamplerCube:
 							samplerTextureDimension = 3;
+							goto SamplerCommon;
+						SamplerCommon:
+							{
+								var registerKey = new RegisterKey(RegisterType.Sampler, constant.RegisterIndex + r);
+								var destinationKey = new RegisterComponentKey(registerKey, 0);
+								var shaderInput = new RegisterInputNode(destinationKey, samplerTextureDimension);
+								_samplers.Add(registerKey, shaderInput);
+							}
+							break;
+						case ParameterType.Float:
+							{
+								var registerKey = new RegisterKey(RegisterType.Const, constant.RegisterIndex + r);
+								for(int i = 0; i < 4; i++)
+								{
+									var destinationKey = new RegisterComponentKey(registerKey, i);
+									var shaderInput = new RegisterInputNode(destinationKey);
+									_activeOutputs.Add(destinationKey, shaderInput);
+								}
+							}
 							break;
 						default:
-							throw new InvalidOperationException();
-					}
-					var shaderInput = new RegisterInputNode(destinationKey, samplerTextureDimension);
-					_samplers.Add(registerKey, shaderInput);
-				}
-				else
-				{
-					for(uint r = 0; r < constant.RegisterCount; r++)
-					{
-						var data = constant.GetRegisterTypeByOffset(r);
-						if(data.Type.ParameterType != ParameterType.Float)
-						{
 							throw new NotImplementedException();
-						}
-						var registerKey = new RegisterKey(RegisterType.Const, constant.RegisterIndex + r);
-						for(int i = 0; i < 4; i++)
-						{
-							var destinationKey = new RegisterComponentKey(registerKey, i);
-							var shaderInput = new RegisterInputNode(destinationKey);
-							_activeOutputs.Add(destinationKey, shaderInput);
-						}
 					}
 				}
 			}

@@ -267,7 +267,7 @@ namespace DXDecompiler.DX9Shader
 				case RegisterType.ColorOut:
 					return (MethodOutputRegisters.Count == 1) ? decl.Name : ("o." + decl.Name);
 				case RegisterType.Const:
-					var constDecl = FindConstant(/*ParameterType.Float, */ registerKey.Number);
+					var constDecl = FindConstant(registerKey.Number);
 					var relativeOffset = registerKey.Number - constDecl.RegisterIndex;
 					var name = constDecl.GetMemberNameByOffset(relativeOffset);
 					var data = constDecl.GetRegisterTypeByOffset(relativeOffset);
@@ -299,7 +299,8 @@ namespace DXDecompiler.DX9Shader
 					ConstantDeclaration samplerDecl = FindConstant(RegisterSet.Sampler, registerKey.Number);
 					if(samplerDecl != null)
 					{
-						return samplerDecl.Name;
+						var offset = registerKey.Number - samplerDecl.RegisterIndex;
+						return samplerDecl.GetMemberNameByOffset(offset);
 					}
 					else
 					{

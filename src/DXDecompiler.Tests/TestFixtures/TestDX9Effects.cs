@@ -122,34 +122,50 @@ namespace DXDecompiler.Tests
 				row_major float2x2 m;
 				column_major float2x2 n;
 
+				sampler Gensokyo[2];
+
 				float4 VS(float4 p : POSITION) : POSITION {
 					return p * HakureiReimuAliceMargatroid.w  * u[2].t[1].v * m[0].y * n[0].y;
+				}
+
+				float4 PS(float4 t : TEXCOORD) : COLOR {
+					return tex2D(Gensokyo[0], t.xy) + tex2D(Gensokyo[1], t.zw);
 				}
 
 				technique Tq {
 					pass p0 {
 						VertexShader = compile vs_3_0 VS();
+						PixelShader = compile ps_3_0 PS();
 					}
 				}
 			", "fx_2_0").Bytecode;
 			var shaderModel = ShaderReader.ReadShader(bytecode);
-			var vertexShaders = from blob in shaderModel.EffectChunk.StateBlobLookup.Values
+			var shaders = from blob in shaderModel.EffectChunk.StateBlobLookup.Values
 								where blob.BlobType == DX9Shader.FX9.StateBlobType.Shader
-								where blob.Shader.Type == ShaderType.Vertex
 								select blob.Shader;
-			var testVertexShader = vertexShaders.First();
-			var hlslWriter = new HlslWriter(testVertexShader, doAstAnalysis: true);
-			var decompiled = hlslWriter.Decompile();
+			string AstDecompile(ShaderModel shader) => new HlslWriter(shader, doAstAnalysis: true).Decompile();
+
+			var testVertexShader = shaders.First(s => s.Type == ShaderType.Vertex);
+			var decompiledVertexShader = AstDecompile(testVertexShader);
 			// here we use the `.w` component, to make sure `HakureiReimuAliceMargatroid.w` 
 			// is inside the actual decompiled shader too, not just inside constant declaration 
 			// (that is, `float4 HakureiReimuAliceMargatroid`).
-			StringAssert.Contains("HakureiReimuAliceMargatroid.w", decompiled);
+			StringAssert.Contains("HakureiReimuAliceMargatroid.w", decompiledVertexShader);
 			// assert that `u[2].t[1].v` appears inside the decompiled source code
-			StringAssert.Contains("u[2].t[1].v", decompiled);
+			StringAssert.Contains("u[2].t[1].v", decompiledVertexShader);
+
+			var testPixelShader = shaders.First(s => s.Type == ShaderType.Pixel);
+			var decompiledPixelShader = AstDecompile(testPixelShader);
+			// assert that sampler array elements `Gensokyo[0]` and `[1]` 
+			// appears inside the decompile source code
+			StringAssert.Contains("Gensokyo[0]", decompiledPixelShader);
+			StringAssert.Contains("Gensokyo[1]", decompiledPixelShader);
 
 			var fromNonAst = HlslWriter.Decompile(bytecode);
 			StringAssert.Contains("HakureiReimuAliceMargatroid.w", fromNonAst);
 			StringAssert.Contains("u[2].t[1].v", fromNonAst);
+			StringAssert.Contains("Gensokyo[0]", fromNonAst);
+			StringAssert.Contains("Gensokyo[1]", fromNonAst);
 		}
 	}
 }
