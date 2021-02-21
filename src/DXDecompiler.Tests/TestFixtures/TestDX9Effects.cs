@@ -119,9 +119,11 @@ namespace DXDecompiler.Tests
 				U u[3];
 
 				float4 HakureiReimuAliceMargatroid;
+				row_major float2x2 m;
+				column_major float2x2 n;
 
 				float4 VS(float4 p : POSITION) : POSITION {
-					return p * HakureiReimuAliceMargatroid.w * u[2].t[1].v;
+					return p * HakureiReimuAliceMargatroid.w  * u[2].t[1].v * m[0].y * n[0].y;
 				}
 
 				technique Tq {
@@ -144,6 +146,10 @@ namespace DXDecompiler.Tests
 			StringAssert.Contains("HakureiReimuAliceMargatroid.w", decompiled);
 			// assert that `u[2].t[1].v` appears inside the decompiled source code
 			StringAssert.Contains("u[2].t[1].v", decompiled);
+
+			var fromNonAst = HlslWriter.Decompile(bytecode);
+			StringAssert.Contains("HakureiReimuAliceMargatroid.w", fromNonAst);
+			StringAssert.Contains("u[2].t[1].v", fromNonAst);
 		}
 	}
 }

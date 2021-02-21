@@ -188,7 +188,7 @@ namespace DXDecompiler.DX9Shader
 							throw new NotImplementedException();
 					}
 					var registerNumber = instruction.GetParamRegisterNumber(srcIndex);
-					ConstantDeclaration decl = FindConstant(parameterType, registerNumber);
+					ConstantDeclaration decl = FindConstant(registerNumber);
 					if(decl == null)
 					{
 						// Constant register not found in def statements nor the constant table
@@ -196,14 +196,17 @@ namespace DXDecompiler.DX9Shader
 						return $"Error {registerType}{registerNumber}";
 						//throw new NotImplementedException();
 					}
-
-					if(decl.ParameterClass == ParameterClass.MatrixRows)
+					var totalOffset = registerNumber - decl.RegisterIndex;
+					var data = decl.GetRegisterTypeByOffset(totalOffset);
+					var offsetFromMember = registerNumber - data.RegisterIndex;
+					sourceRegisterName = decl.GetMemberNameByOffset(totalOffset);
+					if(data.Type.ParameterClass == ParameterClass.MatrixRows)
 					{
-						sourceRegisterName = string.Format("{0}[{1}]", decl.Name, registerNumber - decl.RegisterIndex);
+						sourceRegisterName = string.Format("{0}[{1}]", decl.Name, offsetFromMember);
 					}
-					else
+					else if(data.Type.ParameterClass == ParameterClass.MatrixColumns)
 					{
-						sourceRegisterName = decl.Name;
+						sourceRegisterName = string.Format("transpose({0})[{1}]", decl.Name, offsetFromMember);
 					}
 					break;
 				default:
