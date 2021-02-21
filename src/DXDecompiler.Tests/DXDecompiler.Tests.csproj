@@ -96,7 +96,9 @@
     <Content Include="FXC\fxc9.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ShadersDX9\Internal\Effect_ArrayIndex.fx" />
+    <Content Include="ShadersDX9\Internal\Effect_ArrayIndex.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ShadersDX9\Internal\Effect_EmbedAssembly.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -115,7 +117,9 @@
     <Content Include="ShadersDX9\Internal\Effect_StateBlock.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ShadersDX9\Internal\Effect_Structs.fx" />
+    <Content Include="ShadersDX9\Internal\Effect_Structs.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ShadersDX9\Internal\Effect_Test.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

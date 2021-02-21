@@ -9,7 +9,7 @@ void VertScene(out float4 oPos : POSITION )
     oPos += array[index];
 }
 
-float4 PixScene()
+float4 PixScene() : COLOR0
 {
 	float4 result = 0;
 	result += array[index];
