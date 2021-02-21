@@ -83,15 +83,41 @@ namespace DXDecompiler.DX9Shader
 			return destinationName;
 		}
 
-		string GetSourceName(InstructionToken instruction, int srcIndex)
+		string GetSourceName(InstructionToken instruction, int srcIndex, bool isLogicalIndex = true)
 		{
-			string sourceRegisterName = instruction.GetParamRegisterName(srcIndex);
-			sourceRegisterName = ApplyModifier(instruction.GetSourceModifier(srcIndex), sourceRegisterName);
-			sourceRegisterName += instruction.GetSourceSwizzleName(srcIndex);
-			if(instruction.IsRelativeAddressMode(srcIndex))
+			int dataIndex;
+			if(isLogicalIndex)
 			{
-				sourceRegisterName += $"[{GetSourceName(instruction, srcIndex + 1)}]";
+				// compute the actual data index, which might be different from logical index 
+				// because of relative addressing mode.
+
+				// if instruction has destination, then source starts at the index 1
+				// here we assume destination won't have relative addressing,
+				// so we assume destination will only occupy 1 slot,
+				// that is, the start index for sources will be 1 if instruction.HasDestination is true.
+				var begin = instruction.HasDestination ? 1 : 0;
+				dataIndex = begin;
+				while(srcIndex > begin)
+				{
+					if(instruction.IsRelativeAddressMode(dataIndex))
+					{
+						++dataIndex;
+					}
+					++dataIndex;
+					--srcIndex;
+				}
 			}
+			else
+			{
+				dataIndex = srcIndex;
+			}
+			string sourceRegisterName = instruction.GetParamRegisterName(dataIndex);
+			sourceRegisterName = ApplyModifier(instruction.GetSourceModifier(dataIndex), sourceRegisterName);
+			if(instruction.IsRelativeAddressMode(dataIndex))
+			{
+				sourceRegisterName += $"[{GetSourceName(instruction, dataIndex + 1, isLogicalIndex: false)}]";
+			}
+			sourceRegisterName += instruction.GetSourceSwizzleName(dataIndex);
 			return sourceRegisterName;
 		}
 		string Version()

@@ -49,6 +49,10 @@ namespace DXDecompiler.DX9Shader
 				else
 				{
 					result += GetSourceName(i);
+					if(IsRelativeAddressMode(i))
+					{
+						i++;
+					}
 				}
 			}
 			return result;
@@ -95,11 +99,11 @@ namespace DXDecompiler.DX9Shader
 			var instruction = this;
 			string sourceRegisterName = instruction.GetParamRegisterName(srcIndex);
 			sourceRegisterName = ApplyModifier(instruction.GetSourceModifier(srcIndex), sourceRegisterName);
-			sourceRegisterName += instruction.GetSourceSwizzleName(srcIndex);
 			if(instruction.IsRelativeAddressMode(srcIndex))
 			{
 				sourceRegisterName += $"[{GetSourceName(srcIndex + 1)}]";
 			}
+			sourceRegisterName += instruction.GetSourceSwizzleName(srcIndex);
 			return sourceRegisterName;
 		}
 
