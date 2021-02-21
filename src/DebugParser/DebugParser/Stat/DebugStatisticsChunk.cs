@@ -43,7 +43,7 @@ namespace DXDecompiler.DebugParser.Stat
 		public static DebugBytecodeChunk Parse(DebugBytecodeReader reader, uint chunkSize)
 		{
 			var size = chunkSize / sizeof(uint);
-			var magic = reader.PeakUInt32Ahead(8);
+			var magic = reader.PeekUInt32Ahead(8);
 			if(magic == "DXIL".ToFourCc())
 			{
 				return Dxil.DebugDxilReflectionChunk.Parse(reader, chunkSize);

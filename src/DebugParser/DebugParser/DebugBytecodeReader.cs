@@ -158,13 +158,13 @@ namespace DXDecompiler.DebugParser
 			Indents.Pop();
 			Indent--;
 		}
-		public uint PeakUint32()
+		public uint PeekUint32()
 		{
 			var result = _reader.ReadUInt32();
 			_reader.BaseStream.Position -= 4;
 			return result;
 		}
-		public uint PeakUInt32At(int offset)
+		public uint PeekUInt32At(int offset)
 		{
 			var oldPos = _reader.BaseStream.Position;
 			_reader.BaseStream.Position = offset;
@@ -172,7 +172,7 @@ namespace DXDecompiler.DebugParser
 			_reader.BaseStream.Position = oldPos;
 			return result;
 		}
-		public uint PeakUInt32Ahead(int offset)
+		public uint PeekUInt32Ahead(int offset)
 		{
 			var oldPos = _reader.BaseStream.Position;
 			_reader.BaseStream.Position = _reader.BaseStream.Position + offset;

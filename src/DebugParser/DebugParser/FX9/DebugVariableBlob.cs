@@ -15,7 +15,7 @@ namespace DXDecompiler.DebugParser.FX9
 			result.Index = blobReader.ReadUInt32("Index");
 			result.Size = blobReader.ReadUInt32("Size");
 			var startPosition = blobReader._reader.BaseStream.Position;
-			var header = blobReader.PeakUint32();
+			var header = blobReader.PeekUint32();
 			var shaderType = (ShaderType)(header >> 16);
 			var paddedSize = result.Size + (result.Size % 4 == 0 ? 0 : 4 - result.Size % 4);
 			if(shaderType == ShaderType.Pixel || shaderType == ShaderType.Vertex || shaderType == ShaderType.Expression)
