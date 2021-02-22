@@ -49,6 +49,13 @@ namespace DXDecompiler.DX9Shader
 				else
 				{
 					result += GetSourceName(i);
+					if(IsRelativeAddressMode(i))
+					{
+						// TODO: Handle relative addressing mode in a better way,
+						// by using `InstructionToken.Operands`:
+						// https://github.com/spacehamster/DXDecompiler/pull/6#issuecomment-782958769
+						i++;
+					}
 				}
 			}
 			return result;
@@ -95,11 +102,11 @@ namespace DXDecompiler.DX9Shader
 			var instruction = this;
 			string sourceRegisterName = instruction.GetParamRegisterName(srcIndex);
 			sourceRegisterName = ApplyModifier(instruction.GetSourceModifier(srcIndex), sourceRegisterName);
-			sourceRegisterName += instruction.GetSourceSwizzleName(srcIndex);
 			if(instruction.IsRelativeAddressMode(srcIndex))
 			{
 				sourceRegisterName += $"[{GetSourceName(srcIndex + 1)}]";
 			}
+			sourceRegisterName += instruction.GetSourceSwizzleName(srcIndex);
 			return sourceRegisterName;
 		}
 
