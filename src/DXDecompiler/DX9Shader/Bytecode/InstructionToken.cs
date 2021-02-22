@@ -51,6 +51,9 @@ namespace DXDecompiler.DX9Shader
 					result += GetSourceName(i);
 					if(IsRelativeAddressMode(i))
 					{
+						// TODO: Handle relative addressing mode in a better way,
+						// by using `InstructionToken.Operands`:
+						// https://github.com/spacehamster/DXDecompiler/pull/6#issuecomment-782958769
 						i++;
 					}
 				}

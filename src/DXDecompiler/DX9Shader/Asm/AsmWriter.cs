@@ -90,6 +90,10 @@ namespace DXDecompiler.DX9Shader
 			{
 				// compute the actual data index, which might be different from logical index 
 				// because of relative addressing mode.
+				
+				// TODO: Handle relative addressing mode in a better way,
+				// by using `InstructionToken.Operands`:
+				// https://github.com/spacehamster/DXDecompiler/pull/6#issuecomment-782958769
 
 				// if instruction has destination, then source starts at the index 1
 				// here we assume destination won't have relative addressing,
