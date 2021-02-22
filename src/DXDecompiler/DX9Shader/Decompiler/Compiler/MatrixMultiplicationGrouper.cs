@@ -70,7 +70,7 @@ namespace DXDecompiler.DX9Shader
 				}
 			}
 
-			ConstantDeclration matrix = TryGetMatrixDeclaration(matrixRows);
+			ConstantDeclaration matrix = TryGetMatrixDeclaration(matrixRows);
 			if(matrix == null)
 			{
 				return null;
@@ -120,7 +120,7 @@ namespace DXDecompiler.DX9Shader
 			}
 		}
 
-		private ConstantDeclration TryGetMatrixDeclaration(HlslTreeNode[][] dotProductNodes)
+		private ConstantDeclaration TryGetMatrixDeclaration(HlslTreeNode[][] dotProductNodes)
 		{
 			int dimension = dotProductNodes.Length;
 			var first = dotProductNodes[0];
@@ -142,7 +142,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			if(firstDotProductNode.Value1[0] is RegisterInputNode value1)
 			{
-				ConstantDeclration constant = _registers.FindConstant(value1);
+				ConstantDeclaration constant = _registers.FindConstant(value1);
 				if(constant != null && constant.Rows > 1)
 				{
 					return firstDotProductNode.Value1;
@@ -151,7 +151,7 @@ namespace DXDecompiler.DX9Shader
 
 			if(firstDotProductNode.Value2[0] is RegisterInputNode value2)
 			{
-				ConstantDeclration constant = _registers.FindConstant(value2);
+				ConstantDeclaration constant = _registers.FindConstant(value2);
 				if(constant != null && constant.Rows > 1)
 				{
 					return firstDotProductNode.Value2;
@@ -166,7 +166,7 @@ namespace DXDecompiler.DX9Shader
 	{
 		public MatrixMultiplicationContext(
 			HlslTreeNode[] vector,
-			ConstantDeclration matrix,
+			ConstantDeclaration matrix,
 			bool matrixByVector)
 		{
 			Vector = vector;
@@ -176,7 +176,7 @@ namespace DXDecompiler.DX9Shader
 
 		public HlslTreeNode[] Vector { get; }
 
-		public ConstantDeclration MatrixDeclaration { get; }
+		public ConstantDeclaration MatrixDeclaration { get; }
 		public bool IsMatrixByVector { get; }
 	}
 }

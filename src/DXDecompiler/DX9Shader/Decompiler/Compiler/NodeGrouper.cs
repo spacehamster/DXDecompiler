@@ -218,7 +218,7 @@ namespace DXDecompiler.DX9Shader
 				&& IsMatrixConstantRegister(constantRegister);
 		}
 
-		private static bool IsMatrixConstantRegister(ConstantDeclration constantRegister)
+		private static bool IsMatrixConstantRegister(ConstantDeclaration constantRegister)
 		{
 			return constantRegister.ParameterClass == ParameterClass.MatrixColumns
 				|| constantRegister.ParameterClass == ParameterClass.MatrixRows;

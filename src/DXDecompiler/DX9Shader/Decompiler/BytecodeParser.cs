@@ -56,7 +56,7 @@ namespace DXDecompiler.DX9Shader
 
 		private void LoadConstantOutputs(ShaderModel shader)
 		{
-			IList<ConstantDeclration> constantTable = shader.ConstantTable.ConstantDeclarations;
+			IList<ConstantDeclaration> constantTable = shader.ConstantTable.ConstantDeclarations;
 
 			_activeOutputs = new Dictionary<RegisterComponentKey, HlslTreeNode>();
 			_samplers = new Dictionary<RegisterKey, HlslTreeNode>();

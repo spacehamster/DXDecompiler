@@ -17,9 +17,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		public string VersionString { get; private set; }
 		public byte MajorVersion { get; private set; }
 		public byte MinorVersion { get; private set; }
-		public List<ConstantDeclration> ConstantDeclarations { get; private set; }
+		public List<ConstantDeclaration> ConstantDeclarations { get; private set; }
 		//TODO: Remove
-		public ConstantTable(string creator, string versionString, byte majorVersion, byte minorVersion, List<ConstantDeclration> constantDeclarations)
+		public ConstantTable(string creator, string versionString, byte majorVersion, byte minorVersion, List<ConstantDeclaration> constantDeclarations)
 		{
 			Creator = creator;
 			VersionString = versionString;
@@ -29,7 +29,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		}
 		private ConstantTable()
 		{
-			ConstantDeclarations = new List<ConstantDeclration>();
+			ConstantDeclarations = new List<ConstantDeclaration>();
 		}
 		public static ConstantTable Parse(BytecodeReader ctabReader)
 		{
@@ -47,7 +47,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 			for(int i = 0; i < numConstants; i++)
 			{
 				var decReader = ctabReader.CopyAtOffset(constantInfoOffset + i * 20);
-				ConstantDeclration declaration = ConstantDeclration.Parse(ctabReader, decReader);
+				ConstantDeclaration declaration = ConstantDeclaration.Parse(ctabReader, decReader);
 				result.ConstantDeclarations.Add(declaration);
 			}
 

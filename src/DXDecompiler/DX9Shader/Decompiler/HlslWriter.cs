@@ -445,13 +445,13 @@ namespace DXDecompiler.DX9Shader
 		{
 			if(_registers.ConstantDeclarations.Count != 0)
 			{
-				foreach(ConstantDeclration declaration in _registers.ConstantDeclarations)
+				foreach(ConstantDeclaration declaration in _registers.ConstantDeclarations)
 				{
 					Write(declaration);
 				}
 			}
 		}
-		private void Write(ConstantDeclration declaration)
+		private void Write(ConstantDeclaration declaration)
 		{
 			Write(declaration.Type, declaration.Name);
 			if(!declaration.DefaultValue.All(v => v == 0))
