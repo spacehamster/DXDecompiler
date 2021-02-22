@@ -1,4 +1,5 @@
 ﻿using DXDecompiler.DX9Shader;
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using NUnit.Framework;
 using SharpDX.D3DCompiler;
 using System;
