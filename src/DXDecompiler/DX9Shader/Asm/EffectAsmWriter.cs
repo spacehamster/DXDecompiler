@@ -1,4 +1,5 @@
-﻿using DXDecompiler.DX9Shader.FX9;
+﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.FX9;
 using System.Linq;
 
 namespace DXDecompiler.DX9Shader

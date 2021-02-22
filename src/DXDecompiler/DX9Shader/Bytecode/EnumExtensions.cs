@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using System;
 
 namespace DXDecompiler.DX9Shader
 {

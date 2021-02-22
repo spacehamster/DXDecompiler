@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Declaration;
+﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +56,7 @@ namespace DXDecompiler.DX9Shader
 
 		private void LoadConstantOutputs(ShaderModel shader)
 		{
-			IList<ConstantDeclaration> constantTable = shader.ConstantTable.ConstantDeclarations;
+			IList<ConstantDeclration> constantTable = shader.ConstantTable.ConstantDeclarations;
 
 			_activeOutputs = new Dictionary<RegisterComponentKey, HlslTreeNode>();
 			_samplers = new Dictionary<RegisterKey, HlslTreeNode>();

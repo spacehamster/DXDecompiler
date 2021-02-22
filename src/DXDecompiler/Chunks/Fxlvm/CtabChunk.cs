@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Declaration;
+﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.Util;
 using System.Text;
 

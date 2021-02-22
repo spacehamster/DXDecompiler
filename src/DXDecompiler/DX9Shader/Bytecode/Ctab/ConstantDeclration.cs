@@ -3,9 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DXDecompiler.DX9Shader.Bytecode.Declaration
+namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 {
-	public class ConstantDeclaration
+	/// <summary>
+	/// Refer D3DXSHADER_CONSTANTINFO d3dx9shader.h
+	/// https://docs.microsoft.com/en-us/windows/win32/direct3d9/d3dxshader-constantinfo
+	/// Note also D3DXCONSTANT_DESC d3dx9shader.h which is a combined ConstantInfo and ConstantType struct
+	/// https://docs.microsoft.com/en-us/windows/win32/direct3d9/d3dxconstant-desc
+	/// </summary>
+	public class ConstantDeclration
 	{
 		public string Name { get; private set; }
 		public RegisterSet RegisterSet { get; private set; }
@@ -20,7 +26,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 		public ParameterClass ParameterClass => Type.ParameterClass;
 		public uint Elements => Type.Elements;
 
-		public ConstantDeclaration(string name, RegisterSet registerSet, short registerIndex, short registerCount,
+		public ConstantDeclration(string name, RegisterSet registerSet, short registerIndex, short registerCount,
 			ParameterClass parameterClass, ParameterType parameterType, int rows, int columns, int elements, List<float> defaultValue)
 		{
 			Name = name;
@@ -37,13 +43,13 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 			};
 			DefaultValue = defaultValue;
 		}
-		public ConstantDeclaration()
+		public ConstantDeclration()
 		{
 			DefaultValue = new List<float>();
 		}
-		public static ConstantDeclaration Parse(BytecodeReader reader, BytecodeReader decReader)
+		public static ConstantDeclration Parse(BytecodeReader reader, BytecodeReader decReader)
 		{
-			var result = new ConstantDeclaration();
+			var result = new ConstantDeclration();
 			var nameOffset = decReader.ReadUInt32();
 			result.RegisterSet = (RegisterSet)decReader.ReadUInt16();
 			result.RegisterIndex = decReader.ReadUInt16();

@@ -1,5 +1,5 @@
 ﻿using DXDecompiler.DX9Shader.Asm;
-using DXDecompiler.DX9Shader.Bytecode.Declaration;
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using System;
 using System.Linq;
 

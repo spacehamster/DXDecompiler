@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DXDecompiler.DX9Shader.Bytecode.Declaration
+namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 {
+	/// <summary>
+	/// Refer D3DXSHADER_CONSTANTTABLE d3dx9shader.h
+	/// https://docs.microsoft.com/en-us/windows/win32/direct3d9/d3dxshader-constanttable
+	/// Note also D3DXCONSTANTTABLE_DESC d3dx9shader.h
+	/// https://docs.microsoft.com/en-us/windows/win32/direct3d9/d3dxconstanttable-desc
+	/// Included in the shader as a CTAB comment, ConstantTable contains shader constant information
+	/// </summary>
 	public class ConstantTable
 	{
 		public string Creator { get; private set; }
 		public string VersionString { get; private set; }
 		public byte MajorVersion { get; private set; }
 		public byte MinorVersion { get; private set; }
-		public List<ConstantDeclaration> ConstantDeclarations { get; private set; }
+		public List<ConstantDeclration> ConstantDeclarations { get; private set; }
 		//TODO: Remove
-		public ConstantTable(string creator, string versionString, byte majorVersion, byte minorVersion, List<ConstantDeclaration> constantDeclarations)
+		public ConstantTable(string creator, string versionString, byte majorVersion, byte minorVersion, List<ConstantDeclration> constantDeclarations)
 		{
 			Creator = creator;
 			VersionString = versionString;
@@ -22,7 +29,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 		}
 		private ConstantTable()
 		{
-			ConstantDeclarations = new List<ConstantDeclaration>();
+			ConstantDeclarations = new List<ConstantDeclration>();
 		}
 		public static ConstantTable Parse(BytecodeReader ctabReader)
 		{
@@ -40,7 +47,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 			for(int i = 0; i < numConstants; i++)
 			{
 				var decReader = ctabReader.CopyAtOffset(constantInfoOffset + i * 20);
-				ConstantDeclaration declaration = ConstantDeclaration.Parse(ctabReader, decReader);
+				ConstantDeclration declaration = ConstantDeclration.Parse(ctabReader, decReader);
 				result.ConstantDeclarations.Add(declaration);
 			}
 

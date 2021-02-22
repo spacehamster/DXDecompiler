@@ -1,6 +1,9 @@
-﻿namespace DXDecompiler.DX9Shader
+﻿namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 {
-	// D3DXPARAMETER_TYPE
+	/// <summary>
+	/// Refer D3DXPARAMETER_TYPE d3dx9shader.h
+	/// https://docs.microsoft.com/en-us/windows/win32/direct3d9/d3dxparameter-type
+	/// </summary>
 	public enum ParameterType
 	{
 		Void,

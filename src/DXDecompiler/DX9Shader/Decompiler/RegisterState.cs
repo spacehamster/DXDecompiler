@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Declaration;
+﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -21,7 +21,7 @@ namespace DXDecompiler.DX9Shader
 			Load(shader);
 		}
 
-		public ICollection<ConstantDeclaration> ConstantDeclarations { get; private set; }
+		public ICollection<ConstantDeclration> ConstantDeclarations { get; private set; }
 
 		public IDictionary<RegisterKey, RegisterDeclaration> MethodInputRegisters { get; } = new Dictionary<RegisterKey, RegisterDeclaration>();
 		public IDictionary<RegisterKey, RegisterDeclaration> MethodOutputRegisters { get; } = new Dictionary<RegisterKey, RegisterDeclaration>();
@@ -188,7 +188,7 @@ namespace DXDecompiler.DX9Shader
 							throw new NotImplementedException();
 					}
 					var registerNumber = instruction.GetParamRegisterNumber(srcIndex);
-					ConstantDeclaration decl = FindConstant(registerNumber);
+					ConstantDeclration decl = FindConstant(registerNumber);
 					if(decl == null)
 					{
 						// Constant register not found in def statements nor the constant table
@@ -296,7 +296,7 @@ namespace DXDecompiler.DX9Shader
 							throw new NotImplementedException();
 					}
 				case RegisterType.Sampler:
-					ConstantDeclaration samplerDecl = FindConstant(RegisterSet.Sampler, registerKey.Number);
+					ConstantDeclration samplerDecl = FindConstant(RegisterSet.Sampler, registerKey.Number);
 					if(samplerDecl != null)
 					{
 						var offset = registerKey.Number - samplerDecl.RegisterIndex;
@@ -323,7 +323,7 @@ namespace DXDecompiler.DX9Shader
 			}
 		}
 
-		public ConstantDeclaration FindConstant(RegisterInputNode register)
+		public ConstantDeclration FindConstant(RegisterInputNode register)
 		{
 			if(register.RegisterComponentKey.Type != RegisterType.Const)
 			{
@@ -332,14 +332,14 @@ namespace DXDecompiler.DX9Shader
 			return FindConstant(ParameterType.Float, register.RegisterComponentKey.Number);
 		}
 
-		public ConstantDeclaration FindConstant(RegisterSet set, uint index)
+		public ConstantDeclration FindConstant(RegisterSet set, uint index)
 		{
 			return ConstantDeclarations.FirstOrDefault(c =>
 				c.RegisterSet == set &&
 				c.ContainsIndex(index));
 		}
 
-		public ConstantDeclaration FindConstant(ParameterType type, uint index)
+		public ConstantDeclration FindConstant(ParameterType type, uint index)
 		{
 			return ConstantDeclarations.FirstOrDefault(c =>
 				c.ParameterType == type &&
@@ -347,7 +347,7 @@ namespace DXDecompiler.DX9Shader
 		}
 
 
-		public ConstantDeclaration FindConstant(uint index)
+		public ConstantDeclration FindConstant(uint index)
 		{
 			return ConstantDeclarations.FirstOrDefault(c => c.ContainsIndex(index));
 		}

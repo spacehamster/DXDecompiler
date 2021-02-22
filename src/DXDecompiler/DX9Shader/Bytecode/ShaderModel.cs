@@ -1,5 +1,5 @@
 ﻿using DXDecompiler.DX9Shader.Bytecode;
-using DXDecompiler.DX9Shader.Bytecode.Declaration;
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
 using DXDecompiler.DX9Shader.FX9;
 using DXDecompiler.Util;

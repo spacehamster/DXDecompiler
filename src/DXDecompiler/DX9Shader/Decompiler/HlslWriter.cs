@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Declaration;
+﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
@@ -445,13 +445,13 @@ namespace DXDecompiler.DX9Shader
 		{
 			if(_registers.ConstantDeclarations.Count != 0)
 			{
-				foreach(ConstantDeclaration declaration in _registers.ConstantDeclarations)
+				foreach(ConstantDeclration declaration in _registers.ConstantDeclarations)
 				{
 					Write(declaration);
 				}
 			}
 		}
-		private void Write(ConstantDeclaration declaration)
+		private void Write(ConstantDeclration declaration)
 		{
 			Write(declaration.Type, declaration.Name);
 			if(!declaration.DefaultValue.All(v => v == 0))

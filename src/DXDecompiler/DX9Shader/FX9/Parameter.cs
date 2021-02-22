@@ -1,4 +1,5 @@
-﻿using DXDecompiler.Util;
+﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;

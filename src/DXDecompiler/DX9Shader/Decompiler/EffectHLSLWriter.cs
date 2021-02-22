@@ -1,4 +1,5 @@
-﻿using DXDecompiler.DX9Shader.Decompiler;
+﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Decompiler;
 using DXDecompiler.DX9Shader.FX9;
 using System;
 using System.Collections.Generic;

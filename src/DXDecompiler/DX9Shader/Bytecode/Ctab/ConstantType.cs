@@ -2,8 +2,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace DXDecompiler.DX9Shader.Bytecode.Declaration
+namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 {
+	/// <summary>
+	/// Refer D3DXSHADER_TYPEINFO d3dx9shader.h 
+	/// https://docs.microsoft.com/en-us/windows/win32/direct3d9/d3dxshader-typeinfo
+	/// Note also D3DXCONSTANT_DESC d3dx9shader.h which is a combined ConstantInfo and ConstantType struct
+	/// https://docs.microsoft.com/en-us/windows/win32/direct3d9/d3dxconstant-desc
+	/// </summary>
 	public class ConstantType
 	{
 		public ParameterClass ParameterClass;
@@ -11,10 +17,10 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 		public uint Rows;
 		public uint Columns;
 		public uint Elements;
-		public List<ConstantMember> Members;
+		public List<StructMember> Members;
 		public ConstantType()
 		{
-			Members = new List<ConstantMember>();
+			Members = new List<StructMember>();
 		}
 		public static ConstantType Parse(BytecodeReader reader, BytecodeReader typeReader)
 		{
@@ -31,7 +37,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Declaration
 				var memberReader = reader.CopyAtOffset((int)memberInfoOffset);
 				for(int i = 0; i < memberCount; i++)
 				{
-					result.Members.Add(ConstantMember.Parse(reader, memberReader));
+					result.Members.Add(StructMember.Parse(reader, memberReader));
 				}
 			}
 			return result;

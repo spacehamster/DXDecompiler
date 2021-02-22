@@ -1,14 +1,18 @@
 ﻿using DXDecompiler.Util;
 
-namespace DXDecompiler.DX9Shader.Bytecode.Declaration
+namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 {
-	public class ConstantMember
+	/// <summary>
+	/// Refer D3DXSHADER_STRUCTMEMBERINFO d3dx9shader.h
+	/// https://docs.microsoft.com/en-us/windows/win32/direct3d9/d3dxshader-structmemberinfo
+	/// </summary>
+	public class StructMember
 	{
 		public string Name;
 		public ConstantType Type;
-		public static ConstantMember Parse(BytecodeReader reader, BytecodeReader memberReader)
+		public static StructMember Parse(BytecodeReader reader, BytecodeReader memberReader)
 		{
-			var result = new ConstantMember();
+			var result = new StructMember();
 			var nameOffset = memberReader.ReadUInt32();
 			var typeOffset = memberReader.ReadUInt32();
 			var nameReader = reader.CopyAtOffset((int)nameOffset);

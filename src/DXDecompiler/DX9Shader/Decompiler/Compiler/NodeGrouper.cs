@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Declaration;
+﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -218,7 +218,7 @@ namespace DXDecompiler.DX9Shader
 				&& IsMatrixConstantRegister(constantRegister);
 		}
 
-		private static bool IsMatrixConstantRegister(ConstantDeclaration constantRegister)
+		private static bool IsMatrixConstantRegister(ConstantDeclration constantRegister)
 		{
 			return constantRegister.ParameterClass == ParameterClass.MatrixColumns
 				|| constantRegister.ParameterClass == ParameterClass.MatrixRows;
