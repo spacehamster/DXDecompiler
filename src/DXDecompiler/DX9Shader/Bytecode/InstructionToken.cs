@@ -344,44 +344,29 @@ namespace DXDecompiler.DX9Shader
 
 		public string GetSourceSwizzleName(int srcIndex, bool hlsl = false)
 		{
-			int swizzleLength = 4;
-			if(Opcode == Opcode.Dp4)
-			{
-				swizzleLength = 4;
-			}
+			int? swizzleLimit = null;
 			//TODO: Probably useful in hlsl mode
-			else if(hlsl)
+			if(hlsl)
 			{
-				if(Opcode == Opcode.Dp3)
+				switch(Opcode)
 				{
-					swizzleLength = 3;
-				}
-				else if(HasDestination)
-				{
-					swizzleLength = GetDestinationMaskLength();
+					case Opcode.Dp3:
+						swizzleLimit = 3;
+						break;
+					case Opcode.DP2Add:
+						// dp2add src0.xy src1.xy src2.x
+						swizzleLimit = srcIndex < 2 ? 2 : 1;
+						break;
 				}
 			}
 
 			string swizzleName = "";
 			byte[] swizzle = GetSourceSwizzleComponents(srcIndex);
-			for(int i = 0; i < swizzleLength; i++)
+			for(int i = 0; i < (swizzleLimit ?? 4); i++)
 			{
-				switch(swizzle[i])
-				{
-					case 0:
-						swizzleName += "x";
-						break;
-					case 1:
-						swizzleName += "y";
-						break;
-					case 2:
-						swizzleName += "z";
-						break;
-					case 3:
-						swizzleName += "w";
-						break;
-				}
+				swizzleName += "xyzw"[swizzle[i]];
 			}
+
 			switch(swizzleName)
 			{
 				case "xxx":
@@ -390,7 +375,7 @@ namespace DXDecompiler.DX9Shader
 					return ".y";
 				case "zzz":
 					return ".z";
-				case "xyz":
+				case "xyz" when swizzleLimit is null:
 					return "";
 				case "xyzw":
 					return "";

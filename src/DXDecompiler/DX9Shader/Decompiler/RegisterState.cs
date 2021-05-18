@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -137,7 +137,7 @@ namespace DXDecompiler.DX9Shader
 			}
 		}
 
-		public string GetDestinationName(InstructionToken instruction)
+		public string GetDestinationName(InstructionToken instruction, out string writeMaskName)
 		{
 			int destIndex = instruction.GetDestinationParamIndex();
 			RegisterKey registerKey = instruction.GetParamRegisterKey(destIndex);
@@ -145,9 +145,9 @@ namespace DXDecompiler.DX9Shader
 			string registerName = GetRegisterName(registerKey);
 			registerName = registerName ?? instruction.GetParamRegisterName(destIndex);
 			var registerLength = GetRegisterFullLength(registerKey);
-			string writeMaskName = instruction.GetDestinationWriteMaskName(registerLength, true);
+			writeMaskName = instruction.GetDestinationWriteMaskName(registerLength, true);
 
-			return string.Format("{0}{1}", registerName, writeMaskName);
+			return registerName;
 		}
 
 		public string GetSourceName(InstructionToken instruction, int srcIndex)

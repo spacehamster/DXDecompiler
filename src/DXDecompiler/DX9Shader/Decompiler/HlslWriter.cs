@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
@@ -45,9 +45,15 @@ namespace DXDecompiler.DX9Shader
 			return hlslWriter.Decompile();
 		}
 
-		private string GetDestinationName(InstructionToken instruction)
+		private string GetDestinationName(InstructionToken instruction, out string writeMaskName)
 		{
-			return _registers.GetDestinationName(instruction);
+			return _registers.GetDestinationName(instruction, out writeMaskName);
+		}
+
+		private string GetDestinationNameWithWriteMask(InstructionToken instruction)
+		{
+			var destinationName = GetDestinationName(instruction, out var writeMask);
+			return destinationName + writeMask;
 		}
 
 		private string GetSourceName(InstructionToken instruction, int srcIndex)
@@ -115,38 +121,55 @@ namespace DXDecompiler.DX9Shader
 					return;
 			}
 			WriteIndent();
+
+			void WriteAssignment(string sourceFormat, params string[] args)
+			{
+				var destination = GetDestinationName(instruction, out var writeMask);
+				var sourceResult = string.Format(sourceFormat, args);
+				
+				if(writeMask.Length > 0)
+				{
+					destination += writeMask;
+					if(sourceResult.Contains(','))
+					{
+						sourceResult = $"({sourceResult}){writeMask}";
+					}
+					else
+					{
+						sourceResult += writeMask;
+					}
+				}
+				WriteLine("{0} = {1};", destination, sourceResult);
+			}
+
 			switch(instruction.Opcode)
 			{
 				case Opcode.Abs:
-					WriteLine("{0} = abs({1});", GetDestinationName(instruction),
-						GetSourceName(instruction, 1));
+					WriteAssignment("abs({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Add:
-					WriteLine("{0} = {1} + {2};", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("{0} + {1}", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Cmp:
 					// TODO: should be per-component
-					WriteLine("{0} = ({1} >= 0) ? {2} : {3};", GetDestinationName(instruction),
+					WriteAssignment("({0} >= 0) ? {1} : {2}",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.DP2Add:
-					WriteLine("{0} = dot({1}, {2}) + {3};", GetDestinationName(instruction),
+					WriteAssignment("dot({0}, {1}) + {2}",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.Dp3:
-					WriteLine("{0} = dot({1}, {2});", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("dot({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Dp4:
-					WriteLine("{0} = dot({1}, {2});", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("dot({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Exp:
-					WriteLine("{0} = exp2({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("exp2({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Frc:
-					WriteLine("{0} = frac({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("frac({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.If:
 					WriteLine("if ({0}) {{", GetSourceName(instruction, 0));
@@ -200,46 +223,46 @@ namespace DXDecompiler.DX9Shader
 					Indent++;
 					break;
 				case Opcode.Log:
-					WriteLine("{0} = log2({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("log2({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Lrp:
-					WriteLine("{0} = lerp({2}, {3}, {1});", GetDestinationName(instruction),
+					WriteAssignment("lerp({1}, {2}, {0})",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.Mad:
-					WriteLine("{0} = {1} * {2} + {3};", GetDestinationName(instruction),
+					WriteAssignment("{0} * {1} + {2}",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.Max:
-					WriteLine("{0} = max({1}, {2});", GetDestinationName(instruction),
+					WriteAssignment("max({0}, {1})",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Min:
-					WriteLine("{0} = min({1}, {2});", GetDestinationName(instruction),
+					WriteAssignment("min({0}, {1})",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Mov:
-					WriteLine("{0} = {1};", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("{0}", GetSourceName(instruction, 1));
 					break;
 				case Opcode.MovA:
-					WriteLine("{0} = {1};", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("{0}", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Mul:
-					WriteLine("{0} = {1} * {2};", GetDestinationName(instruction),
+					WriteAssignment("{0} * {1}",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Nrm:
-					WriteLine("{0} = normalize({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("normalize({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Pow:
-					WriteLine("{0} = pow({1}, {2});", GetDestinationName(instruction),
+					WriteAssignment("pow({0}, {1})",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Rcp:
-					WriteLine("{0} = 1 / {1};", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("1 / {0}", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Rsq:
-					WriteLine("{0} = 1 / sqrt({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("1 / sqrt({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Sge:
 					if(instruction.GetSourceModifier(1) == SourceModifier.AbsAndNegate &&
@@ -247,39 +270,39 @@ namespace DXDecompiler.DX9Shader
 						instruction.GetParamRegisterName(1) + instruction.GetSourceSwizzleName(1) ==
 						instruction.GetParamRegisterName(2) + instruction.GetSourceSwizzleName(2))
 					{
-						WriteLine("{0} = ({1} == 0) ? 1 : 0;", GetDestinationName(instruction),
+						WriteAssignment("({0} == 0) ? 1 : 0",
 							instruction.GetParamRegisterName(1) + instruction.GetSourceSwizzleName(1));
 					}
 					else
 					{
-						WriteLine("{0} = ({1} >= {2}) ? 1 : 0;", GetDestinationName(instruction), GetSourceName(instruction, 1),
+						WriteAssignment("({0} >= {1}) ? 1 : 0", GetSourceName(instruction, 1),
 							GetSourceName(instruction, 2));
 					}
 					break;
 				case Opcode.Slt:
-					WriteLine("{0} = ({1} < {2}) ? 1 : 0;", GetDestinationName(instruction), GetSourceName(instruction, 1),
+					WriteAssignment("({0} < {1}) ? 1 : 0", GetSourceName(instruction, 1),
 						GetSourceName(instruction, 2));
 					break;
 				case Opcode.SinCos:
-					WriteLine("sincos({1}, {0}, {0});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteLine("sincos({1}, {0}, {0});", GetDestinationNameWithWriteMask(instruction), GetSourceName(instruction, 1));
 					break;
 				case Opcode.Sub:
-					WriteLine("{0} = {1} - {2};", GetDestinationName(instruction),
+					WriteAssignment("{0} - {1}",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Tex:
 					if((_shader.MajorVersion == 1 && _shader.MinorVersion >= 4) || (_shader.MajorVersion > 1))
 					{
-						WriteLine("{0} = tex2D({2}, {1});", GetDestinationName(instruction),
+						WriteAssignment("tex2D({1}, {0})",
 							GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					}
 					else
 					{
-						WriteLine("{0} = tex2D();", GetDestinationName(instruction));
+						WriteAssignment("tex2D()");
 					}
 					break;
 				case Opcode.TexLDL:
-					WriteLine("{0} = tex2Dlod({2}, {1});", GetDestinationName(instruction),
+					WriteAssignment("tex2Dlod({1}, {0})",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Comment:
@@ -296,7 +319,7 @@ namespace DXDecompiler.DX9Shader
 					Indent++;
 					break;
 				case Opcode.TexKill:
-					WriteLine("clip({0});", GetDestinationName(instruction));
+					WriteLine("clip({0});", GetDestinationNameWithWriteMask(instruction));
 					break;
 				default:
 					throw new NotImplementedException(instruction.Opcode.ToString());
