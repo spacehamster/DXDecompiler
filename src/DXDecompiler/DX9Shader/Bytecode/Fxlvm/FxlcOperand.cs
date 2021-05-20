@@ -13,8 +13,8 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		public uint OpIndex { get; private set; }
 		public FxlcOperandType ArrayType { get; private set; }
 		public uint ArrayIndex { get; private set; }
+		public uint ComponentCount { get; private set; }
 
-		private uint ComponentCount;
 		public static FxlcOperand Parse(BytecodeReader reader, uint componentCount, bool isScalarOp)
 		{
 			var result = new FxlcOperand()
@@ -104,25 +104,33 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					return $".UnknownCount{componentCount}";
 			}
 		}
-		private string FormatOperand(ConstantTable ctab, CliToken cli, FxlcOperandType type, uint index)
+		private string FormatOperand(ConstantTable ctab, CliToken cli, FxlcOperandType type, uint index, out string component)
 		{
 			var elementIndex = index / 4;
 			var componentIndex = index % 4;
-			var component = FormatComponent(componentIndex, ComponentCount);
+			component = FormatComponent(componentIndex, ComponentCount);
 			switch(type)
 			{
 				case FxlcOperandType.Literal:
-					var literal = string.Join(", ",
-						Enumerable.Repeat(cli.GetLiteral(index), (int)ComponentCount));
-					return string.Format("({0})", literal);
+					var literal = cli.GetLiteral(index);
+					if(literal == "-0")
+					{
+						literal = string.Format("{0}, 0, 0, 0", literal);
+					}
+					else
+					{
+						literal = string.Join(", ", Enumerable.Repeat(cli.GetLiteral(index), (int)ComponentCount));
+					}
+					component = string.Empty;
+					return $"({literal})";
 				case FxlcOperandType.Temp:
-					return string.Format("r{0}{1}", elementIndex, component);
+					return $"r{elementIndex}";
 				case FxlcOperandType.Variable:
-					return string.Format("c{0}{1}", elementIndex, component);
+					return $"c{elementIndex}";
 				case FxlcOperandType.Expr:
-					return string.Format("c{0}{1}", elementIndex, component);
+					return $"c{elementIndex}";
 				default:
-					return string.Format("unknown{0}{1}", elementIndex, component);
+					return $"unknown{elementIndex}"; ;
 			}
 		}
 		private string FormatOperand(ConstantTable ctab, Chunks.Fxlvm.Cli4Chunk cli, FxlcOperandType type, uint index)
@@ -166,13 +174,13 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		{
 			if(IsArray == 0)
 			{
-				return FormatOperand(ctab, cli, OpType, OpIndex);
+				return FormatOperand(ctab, cli, OpType, OpIndex, out var component) + component;
 			}
 			else
 			{
-				return string.Format("{0}[{1}]",
-					FormatOperand(ctab, cli, ArrayType, ArrayIndex),
-					FormatOperand(ctab, cli, OpType, OpIndex));
+				var arrayOperand = FormatOperand(ctab, cli, ArrayType, ArrayIndex, out var elementComponent);
+				var indexOperand = FormatOperand(ctab, cli, OpType, OpIndex, out _);
+				return string.Format("{0}[{1}.x]{2}", arrayOperand, indexOperand, elementComponent);
 			}
 		}
 		/// <summary>

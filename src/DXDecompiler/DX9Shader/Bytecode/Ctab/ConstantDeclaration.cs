@@ -112,15 +112,6 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 				throw new InvalidOperationException();
 			}
 
-			switch(data.Type.ParameterType)
-			{
-				case ParameterType.Float:
-					// implemented
-					break;
-				default:
-					throw new NotImplementedException();
-			}
-
 			// matrix row / columns
 			if(data.Type.ParameterClass == ParameterClass.MatrixRows)
 			{

@@ -90,7 +90,7 @@ namespace DXDecompiler.DX9Shader
 			{
 				// compute the actual data index, which might be different from logical index 
 				// because of relative addressing mode.
-				
+
 				// TODO: Handle relative addressing mode in a better way,
 				// by using `InstructionToken.Operands`:
 				// https://github.com/spacehamster/DXDecompiler/pull/6#issuecomment-782958769
@@ -193,16 +193,7 @@ namespace DXDecompiler.DX9Shader
 			WriteLine("//");
 			foreach(var declaration in constantTable.ConstantDeclarations)
 			{
-				string arraySubscript = "";
-				if(declaration.Elements > 1)
-				{
-					arraySubscript = $"[{declaration.Elements}]";
-				}
-				WriteLine("//   {0} {1}{2};",
-						declaration.GetTypeName(),
-						declaration.Name,
-						arraySubscript
-						);
+				WriteConstantType(declaration.Type, declaration.Name);
 			}
 			WriteLine("//");
 			WriteLine("//");
@@ -615,7 +606,7 @@ namespace DXDecompiler.DX9Shader
 					WriteLine("ret");
 					break;
 				case Opcode.Label:
-					WriteLine("label", GetSourceName(instruction, 0));
+					WriteLine("label {0}", GetSourceName(instruction, 0));
 					break;
 				case Opcode.Comment:
 				case Opcode.End:
@@ -625,6 +616,56 @@ namespace DXDecompiler.DX9Shader
 					//WriteLine("// Warning - Not Implemented");
 					throw new NotImplementedException($"Instruction not implemented {instruction.Opcode}");
 			}
+		}
+
+		// copied from HLSLWriter
+		private static string GetConstantTypeName(ConstantType type)
+		{
+			switch(type.ParameterClass)
+			{
+				case ParameterClass.Scalar:
+					return type.ParameterType.GetDescription();
+				case ParameterClass.Vector:
+					return type.ParameterType.GetDescription() + type.Columns;
+				case ParameterClass.Struct:
+					return "struct";
+				case ParameterClass.MatrixColumns:
+				case ParameterClass.MatrixRows:
+					return $"{type.ParameterType.GetDescription()}{type.Rows}x{type.Columns}";
+				case ParameterClass.Object:
+					return type.ParameterType.GetDescription();
+			}
+			throw new NotImplementedException();
+		}
+
+		private void WriteConstantType(ConstantType type, string name, bool isStructMember = false)
+		{
+			string typeName = GetConstantTypeName(type);
+			Write("//   ");
+			WriteIndent();
+			Write("{0}", typeName);
+			if(type.ParameterClass == ParameterClass.Struct)
+			{
+				WriteLine("");
+				Write("//   ");
+				WriteIndent();
+				WriteLine("{");
+				Indent++;
+				foreach(var member in type.Members)
+				{
+					WriteConstantType(member.Type, member.Name, true);
+				}
+				Indent--;
+				Write("//   ");
+				WriteIndent();
+				Write("}");
+			}
+			Write(" {0}", name);
+			if(type.Elements > 1)
+			{
+				Write("[{0}]", type.Elements);
+			}
+			WriteLine(";");
 		}
 	}
 }
