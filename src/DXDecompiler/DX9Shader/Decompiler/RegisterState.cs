@@ -196,18 +196,7 @@ namespace DXDecompiler.DX9Shader
 						return $"Error {registerType}{registerNumber}";
 						//throw new NotImplementedException();
 					}
-					var totalOffset = registerNumber - decl.RegisterIndex;
-					var data = decl.GetRegisterTypeByOffset(totalOffset);
-					var offsetFromMember = registerNumber - data.RegisterIndex;
-					sourceRegisterName = decl.GetMemberNameByOffset(totalOffset);
-					if(data.Type.ParameterClass == ParameterClass.MatrixRows)
-					{
-						sourceRegisterName = string.Format("{0}[{1}]", decl.Name, offsetFromMember);
-					}
-					else if(data.Type.ParameterClass == ParameterClass.MatrixColumns)
-					{
-						sourceRegisterName = string.Format("transpose({0})[{1}]", decl.Name, offsetFromMember);
-					}
+					sourceRegisterName = decl.GetConstantNameByRegisterNumber(registerNumber);
 					break;
 				default:
 					sourceRegisterName = GetRegisterName(registerKey);
@@ -268,33 +257,7 @@ namespace DXDecompiler.DX9Shader
 					return (MethodOutputRegisters.Count == 1) ? decl.Name : ("o." + decl.Name);
 				case RegisterType.Const:
 					var constDecl = FindConstant(registerKey.Number);
-					var relativeOffset = registerKey.Number - constDecl.RegisterIndex;
-					var name = constDecl.GetMemberNameByOffset(relativeOffset);
-					var data = constDecl.GetRegisterTypeByOffset(relativeOffset);
-
-					// sanity check
-					var registersOccupied = data.Type.ParameterClass == ParameterClass.MatrixColumns
-						? data.Type.Columns
-						: data.Type.Rows;
-					if(registersOccupied == 1 && data.RegisterIndex != registerKey.Number)
-					{
-						throw new InvalidOperationException();
-					}
-
-					switch(data.Type.ParameterType)
-					{
-						case ParameterType.Float:
-							if(registersOccupied == 1)
-							{
-								return name;
-							}
-							var subElement = (registerKey.Number - data.RegisterIndex).ToString();
-							return ColumnMajorOrder
-								? $"transpose({name})[{subElement}]" // subElement = col
-								: $"{name}[{subElement}]"; // subElement = row;
-						default:
-							throw new NotImplementedException();
-					}
+					return constDecl.GetConstantNameByRegisterNumber(registerKey.Number);
 				case RegisterType.Sampler:
 					ConstantDeclaration samplerDecl = FindConstant(RegisterSet.Sampler, registerKey.Number);
 					if(samplerDecl != null)

@@ -93,6 +93,48 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 			return $"{RegisterSet.GetDescription()}{RegisterIndex}";
 		}
 
+		public string GetConstantNameByRegisterNumber(uint registerNumber)
+		{
+			var decl = this;
+			var totalOffset = registerNumber - decl.RegisterIndex;
+			var data = decl.GetRegisterTypeByOffset(totalOffset);
+			var name = decl.GetMemberNameByOffset(totalOffset);
+			var offsetFromMember = registerNumber - data.RegisterIndex;
+
+			// how many registers should be occupied by the current constant item
+			var registersOccupied = data.Type.ParameterClass == ParameterClass.MatrixColumns
+				? data.Type.Columns
+				: data.Type.Rows;
+			// sanity check: if the current constant item only occupies one register
+			// then its start index must match with the register number
+			if(registersOccupied == 1 && data.RegisterIndex != registerNumber)
+			{
+				throw new InvalidOperationException();
+			}
+
+			switch(data.Type.ParameterType)
+			{
+				case ParameterType.Float:
+					// implemented
+					break;
+				default:
+					throw new NotImplementedException();
+			}
+
+			// matrix row / columns
+			if(data.Type.ParameterClass == ParameterClass.MatrixRows)
+			{
+				return $"{name}[{offsetFromMember}]";
+			}
+			else if(data.Type.ParameterClass == ParameterClass.MatrixColumns)
+			{
+				var accessors = Enumerable.Range(0, (int)data.Type.Rows).Select(i => $"m{i}{offsetFromMember}");
+				return $"({name}._{string.Join("_", accessors)})";
+			}
+
+			return name;
+		}
+
 		public class ConstantRegisterData
 		{
 			public ConstantType Type { get; }
