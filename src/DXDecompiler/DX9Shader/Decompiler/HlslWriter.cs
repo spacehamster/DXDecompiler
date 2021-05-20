@@ -386,18 +386,12 @@ namespace DXDecompiler.DX9Shader
 		{
 			if(_shader.Type == ShaderType.Expression)
 			{
-				Write($"// Writing expression");
-				WriteExpression(_shader);
-				return;
+				throw new InvalidOperationException($"Expression should be written using {nameof(ExpressionHLSLWriter)} in {nameof(EffectHLSLWriter)}");
 			}
 			_registers = new RegisterState(_shader);
 
 			WriteConstantDeclarations();
 
-			if(_shader.Preshader != null)
-			{
-				WriteExpression(_shader.Preshader.Shader);
-			}
 			if(_registers.MethodInputRegisters.Count > 1)
 			{
 				WriteInputStructureDeclaration();
@@ -418,6 +412,12 @@ namespace DXDecompiler.DX9Shader
 				methodSemantic);
 			WriteLine("{");
 			Indent++;
+
+			if(_shader.Preshader != null)
+			{
+				var preshader = PreshaderWriter.Decompile(_shader.Preshader, Indent, out var ctabOverride);
+				WriteLine(preshader);
+			}
 
 			if(_registers.MethodOutputRegisters.Count > 1)
 			{
@@ -627,22 +627,6 @@ namespace DXDecompiler.DX9Shader
 				WriteInstruction(instruction);
 			}
 			WriteLine();
-		}
-		private void WriteExpression(ShaderModel shader)
-		{
-			WriteLine("void {0}Preshader(){{", _entryPoint);
-			Indent++;
-			WriteLine($"// {shader.Type}_{shader.MajorVersion}_{shader.MinorVersion}");
-			foreach(var token in shader.Fxlc.Tokens)
-			{
-				WriteLine($"// {token.ToString(shader.ConstantTable, shader.Cli)}");
-			}
-			if(shader.Prsi != null)
-			{
-				WriteLine(shader.Prsi.Dump());
-			}
-			Indent--;
-			WriteLine("}");
 		}
 	}
 }

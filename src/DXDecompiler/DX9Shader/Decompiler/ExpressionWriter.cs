@@ -1,24 +1,15 @@
-﻿using DXDecompiler.DX9Shader.Bytecode;
-using DXDecompiler.DX9Shader.Bytecode.Ctab;
-using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
-using System;
+﻿using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace DXDecompiler.DX9Shader.Decompiler
 {
-	class ExpressionHLSLWriter : DecompileWriter
+	class ExpressionHLSLWriter : FxlcHlslWriter
 	{
-		ShaderModel Shader;
-		ConstantTable Ctab;
-		CliToken Cli;
-		string ExpressionName;
-		public ExpressionHLSLWriter(ShaderModel shader, string expressionName)
+		string ExpressionName { get; }
+		public ExpressionHLSLWriter(ShaderModel shader, string expressionName) : base(shader)
 		{
-			Shader = shader;
 			ExpressionName = expressionName;
-			Ctab = shader.ConstantTable;
-			Cli = shader.Cli;
 		}
 		public static string Decompile(ShaderModel shader, string expressionName = "Expression")
 		{
@@ -31,153 +22,18 @@ namespace DXDecompiler.DX9Shader.Decompiler
 			WriteLine("{");
 			Indent++;
 
-			var temporaryRegisters = new SortedSet<uint>();
-			foreach(var operands in Shader.Fxlc.Tokens.SelectMany(t => t.Operands))
-			{
-				if(operands.OpType == FxlcOperandType.Temp)
-				{
-					temporaryRegisters.Add(operands.OpIndex);
-				}
-			}
-			foreach(var tempIndex in temporaryRegisters)
-			{
-				WriteIndent();
-				WriteLine($"float4 temp{tempIndex};");
-			}
+			WriteTemporaries();
 
 			WriteIndent();
 			WriteLine("float expr0;");
-			foreach(var token in Shader.Fxlc.Tokens)
-			{
-				Write(token);
-			}
+
+			WriteInstructions();
+
 			WriteIndent();
 			WriteLine("return expr0;");
+
 			Indent--;
 			WriteLine("}");
-		}
-
-		void Write(FxlcToken token)
-		{
-			WriteIndent();
-			WriteLine($"// {token.ToString(Shader.ConstantTable, Shader.Cli)}");
-			switch(token.Opcode)
-			{
-				default:
-					throw new NotImplementedException(token.Opcode.ToString());
-				case Bytecode.Fxlvm.FxlcOpcode.Mov:
-					WriteIndent();
-					WriteLine("{0} = {1};",
-						token.Operands[0].FormatOperand(Cli, Ctab),
-						token.Operands[1].FormatOperand(Cli, Ctab));
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Neg:
-					WriteIndent();
-					WriteLine("{0} = -{1};",
-						token.Operands[0].FormatOperand(Cli, Ctab),
-						token.Operands[1].FormatOperand(Cli, Ctab));
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Frc:
-					WriteFunction("frac", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Exp:
-					WriteFunction("exp", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Log:
-					WriteFunction("log", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Rsq:
-					WriteFunction("rsq", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Sin:
-					WriteFunction("sin", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Cos:
-					WriteFunction("cos", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Asin:
-					WriteFunction("asin", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Acos:
-					WriteFunction("acos", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Atan:
-					WriteFunction("atam", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Atan2:
-					WriteFunction("atan2", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Sqrt:
-					WriteFunction("sqrt", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Ineg:
-					WriteFunction("~int", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Imax:
-					WriteFunction("(int)max(", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Not:
-					WriteFunction("!", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Utof:
-					WriteFunction("utof", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Ftoi:
-					WriteFunction("ftoi", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Ftou:
-					WriteFunction("ftou", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Btoi:
-					WriteFunction("btoi", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Round:
-					WriteFunction("round", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Floor:
-					WriteFunction("floor", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Ceil:
-					WriteFunction("ceil", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Min:
-					WriteFunction("min", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Max:
-					WriteFunction("max", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Add:
-					WriteInfix("+", token);
-					break;
-				case Bytecode.Fxlvm.FxlcOpcode.Mul:
-					WriteInfix("*", token);
-					break;
-
-
-				case Bytecode.Fxlvm.FxlcOpcode.Lt:
-					WriteInfix("<", token);
-					break;
-			}
-		}
-		void WriteInfix(string op, FxlcToken token)
-		{
-			WriteIndent();
-			WriteLine("{0} = {1} {2} {3};",
-				token.Operands[0].FormatOperand(Cli, Ctab),
-				token.Operands[1].FormatOperand(Cli, Ctab),
-				op,
-				token.Operands[2].FormatOperand(Cli, Ctab));
-		}
-		void WriteFunction(string func, FxlcToken token)
-		{
-			WriteIndent();
-			var operands = token.Operands
-				.Skip(1)
-				.Select(o => o.FormatOperand(Cli, Ctab));
-			WriteLine("{0} = {1}({2});",
-				token.Operands[0].FormatOperand(Cli, Ctab),
-				func,
-				string.Join(", ", operands));
 		}
 	}
 }

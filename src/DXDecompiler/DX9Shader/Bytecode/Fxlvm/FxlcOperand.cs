@@ -1,6 +1,7 @@
 ﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.Util;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -104,7 +105,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					return $".UnknownCount{componentCount}";
 			}
 		}
-		private string FormatOperand(ConstantTable ctab, CliToken cli, FxlcOperandType type, uint index, out string component)
+		private string FormatOperand(ConstantTable ctab, CliToken cli, HashSet<uint> ctabOverride, FxlcOperandType type, uint index, out string component)
 		{
 			var elementIndex = index / 4;
 			var componentIndex = index % 4;
@@ -126,12 +127,18 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					return $"{typeName}({literal})";
 				case FxlcOperandType.Temp:
 					return $"{(ctab is null ? "r" : "temp")}{elementIndex}";
-				case FxlcOperandType.Variable when ctab is null:
+				case FxlcOperandType.Variable:
+					if(ctabOverride?.Contains(elementIndex) is true)
+					{
+						return $"expr{elementIndex}";
+					}
+					if(ctab is not null)
+					{
+						return ctab.ConstantDeclarations
+							.First(d => d.ContainsIndex(elementIndex))
+							.GetConstantNameByRegisterNumber(elementIndex);
+					}
 					return $"c{elementIndex}";
-				case FxlcOperandType.Variable when ctab is not null:
-					return ctab.ConstantDeclarations
-						.FirstOrDefault(d => d.ContainsIndex(elementIndex))
-						.GetConstantNameByRegisterNumber(elementIndex);
 				case FxlcOperandType.Expr:
 					return $"{(ctab is null ? "c" : "expr")}{elementIndex}";
 				default:
@@ -174,17 +181,18 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		/// </summary>
 		/// <param name="cli">CliToken, neccessary for retrieving literal values</param>
 		/// <param name="ctab">ConstantTable, optional. If not null, it will be used to resolve constants.</param>
+		/// <param name="ctabOverride">Constant registers overwritten by preshader</param>
 		/// <returns></returns>
-		public string FormatOperand(CliToken cli, ConstantTable ctab)
+		public string FormatOperand(CliToken cli, ConstantTable ctab, HashSet<uint> ctabOverride = null)
 		{
 			if(IsArray == 0)
 			{
-				return FormatOperand(ctab, cli, OpType, OpIndex, out var component) + component;
+				return FormatOperand(ctab, cli, ctabOverride, OpType, OpIndex, out var component) + component;
 			}
 			else
 			{
-				var arrayOperand = FormatOperand(ctab, cli, ArrayType, ArrayIndex, out var elementComponent);
-				var indexOperand = FormatOperand(ctab, cli, OpType, OpIndex, out _);
+				var arrayOperand = FormatOperand(ctab, cli, ctabOverride, ArrayType, ArrayIndex, out var elementComponent);
+				var indexOperand = FormatOperand(ctab, cli, ctabOverride, OpType, OpIndex, out _);
 				return string.Format("{0}[{1}.x]{2}", arrayOperand, indexOperand, elementComponent);
 			}
 		}
