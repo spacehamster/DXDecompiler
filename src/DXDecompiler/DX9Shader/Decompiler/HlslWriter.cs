@@ -363,7 +363,7 @@ namespace DXDecompiler.DX9Shader
 							if(!tempRegisters.ContainsKey(registerKey))
 							{
 								var reg = new RegisterDeclaration(registerKey);
-								_registers._registerDeclarations[registerKey] = reg;
+								_registers.RegisterDeclarations[registerKey] = reg;
 								tempRegisters[registerKey] = (int)inst.GetDestinationWriteMask();
 							}
 							else
@@ -440,6 +440,7 @@ namespace DXDecompiler.DX9Shader
 			if(_shader.Preshader != null)
 			{
 				var preshader = PreshaderWriter.Decompile(_shader.Preshader, Indent, out var ctabOverride);
+				_registers.CtabOverride = ctabOverride;
 				WriteLine(preshader);
 			}
 

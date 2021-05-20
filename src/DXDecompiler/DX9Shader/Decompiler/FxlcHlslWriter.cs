@@ -45,7 +45,7 @@ namespace DXDecompiler.DX9Shader.Decompiler
 		{
 			foreach(var token in Shader.Fxlc.Tokens)
 			{
-				Write(token);
+				Write(token, ctabOverride);
 			}
 		}
 
@@ -160,7 +160,10 @@ namespace DXDecompiler.DX9Shader.Decompiler
 			{
 				throw new NotImplementedException();
 			}
-			ctabOverride?.Add(destination.OpIndex / 4);
+			if(destination.OpType == FxlcOperandType.Expr)
+			{
+				ctabOverride?.Add(destination.OpIndex / 4);
+			}
 		}
 		void WriteInfix(string op, FxlcToken token, HashSet<uint> ctabOverride)
 		{
