@@ -234,12 +234,10 @@ namespace DXDecompiler.DX9Shader
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.Max:
-					WriteAssignment("max({0}, {1})",
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("max({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Min:
-					WriteAssignment("min({0}, {1})",
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("min({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Mov:
 					WriteAssignment("{0}", GetSourceName(instruction, 1));
@@ -248,15 +246,13 @@ namespace DXDecompiler.DX9Shader
 					WriteAssignment("{0}", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Mul:
-					WriteAssignment("{0} * {1}",
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("{0} * {1}", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Nrm:
 					WriteAssignment("normalize({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Pow:
-					WriteAssignment("pow({0}, {1})",
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("pow({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Rcp:
 					WriteAssignment("1 / {0}", GetSourceName(instruction, 1));
@@ -280,21 +276,18 @@ namespace DXDecompiler.DX9Shader
 					}
 					break;
 				case Opcode.Slt:
-					WriteAssignment("({0} < {1}) ? 1 : 0", GetSourceName(instruction, 1),
-						GetSourceName(instruction, 2));
+					WriteAssignment("({0} < {1}) ? 1 : 0", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.SinCos:
 					WriteLine("sincos({1}, {0}, {0});", GetDestinationNameWithWriteMask(instruction), GetSourceName(instruction, 1));
 					break;
 				case Opcode.Sub:
-					WriteAssignment("{0} - {1}",
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("{0} - {1}", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Tex:
 					if((_shader.MajorVersion == 1 && _shader.MinorVersion >= 4) || (_shader.MajorVersion > 1))
 					{
-						WriteAssignment("tex2D({1}, {0})",
-							GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+						WriteAssignment("tex2D({1}, {0})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					}
 					else
 					{
@@ -302,8 +295,7 @@ namespace DXDecompiler.DX9Shader
 					}
 					break;
 				case Opcode.TexLDL:
-					WriteAssignment("tex2Dlod({1}, {0})",
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("tex2Dlod({1}, {0})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Comment:
 					{
@@ -320,6 +312,12 @@ namespace DXDecompiler.DX9Shader
 					break;
 				case Opcode.TexKill:
 					WriteLine("clip({0});", GetDestinationNameWithWriteMask(instruction));
+					break;
+				case Opcode.DSX:
+					WriteAssignment("ddx({0})", GetSourceName(instruction, 1));
+					break;
+				case Opcode.DSY:
+					WriteAssignment("ddy({0})", GetSourceName(instruction, 1));
 					break;
 				default:
 					throw new NotImplementedException(instruction.Opcode.ToString());
