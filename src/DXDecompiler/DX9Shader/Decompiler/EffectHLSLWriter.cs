@@ -22,12 +22,19 @@ namespace DXDecompiler.DX9Shader
 		}
 		void BuildNameLookup()
 		{
-			int shaderCount = 0;
+			string MakeShaderName(ShaderModel shader) => shader.Type switch
+			{
+				ShaderType.Pixel => "PixelShader",
+				ShaderType.Vertex => "VertexShader",
+				ShaderType.Expression => "Expression",
+				_ => "Shader"
+			} + $"{ShaderNames.Count + 1}";
+
 			foreach(var blob in EffectChunk.VariableBlobs)
 			{
 				if(blob.IsShader)
 				{
-					ShaderNames[blob] = $"Shader{shaderCount++}";
+					ShaderNames[blob] = MakeShaderName(blob.Shader);
 				}
 			}
 			foreach(var blob in EffectChunk.StateBlobs)
@@ -35,10 +42,10 @@ namespace DXDecompiler.DX9Shader
 				if(blob.BlobType == StateBlobType.Shader ||
 					blob.BlobType == StateBlobType.IndexShader)
 				{
-					ShaderNames[blob] = $"Shader{shaderCount++}";
+
+					ShaderNames[blob] = MakeShaderName(blob.Shader);
 				}
 			}
-
 		}
 		protected override void Write()
 		{
@@ -65,7 +72,7 @@ namespace DXDecompiler.DX9Shader
 		{
 			WriteLine($"// {shaderName} {shader.Type}_{shader.MajorVersion}_{shader.MinorVersion} Has PRES {shader.Preshader != null}");
 			var funcName = shaderName;
-			var text = "";
+			string text;
 			if(shader.Type == ShaderType.Expression)
 			{
 				text = ExpressionHLSLWriter.Decompile(shader, funcName);
@@ -93,7 +100,7 @@ namespace DXDecompiler.DX9Shader
 				if(data.Shader.Type == ShaderType.Expression)
 				{
 					var funcName = ShaderNames[data];
-					return $"{funcName}";
+					return $"{funcName}()";
 				}
 				else
 				{
@@ -249,7 +256,7 @@ namespace DXDecompiler.DX9Shader
 						{
 							WriteLine(" = {0}; // {1}", data, variable.DefaultValue[0].UInt);
 						}
-					}	
+					}
 				}
 				else if(variable.DefaultValue.All(d => d.UInt == 0))
 				{

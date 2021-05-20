@@ -121,7 +121,7 @@ namespace DXDecompiler.DX9Shader
 						var reg = new RegisterDeclaration(registerKey);
 						_registerDeclarations[registerKey] = reg;
 						switch(registerType)
-						{	
+						{
 							case RegisterType.AttrOut:
 							case RegisterType.ColorOut:
 							case RegisterType.DepthOut:
@@ -150,7 +150,7 @@ namespace DXDecompiler.DX9Shader
 			return registerName;
 		}
 
-		public string GetSourceName(InstructionToken instruction, int srcIndex)
+		public string GetSourceName(InstructionToken instruction, int srcIndex, out string swizzle, out string modifier)
 		{
 			string sourceRegisterName;
 			RegisterKey registerKey = instruction.GetParamRegisterKey(srcIndex);
@@ -166,33 +166,37 @@ namespace DXDecompiler.DX9Shader
 					sourceRegisterName = GetSourceConstantName(instruction, srcIndex);
 					if(sourceRegisterName != null)
 					{
+						swizzle = string.Empty;
+						modifier = "{0}";
 						return sourceRegisterName;
 					}
 
-					ParameterType parameterType;
+					RegisterSet registerSet;
 					switch(registerType)
 					{
 						case RegisterType.Const:
 						case RegisterType.Const2:
 						case RegisterType.Const3:
 						case RegisterType.Const4:
-							parameterType = ParameterType.Float;
+							registerSet = RegisterSet.Float4;
 							break;
 						case RegisterType.ConstBool:
-							parameterType = ParameterType.Bool;
+							registerSet = RegisterSet.Bool;
 							break;
 						case RegisterType.ConstInt:
-							parameterType = ParameterType.Int;
+							registerSet = RegisterSet.Int4;
 							break;
 						default:
 							throw new NotImplementedException();
 					}
 					var registerNumber = instruction.GetParamRegisterNumber(srcIndex);
-					ConstantDeclaration decl = FindConstant(registerNumber);
+					var decl = FindConstant(registerSet, registerNumber);
 					if(decl == null)
 					{
 						// Constant register not found in def statements nor the constant table
 						//TODO:
+						swizzle = "Error";
+						modifier = "{0}";
 						return $"Error {registerType}{registerNumber}";
 						//throw new NotImplementedException();
 					}
@@ -205,15 +209,17 @@ namespace DXDecompiler.DX9Shader
 
 			sourceRegisterName = sourceRegisterName ?? instruction.GetParamRegisterName(srcIndex);
 
-			sourceRegisterName += instruction.GetSourceSwizzleName(srcIndex, true);
-			return ApplyModifier(instruction.GetSourceModifier(srcIndex), sourceRegisterName);
+			swizzle = instruction.GetSourceSwizzleName(srcIndex, true);
+			modifier = GetModifier(instruction.GetSourceModifier(srcIndex));
+			return sourceRegisterName;
 		}
 
 		public uint GetRegisterFullLength(RegisterKey registerKey)
 		{
+			// TODO: handle other cases as well
 			if(registerKey.Type == RegisterType.Const)
 			{
-				var constant = FindConstant(registerKey.Number);
+				var constant = FindConstant(RegisterSet.Float4, registerKey.Number);
 				var data = constant.GetRegisterTypeByOffset(registerKey.Number - constant.RegisterIndex);
 				if(data.Type.ParameterType != ParameterType.Float)
 				{
@@ -256,7 +262,7 @@ namespace DXDecompiler.DX9Shader
 				case RegisterType.ColorOut:
 					return (MethodOutputRegisters.Count == 1) ? decl.Name : ("o." + decl.Name);
 				case RegisterType.Const:
-					var constDecl = FindConstant(registerKey.Number);
+					var constDecl = FindConstant(RegisterSet.Float4, registerKey.Number);
 					return constDecl.GetConstantNameByRegisterNumber(registerKey.Number);
 				case RegisterType.Sampler:
 					ConstantDeclaration samplerDecl = FindConstant(RegisterSet.Sampler, registerKey.Number);
@@ -292,7 +298,7 @@ namespace DXDecompiler.DX9Shader
 			{
 				return null;
 			}
-			return FindConstant(ParameterType.Float, register.RegisterComponentKey.Number);
+			return FindConstant(RegisterSet.Float4, register.RegisterComponentKey.Number);
 		}
 
 		public ConstantDeclaration FindConstant(RegisterSet set, uint index)
@@ -309,196 +315,125 @@ namespace DXDecompiler.DX9Shader
 				c.ContainsIndex(index));
 		}
 
-
-		public ConstantDeclaration FindConstant(uint index)
-		{
-			return ConstantDeclarations.FirstOrDefault(c => c.ContainsIndex(index));
-		}
-
 		private string GetSourceConstantName(InstructionToken instruction, int srcIndex)
 		{
 			var registerType = instruction.GetParamRegisterType(srcIndex);
 			var registerNumber = instruction.GetParamRegisterNumber(srcIndex);
 
+			string type;
+			string[] constant;
 			switch(registerType)
 			{
 				case RegisterType.ConstBool:
 					//throw new NotImplementedException();
 					return null;
 				case RegisterType.ConstInt:
+					type = "int";
+					var constantInt = _constantIntDefinitions.FirstOrDefault(x => x.RegisterIndex == registerNumber);
+					if(constantInt == null)
 					{
-						var constantInt = _constantIntDefinitions.FirstOrDefault(x => x.RegisterIndex == registerNumber);
-						if(constantInt == null)
-						{
-							return null;
-						}
-						byte[] swizzle = instruction.GetSourceSwizzleComponents(srcIndex);
-						uint[] constant = {
-								constantInt[swizzle[0]],
-								constantInt[swizzle[1]],
-								constantInt[swizzle[2]],
-								constantInt[swizzle[3]] };
-
-						switch(instruction.GetSourceModifier(srcIndex))
-						{
-							case SourceModifier.None:
-								break;
-							case SourceModifier.Negate:
-								throw new NotImplementedException();
-							/*
-							for (int i = 0; i < 4; i++)
-							{
-								constant[i] = -constant[i];
-							}
-							break;*/
-							default:
-								throw new NotImplementedException();
-						}
-
-						int destLength = instruction.GetDestinationMaskLength();
-						switch(destLength)
-						{
-							case 1:
-								return constant[0].ToString();
-							case 2:
-								if(constant[0] == constant[1])
-								{
-									return constant[0].ToString();
-								}
-								return $"int2({constant[0]}, {constant[1]})";
-							case 3:
-								if(constant[0] == constant[1] && constant[0] == constant[2])
-								{
-									return constant[0].ToString();
-								}
-								return $"int3({constant[0]}, {constant[1]}, {constant[2]})";
-							case 4:
-								if(constant[0] == constant[1] && constant[0] == constant[2] && constant[0] == constant[3])
-								{
-									return constant[0].ToString();
-								}
-								return $"int4({constant[0]}, {constant[1]}, {constant[2]}, {constant[3]})";
-							default:
-								throw new InvalidOperationException();
-						}
+						return null;
 					}
+					var intValues = instruction.GetSourceSwizzleComponents(srcIndex)
+						.Select(s => constantInt[s])
+						.ToArray();
 
+					switch(instruction.GetSourceModifier(srcIndex))
+					{
+						case SourceModifier.None:
+							break;
+						case SourceModifier.Negate:
+							throw new NotImplementedException();
+						/*
+						for (int i = 0; i < 4; i++)
+						{
+							intValues[i] = -intValues[i];
+						}
+						break;*/
+						default:
+							throw new NotImplementedException();
+					}
+					constant = intValues.Select(i => i.ToString(_culture)).ToArray();
+					break;
 				case RegisterType.Const:
 				case RegisterType.Const2:
 				case RegisterType.Const3:
 				case RegisterType.Const4:
+					type = "float";
+					var constantRegister = _constantDefinitions.FirstOrDefault(x => x.RegisterIndex == registerNumber);
+					if(constantRegister == null)
 					{
-						var constantRegister = _constantDefinitions.FirstOrDefault(x => x.RegisterIndex == registerNumber);
-						if(constantRegister == null)
-						{
-							return null;
-						}
-
-						byte[] swizzle = instruction.GetSourceSwizzleComponents(srcIndex);
-						float[] constant = {
-							constantRegister[swizzle[0]],
-							constantRegister[swizzle[1]],
-							constantRegister[swizzle[2]],
-							constantRegister[swizzle[3]] };
-
-						switch(instruction.GetSourceModifier(srcIndex))
-						{
-							case SourceModifier.None:
-								break;
-							case SourceModifier.Negate:
-								for(int i = 0; i < 4; i++)
-								{
-									constant[i] = -constant[i];
-								}
-								break;
-							default:
-								throw new NotImplementedException();
-						}
-
-						int destLength;
-						if(instruction.HasDestination)
-						{
-							destLength = instruction.GetDestinationMaskLength();
-						}
-						else
-						{
-							if(instruction.Opcode == Opcode.If || instruction.Opcode == Opcode.IfC)
-							{
-								// TODO
-							}
-							destLength = 4;
-						}
-						switch(destLength)
-						{
-							case 1:
-								return constant[0].ToString(_culture);
-							case 2:
-								if(constant[0] == constant[1])
-								{
-									return constant[0].ToString(_culture);
-								}
-								return string.Format("float2({0}, {1})",
-									constant[0].ToString(_culture),
-									constant[1].ToString(_culture));
-							case 3:
-								if(constant[0] == constant[1] && constant[0] == constant[2])
-								{
-									return constant[0].ToString(_culture);
-								}
-								return string.Format("float3({0}, {1}, {2})",
-									constant[0].ToString(_culture),
-									constant[1].ToString(_culture),
-									constant[2].ToString(_culture));
-							case 4:
-								if(constant[0] == constant[1] && constant[0] == constant[2] && constant[0] == constant[3])
-								{
-									return constant[0].ToString(_culture);
-								}
-								return string.Format("float4({0}, {1}, {2}, {3})",
-									constant[0].ToString(_culture),
-									constant[1].ToString(_culture),
-									constant[2].ToString(_culture),
-									constant[3].ToString(_culture));
-							default:
-								throw new InvalidOperationException();
-						}
+						return null;
 					}
+
+					var floatValues = instruction.GetSourceSwizzleComponents(srcIndex)
+						.Select(s => constantRegister[s])
+						.ToArray();
+
+					switch(instruction.GetSourceModifier(srcIndex))
+					{
+						case SourceModifier.None:
+							break;
+						case SourceModifier.Negate:
+							for(int i = 0; i < floatValues.Length; i++)
+							{
+								floatValues[i] = -floatValues[i];
+							}
+							break;
+						case SourceModifier.Abs:
+							for(int i = 0; i < floatValues.Length; i++)
+							{
+								floatValues[i] = Math.Abs(floatValues[i]);
+							}
+							break;
+						default:
+							throw new NotImplementedException();
+					}
+					constant = floatValues.Select(f => f.ToString(_culture)).ToArray();
+					break;
 				default:
 					return null;
 			}
+
+			if(instruction.Opcode == Opcode.If || instruction.Opcode == Opcode.IfC)
+			{
+				// TODO
+			}
+
+			return string.Format("{0}{1}({2})", type, constant.Length, string.Join(", ", constant));
 		}
 
 
-		private static string ApplyModifier(SourceModifier modifier, string value)
+		private static string GetModifier(SourceModifier modifier)
 		{
 			switch(modifier)
 			{
 				case SourceModifier.None:
-					return value;
+					return "{0}";
 				case SourceModifier.Negate:
-					return $"-{value}";
+					return "-{0}";
 				case SourceModifier.Bias:
-					return $"{value}_bias";
+					return "{0}_bias";
 				case SourceModifier.BiasAndNegate:
-					return $"-{value}_bias";
+					return "-{0}_bias";
 				case SourceModifier.Sign:
-					return $"{value}_bx2";
+					return "{0}_bx2";
 				case SourceModifier.SignAndNegate:
-					return $"-{value}_bx2";
+					return "-{0}_bx2";
 				case SourceModifier.Complement:
 					throw new NotImplementedException();
 				case SourceModifier.X2:
-					return $"(2 * {value})";
+					return "(2 * {0})";
 				case SourceModifier.X2AndNegate:
-					return $"(-2 * {value})";
+					return "(-2 * {0})";
 				case SourceModifier.DivideByZ:
-					return $"{value}_dz";
+					return "{0}_dz";
 				case SourceModifier.DivideByW:
-					return $"{value}_dw";
+					return "{0}_dw";
 				case SourceModifier.Abs:
-					return $"abs({value})";
+					return "abs({0})";
 				case SourceModifier.AbsAndNegate:
-					return $"-abs({value})";
+					return "-abs({0})";
 				case SourceModifier.Not:
 					throw new NotImplementedException();
 				default:

@@ -1,4 +1,5 @@
 using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Decompiler;
 using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,14 @@ namespace DXDecompiler.DX9Shader
 {
 	public class HlslWriter : DecompileWriter
 	{
+		private class SourceOperand
+		{
+			public string Body { get; set; }
+			public string Swizzle { get; set; }
+			public string Modifier { get; set; }
+		}
+
+
 		private readonly ShaderModel _shader;
 		private readonly bool _doAstAnalysis;
 		private int _iterationDepth = 0;
@@ -56,9 +65,15 @@ namespace DXDecompiler.DX9Shader
 			return destinationName + writeMask;
 		}
 
-		private string GetSourceName(InstructionToken instruction, int srcIndex)
+		private SourceOperand GetSourceName(InstructionToken instruction, int srcIndex)
 		{
-			return _registers.GetSourceName(instruction, srcIndex);
+			var body = _registers.GetSourceName(instruction, srcIndex, out var swizzle, out var modifier);
+			return new SourceOperand
+			{
+				Body = body,
+				Swizzle = swizzle,
+				Modifier = modifier
+			};
 		}
 
 		private static string GetConstantTypeName(ConstantType type)
@@ -122,25 +137,30 @@ namespace DXDecompiler.DX9Shader
 			}
 			WriteIndent();
 
-			void WriteAssignment(string sourceFormat, params string[] args)
+			void WriteAssignmentEx(string sourceFormat, bool returnsScalar, params SourceOperand[] args)
 			{
 				var destination = GetDestinationName(instruction, out var writeMask);
-				var sourceResult = string.Format(sourceFormat, args);
-				
+				var strings = args.Select(x => string.Format(x.Modifier, x.Body + x.Swizzle)).ToArray();
+				var sourceResult = string.Format(sourceFormat, strings);
+
+				var swizzleSizes = args.Select(x => x.Swizzle.StartsWith(".") ? x.Swizzle.Trim('.').Length : -1);
+				returnsScalar = returnsScalar || swizzleSizes.All(x => x == 1);
+
 				if(writeMask.Length > 0)
 				{
 					destination += writeMask;
-					if(sourceResult.Contains(','))
+					if(writeMask.Trim('.').Length == 1 && returnsScalar)
+					{
+						// do nothing, don't need to append write mask as swizzle
+					}
+					else if(sourceResult.Contains(',') || char.IsDigit(sourceResult.Last()))
 					{
 						sourceResult = $"({sourceResult}){writeMask}";
-					}
-					else
-					{
-						sourceResult += writeMask;
 					}
 				}
 				WriteLine("{0} = {1};", destination, sourceResult);
 			}
+			void WriteAssignment(string sourceFormat, params SourceOperand[] args) => WriteAssignmentEx(sourceFormat, false, args);
 
 			switch(instruction.Opcode)
 			{
@@ -156,14 +176,14 @@ namespace DXDecompiler.DX9Shader
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.DP2Add:
-					WriteAssignment("dot({0}, {1}) + {2}",
+					WriteAssignmentEx("dot({0}, {1}) + {2}", true,
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.Dp3:
-					WriteAssignment("dot({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignmentEx("dot({0}, {1})", true, GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Dp4:
-					WriteAssignment("dot({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignmentEx("dot({0}, {1})", true, GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Exp:
 					WriteAssignment("exp2({0})", GetSourceName(instruction, 1));
@@ -255,7 +275,7 @@ namespace DXDecompiler.DX9Shader
 					WriteAssignment("pow({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Rcp:
-					WriteAssignment("1 / {0}", GetSourceName(instruction, 1));
+					WriteAssignment("1.0f / {0}", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Rsq:
 					WriteAssignment("1 / sqrt({0})", GetSourceName(instruction, 1));
@@ -266,8 +286,12 @@ namespace DXDecompiler.DX9Shader
 						instruction.GetParamRegisterName(1) + instruction.GetSourceSwizzleName(1) ==
 						instruction.GetParamRegisterName(2) + instruction.GetSourceSwizzleName(2))
 					{
-						WriteAssignment("({0} == 0) ? 1 : 0",
-							instruction.GetParamRegisterName(1) + instruction.GetSourceSwizzleName(1));
+						WriteAssignment("({0} == 0) ? 1 : 0", new SourceOperand
+						{
+							Body = instruction.GetParamRegisterName(1),
+							Swizzle = instruction.GetSourceSwizzleName(1),
+							Modifier = "{0}"
+						});
 					}
 					else
 					{
