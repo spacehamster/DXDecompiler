@@ -1,6 +1,8 @@
-using DXDecompiler.DX9Shader.Bytecode;
+﻿using DXDecompiler.DX9Shader.Bytecode;
 using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DXDecompiler.DX9Shader.Decompiler
@@ -28,21 +30,31 @@ namespace DXDecompiler.DX9Shader.Decompiler
 			WriteLine($"float4 {ExpressionName}()");
 			WriteLine("{");
 			Indent++;
+
+			var temporaryRegisters = new SortedSet<uint>();
+			foreach(var operands in Shader.Fxlc.Tokens.SelectMany(t => t.Operands))
+			{
+				if(operands.OpType == FxlcOperandType.Temp)
+				{
+					temporaryRegisters.Add(operands.OpIndex);
+				}
+			}
+			foreach(var tempIndex in temporaryRegisters)
+			{
+				WriteIndent();
+				WriteLine($"float4 temp{tempIndex};");
+			}
+
 			WriteIndent();
-			WriteLine("float4 expr;");
+			WriteLine("float expr0;");
 			foreach(var token in Shader.Fxlc.Tokens)
 			{
 				Write(token);
 			}
 			WriteIndent();
-			WriteLine("return expr;");
+			WriteLine("return expr0;");
 			Indent--;
 			WriteLine("}");
-
-			if(Shader.Preshader != null)
-			{
-				Write("Have Pres");
-			}
 		}
 
 		void Write(FxlcToken token)
@@ -51,6 +63,8 @@ namespace DXDecompiler.DX9Shader.Decompiler
 			WriteLine($"// {token.ToString(Shader.ConstantTable, Shader.Cli)}");
 			switch(token.Opcode)
 			{
+				default:
+					throw new NotImplementedException(token.Opcode.ToString());
 				case Bytecode.Fxlvm.FxlcOpcode.Mov:
 					WriteIndent();
 					WriteLine("{0} = {1};",
@@ -149,19 +163,19 @@ namespace DXDecompiler.DX9Shader.Decompiler
 		{
 			WriteIndent();
 			WriteLine("{0} = {1} {2} {3};",
-				token.Operands[0].FormatOperand(Ctab, Cli),
-				token.Operands[1].FormatOperand(Ctab, Cli),
+				token.Operands[0].FormatOperand(Cli, Ctab),
+				token.Operands[1].FormatOperand(Cli, Ctab),
 				op,
-				token.Operands[2].FormatOperand(Ctab, Cli));
+				token.Operands[2].FormatOperand(Cli, Ctab));
 		}
 		void WriteFunction(string func, FxlcToken token)
 		{
 			WriteIndent();
 			var operands = token.Operands
 				.Skip(1)
-				.Select(o => o.FormatOperand(Ctab, Cli));
+				.Select(o => o.FormatOperand(Cli, Ctab));
 			WriteLine("{0} = {1}({2});",
-				token.Operands[0].FormatOperand(Ctab, Cli),
+				token.Operands[0].FormatOperand(Cli, Ctab),
 				func,
 				string.Join(", ", operands));
 		}
