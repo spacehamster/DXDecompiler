@@ -122,13 +122,18 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 						literal = string.Join(", ", Enumerable.Repeat(cli.GetLiteral(index), (int)ComponentCount));
 					}
 					component = string.Empty;
-					return $"({literal})";
+					var typeName = ctab is null || ComponentCount == 1 ? string.Empty : $"float{ComponentCount}";
+					return $"{typeName}({literal})";
 				case FxlcOperandType.Temp:
-					return $"r{elementIndex}";
-				case FxlcOperandType.Variable:
+					return $"{(ctab is null ? "r" : "temp")}{elementIndex}";
+				case FxlcOperandType.Variable when ctab is null:
 					return $"c{elementIndex}";
+				case FxlcOperandType.Variable when ctab is not null:
+					return ctab.ConstantDeclarations
+						.FirstOrDefault(d => d.ContainsIndex(elementIndex))
+						.GetConstantNameByRegisterNumber(elementIndex);
 				case FxlcOperandType.Expr:
-					return $"c{elementIndex}";
+					return $"{(ctab is null ? "c" : "expr")}{elementIndex}";
 				default:
 					return $"unknown{elementIndex}"; ;
 			}
@@ -167,10 +172,10 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		/// <summary>
 		/// Format operand for FX9 preshaders
 		/// </summary>
-		/// <param name="ctab"></param>
-		/// <param name="cli"></param>
+		/// <param name="cli">CliToken, neccessary for retrieving literal values</param>
+		/// <param name="ctab">ConstantTable, optional. If not null, it will be used to resolve constants.</param>
 		/// <returns></returns>
-		public string FormatOperand(ConstantTable ctab, CliToken cli)
+		public string FormatOperand(CliToken cli, ConstantTable ctab)
 		{
 			if(IsArray == 0)
 			{

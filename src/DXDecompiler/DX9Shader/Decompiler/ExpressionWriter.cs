@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode;
+using DXDecompiler.DX9Shader.Bytecode;
 using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
 using System.Linq;
@@ -54,14 +54,14 @@ namespace DXDecompiler.DX9Shader.Decompiler
 				case Bytecode.Fxlvm.FxlcOpcode.Mov:
 					WriteIndent();
 					WriteLine("{0} = {1};",
-						token.Operands[0].FormatOperand(Ctab, Cli),
-						token.Operands[1].FormatOperand(Ctab, Cli));
+						token.Operands[0].FormatOperand(Cli, Ctab),
+						token.Operands[1].FormatOperand(Cli, Ctab));
 					break;
 				case Bytecode.Fxlvm.FxlcOpcode.Neg:
 					WriteIndent();
 					WriteLine("{0} = -{1};",
-						token.Operands[0].FormatOperand(Ctab, Cli),
-						token.Operands[1].FormatOperand(Ctab, Cli));
+						token.Operands[0].FormatOperand(Cli, Ctab),
+						token.Operands[1].FormatOperand(Cli, Ctab));
 					break;
 				case Bytecode.Fxlvm.FxlcOpcode.Frc:
 					WriteFunction("frac", token);

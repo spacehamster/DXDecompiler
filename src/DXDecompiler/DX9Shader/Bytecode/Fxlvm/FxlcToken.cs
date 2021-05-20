@@ -58,7 +58,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 
 		public string ToString(ConstantTable ctab, CliToken cli)
 		{
-			var operands = string.Join(", ", Operands.Select(o => o.FormatOperand(ctab, cli)));
+			var operands = string.Join(", ", Operands.Select(o => o.FormatOperand(cli, null)));
 			return string.Format("{0} {1}",
 					Opcode.ToString().ToLowerInvariant(),
 					operands);
