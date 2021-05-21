@@ -76,7 +76,7 @@ namespace DXDecompiler.DX9Shader.FX9
 					return 0;
 			}
 		}
-		public string GetDecleration(int indentLevel = 0)
+		public string GetDeclaration(int indentLevel = 0)
 		{
 			string arrayDecl = "";
 			string semanticDecl = "";
@@ -119,7 +119,7 @@ namespace DXDecompiler.DX9Shader.FX9
 						sb.AppendLine("struct {");
 						foreach(var member in StructMembers)
 						{
-							sb.AppendLine(string.Format("{0};", member.GetDecleration(indentLevel + 1)));
+							sb.AppendLine(string.Format("{0};", member.GetDeclaration(indentLevel + 1)));
 						}
 						sb.Append(indent);
 						sb.Append("}");

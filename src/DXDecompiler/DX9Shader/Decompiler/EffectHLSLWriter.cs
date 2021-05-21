@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.DX9Shader.Decompiler;
 using DXDecompiler.DX9Shader.FX9;
 using System;
@@ -171,7 +171,7 @@ namespace DXDecompiler.DX9Shader
 					++index;
 				}
 			}
-			Write(param.GetDecleration());
+				Write(param.GetDeclaration());
 			if(variable.Annotations.Count > 0)
 			{
 				Write(" ");
