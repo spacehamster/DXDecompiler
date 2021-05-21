@@ -27,7 +27,7 @@ namespace DXDecompiler.DX9Shader
 			Load(shader);
 		}
 
-		
+
 
 		private void Load(ShaderModel shader)
 		{
@@ -210,7 +210,13 @@ namespace DXDecompiler.DX9Shader
 						return $"Error {registerType}{registerNumber}";
 						//throw new NotImplementedException();
 					}
-					sourceRegisterName = decl.GetConstantNameByRegisterNumber(registerNumber);
+					string indexer = null;
+					if(instruction.IsRelativeAddressMode(srcIndex))
+					{
+						indexer = GetSourceName(instruction, srcIndex + 1, out var indexSwizzle, out var indexModifier);
+						indexer = string.Format(indexModifier, indexer + indexSwizzle);
+					}
+					sourceRegisterName = decl.GetConstantNameByRegisterNumber(registerNumber, indexer);
 					break;
 				default:
 					sourceRegisterName = GetRegisterName(registerKey);

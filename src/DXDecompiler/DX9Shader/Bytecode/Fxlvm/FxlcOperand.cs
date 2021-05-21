@@ -105,7 +105,14 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					return $".UnknownCount{componentCount}";
 			}
 		}
-		private string FormatOperand(ConstantTable ctab, CliToken cli, HashSet<uint> ctabOverride, FxlcOperandType type, uint index, out string component)
+		private string FormatOperand(
+			ConstantTable ctab,
+			CliToken cli,
+			HashSet<uint> ctabOverride,
+			FxlcOperandType type,
+			uint index,
+			string indexer,
+			out string component)
 		{
 			var elementIndex = index / 4;
 			var componentIndex = index % 4;
@@ -136,7 +143,11 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					{
 						return ctab.ConstantDeclarations
 							.First(d => d.ContainsIndex(elementIndex))
-							.GetConstantNameByRegisterNumber(elementIndex);
+							.GetConstantNameByRegisterNumber(elementIndex, indexer);
+					}
+					else if(!string.IsNullOrEmpty(indexer))
+					{
+						return $"c{elementIndex}[{indexer}]";
 					}
 					return $"c{elementIndex}";
 				case FxlcOperandType.Expr:
@@ -187,13 +198,13 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		{
 			if(IsArray == 0)
 			{
-				return FormatOperand(ctab, cli, ctabOverride, OpType, OpIndex, out var component) + component;
+				return FormatOperand(ctab, cli, ctabOverride, OpType, OpIndex, null, out var component) + component;
 			}
 			else
 			{
-				var arrayOperand = FormatOperand(ctab, cli, ctabOverride, ArrayType, ArrayIndex, out var elementComponent);
-				var indexOperand = FormatOperand(ctab, cli, ctabOverride, OpType, OpIndex, out _);
-				return string.Format("{0}[{1}.x]{2}", arrayOperand, indexOperand, elementComponent);
+				var indexOperand = FormatOperand(ctab, cli, ctabOverride, OpType, OpIndex, null, out _) + ".x";
+				var arrayOperand = FormatOperand(ctab, cli, ctabOverride, ArrayType, ArrayIndex, indexOperand, out var elementComponent);
+				return string.Format("{0}{1}", arrayOperand, elementComponent);
 			}
 		}
 		/// <summary>

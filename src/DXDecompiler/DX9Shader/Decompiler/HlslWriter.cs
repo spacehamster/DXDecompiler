@@ -65,9 +65,40 @@ namespace DXDecompiler.DX9Shader
 			return destinationName + writeMask;
 		}
 
-		private SourceOperand GetSourceName(InstructionToken instruction, int srcIndex)
+		private SourceOperand GetSourceName(InstructionToken instruction, int srcIndex, bool isLogicalIndex = true)
 		{
-			var body = _registers.GetSourceName(instruction, srcIndex, out var swizzle, out var modifier);
+			int dataIndex;
+			if(isLogicalIndex)
+			{
+				// compute the actual data index, which might be different from logical index 
+				// because of relative addressing mode.
+
+				// TODO: Handle relative addressing mode in a better way,
+				// by using `InstructionToken.Operands`:
+				// https://github.com/spacehamster/DXDecompiler/pull/6#issuecomment-782958769
+
+				// if instruction has destination, then source starts at the index 1
+				// here we assume destination won't have relative addressing,
+				// so we assume destination will only occupy 1 slot,
+				// that is, the start index for sources will be 1 if instruction.HasDestination is true.
+				var begin = instruction.HasDestination ? 1 : 0;
+				dataIndex = begin;
+				while(srcIndex > begin)
+				{
+					if(instruction.IsRelativeAddressMode(dataIndex))
+					{
+						++dataIndex;
+					}
+					++dataIndex;
+					--srcIndex;
+				}
+			}
+			else
+			{
+				dataIndex = srcIndex;
+			}
+
+			var body = _registers.GetSourceName(instruction, dataIndex, out var swizzle, out var modifier);
 			return new SourceOperand
 			{
 				Body = body,

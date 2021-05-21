@@ -93,13 +93,35 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 			return $"{RegisterSet.GetDescription()}{RegisterIndex}";
 		}
 
-		public string GetConstantNameByRegisterNumber(uint registerNumber)
+		public string GetConstantNameByRegisterNumber(uint registerNumber, string relativeAddressing)
 		{
 			var decl = this;
 			var totalOffset = registerNumber - decl.RegisterIndex;
 			var data = decl.GetRegisterTypeByOffset(totalOffset);
 			var name = decl.GetMemberNameByOffset(totalOffset);
 			var offsetFromMember = registerNumber - data.RegisterIndex;
+
+			if(relativeAddressing != null)
+			{
+				// a nasty way to check array subscripts
+				// TODO: we need something more serious...
+				if(decl.Elements <= 1 || !name.EndsWith("]") || name.Count(x => x == ']') != 1)
+				{
+					// we cannot handle relative addressing if this contant declaration is not an array
+					// we also cannot handle relative addressing if this constant declaration contains nested arrays
+					name = $"Error({name}, {relativeAddressing})";
+				}
+				else
+				{
+					var declElementSize = decl.RegisterCount / decl.Elements;
+					if(declElementSize > 1)
+					{
+						relativeAddressing = $"({relativeAddressing} / {declElementSize})";
+					}
+					name = name.Substring(0, name.Length - 1) // name without the last ']'
+						+ $" + {relativeAddressing}]";
+				}
+			}
 
 			// how many registers should be occupied by the current constant item
 			var registersOccupied = data.Type.ParameterClass == ParameterClass.MatrixColumns
