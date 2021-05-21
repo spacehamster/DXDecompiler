@@ -269,7 +269,6 @@ namespace DXDecompiler.DX9Shader
 			var decl = RegisterDeclarations[registerKey];
 			switch(registerKey.Type)
 			{
-				case RegisterType.Texture:
 				case RegisterType.Input:
 					return (MethodInputRegisters.Count == 1) ? decl.Name : ("i." + decl.Name);
 				case RegisterType.RastOut:
@@ -300,6 +299,7 @@ namespace DXDecompiler.DX9Shader
 						default:
 							throw new NotImplementedException();
 					}
+				case RegisterType.Addr:
 				case RegisterType.Temp:
 					return registerKey.ToString();
 				default:

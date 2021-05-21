@@ -387,7 +387,7 @@ namespace DXDecompiler.DX9Shader
 				{
 					if(operand is DestinationOperand dest)
 					{
-						if(dest.RegisterType == RegisterType.Temp)
+						if(dest.RegisterType is RegisterType.Temp or RegisterType.Addr)
 						{
 
 							var registerKey = new RegisterKey(dest.RegisterType, dest.RegisterNumber);
@@ -411,31 +411,17 @@ namespace DXDecompiler.DX9Shader
 				kv => kv.Key))
 			{
 				int writeMask = group.Key;
-				string writeMaskName; switch(writeMask)
+				string writeMaskName = writeMask switch
 				{
-					case 0x1:
-						writeMaskName = "float";
-						break;
-					case 0x3:
-						writeMaskName = "float2";
-						break;
-					case 0x7:
-						writeMaskName = "float3";
-						break;
-					case 0xF:
-						writeMaskName = "float4";
-						break;
-					default:
-						// TODO
-						writeMaskName = "float4";
-						break;
-						//throw new NotImplementedException();
-				}
+					0x1 => "float",
+					0x3 => "float2",
+					0x7 => "float3",
+					0xF => "float4",
+					_ => "float4",// TODO
+				};
 				WriteIndent();
 				WriteLine("{0} {1};", writeMaskName, string.Join(", ", group));
 			}
-
-
 		}
 		protected override void Write()
 		{
