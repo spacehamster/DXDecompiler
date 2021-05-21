@@ -25,6 +25,11 @@ namespace DXDecompiler.DX9Shader
 
 	public class ShaderModel
 	{
+		static ShaderModel()
+		{
+			System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+		}
+
 		private static readonly Dictionary<uint, CommentType> KnownCommentTypes =
 			new Dictionary<uint, CommentType>
 		{
