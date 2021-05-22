@@ -451,7 +451,7 @@ namespace DXDecompiler.DX9Shader
 				var assignment = string.IsNullOrEmpty(decompiled.DefaultValue)
 					? string.Empty
 					: $" = {decompiled.DefaultValue}";
-				WriteLine($"{decompiled.Code}{decompiled.RegisterAssignmentString}{assignment}");
+				WriteLine($"{decompiled.Code}{decompiled.RegisterAssignmentString}{assignment};");
 			}
 
 
