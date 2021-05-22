@@ -428,6 +428,23 @@ namespace DXDecompiler.DX9Shader
 				: GetDeclIndex().ToString();
 			switch(registerType)
 			{
+				case RegisterType.Input when _shaderModel is { Type: ShaderType.Pixel, MajorVersion: <= 2 }:
+				case RegisterType.Texture when _shaderModel is { Type: ShaderType.Pixel, MajorVersion: <= 2 }:
+					if(_shaderModel.MajorVersion == 1)
+					{
+						throw new NotImplementedException("Shader model 1 not supported yet");
+					}
+					declIndexString = GetParamRegisterNumber(1) is 0
+						? string.Empty
+						: GetParamRegisterNumber(1).ToString();
+
+					// https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dcl---ps
+					return registerType switch
+					{
+						RegisterType.Input => "COLOR",
+						RegisterType.Texture => "TEXCOORD",
+						_ => throw new NotSupportedException(registerType.ToString())
+					} + declIndexString;
 				case RegisterType.Input:
 				case RegisterType.Output when _shaderModel.Type == ShaderType.Vertex && _shaderModel.MajorVersion >= 3:
 					string name;
@@ -476,9 +493,6 @@ namespace DXDecompiler.DX9Shader
 						return "vPos";
 					}
 					throw new NotImplementedException();
-				case RegisterType.Texture when _shaderModel.Type == ShaderType.Pixel && _shaderModel.MajorVersion <= 2:
-					var registerNumber = GetParamRegisterNumber(1);
-					return "TEXCOORD" + (registerNumber == 0 ? string.Empty : registerNumber.ToString());
 				case RegisterType.TexCoordOut:
 					return "TEXCOORD" + declIndexString;
 				default:
