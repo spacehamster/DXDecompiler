@@ -419,19 +419,9 @@ namespace DXDecompiler.DX9Shader
 				WriteLine($"{decompiled.Code}{decompiled.RegisterAssignmentString}{assignment}");
 			}
 
-			if(_registers.MethodInputRegisters.Count > 1)
-			{
-				WriteInputStructureDeclaration();
-			}
 
-			if(_registers.MethodOutputRegisters.Count > 1)
-			{
-				WriteOutputStructureDeclaration();
-			}
-
-			string methodReturnType = GetMethodReturnType();
-			string methodParameters = GetMethodParameters();
-			string methodSemantic = GetMethodSemantic();
+			ProcessMethodInputType(out var methodParameters);
+			ProcessMethodOutputType(out var methodReturnType, out var methodSemantic);
 			WriteLine("{0} {1}({2}){3}",
 				methodReturnType,
 				_entryPoint,
@@ -449,9 +439,8 @@ namespace DXDecompiler.DX9Shader
 
 			if(_registers.MethodOutputRegisters.Count > 1)
 			{
-				var outputStructType = _shader.Type == ShaderType.Pixel ? "PS_OUT" : "VS_OUT";
 				WriteIndent();
-				WriteLine($"{outputStructType} o;");
+				WriteLine($"{methodReturnType} o;");
 			}
 			else
 			{
@@ -490,82 +479,84 @@ namespace DXDecompiler.DX9Shader
 			WriteLine("}");
 		}
 
-		private void WriteInputStructureDeclaration()
+		private void WriteStructureDeclaration(IEnumerable<RegisterDeclaration> registers, string postFix, out string typeName)
 		{
-			var inputStructType = _shader.Type == ShaderType.Pixel ? "PS_IN" : "VS_IN";
-			WriteLine($"struct {inputStructType}");
+			var declarations = registers
+				.Select(x =>
+				{
+					var registerName = Operand.GetParamRegisterName(x.RegisterKey.Type, (uint)x.RegisterKey.Number);
+					var comment = $"// {x.RegisterKey} {registerName}";
+					var code = $"{x.TypeName} {x.Name} : {x.Semantic};";
+					return (Comment: comment, Code: code);
+				});
+			var codes = declarations.Select(t => t.Code).ToArray();
+			typeName = $"{_entryPoint}_{postFix}";
+			if(_effectWriter is not null)
+			{
+				// check if a compatible type has alreaady been defined inside this effect
+				foreach(var (name, existing) in _effectWriter.InputOutputStructures)
+				{
+					if(codes.All(x => existing.Contains(x)))
+					{
+						typeName = name;
+						// we don't need to write declaration again in this case
+						return;
+					}
+				}
+				_effectWriter.InputOutputStructures.Add((typeName, codes));
+			}
+
+			WriteLine($"struct {typeName}");
 			WriteLine("{");
 			Indent++;
-			foreach(var input in _registers.MethodInputRegisters.Values)
+			foreach(var (comment, code) in declarations)
 			{
 				WriteIndent();
-				WriteLine($"{input.TypeName} {input.Name} : {input.Semantic};");
+				WriteLine(comment);
+				WriteIndent();
+				WriteLine(code);
 			}
 			Indent--;
 			WriteLine("};");
 			WriteLine();
 		}
 
-		private void WriteOutputStructureDeclaration()
+		private void ProcessMethodInputType(out string methodParameters)
 		{
-			var outputStructType = _shader.Type == ShaderType.Pixel ? "PS_OUT" : "VS_OUT";
-			WriteLine($"struct {outputStructType}");
-			WriteLine("{");
-			Indent++;
-			foreach(var output in _registers.MethodOutputRegisters.Values)
+			var registers = _registers.MethodInputRegisters.Values;
+			switch(registers.Count)
 			{
-				WriteIndent();
-				WriteLine($"// {output.RegisterKey} {Operand.GetParamRegisterName(output.RegisterKey.Type, (uint)output.RegisterKey.Number)}");
-				WriteIndent();
-				WriteLine($"{output.TypeName} {output.Name} : {output.Semantic};");
+				case 0:
+					methodParameters = string.Empty;
+					break;
+				case 1:
+					var input = registers.First();
+					methodParameters = $"{input.TypeName} {input.Name} : {input.Semantic}";
+					break;
+				default:
+					WriteStructureDeclaration(registers, "Input", out var inputTypeName);
+					methodParameters = $"{inputTypeName} i";
+					break;
 			}
-			Indent--;
-			WriteLine("};");
-			WriteLine();
 		}
 
-		private string GetMethodReturnType()
+		private void ProcessMethodOutputType(out string methodReturnType, out string methodSemantic)
 		{
-			switch(_registers.MethodOutputRegisters.Count)
+			var registers = _registers.MethodOutputRegisters.Values;
+			switch(registers.Count)
 			{
 				case 0:
 					throw new InvalidOperationException();
 				case 1:
-					return _registers.MethodOutputRegisters.Values.First().TypeName;
+					methodReturnType = registers.First().TypeName;
+					string semantic = registers.First().Semantic;
+					methodSemantic = $" : {semantic}";
+					break;
 				default:
-					return _shader.Type == ShaderType.Pixel ? "PS_OUT" : "VS_OUT";
-			}
-		}
-
-		private string GetMethodSemantic()
-		{
-			switch(_registers.MethodOutputRegisters.Count)
-			{
-				case 0:
-					throw new InvalidOperationException();
-				case 1:
-					string semantic = _registers.MethodOutputRegisters.Values.First().Semantic;
-					return $" : {semantic}";
-				default:
-					return string.Empty;
-			}
-		}
-
-		private string GetMethodParameters()
-		{
-			if(_registers.MethodInputRegisters.Count == 0)
-			{
-				return string.Empty;
-			}
-			else if(_registers.MethodInputRegisters.Count == 1)
-			{
-				var input = _registers.MethodInputRegisters.Values.First();
-				return $"{input.TypeName} {input.Name} : {input.Semantic}";
-			}
-
-			return _shader.Type == ShaderType.Pixel
-					? "PS_IN i"
-					: "VS_IN i";
+					WriteStructureDeclaration(registers, "Output", out methodReturnType);
+					methodSemantic = string.Empty;
+					break;
+			};
 		}
 
 		private void WriteAst(HlslAst ast)

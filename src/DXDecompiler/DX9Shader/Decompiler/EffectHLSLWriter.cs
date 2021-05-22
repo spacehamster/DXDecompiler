@@ -13,7 +13,7 @@ namespace DXDecompiler.DX9Shader
 		private readonly EffectContainer _effectChunk;
 
 		public Dictionary<string, DecompiledConstantDeclaration> CommonConstantDeclarations { get; } = new();
-
+		public List<(string Name, string[] Declarations)> InputOutputStructures { get; } = new();
 
 		public EffectHLSLWriter(EffectContainer effectChunk)
 		{
