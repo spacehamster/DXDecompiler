@@ -278,7 +278,7 @@ namespace DXDecompiler.DX9Shader
 				case RegisterType.Output:
 				case RegisterType.AttrOut:
 				case RegisterType.ColorOut:
-					return (MethodOutputRegisters.Count == 1) ? decl.Name : ("o." + decl.Name);
+					return (MethodOutputRegisters.Count == 1) ? "out_" + decl.Name : ("o." + decl.Name);
 				case RegisterType.Const:
 					throw new NotSupportedException($"Use {nameof(GetSourceName)} instead");
 				case RegisterType.Sampler:
