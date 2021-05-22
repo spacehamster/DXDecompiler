@@ -14,7 +14,15 @@ namespace DXDecompiler.DX9Shader
 			public string Swizzle { get; set; }
 			public string Modifier { get; set; }
 
-			public override string ToString() => string.Format(Modifier, Body + Swizzle);
+			public override string ToString()
+			{
+				var body = string.Format(Modifier, Body);
+				if(char.IsDigit(body.Last()))
+				{
+					body = $"({body})";
+				}
+				return body + Swizzle;
+			}
 		}
 
 		private readonly ShaderModel _shader;
@@ -143,30 +151,55 @@ namespace DXDecompiler.DX9Shader
 			}
 			WriteIndent();
 
-			void WriteAssignmentEx(string sourceFormat, bool returnsScalar, params SourceOperand[] args)
+			void WriteAssignment(string sourceFormat, params SourceOperand[] args)
 			{
 				var destination = GetDestinationName(instruction, out var writeMask);
-				var strings = args.Select(x => x.ToString()).ToArray();
-				var sourceResult = string.Format(sourceFormat, strings);
+				var sourceResult = string.Format(sourceFormat, args);
 
 				var swizzleSizes = args.Select(x => x.Swizzle.StartsWith(".") ? x.Swizzle.Trim('.').Length : -1);
-				returnsScalar = returnsScalar || swizzleSizes.All(x => x == 1);
+				var returnsScalar = instruction.Opcode.ReturnsScalar() || swizzleSizes.All(x => x == 1);
 
 				if(writeMask.Length > 0)
 				{
 					destination += writeMask;
-					if(writeMask.Trim('.').Length == 1 && returnsScalar)
+					if(returnsScalar)
 					{
 						// do nothing, don't need to append write mask as swizzle
 					}
-					else if(sourceResult.Contains(',') || char.IsDigit(sourceResult.Last()))
+					// if the instruction is parallel then we are safe to "edit" source swizzles
+					else if(instruction.Opcode.IsParallel(_shader))
+					{
+						foreach(var arg in args)
+						{
+							const string xyzw = ".xyzw";
+							var trimmedSwizzle = ".";
+							if(string.IsNullOrEmpty(arg.Swizzle))
+							{
+								arg.Swizzle = xyzw;
+							}
+							while(arg.Swizzle.Length <= 4)
+							{
+								arg.Swizzle += arg.Swizzle.Last();
+							}
+							for(var i = 1; i <= 4; ++i)
+							{
+								if(writeMask.Contains(xyzw[i]))
+								{
+									trimmedSwizzle += arg.Swizzle[i];
+								}
+							}
+							arg.Swizzle = trimmedSwizzle;
+						}
+						sourceResult = string.Format(sourceFormat, args);
+					}
+					// if we cannot "edit" the swizzles, we need to apply write masks on the source result
+					else if(sourceResult.Last() != ')')
 					{
 						sourceResult = $"({sourceResult}){writeMask}";
 					}
 				}
 				WriteLine("{0} = {1};", destination, sourceResult);
 			}
-			void WriteAssignment(string sourceFormat, params SourceOperand[] args) => WriteAssignmentEx(sourceFormat, false, args);
 
 			switch(instruction.Opcode)
 			{
@@ -182,14 +215,14 @@ namespace DXDecompiler.DX9Shader
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.DP2Add:
-					WriteAssignmentEx("dot({0}, {1}) + {2}", true,
+					WriteAssignment("dot({0}, {1}) + {2}",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.Dp3:
-					WriteAssignmentEx("dot({0}, {1})", true, GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("dot({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Dp4:
-					WriteAssignmentEx("dot({0}, {1})", true, GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("dot({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Exp:
 					WriteAssignment("exp2({0})", GetSourceName(instruction, 1));

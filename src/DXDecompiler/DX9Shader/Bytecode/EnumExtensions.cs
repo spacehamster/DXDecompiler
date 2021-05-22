@@ -163,5 +163,65 @@ namespace DXDecompiler.DX9Shader
 					return false;
 			}
 		}
+		public static bool ReturnsScalar(this Opcode opcode)
+		{
+			switch(opcode)
+			{
+				// TODO: there could be more parallel instructions
+				case Opcode.DP2Add:
+				case Opcode.Dp3:
+				case Opcode.Dp4:
+					return true;
+				default:
+					return false;
+			}
+		}
+		/// <summary>
+		/// Check if the instruction is "parallel", that is, 
+		/// each component will be processed independently without affecting other components.
+		/// <br/>
+		/// This is useful for clipping source swizzles with destination write masks:
+		/// Since the instruction is parallel, it's safe to clip source swizzles as they will not have any effect.
+		/// </summary>
+		/// <param name="opcode">The instruction to be checked</param>
+		/// <param name="shader">The current shader</param>
+		/// <returns>true if instruction is parallel</returns>
+		public static bool IsParallel(this Opcode opcode, ShaderModel shader)
+		{
+			switch(opcode)
+			{
+				// TODO: there could be more parallel instructions
+				case Opcode.Abs:
+				case Opcode.Add:
+				case Opcode.Cmp:
+				case Opcode.Cnd when shader is { MajorVersion: 1, MinorVersion: >= 4 } or { MajorVersion: > 1 }:
+				case Opcode.DSX:
+				case Opcode.DSY:
+				case Opcode.Exp:
+				case Opcode.ExpP:
+				case Opcode.Frc:
+				case Opcode.Log:
+				case Opcode.LogP:
+				case Opcode.Lrp:
+				case Opcode.Mad:
+				case Opcode.Max:
+				case Opcode.Min:
+				case Opcode.Mov:
+				case Opcode.MovA when shader.MajorVersion >= 2:
+				case Opcode.Mul:
+				case Opcode.Pow:
+				case Opcode.Rcp:
+				case Opcode.Rsq:
+				case Opcode.SetP:
+				case Opcode.Sge:
+				case Opcode.Sgn:
+				case Opcode.Slt:
+				case Opcode.Sub:
+				case Opcode.TexKill:
+					return true;
+				default:
+					return false;
+			}
+		}
 	}
 }
