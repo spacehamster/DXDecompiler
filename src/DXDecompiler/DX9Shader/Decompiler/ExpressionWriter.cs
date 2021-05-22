@@ -18,7 +18,7 @@ namespace DXDecompiler.DX9Shader.Decompiler
 		}
 		protected override void Write()
 		{
-			WriteLine($"float4 {ExpressionName}()");
+			WriteLine($"float {ExpressionName}()");
 			WriteLine("{");
 			Indent++;
 
