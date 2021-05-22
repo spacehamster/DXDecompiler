@@ -126,7 +126,22 @@ namespace DXDecompiler.DX9Shader.FX9
 					}
 					break;
 				case ParameterClass.Object:
-					sb.Append(ParameterType.ToString().ToLower());
+					switch(ParameterType)
+					{
+						case ParameterType.Sampler1D:
+						case ParameterType.Sampler2D:
+						case ParameterType.Sampler3D:
+						case ParameterType.SamplerCube:
+							sb.Append(ParameterType.GetDescription());
+							break;
+						case ParameterType.PixelShader:
+						case ParameterType.VertexShader:
+							sb.Append(ParameterType.ToString());
+							break;
+						default:
+							sb.Append(ParameterType.ToString().ToLower());
+							break;
+					}
 					break;
 				default:
 					break;
