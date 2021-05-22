@@ -1,4 +1,4 @@
-using DXDecompiler.DX9Shader.Bytecode.Ctab;
+﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.DX9Shader.Decompiler;
 using DXDecompiler.DX9Shader.FX9;
 using System;
@@ -222,19 +222,24 @@ namespace DXDecompiler.DX9Shader
 		{
 			var param = variable.Parameter;
 			WriteIndent();
-			var isShaderArray = param.ParameterClass == ParameterClass.Object &&
-				(param.ParameterType == ParameterType.PixelShader || param.ParameterType == ParameterType.VertexShader);
-			Dictionary<uint, string> shaderArrayElements = null;
+			var isShaderArray = param is
+			{
+				ParameterClass: ParameterClass.Object,
+				ParameterType: ParameterType.PixelShader or ParameterType.VertexShader
+			};
+			Dictionary<uint, string> shaderArrayCompileStatements = null;
 			if(isShaderArray)
 			{
-				shaderArrayElements = new Dictionary<uint, string>();
+				shaderArrayCompileStatements = new Dictionary<uint, string>();
 				var blobs = _effectChunk.VariableBlobLookup[param];
 				var index = 0;
 				foreach(var blob in blobs)
 				{
 					var name = $"{variable.Parameter.Name}_Shader_{index}";
-					shaderArrayElements.Add(blob.Index, name);
-					WriteShader(name, blob.Shader);
+					var shader = blob.Shader;
+					var compileStatement = $"compile {shader.Type.GetDescription()}_{shader.MajorVersion}_{shader.MinorVersion} {name}()";
+					shaderArrayCompileStatements.Add(blob.Index, compileStatement);
+					WriteShader(name, shader);
 					++index;
 				}
 			}
@@ -243,7 +248,7 @@ namespace DXDecompiler.DX9Shader
 				var semantic = string.IsNullOrEmpty(param.Semantic)
 					? string.Empty
 					: $" : {param.Semantic}";
-				WriteLine($"{decompiled.Code}{semantic}{decompiled.RegisterAssignmentString}");
+				Write($"{decompiled.Code}{semantic}{decompiled.RegisterAssignmentString}");
 			}
 			// shader's constant declaration might differ from the effect variable's parameter declaration
 			// in that case, we should prefer shader's one.
@@ -320,7 +325,7 @@ namespace DXDecompiler.DX9Shader
 						foreach(var idx in variable.DefaultValue)
 						{
 							WriteIndent();
-							WriteLine("{0}, // {1}", shaderArrayElements[idx.UInt], idx.UInt);
+							WriteLine("{0}, // {1}", shaderArrayCompileStatements[idx.UInt], idx.UInt);
 						}
 						Indent--;
 						WriteLine("};");
