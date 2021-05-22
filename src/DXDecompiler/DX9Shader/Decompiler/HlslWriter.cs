@@ -13,6 +13,8 @@ namespace DXDecompiler.DX9Shader
 			public string Body { get; set; }
 			public string Swizzle { get; set; }
 			public string Modifier { get; set; }
+
+			public override string ToString() => string.Format(Modifier, Body + Swizzle);
 		}
 
 		private readonly ShaderModel _shader;
@@ -144,7 +146,7 @@ namespace DXDecompiler.DX9Shader
 			void WriteAssignmentEx(string sourceFormat, bool returnsScalar, params SourceOperand[] args)
 			{
 				var destination = GetDestinationName(instruction, out var writeMask);
-				var strings = args.Select(x => string.Format(x.Modifier, x.Body + x.Swizzle)).ToArray();
+				var strings = args.Select(x => x.ToString()).ToArray();
 				var sourceResult = string.Format(sourceFormat, strings);
 
 				var swizzleSizes = args.Select(x => x.Swizzle.StartsWith(".") ? x.Swizzle.Trim('.').Length : -1);
