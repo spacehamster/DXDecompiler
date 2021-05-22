@@ -15,12 +15,12 @@ namespace DXDecompiler.DX9Shader
 			public string Modifier { get; set; }
 		}
 
-
 		private readonly ShaderModel _shader;
 		private readonly bool _doAstAnalysis;
 		private int _iterationDepth = 0;
 
-		public RegisterState _registers;
+		private EffectHLSLWriter _effectWriter;
+		private RegisterState _registers;
 		string _entryPoint;
 
 		public HlslWriter(ShaderModel shader, bool doAstAnalysis = false, string entryPoint = null)
@@ -43,13 +43,16 @@ namespace DXDecompiler.DX9Shader
 			var shaderModel = ShaderReader.ReadShader(bytecode);
 			return Decompile(shaderModel);
 		}
-		public static string Decompile(ShaderModel shaderModel, string entryPoint = null)
+		public static string Decompile(ShaderModel shaderModel, string entryPoint = null, EffectHLSLWriter effect = null)
 		{
 			if(shaderModel.Type == ShaderType.Effect)
 			{
 				return EffectHLSLWriter.Decompile(shaderModel.EffectChunk);
 			}
-			var hlslWriter = new HlslWriter(shaderModel, false, entryPoint);
+			var hlslWriter = new HlslWriter(shaderModel, false, entryPoint)
+			{
+				_effectWriter = effect
+			};
 			return hlslWriter.Decompile();
 		}
 
@@ -401,6 +404,20 @@ namespace DXDecompiler.DX9Shader
 			}
 			_registers = new RegisterState(_shader);
 
+			foreach(var declaration in _registers.ConstantDeclarations)
+			{
+				if(_effectWriter?.CommonConstantDeclarations.ContainsKey(declaration.Name) is true)
+				{
+					// skip common constant declarations
+					continue;
+				}
+				// write constant declaration
+				var decompiled = ConstantTypeWriter.Decompile(declaration, _shader);
+				var assignment = string.IsNullOrEmpty(decompiled.DefaultValue)
+					? string.Empty
+					: $" = {decompiled.DefaultValue}";
+				WriteLine($"{decompiled.Code}{decompiled.RegisterAssignmentString}{assignment}");
+			}
 
 			if(_registers.MethodInputRegisters.Count > 1)
 			{
