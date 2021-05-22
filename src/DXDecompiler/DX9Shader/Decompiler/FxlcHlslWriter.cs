@@ -25,12 +25,16 @@ namespace DXDecompiler.DX9Shader.Decompiler
 			var temporaryRegisters = new SortedSet<uint>();
 			foreach(var operands in Shader.Fxlc.Tokens.SelectMany(t => t.Operands))
 			{
-				if(operands.OpType == FxlcOperandType.Temp)
+				if(operands.IsArray != 0)
 				{
-					if(operands.IsArray != 0)
+					if(operands.ArrayType == FxlcOperandType.Temp)
 					{
+						// will this ever happen?
 						throw new NotImplementedException();
 					}
+				}
+				if(operands.OpType == FxlcOperandType.Temp)
+				{
 					temporaryRegisters.Add(operands.OpIndex);
 				}
 			}
@@ -61,10 +65,10 @@ namespace DXDecompiler.DX9Shader.Decompiler
 					WriteFunction("1.0f / ", token, ctabOverride);
 					break;
 				case FxlcOpcode.Mov:
-					WriteAssignment(token, ctabOverride, "{0}", token.Operands[1].FormatOperand(Cli, Ctab));
+					WriteAssignment(token, ctabOverride, "{0}", token.Operands[1].FormatOperand(Cli, Ctab, ctabOverride));
 					break;
 				case FxlcOpcode.Neg:
-					WriteAssignment(token, ctabOverride, "-{0}", token.Operands[1].FormatOperand(Cli, Ctab));
+					WriteAssignment(token, ctabOverride, "-{0}", token.Operands[1].FormatOperand(Cli, Ctab, ctabOverride));
 					break;
 				case FxlcOpcode.Frc:
 					WriteFunction("frac", token, ctabOverride);
@@ -135,6 +139,9 @@ namespace DXDecompiler.DX9Shader.Decompiler
 				case FxlcOpcode.Max:
 					WriteFunction("max", token, ctabOverride);
 					break;
+				case FxlcOpcode.Dot:
+					WriteFunction("dot", token, ctabOverride);
+					break;
 				case FxlcOpcode.Add:
 					WriteInfix("+", token, ctabOverride);
 					break;
@@ -143,6 +150,13 @@ namespace DXDecompiler.DX9Shader.Decompiler
 					break;
 				case FxlcOpcode.Lt:
 					WriteInfix("<", token, ctabOverride);
+					break;
+				case FxlcOpcode.Ge:
+					WriteInfix(">=", token, ctabOverride);
+					break;
+				case FxlcOpcode.Cmp:
+					WriteAssignment(token, ctabOverride, "({0} >= 0 ? {1} : {2})",
+						token.Operands.Skip(1).Select(o => o.FormatOperand(Cli, Ctab, ctabOverride)).ToArray());
 					break;
 			}
 		}
