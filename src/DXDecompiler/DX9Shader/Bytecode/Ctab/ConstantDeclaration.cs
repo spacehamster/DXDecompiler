@@ -104,8 +104,11 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 			if(relativeAddressing != null)
 			{
 				// a nasty way to check array subscripts
-				// TODO: we need something more serious...
-				if(decl.Elements <= 1 || !name.EndsWith("]") || name.Count(x => x == ']') != 1)
+				// TODO: we need something less ugly...
+				var firstDotIndex = name.IndexOf('.');
+				firstDotIndex = firstDotIndex == -1 ? name.Length : name.Length;
+				var isChildArray = name.LastIndexOf(']') > firstDotIndex;
+				if(decl.Elements <= 1 || isChildArray || name.Count(x => x == ']') != 1)
 				{
 					// we cannot handle relative addressing if this contant declaration is not an array
 					// we also cannot handle relative addressing if this constant declaration contains nested arrays
@@ -118,8 +121,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 					{
 						relativeAddressing = $"({relativeAddressing} / {declElementSize})";
 					}
-					name = name.Substring(0, name.Length - 1) // name without the last ']'
-						+ $" + {relativeAddressing}]";
+					name = name.Replace("]", $" + {relativeAddressing}]");
 				}
 			}
 
