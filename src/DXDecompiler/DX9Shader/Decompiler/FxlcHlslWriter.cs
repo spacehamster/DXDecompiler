@@ -80,7 +80,7 @@ namespace DXDecompiler.DX9Shader.Decompiler
 					WriteFunction("log", token, ctabOverride);
 					break;
 				case FxlcOpcode.Rsq:
-					WriteFunction("rsq", token, ctabOverride);
+					WriteFunction("1.0f / sqrt", token, ctabOverride);
 					break;
 				case FxlcOpcode.Sin:
 					WriteFunction("sin", token, ctabOverride);
