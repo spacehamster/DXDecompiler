@@ -169,7 +169,7 @@ namespace DXDecompiler.DX9Shader
 					{
 						swizzle = instruction.GetSourceSwizzleName(srcIndex, true);
 						modifier = GetModifier(instruction.GetSourceModifier(srcIndex));
-						return $"expr{srcIndex}";
+						return $"expr{registerNumber}";
 					}
 					goto case RegisterType.ConstInt;
 				case RegisterType.ConstBool:
