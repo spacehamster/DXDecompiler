@@ -395,9 +395,9 @@ namespace DXDecompiler.DX9Shader
 				{
 					if(operand is DestinationOperand dest)
 					{
-						if(dest.RegisterType is RegisterType.Temp or RegisterType.Addr)
+						if(dest.RegisterType == RegisterType.Temp
+							|| (_shader.Type == ShaderType.Vertex && dest.RegisterType == RegisterType.Addr))
 						{
-
 							var registerKey = new RegisterKey(dest.RegisterType, dest.RegisterNumber);
 							if(!tempRegisters.ContainsKey(registerKey))
 							{
@@ -519,7 +519,7 @@ namespace DXDecompiler.DX9Shader
 			var declarations = registers
 				.Select(x =>
 				{
-					var registerName = Operand.GetParamRegisterName(x.RegisterKey.Type, (uint)x.RegisterKey.Number);
+					var registerName = Operand.GetParamRegisterName(x.RegisterKey.Type, x.RegisterKey.Number);
 					var comment = $"// {x.RegisterKey} {registerName}";
 					var code = $"{x.TypeName} {x.Name} : {x.Semantic};";
 					return (Comment: comment, Code: code);

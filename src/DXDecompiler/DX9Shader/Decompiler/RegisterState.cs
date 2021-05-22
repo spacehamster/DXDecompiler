@@ -11,6 +11,7 @@ namespace DXDecompiler.DX9Shader
 		public readonly bool ColumnMajorOrder = true;
 
 		private readonly CultureInfo _culture = CultureInfo.InvariantCulture;
+		private readonly ShaderType _shaderType;
 
 		private ICollection<Constant> _constantDefinitions = new List<Constant>();
 		private ICollection<ConstantInt> _constantIntDefinitions = new List<ConstantInt>();
@@ -24,6 +25,7 @@ namespace DXDecompiler.DX9Shader
 
 		public RegisterState(ShaderModel shader)
 		{
+			_shaderType = shader.Type;
 			Load(shader);
 		}
 
@@ -270,6 +272,7 @@ namespace DXDecompiler.DX9Shader
 			switch(registerKey.Type)
 			{
 				case RegisterType.Input:
+				case RegisterType.Addr when _shaderType is ShaderType.Pixel:
 					return (MethodInputRegisters.Count == 1) ? decl.Name : ("i." + decl.Name);
 				case RegisterType.RastOut:
 				case RegisterType.Output:
@@ -299,7 +302,7 @@ namespace DXDecompiler.DX9Shader
 						default:
 							throw new NotImplementedException();
 					}
-				case RegisterType.Addr:
+				case RegisterType.Addr when _shaderType is not ShaderType.Pixel:
 				case RegisterType.Temp:
 					return registerKey.ToString();
 				default:
