@@ -51,6 +51,22 @@ namespace DXDecompiler.DX9Shader
 		public PrsiToken Prsi { get; set; }
 		public IEnumerable<InstructionToken> Instructions => Tokens.OfType<InstructionToken>();
 
+		public string Profile
+		{
+			get
+			{
+				var version = $"{MajorVersion}_{MinorVersion}";
+				version = version switch
+				{
+					"2_1" => "2_a",
+					"2_255" => "2_sw",
+					"3_255" => "3_sw",
+					_ => version
+				};
+				return $"{Type.GetDescription()}_{version}";
+			}
+		}
+
 		public ShaderModel(int majorVersion, int minorVersion, ShaderType type)
 		{
 			MajorVersion = majorVersion;

@@ -45,9 +45,8 @@ namespace DXDecompiler.DX9Shader.Decompiler
 			};
 			if(shader.Type != ShaderType.Expression)
 			{
-				var shaderProfile = $"{shader.Type.GetDescription()}_{shader.MajorVersion}_{shader.MinorVersion}";
 				var register = declaration.RegisterSet.GetDescription() + declaration.RegisterIndex;
-				decompiled.RegisterAssignments[shaderProfile] = register;
+				decompiled.RegisterAssignments[shader.Profile] = register;
 			}
 			return decompiled;
 		}
