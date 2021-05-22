@@ -1,5 +1,6 @@
 ﻿using DXDecompiler.DX9Shader.Asm;
 using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Decompiler;
 using System;
 using System.Linq;
 
@@ -193,7 +194,8 @@ namespace DXDecompiler.DX9Shader
 			WriteLine("//");
 			foreach(var declaration in constantTable.ConstantDeclarations)
 			{
-				WriteConstantType(declaration.Type, declaration.Name);
+				var decompiled = ConstantTypeWriter.Decompile(declaration.Type, declaration.Name, false, Indent);
+				WriteLine(string.Join("\n", decompiled.Split('\n').Select(l => $"//   {l}")));
 			}
 			WriteLine("//");
 			WriteLine("//");
@@ -616,56 +618,6 @@ namespace DXDecompiler.DX9Shader
 					//WriteLine("// Warning - Not Implemented");
 					throw new NotImplementedException($"Instruction not implemented {instruction.Opcode}");
 			}
-		}
-
-		// copied from HLSLWriter
-		private static string GetConstantTypeName(ConstantType type)
-		{
-			switch(type.ParameterClass)
-			{
-				case ParameterClass.Scalar:
-					return type.ParameterType.GetDescription();
-				case ParameterClass.Vector:
-					return type.ParameterType.GetDescription() + type.Columns;
-				case ParameterClass.Struct:
-					return "struct";
-				case ParameterClass.MatrixColumns:
-				case ParameterClass.MatrixRows:
-					return $"{type.ParameterType.GetDescription()}{type.Rows}x{type.Columns}";
-				case ParameterClass.Object:
-					return type.ParameterType.GetDescription();
-			}
-			throw new NotImplementedException();
-		}
-
-		private void WriteConstantType(ConstantType type, string name, bool isStructMember = false)
-		{
-			string typeName = GetConstantTypeName(type);
-			Write("//   ");
-			WriteIndent();
-			Write("{0}", typeName);
-			if(type.ParameterClass == ParameterClass.Struct)
-			{
-				WriteLine("");
-				Write("//   ");
-				WriteIndent();
-				WriteLine("{");
-				Indent++;
-				foreach(var member in type.Members)
-				{
-					WriteConstantType(member.Type, member.Name, true);
-				}
-				Indent--;
-				Write("//   ");
-				WriteIndent();
-				Write("}");
-			}
-			Write(" {0}", name);
-			if(type.Elements > 1)
-			{
-				Write("[{0}]", type.Elements);
-			}
-			WriteLine(";");
 		}
 	}
 }

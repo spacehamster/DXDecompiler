@@ -1,4 +1,3 @@
-using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.DX9Shader.Decompiler;
 using DXDecompiler.Util;
 using System;
@@ -105,35 +104,6 @@ namespace DXDecompiler.DX9Shader
 				Swizzle = swizzle,
 				Modifier = modifier
 			};
-		}
-
-		private static string GetConstantTypeName(ConstantType type)
-		{
-			switch(type.ParameterClass)
-			{
-				case ParameterClass.Scalar:
-					return type.ParameterType.GetDescription();
-				case ParameterClass.Vector:
-					return type.ParameterType.GetDescription() + type.Columns;
-				case ParameterClass.Struct:
-					return "struct";
-				case ParameterClass.MatrixColumns:
-					return $"column_major {type.ParameterType.GetDescription()}{type.Rows}x{type.Columns}";
-				case ParameterClass.MatrixRows:
-					return $"row_major {type.ParameterType.GetDescription()}{type.Rows}x{type.Columns}";
-				case ParameterClass.Object:
-					switch(type.ParameterType)
-					{
-						case ParameterType.Sampler1D:
-						case ParameterType.Sampler2D:
-						case ParameterType.Sampler3D:
-						case ParameterType.SamplerCube:
-							return "sampler";
-						default:
-							throw new NotImplementedException();
-					}
-			}
-			throw new NotImplementedException();
 		}
 
 		private void WriteInstruction(InstructionToken instruction)
@@ -431,7 +401,6 @@ namespace DXDecompiler.DX9Shader
 			}
 			_registers = new RegisterState(_shader);
 
-			WriteConstantDeclarations();
 
 			if(_registers.MethodInputRegisters.Count > 1)
 			{
@@ -504,54 +473,6 @@ namespace DXDecompiler.DX9Shader
 			WriteLine("}");
 		}
 
-		private void WriteConstantDeclarations()
-		{
-			if(_registers.ConstantDeclarations.Count != 0)
-			{
-				foreach(ConstantDeclaration declaration in _registers.ConstantDeclarations)
-				{
-					Write(declaration);
-				}
-			}
-		}
-		private void Write(ConstantDeclaration declaration)
-		{
-			Write(declaration.Type, declaration.Name);
-			if(!declaration.DefaultValue.All(v => v == 0))
-			{
-				Write(" = {{ {0} }}", string.Join(", ", declaration.DefaultValue));
-			}
-			WriteLine(";");
-			WriteLine();
-		}
-		private void Write(ConstantType type, string name, bool isStructMember = false)
-		{
-			string typeName = GetConstantTypeName(type);
-			WriteIndent();
-			Write("{0}", typeName);
-			if(type.ParameterClass == ParameterClass.Struct)
-			{
-				WriteLine("");
-				WriteLine("{");
-				Indent++;
-				foreach(var member in type.Members)
-				{
-					Write(member.Type, member.Name, true);
-				}
-				Indent--;
-				WriteIndent();
-				Write("}");
-			}
-			Write(" {0}", name);
-			if(type.Elements > 1)
-			{
-				Write("[{0}]", type.Elements);
-			}
-			if(isStructMember)
-			{
-				Write(";\n");
-			}
-		}
 		private void WriteInputStructureDeclaration()
 		{
 			var inputStructType = _shader.Type == ShaderType.Pixel ? "PS_IN" : "VS_IN";
