@@ -181,7 +181,7 @@ namespace DXDecompiler.Tests
 			// Act.
 			var binaryFileBytes = File.ReadAllBytes(file + ".o");
 			var shaderModel = ShaderReader.ReadShader(binaryFileBytes);
-			var decompiledHLSL = HlslWriter.Decompile(shaderModel);
+			var decompiledHLSL = HlslWriter.Decompile(shaderModel, "main");
 			File.WriteAllText($"{OutputDir}/{relPath}.d.hlsl", decompiledHLSL);
 
 			using(var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
@@ -189,6 +189,7 @@ namespace DXDecompiler.Tests
 				var profile = shaderModel.Type == DX9Shader.ShaderType.Pixel ?
 					$"ps_{shaderModel.MajorVersion}_{shaderModel.MinorVersion}" :
 					$"vs_{shaderModel.MajorVersion}_{shaderModel.MinorVersion}";
+				
 				var compiledShader = ShaderBytecode.Compile(decompiledHLSL, "main", profile);
 				var disassembly = shaderBytecode.Disassemble();
 				var redisassembly = compiledShader.Bytecode.Disassemble();
