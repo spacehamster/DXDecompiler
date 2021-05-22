@@ -146,6 +146,10 @@ namespace DXDecompiler.DX9Shader
 			{
 				return $"\"{data.Value}\"";
 			}
+			else if(string.IsNullOrEmpty(data.Value))
+			{
+				return string.Empty;
+			}
 			else
 			{
 				return $"<{data.Value}>";
