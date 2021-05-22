@@ -40,7 +40,7 @@ namespace DXDecompiler.DX9Shader.Decompiler
 			var decompiled = new DecompiledConstantDeclaration
 			{
 				Name = declaration.Name,
-				Code = Decompile(declaration.Type, declaration.Name, true),
+				Code = Decompile(declaration.Type, declaration.Name.TrimStart('$'), true),
 				DefaultValue = defaultValue,
 			};
 			if(shader.Type != ShaderType.Expression)

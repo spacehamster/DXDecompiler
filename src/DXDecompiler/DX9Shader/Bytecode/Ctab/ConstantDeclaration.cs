@@ -208,6 +208,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 			var lastDepth = 0;
 			TraverseChildTree(ref offset, (type, name, index, depth) =>
 			{
+				name = name.TrimStart('$');
 				if(depth >= indexes.Count)
 				{
 					indexes.Add((name, index, type.Elements));
