@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.DX9Shader.Decompiler;
 using DXDecompiler.DX9Shader.FX9;
 using System;
@@ -356,6 +356,10 @@ namespace DXDecompiler.DX9Shader
 			{
 				var annotation = annotations[i];
 				var value = string.Join(", ", annotation.Value);
+				if(annotation.Value.Count > 1)
+				{
+					value = string.Format("{0}({1})", annotation.Parameter.GetTypeName(), value);
+				}
 				if(annotation.Parameter.ParameterType.HasVariableBlob())
 				{
 					Write("{0} {1} = {2};",
