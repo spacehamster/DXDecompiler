@@ -650,14 +650,8 @@ namespace DXDecompiler.DX9Shader
 			Indent++;
 			foreach(var register in declarations)
 			{
-				var registerName = Operand.GetParamRegisterName(register.RegisterKey.Type, register.RegisterKey.Number);
-				var comment = $"// {register.RegisterKey} {registerName}";
-				var code = $"{register.TypeName} {register.Name} : {register.Semantic};";
-
 				WriteIndent();
-				WriteLine(comment);
-				WriteIndent();
-				WriteLine(code);
+				WriteLine($"{register.TypeName} {register.Name} : {register.Semantic};");
 			}
 			Indent--;
 			WriteLine("};");
