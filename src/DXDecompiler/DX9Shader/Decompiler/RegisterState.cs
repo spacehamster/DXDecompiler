@@ -216,6 +216,9 @@ namespace DXDecompiler.DX9Shader
 					if(instruction.IsRelativeAddressMode(srcIndex))
 					{
 						indexer = GetSourceName(instruction, srcIndex + 1, out var indexSwizzle, out var indexModifier);
+						// make sure index swizzle only has one component
+						indexSwizzle = indexSwizzle.TrimStart('.');
+						indexSwizzle = "." + indexSwizzle[0];
 						indexer = string.Format(indexModifier, indexer + indexSwizzle);
 					}
 					sourceRegisterName = decl.GetConstantNameByRegisterNumber(registerNumber, indexer);
