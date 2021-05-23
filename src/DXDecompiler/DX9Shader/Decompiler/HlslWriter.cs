@@ -1,3 +1,4 @@
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.DX9Shader.Decompiler;
 using DXDecompiler.Util;
 using System;
@@ -13,6 +14,7 @@ namespace DXDecompiler.DX9Shader
 			public string Body { get; set; }
 			public string Swizzle { get; set; }
 			public string Modifier { get; set; }
+			public ParameterType? SamplerType { get; set; }
 
 			public override string ToString()
 			{
@@ -110,12 +112,24 @@ namespace DXDecompiler.DX9Shader
 				dataIndex = srcIndex;
 			}
 
+			ParameterType? samplerType = null;
+			var registerNumber = instruction.GetParamRegisterNumber(dataIndex);
+			var registerType = instruction.GetParamRegisterType(dataIndex);
+			if(registerType == RegisterType.Sampler)
+			{
+				var decl = _registers.FindConstant(RegisterSet.Sampler, registerNumber);
+				var type = decl.GetRegisterTypeByOffset(registerNumber - decl.RegisterIndex);
+				samplerType = type.Type.ParameterType;
+			}
+
+
 			var body = _registers.GetSourceName(instruction, dataIndex, out var swizzle, out var modifier);
 			return new SourceOperand
 			{
 				Body = body,
 				Swizzle = swizzle,
-				Modifier = modifier
+				Modifier = modifier,
+				SamplerType = samplerType
 			};
 		}
 
@@ -199,6 +213,24 @@ namespace DXDecompiler.DX9Shader
 					}
 				}
 				WriteLine("{0} = {1};", destination, sourceResult);
+			}
+
+			void WriteTextureAssignment(string postFix, SourceOperand sampler, params SourceOperand[] others)
+			{
+				var operation = sampler.SamplerType switch
+				{
+					ParameterType.Sampler1D => "tex1D",
+					ParameterType.Sampler2D => "tex2D",
+					ParameterType.Sampler3D => "tex3D",
+					ParameterType.SamplerCube => "texCUBE",
+					ParameterType.Sampler => "texUnknown",
+					_ => throw new InvalidOperationException(sampler.SamplerType.ToString())
+				};
+				var args = new SourceOperand[others.Length + 1];
+				args[0] = sampler;
+				others.CopyTo(args, 1);
+				var format = string.Join(", ", args.Select((_, i) => $"{{{i}}}"));
+				WriteAssignment($"{operation}{postFix}({format})", args);
 			}
 
 			switch(instruction.Opcode)
@@ -350,7 +382,7 @@ namespace DXDecompiler.DX9Shader
 				case Opcode.Tex:
 					if((_shader.MajorVersion == 1 && _shader.MinorVersion >= 4) || (_shader.MajorVersion > 1))
 					{
-						WriteAssignment("tex2D({1}, {0})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+						WriteTextureAssignment(string.Empty, GetSourceName(instruction, 2), GetSourceName(instruction, 1));
 					}
 					else
 					{
@@ -358,7 +390,7 @@ namespace DXDecompiler.DX9Shader
 					}
 					break;
 				case Opcode.TexLDL:
-					WriteAssignment("tex2Dlod({1}, {0})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteTextureAssignment("lod", GetSourceName(instruction, 2), GetSourceName(instruction, 1));
 					break;
 				case Opcode.Comment:
 					{
