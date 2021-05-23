@@ -35,7 +35,7 @@ namespace DXDecompiler.DX9Shader.Decompiler
 				}
 				if(operands.OpType == FxlcOperandType.Temp)
 				{
-					temporaryRegisters.Add(operands.OpIndex);
+					temporaryRegisters.Add(operands.OpIndex / 4);
 				}
 			}
 			foreach(var tempIndex in temporaryRegisters)
