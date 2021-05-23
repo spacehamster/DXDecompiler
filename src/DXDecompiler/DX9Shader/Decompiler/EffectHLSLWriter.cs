@@ -156,7 +156,7 @@ namespace DXDecompiler.DX9Shader
 			var data = _effectChunk.StateBlobLookup[key];
 			if(data == null)
 			{
-				return "Blob is NULL";
+				return "NULL /* Blob is NULL!!! */";
 			}
 			if(data.BlobType == StateBlobType.Shader)
 			{

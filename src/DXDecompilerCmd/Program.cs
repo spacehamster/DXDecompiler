@@ -146,8 +146,16 @@ namespace DXDecompilerCmd
 					}
 					else if(options.Mode == DecompileMode.Decompile)
 					{
-						var hlsl = DXDecompiler.DX9Shader.HlslWriter.Decompile(data);
-						sw.Write(hlsl);
+						try
+						{
+							var hlsl = DXDecompiler.DX9Shader.HlslWriter.Decompile(data);
+							sw.Write(hlsl);
+						}
+						catch(Exception e) when(!System.Diagnostics.Debugger.IsAttached)
+						{
+							Console.Error.WriteLine(e);
+							Environment.Exit(1);
+						}
 					}
 					else if(options.Mode == DecompileMode.Debug)
 					{
