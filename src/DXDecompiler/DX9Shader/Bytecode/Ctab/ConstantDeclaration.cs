@@ -68,9 +68,47 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 			{
 				//Note: thre are corrisponding def instructions. TODO: check that they are the same
 				var defaultValueReader = reader.CopyAtOffset((int)defaultValueOffset);
-				for(int i = 0; i < 4; i++)
+				if(result.Type.ParameterClass == ParameterClass.Object)
 				{
-					result.DefaultValue.Add(defaultValueReader.ReadSingle());
+					for(int i = 0; i < 4; i++)
+					{
+						result.DefaultValue.Add(defaultValueReader.ReadSingle());
+					}
+				}
+				else
+				{
+					var forever = uint.MaxValue;
+					var elementCounter = 0;
+					result.TraverseChildTree(ref forever, (type, name, index, depth) =>
+					{
+						float[] ReadFour()
+						{
+							var values = new float[4];
+							for(int i = 0; i < values.Length; ++i)
+							{
+								values[i] = defaultValueReader.ReadSingle();
+							}
+							return values;
+						}
+
+						switch(type.ParameterClass)
+						{
+							case ParameterClass.Struct:
+								break;
+							case ParameterClass.MatrixColumns:
+								result.DefaultValue.AddRange(ReadFour().Take((int)type.Rows));
+								break;
+							case ParameterClass.MatrixRows:
+							case ParameterClass.Vector:
+								result.DefaultValue.AddRange(ReadFour().Take((int)type.Columns));
+								break;
+							case ParameterClass.Scalar:
+								result.DefaultValue.Add(ReadFour()[0]);
+								break;
+							default:
+								throw new NotSupportedException(type.ParameterClass.ToString());
+						}
+					});
 				}
 			}
 			return result;
@@ -248,8 +286,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		/// <param name="type">The type of current target.</param>
 		/// <param name="offset">
 		/// The offset of child element to be searched.
-		/// It will become 0 if a child element has been found exactly on the specified offset,
-		/// non-zero if we are accessing "in the middle of an element",
+		/// If it's <see cref="uint.MaxValue"/>, then it will traverse the entire tree.<br/>
+		/// Otherwise, it will  become 0 if a child element has been found exactly on the specified offset,
+		/// or non-zero if we are accessing "in the middle of an element",
 		/// something like "accessing the 2nd column of matrix".
 		/// </param>
 		/// <param name="visitor">
@@ -257,8 +296,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		/// </param>
 		private void TraverseChildTree(ref uint offset, ChildTreeVisitor visitor)
 		{
+			var fullTraverse = offset == uint.MaxValue;
 			var found = TraverseChildTree(Name, Type, ref offset, visitor, 0);
-			if(!found)
+			if(!found && !fullTraverse)
 			{
 				throw new InvalidOperationException();
 			}
