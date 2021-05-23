@@ -93,7 +93,7 @@ namespace DXDecompiler.DX9Shader
 						if(existing.RegisterAssignments.TryGetValue(registerAssignment.Key, out var existingRegister))
 						{
 							// if register number of the same constant is different
-							// betwwen two shaders of same shader profile
+							// between two shaders of same shader profile
 							if(registerAssignment.Value != existingRegister)
 							{
 								// then probably there weren't a register assignment at all.
@@ -168,7 +168,7 @@ namespace DXDecompiler.DX9Shader
 				else
 				{
 					var funcName = _shaderNames[data];
-					return $"compile {data.Shader.Type.GetDescription()}_{data.Shader.MajorVersion}_{data.Shader.MinorVersion} {funcName}()";
+					return $"compile {data.Shader.Profile} {funcName}()";
 				}
 			}
 			if(data.BlobType == StateBlobType.Variable)
