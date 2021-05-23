@@ -569,10 +569,10 @@ namespace DXDecompiler.DX9Shader
 						{
 							goto checkNext;
 						}
-						// we don't need to write declaration again in this case
-						typeName = name;
-						return;
 					}
+					// we don't need to write declaration again in this case
+					typeName = name;
+					return;
 				checkNext:
 					continue;
 				}
