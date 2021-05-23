@@ -602,7 +602,7 @@ namespace DXDecompiler.DX9Shader
 				// check if a matching type has already been defined inside this effect
 				foreach(var (name, existing) in _effectWriter.InputOutputStructures)
 				{
-					var equals = !existing.Except(current).Any();
+					var equals = existing.Length == current.Length && !existing.Except(current).Any();
 					if(equals)
 					{
 						// we don't need to write declaration again in this case
