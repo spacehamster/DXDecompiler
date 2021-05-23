@@ -120,11 +120,13 @@ namespace DXDecompiler.DX9Shader
 					int destIndex = instruction.GetDestinationParamIndex();
 					RegisterType registerType = instruction.GetParamRegisterType(destIndex);
 					var registerNumber = instruction.GetParamRegisterNumber(destIndex);
+					var maskedLength = instruction.GetDestinationMaskedLength();
 					var registerKey = new RegisterKey(registerType, registerNumber);
-					if(RegisterDeclarations.ContainsKey(registerKey) == false)
+					if(!RegisterDeclarations.TryGetValue(registerKey, out var declaration)
+						|| declaration.MaskedLength < maskedLength)
 					{
-						var reg = new RegisterDeclaration(registerKey);
-						RegisterDeclarations[registerKey] = reg;
+						declaration = new RegisterDeclaration(registerKey, maskedLength);
+						RegisterDeclarations[registerKey] = declaration;
 						switch(registerType)
 						{
 							case RegisterType.AttrOut:
@@ -132,12 +134,10 @@ namespace DXDecompiler.DX9Shader
 							case RegisterType.DepthOut:
 							case RegisterType.Output:
 							case RegisterType.RastOut:
-								MethodOutputRegisters[registerKey] = reg;
+								MethodOutputRegisters[registerKey] = declaration;
 								break;
-
 						}
 					}
-
 				}
 			}
 		}

@@ -546,38 +546,72 @@ namespace DXDecompiler.DX9Shader
 			WriteLine("}");
 		}
 
-		private void WriteStructureDeclaration(IEnumerable<RegisterDeclaration> registers, string postFix, out string typeName)
+		private void WriteInputDeclarationsStructure(IEnumerable<RegisterDeclaration> declarations, out string typeName)
 		{
-			var declarations = registers
-				.Select(x =>
-				{
-					var registerName = Operand.GetParamRegisterName(x.RegisterKey.Type, x.RegisterKey.Number);
-					var comment = $"// {x.RegisterKey} {registerName}";
-					var code = $"{x.TypeName} {x.Name} : {x.Semantic};";
-					return (Comment: comment, Code: code);
-				});
-			var codes = declarations.Select(t => t.Code).ToArray();
-			typeName = $"{_entryPoint}_{postFix}";
+			typeName = $"{_entryPoint}_Input";
 			if(_effectWriter is not null)
 			{
-				// check if a compatible type has alreaady been defined inside this effect
+				var current = declarations
+					.Select(r => (r.MaskedLength, r.Semantic))
+					.ToArray();
+				// check if a compatible type has already been defined inside this effect
 				foreach(var (name, existing) in _effectWriter.InputOutputStructures)
 				{
-					if(codes.All(x => existing.Contains(x)))
+					foreach(var (maskedLength, semantic) in current)
 					{
-						typeName = name;
+						if(!existing.Any(e => e.MaskedLength >= maskedLength && e.Semantic == semantic))
+						{
+							goto checkNext;
+						}
 						// we don't need to write declaration again in this case
+						typeName = name;
+						return;
+					}
+				checkNext:
+					continue;
+				}
+				_effectWriter.InputOutputStructures.Add((typeName, current));
+			}
+
+			WriteDeclarationsAsStruct(typeName, declarations);
+		}
+
+		private void WriteOutputDeclarationsStructure(IEnumerable<RegisterDeclaration> declarations, out string typeName)
+		{
+			typeName = $"{_entryPoint}_Output";
+			if(_effectWriter is not null)
+			{
+				var current = declarations
+					.Select(r => (r.MaskedLength, r.Semantic))
+					.ToArray();
+				// check if a matching type has already been defined inside this effect
+				foreach(var (name, existing) in _effectWriter.InputOutputStructures)
+				{
+					var equals = !existing.Except(current).Any();
+					if(equals)
+					{
+						// we don't need to write declaration again in this case
+						typeName = name;
 						return;
 					}
 				}
-				_effectWriter.InputOutputStructures.Add((typeName, codes));
+				_effectWriter.InputOutputStructures.Add((typeName, current));
 			}
 
+			WriteDeclarationsAsStruct(typeName, declarations);
+		}
+
+		private void WriteDeclarationsAsStruct(string typeName, IEnumerable<RegisterDeclaration> declarations)
+		{
 			WriteLine($"struct {typeName}");
 			WriteLine("{");
 			Indent++;
-			foreach(var (comment, code) in declarations)
+			foreach(var register in declarations)
 			{
+				var registerName = Operand.GetParamRegisterName(register.RegisterKey.Type, register.RegisterKey.Number);
+				var comment = $"// {register.RegisterKey} {registerName}";
+				var code = $"{register.TypeName} {register.Name} : {register.Semantic};";
+
 				WriteIndent();
 				WriteLine(comment);
 				WriteIndent();
@@ -601,7 +635,7 @@ namespace DXDecompiler.DX9Shader
 					methodParameters = $"{input.TypeName} {input.Name} : {input.Semantic}";
 					break;
 				default:
-					WriteStructureDeclaration(registers, "Input", out var inputTypeName);
+					WriteInputDeclarationsStructure(registers, out var inputTypeName);
 					methodParameters = $"{inputTypeName} i";
 					break;
 			}
@@ -620,7 +654,7 @@ namespace DXDecompiler.DX9Shader
 					methodSemantic = $" : {semantic}";
 					break;
 				default:
-					WriteStructureDeclaration(registers, "Output", out methodReturnType);
+					WriteOutputDeclarationsStructure(registers, out methodReturnType);
 					methodSemantic = string.Empty;
 					break;
 			};
