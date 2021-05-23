@@ -2,6 +2,7 @@
 using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.DX9Shader.Decompiler;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace DXDecompiler.DX9Shader
@@ -30,6 +31,23 @@ namespace DXDecompiler.DX9Shader
 			var asmWriter = new AsmWriter(shaderModel);
 			return asmWriter.Decompile();
 		}
+
+		public string Disassemble(InstructionToken instruction)
+		{
+			using var writer = new StringWriter();
+			var previous = Writer;
+			try
+			{
+				Writer = writer;
+				WriteInstruction(instruction);
+				return writer.ToString();
+			}
+			finally
+			{
+				Writer = previous;
+			}
+		}
+
 		static string ApplyModifier(SourceModifier modifier, string value)
 		{
 			switch(modifier)

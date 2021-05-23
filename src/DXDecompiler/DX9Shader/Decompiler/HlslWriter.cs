@@ -28,6 +28,7 @@ namespace DXDecompiler.DX9Shader
 		}
 
 		private readonly ShaderModel _shader;
+		private readonly AsmWriter _disassember;
 		private readonly bool _doAstAnalysis;
 		private int _iterationDepth = 0;
 
@@ -39,6 +40,10 @@ namespace DXDecompiler.DX9Shader
 		{
 			_shader = shader;
 			_doAstAnalysis = doAstAnalysis;
+			if(!_doAstAnalysis)
+			{
+				_disassember = new(shader);
+			}
 			if(string.IsNullOrEmpty(entryPoint))
 			{
 				_entryPoint = $"{_shader.Type}Main";
@@ -136,7 +141,7 @@ namespace DXDecompiler.DX9Shader
 		private void WriteInstruction(InstructionToken instruction)
 		{
 			WriteIndent();
-			WriteLine($"// {instruction}");
+			WriteLine($"// {_disassember?.Disassemble(instruction).Trim()}");
 			switch(instruction.Opcode)
 			{
 				case Opcode.Def:
