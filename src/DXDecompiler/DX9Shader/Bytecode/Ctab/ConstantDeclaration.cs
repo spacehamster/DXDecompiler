@@ -19,6 +19,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		public ushort RegisterCount { get; private set; }
 		public ConstantType Type { get; private set; }
 		public List<float> DefaultValue { get; private set; }
+		public List<float> DefaultValueWithPadding { get; private set; }
 
 		public uint Rows => Type.Rows;
 		public uint Columns => Type.Columns;
@@ -45,7 +46,8 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		}
 		public ConstantDeclaration()
 		{
-			DefaultValue = new List<float>();
+			DefaultValue = new();
+			DefaultValueWithPadding = new();
 		}
 		public static ConstantDeclaration Parse(BytecodeReader reader, BytecodeReader decReader)
 		{
@@ -72,7 +74,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 				{
 					for(int i = 0; i < 4; i++)
 					{
-						result.DefaultValue.Add(defaultValueReader.ReadSingle());
+						var value = defaultValueReader.ReadSingle();
+						result.DefaultValueWithPadding.Add(value);
+						result.DefaultValue.Add(value);
 					}
 				}
 				else
@@ -84,10 +88,11 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 						float[] ReadFour()
 						{
 							var values = new float[4];
-							for(int i = 0; i < values.Length; ++i)
+							for(int i = 0; i < 4; ++i)
 							{
 								values[i] = defaultValueReader.ReadSingle();
 							}
+							result.DefaultValueWithPadding.AddRange(values);
 							return values;
 						}
 

@@ -153,12 +153,12 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 							{
 								continue;
 							}
-							if(x.DefaultValue.Count != constantValueCount)
+							if(x.DefaultValueWithPadding.Count != constantValueCount)
 							{
 								throw new InvalidOperationException();
 							}
 							offset = -constantDecarationStart;
-							current = x.DefaultValue;
+							current = x.DefaultValueWithPadding;
 						}
 					}
 

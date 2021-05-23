@@ -139,7 +139,7 @@ namespace DXDecompiler.DX9Shader.FX9
 							sb.Append(ParameterType.ToString());
 							break;
 						default:
-							sb.Append(ParameterType.ToString().ToLower());
+							sb.Append(ParameterType.GetDescription());
 							break;
 					}
 					break;
