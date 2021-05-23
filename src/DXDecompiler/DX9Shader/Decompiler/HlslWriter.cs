@@ -355,7 +355,34 @@ namespace DXDecompiler.DX9Shader
 					WriteAssignment("{0} * {1}", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Nrm:
-					WriteAssignment("normalize({0})", GetSourceName(instruction, 1));
+					// the nrm opcode actually only works on the 3D vector
+					var operand = GetSourceName(instruction, 1);
+					if(instruction.GetDestinationMaskedLength() < 4)
+					{
+						var swizzle = operand.Swizzle.TrimStart('.');
+						switch(swizzle.Length)
+						{
+							case 0:
+							case 4:
+								WriteAssignment("normalize({0}.xyz)", operand);
+								break;
+							case 1:
+								// let it reach 3 dimensions
+								operand.Swizzle += swizzle;
+								operand.Swizzle += swizzle;
+								goto case 3;
+							case 3:
+								WriteAssignment("normalize({0})", operand);
+								break;
+							default:
+								WriteAssignment("({0} / length(float3({0}))", operand);
+								break;
+						}
+					}
+					else
+					{
+						WriteAssignment("({0} / length(float3({0}))", operand);
+					}
 					break;
 				case Opcode.Pow:
 					WriteAssignment("pow({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
