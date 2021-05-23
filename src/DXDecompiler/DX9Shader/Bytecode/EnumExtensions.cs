@@ -23,6 +23,8 @@ namespace DXDecompiler.DX9Shader
 					return "texture2D";
 				case ParameterType.Texture3D:
 					return "texture3D";
+				case ParameterType.TextureCube:
+					return "textureCUBE";
 				default:
 					return value.ToString().ToLower();
 			}
