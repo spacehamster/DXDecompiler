@@ -19,7 +19,7 @@ namespace DXDecompiler.DX9Shader
 			public override string ToString()
 			{
 				var body = string.Format(Modifier, Body);
-				if(char.IsDigit(body.Last()))
+				if(body.All(char.IsDigit))
 				{
 					body = $"({body})";
 				}
@@ -233,6 +233,10 @@ namespace DXDecompiler.DX9Shader
 				};
 				var args = new SourceOperand[others.Length + 2];
 				var uvSwizzle = uv.Swizzle.TrimStart('.');
+				if(uvSwizzle.Length == 0)
+				{
+					uvSwizzle = "xyzw";
+				}
 				if(uvSwizzle.Length > dimension + extraUvDimensions)
 				{
 					uv.Swizzle = "." + uvSwizzle.Substring(0, dimension + extraUvDimensions);
