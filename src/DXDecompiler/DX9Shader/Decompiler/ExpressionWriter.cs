@@ -1,5 +1,5 @@
 ﻿using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 
 namespace DXDecompiler.DX9Shader.Decompiler
@@ -7,6 +7,7 @@ namespace DXDecompiler.DX9Shader.Decompiler
 	class ExpressionHLSLWriter : FxlcHlslWriter
 	{
 		string ExpressionName { get; }
+
 		public ExpressionHLSLWriter(ShaderModel shader, string expressionName) : base(shader)
 		{
 			ExpressionName = expressionName;
@@ -18,22 +19,63 @@ namespace DXDecompiler.DX9Shader.Decompiler
 		}
 		protected override void Write()
 		{
-			WriteLine($"float {ExpressionName}()");
+			var (rows, columns) = GetOutputDimensions();
+			string returnType;
+			if(rows == 1)
+			{
+				returnType = columns == 1 ? "float" : $"float{columns}";
+			}
+			else
+			{
+				returnType = $"float{rows}x{columns}";
+			}
+
+			WriteLine($"{returnType} {ExpressionName}()");
 			WriteLine("{");
 			Indent++;
 
 			WriteTemporaries();
-
+			var destinationVariables = string.Join(", ", Enumerable.Range(0, rows).Select(i => $"expr{i}"));
 			WriteIndent();
-			WriteLine("float expr0;");
+			WriteLine($"float{columns} {destinationVariables};");
 
 			WriteInstructions();
 
 			WriteIndent();
-			WriteLine("return expr0;");
+			if(rows == 1)
+			{
+				WriteLine("return expr0;");
+			}
+			else
+			{
+
+				WriteLine($"return {returnType}({destinationVariables});");
+			}
 
 			Indent--;
 			WriteLine("}");
+		}
+		private (int Rows, int Columns) GetOutputDimensions()
+		{
+			int registerNumber = 0;
+			int components = 0;
+			foreach(var token in Shader.Fxlc.Tokens)
+			{
+				var destination = token.Operands[0];
+				if(destination.IsArray != 0 && destination.ArrayType == FxlcOperandType.Expr)
+				{
+					throw new NotImplementedException();
+				}
+				if(destination.OpType != FxlcOperandType.Expr)
+				{
+					continue;
+				}
+				registerNumber = Math.Max(registerNumber, (int)destination.OpIndex / 4);
+				var extraComponents = Math.Max(0, (int)destination.ComponentCount - 1);
+				var lastIndex = Math.Min(4, (int)destination.OpIndex % 4 + extraComponents);
+				components = Math.Max(components, lastIndex);
+			}
+			return (registerNumber + 1, components + 1);
 		}
 	}
 }
