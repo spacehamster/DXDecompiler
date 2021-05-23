@@ -430,13 +430,13 @@ namespace DXDecompiler.DX9Shader
 				index = string.Format("[{0}]", assignment.ArrayIndex);
 			}
 			string value;
-			if(assignment.Value.Count > 1)
-			{
-				value = string.Format("{{ {0} }}", string.Join(", ", assignment.Value));
-			}
-			else if(_effectChunk.StateBlobLookup.ContainsKey(assignment))
+			if(_effectChunk.StateBlobLookup.ContainsKey(assignment))
 			{
 				value = StateBlobToString(assignment);
+			}
+			else if(assignment.Value.Count > 1)
+			{
+				value = string.Format("{{ {0} }}", string.Join(", ", assignment.Value));
 			}
 			else
 			{
