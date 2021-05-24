@@ -588,61 +588,6 @@ namespace DXDecompiler.DX9Shader
 			WriteLine("}");
 		}
 
-		private void WriteInputDeclarationsStructure(IEnumerable<RegisterDeclaration> declarations, out string typeName)
-		{
-			typeName = $"{_entryPoint}_Input";
-			if(_effectWriter is not null)
-			{
-				var current = declarations
-					.Select(r => (r.MaskedLength, r.Semantic))
-					.ToArray();
-				// check if a compatible type has already been defined inside this effect
-				foreach(var (name, existing) in _effectWriter.InputOutputStructures)
-				{
-					foreach(var (maskedLength, semantic) in current)
-					{
-						if(!existing.Any(e => e.MaskedLength >= maskedLength && e.Semantic == semantic))
-						{
-							goto checkNext;
-						}
-					}
-					// we don't need to write declaration again in this case
-					typeName = name;
-					return;
-				checkNext:
-					continue;
-				}
-				_effectWriter.InputOutputStructures.Add((typeName, current));
-			}
-
-			WriteDeclarationsAsStruct(typeName, declarations);
-		}
-
-		private void WriteOutputDeclarationsStructure(IEnumerable<RegisterDeclaration> declarations, out string typeName)
-		{
-			typeName = $"{_entryPoint}_Output";
-			if(_effectWriter is not null)
-			{
-				var current = declarations
-					.Select(r => (r.MaskedLength, r.Semantic))
-					.ToArray();
-				// check if a matching type has already been defined inside this effect
-				foreach(var (name, existing) in _effectWriter.InputOutputStructures)
-				{
-					var equals = existing.Length == current.Length && !existing.Except(current).Any();
-					if(equals)
-					{
-						// we don't need to write declaration again in this case
-						typeName = name;
-						return;
-					}
-				}
-				_effectWriter.InputOutputStructures.Add((typeName, current));
-			}
-
-			WriteDeclarationsAsStruct(typeName, declarations);
-		}
-
 		private void WriteDeclarationsAsStruct(string typeName, IEnumerable<RegisterDeclaration> declarations)
 		{
 			WriteLine($"struct {typeName}");
@@ -671,7 +616,8 @@ namespace DXDecompiler.DX9Shader
 					methodParameters = $"{input.TypeName} {input.Name} : {input.Semantic}";
 					break;
 				default:
-					WriteInputDeclarationsStructure(registers, out var inputTypeName);
+					var inputTypeName = $"{_entryPoint}_Input";
+					WriteDeclarationsAsStruct(inputTypeName, registers);
 					methodParameters = $"{inputTypeName} i";
 					break;
 			}
@@ -690,7 +636,8 @@ namespace DXDecompiler.DX9Shader
 					methodSemantic = $" : {semantic}";
 					break;
 				default:
-					WriteOutputDeclarationsStructure(registers, out methodReturnType);
+					methodReturnType = $"{_entryPoint}_Output";
+					WriteDeclarationsAsStruct(methodReturnType, registers);
 					methodSemantic = string.Empty;
 					break;
 			};
