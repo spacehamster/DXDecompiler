@@ -92,6 +92,12 @@ namespace DXDecompilerCmd
 			if(string.IsNullOrEmpty(options.SourcePath))
 			{
 				Console.Error.WriteLine("No source path specified");
+				Console.Error.WriteLine("Usage: ");
+				Console.Error.WriteLine("  DXDecompilerCmd <CompiledShader>                # decompile to stdout");
+				Console.Error.WriteLine("  DXDecompilerCmd <CompiledShader>    -O <Output> # decompile to file");
+				Console.Error.WriteLine("  DXDecompilerCmd <CompiledShader> -a             # disassemble to stdout");
+				Console.Error.WriteLine("  DXDecompilerCmd <CompiledShader> -a -O <Output> # disassemble to file");
+				Console.Error.WriteLine("  DXDecompilerCmd <CompiledShader> -h -O <Output> # generate debug HTML");
 				Environment.Exit(1);
 			}
 
