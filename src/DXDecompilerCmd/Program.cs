@@ -1,10 +1,11 @@
-﻿using DXDecompiler;
+using DXDecompiler;
 using DXDecompiler.DebugParser;
 using DXDecompiler.DebugParser.DX9;
 using DXDecompiler.DebugParser.FX9;
 using DXDecompiler.Decompiler;
 using DXDecompiler.Util;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace DXDecompilerCmd
@@ -58,6 +59,8 @@ namespace DXDecompilerCmd
 		}
 		static void Main(string[] args)
 		{
+			Trace.Listeners.Add(new ConsoleTraceListener(useErrorStream: true));
+
 			var options = new Options();
 			for(int i = 0; i < args.Length; i++)
 			{

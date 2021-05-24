@@ -511,6 +511,12 @@ namespace DXDecompiler.DX9Shader
 			{
 				throw new InvalidOperationException($"Expression should be written using {nameof(ExpressionHLSLWriter)} in {nameof(EffectHLSLWriter)}");
 			}
+			if(_shader.MajorVersion == 1)
+			{
+				WriteLine("#pragma message \"Shader Model 1.0 not supported\"");
+				WriteLine($"float4 {_entryPoint}(): POSITION;");
+				return;
+			}
 			_registers = new RegisterState(_shader);
 
 			foreach(var declaration in _registers.ConstantDeclarations)
