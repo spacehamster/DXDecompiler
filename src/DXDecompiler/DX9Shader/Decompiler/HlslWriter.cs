@@ -456,6 +456,9 @@ namespace DXDecompiler.DX9Shader
 				case Opcode.DSY:
 					WriteAssignment("ddy({0})", GetSourceName(instruction, 1));
 					break;
+				case Opcode.Lit:
+					WriteAssignment("lit({0}.x, {0}.y, {0}.w)", GetSourceName(instruction, 1));
+					break;
 				default:
 					throw new NotImplementedException(instruction.Opcode.ToString());
 			}
