@@ -1,4 +1,4 @@
-﻿using DXDecompiler.DX9Shader.Bytecode;
+using DXDecompiler.DX9Shader.Bytecode;
 using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
 using DXDecompiler.DX9Shader.FX9;
@@ -138,7 +138,10 @@ namespace DXDecompiler.DX9Shader
 							Fxlc = FxlcBlock.Parse(commentReader);
 							return null;
 						case CommentType.PRES:
-							Preshader = Preshader.Parse(commentReader);
+							if(size > 1)
+							{
+								Preshader = Preshader.Parse(commentReader);
+							}
 							return null;
 						case CommentType.PRSI:
 							Prsi = PrsiToken.Parse(commentReader);
