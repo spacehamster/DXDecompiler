@@ -58,6 +58,7 @@ namespace DXDecompiler.DX9Shader
 			var blobShaders = _effectChunk.StateBlobs
 				.Where(x => x.BlobType is StateBlobType.Shader or StateBlobType.IndexShader)
 				.Select(x => x.Shader);
+
 			foreach(var shader in variableShaders.Concat(blobShaders))
 			{
 				var declarations = shader.ConstantTable?.ConstantDeclarations
@@ -65,7 +66,6 @@ namespace DXDecompiler.DX9Shader
 				var decompiled = declarations.Select(c => ConstantTypeWriter.Decompile(c, shader));
 				foreach(var declaration in decompiled)
 				{
-					// assuming every shader have com
 					if(!CommonConstantDeclarations.TryGetValue(declaration.Name, out var existing))
 					{
 						CommonConstantDeclarations[declaration.Name] = declaration;
@@ -105,6 +105,26 @@ namespace DXDecompiler.DX9Shader
 						{
 							existing.RegisterAssignments[registerAssignment.Key] = registerAssignment.Value;
 						}
+					}
+				}
+			}
+
+			// we should also remove register assignments, 
+			// when there are two different declarations with the same register assignments
+			var occupiedRegisterAssignments = new Dictionary<KeyValuePair<string, string>, DecompiledConstantDeclaration>();
+			foreach(var decl in CommonConstantDeclarations.Values)
+			{
+				foreach(var assignment in decl.RegisterAssignments)
+				{
+					if(occupiedRegisterAssignments.TryGetValue(assignment, out var other))
+					{
+						// remove conflicting register assignments
+						other.RegisterAssignments.Remove(assignment.Key);
+						decl.RegisterAssignments.Remove(assignment.Key);
+					}
+					else
+					{
+						occupiedRegisterAssignments[assignment] = decl;
 					}
 				}
 			}
