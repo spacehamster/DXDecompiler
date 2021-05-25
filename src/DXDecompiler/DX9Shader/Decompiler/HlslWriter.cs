@@ -339,7 +339,7 @@ namespace DXDecompiler.DX9Shader
 					WriteAssignment("log2({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Lrp:
-					WriteAssignment("lerp({1}, {2}, {0})",
+					WriteAssignment("lerp({2}, {1}, {0})",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.Mad:
