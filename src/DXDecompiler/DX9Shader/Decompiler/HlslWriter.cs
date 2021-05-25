@@ -173,6 +173,13 @@ namespace DXDecompiler.DX9Shader
 			void WriteAssignment(string sourceFormat, params SourceOperand[] args)
 			{
 				var destination = GetDestinationName(instruction, out var writeMask);
+				var destinationModifier = instruction.GetDestinationResultModifier() switch
+				{
+					ResultModifier.None => "{0} = {1};",
+					ResultModifier.Saturate => "{0} = saturate({1});",
+					ResultModifier.PartialPrecision => $"{{0}} = /* not implemented _pp modifier */ {{1}};",
+					object unknown => throw new NotImplementedException($"{unknown}")
+				};
 				var sourceResult = string.Format(sourceFormat, args);
 
 				var swizzleSizes = args.Select(x => x.Swizzle.StartsWith(".") ? x.Swizzle.Trim('.').Length : -1);
@@ -217,7 +224,7 @@ namespace DXDecompiler.DX9Shader
 						sourceResult = $"({sourceResult}){writeMask}";
 					}
 				}
-				WriteLine("{0} = {1};", destination, sourceResult);
+				WriteLine(destinationModifier, destination, sourceResult);
 			}
 
 			void WriteTextureAssignment(string postFix, SourceOperand sampler, SourceOperand uv, int extraUvDimensions, params SourceOperand[] others)
