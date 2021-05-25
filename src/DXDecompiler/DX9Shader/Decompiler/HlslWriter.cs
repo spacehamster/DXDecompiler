@@ -11,14 +11,20 @@ namespace DXDecompiler.DX9Shader
 	{
 		private class SourceOperand
 		{
-			public string Body { get; set; }
-			public string Swizzle { get; set; }
-			public string Modifier { get; set; }
-			public ParameterType? SamplerType { get; set; }
+			public string Body { get; set; } // normally, register / constant name, or type name if Literals are not null
+			public string[] Literals { get; set; } // either null, or literal values
+			public string Swizzle { get; set; } // either empty, or a swizzle with leading dot. Empty if Literals are not null.
+			public string Modifier { get; set; } // should be used with string.Format to format the body. Should be "{0}" if Literals are not null.
+			public ParameterType? SamplerType { get; set; } // not null if it's a sampler
 
 			public override string ToString()
 			{
-				var body = string.Format(Modifier, Body);
+				var body = Body;
+				if(Literals is not null)
+				{
+					body += string.Format("{0}({1})", Literals.Length, string.Join(", ", Literals));
+				}
+				body = string.Format(Modifier, body);
 				if(body.All(char.IsDigit))
 				{
 					body = $"({body})";
@@ -128,10 +134,11 @@ namespace DXDecompiler.DX9Shader
 			}
 
 
-			var body = _registers.GetSourceName(instruction, dataIndex, out var swizzle, out var modifier);
+			var body = _registers.GetSourceName(instruction, dataIndex, out var swizzle, out var modifier, out var literals);
 			return new SourceOperand
 			{
 				Body = body,
+				Literals = literals,
 				Swizzle = swizzle,
 				Modifier = modifier,
 				SamplerType = samplerType
@@ -198,6 +205,15 @@ namespace DXDecompiler.DX9Shader
 						foreach(var arg in args)
 						{
 							const string xyzw = ".xyzw";
+
+							if(arg.Literals is not null)
+							{
+								arg.Literals = arg.Literals
+									.Where((v, i) => writeMask.Contains(xyzw[i + 1]))
+									.ToArray();
+								continue;
+							}
+
 							var trimmedSwizzle = ".";
 							if(string.IsNullOrEmpty(arg.Swizzle))
 							{
@@ -362,35 +378,37 @@ namespace DXDecompiler.DX9Shader
 					WriteAssignment("{0} * {1}", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Nrm:
-					// the nrm opcode actually only works on the 3D vector
-					var operand = GetSourceName(instruction, 1);
-					if(instruction.GetDestinationMaskedLength() < 4)
 					{
-						var swizzle = operand.Swizzle.TrimStart('.');
-						switch(swizzle.Length)
+						// the nrm opcode actually only works on the 3D vector
+						var operand = GetSourceName(instruction, 1);
+						if(instruction.GetDestinationMaskedLength() < 4)
 						{
-							case 0:
-							case 4:
-								WriteAssignment("normalize({0}.xyz)", operand);
-								break;
-							case 1:
-								// let it reach 3 dimensions
-								operand.Swizzle += swizzle;
-								operand.Swizzle += swizzle;
-								goto case 3;
-							case 3:
-								WriteAssignment("normalize({0})", operand);
-								break;
-							default:
-								WriteAssignment("({0} / length(float3({0}))", operand);
-								break;
+							var swizzle = operand.Swizzle.TrimStart('.');
+							switch(swizzle.Length)
+							{
+								case 0:
+								case 4:
+									WriteAssignment("normalize({0}.xyz)", operand);
+									break;
+								case 1:
+									// let it reach 3 dimensions
+									operand.Swizzle += swizzle;
+									operand.Swizzle += swizzle;
+									goto case 3;
+								case 3:
+									WriteAssignment("normalize({0})", operand);
+									break;
+								default:
+									WriteAssignment("({0} / length(float3({0}))", operand);
+									break;
+							}
 						}
+						else
+						{
+							WriteAssignment("({0} / length(float3({0}))", operand);
+						}
+						break;
 					}
-					else
-					{
-						WriteAssignment("({0} / length(float3({0}))", operand);
-					}
-					break;
 				case Opcode.Pow:
 					WriteAssignment("pow({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;

@@ -342,22 +342,32 @@ namespace DXDecompiler.DX9Shader
 			return swizzleArray;
 		}
 
+		public int? GetSourceSwizzleLimit(int operandDataIndex)
+		{
+			int logicalIndex = 0;
+			for(var i = 0; i < operandDataIndex; ++i)
+			{
+				if(!IsRelativeAddressMode(i))
+				{
+					++logicalIndex;
+				}
+			}
+
+			return Opcode switch
+			{
+				Opcode.Dp3 => 3,
+				Opcode.DP2Add => logicalIndex < 3 ? 2 : 1,// dp2add dst, src0.xy src1.xy src2.x
+				_ => null,
+			};
+		}
+
 		public string GetSourceSwizzleName(int srcIndex, bool hlsl = false)
 		{
 			int? swizzleLimit = null;
 			//TODO: Probably useful in hlsl mode
 			if(hlsl)
 			{
-				switch(Opcode)
-				{
-					case Opcode.Dp3:
-						swizzleLimit = 3;
-						break;
-					case Opcode.DP2Add:
-						// dp2add src0.xy src1.xy src2.x
-						swizzleLimit = srcIndex < 2 ? 2 : 1;
-						break;
-				}
+				swizzleLimit = GetSourceSwizzleLimit(srcIndex);
 			}
 
 			string swizzleName = "";

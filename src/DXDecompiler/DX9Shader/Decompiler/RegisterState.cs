@@ -155,7 +155,7 @@ namespace DXDecompiler.DX9Shader
 			return registerName;
 		}
 
-		public string GetSourceName(InstructionToken instruction, int srcIndex, out string swizzle, out string modifier)
+		public string GetSourceName(InstructionToken instruction, int srcIndex, out string swizzle, out string modifier, out string[] literals)
 		{
 			string sourceRegisterName;
 			var registerKey = instruction.GetParamRegisterKey(srcIndex);
@@ -171,17 +171,18 @@ namespace DXDecompiler.DX9Shader
 					{
 						swizzle = instruction.GetSourceSwizzleName(srcIndex, true);
 						modifier = GetModifier(instruction.GetSourceModifier(srcIndex));
+						literals = null;
 						return $"expr{registerNumber}";
 					}
 					goto case RegisterType.ConstInt;
 				case RegisterType.ConstBool:
 				case RegisterType.ConstInt:
-					sourceRegisterName = GetSourceConstantName(instruction, srcIndex);
-					if(sourceRegisterName != null)
+					literals = GetSourceConstantLiterals(instruction, srcIndex, out var literalsType);
+					if(literals != null)
 					{
 						swizzle = string.Empty;
 						modifier = "{0}";
-						return sourceRegisterName;
+						return literalsType;
 					}
 
 					RegisterSet registerSet;
@@ -215,7 +216,11 @@ namespace DXDecompiler.DX9Shader
 					string indexer = null;
 					if(instruction.IsRelativeAddressMode(srcIndex))
 					{
-						indexer = GetSourceName(instruction, srcIndex + 1, out var indexSwizzle, out var indexModifier);
+						indexer = GetSourceName(instruction, srcIndex + 1, out var indexSwizzle, out var indexModifier, out var indexLiterals);
+						if(indexLiterals != null)
+						{
+							throw new InvalidOperationException();
+						}
 						// make sure index swizzle only has one component
 						indexSwizzle = indexSwizzle.TrimStart('.');
 						indexSwizzle = "." + indexSwizzle[0];
@@ -224,6 +229,7 @@ namespace DXDecompiler.DX9Shader
 					sourceRegisterName = decl.GetConstantNameByRegisterNumber(registerNumber, indexer);
 					break;
 				default:
+					literals = null;
 					sourceRegisterName = GetRegisterName(registerKey);
 					break;
 			}
@@ -336,16 +342,16 @@ namespace DXDecompiler.DX9Shader
 				c.ContainsIndex(index));
 		}
 
-		private string GetSourceConstantName(InstructionToken instruction, int srcIndex)
+		private string[] GetSourceConstantLiterals(InstructionToken instruction, int srcIndex, out string type)
 		{
 			var registerType = instruction.GetParamRegisterType(srcIndex);
 			var registerNumber = instruction.GetParamRegisterNumber(srcIndex);
-
-			string type;
-			string[] constant;
+			var swizzleLimit = instruction.GetSourceSwizzleLimit(srcIndex) ?? 4;
+			string[] constants;
 			switch(registerType)
 			{
 				case RegisterType.ConstBool:
+					type = "bool";
 					//throw new NotImplementedException();
 					return null;
 				case RegisterType.ConstInt:
@@ -355,7 +361,19 @@ namespace DXDecompiler.DX9Shader
 					{
 						return null;
 					}
-					var intValues = instruction.GetSourceSwizzleComponents(srcIndex)
+					var intSwizzles = instruction.GetSourceSwizzleComponents(srcIndex);
+					if(instruction.Opcode == Opcode.Rep)
+					{
+						if(intSwizzles[0] != 0)
+						{
+							// https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/rep---ps
+							// MSDN says "i#.yzw" are unused, but it's not clear on whether if swizzles are allowed
+							throw new NotImplementedException("rep i# with swizzles not yet implemented");
+						}
+						swizzleLimit = 1;
+					}
+					var intValues = intSwizzles
+						.Take(swizzleLimit)
 						.Select(s => constantInt[s])
 						.ToArray();
 
@@ -374,7 +392,7 @@ namespace DXDecompiler.DX9Shader
 						default:
 							throw new NotImplementedException();
 					}
-					constant = intValues.Select(i => i.ToString(_culture)).ToArray();
+					constants = intValues.Select(i => i.ToString(_culture)).ToArray();
 					break;
 				case RegisterType.Const:
 				case RegisterType.Const2:
@@ -388,6 +406,7 @@ namespace DXDecompiler.DX9Shader
 					}
 
 					var floatValues = instruction.GetSourceSwizzleComponents(srcIndex)
+						.Take(swizzleLimit)
 						.Select(s => constantRegister[s])
 						.ToArray();
 
@@ -410,9 +429,10 @@ namespace DXDecompiler.DX9Shader
 						default:
 							throw new NotImplementedException();
 					}
-					constant = floatValues.Select(f => f.ToString(_culture)).ToArray();
+					constants = floatValues.Select(f => f.ToString(_culture)).ToArray();
 					break;
 				default:
+					type = null;
 					return null;
 			}
 
@@ -421,7 +441,7 @@ namespace DXDecompiler.DX9Shader
 				// TODO
 			}
 
-			return string.Format("{0}{1}({2})", type, constant.Length, string.Join(", ", constant));
+			return constants;
 		}
 
 
