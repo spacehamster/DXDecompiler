@@ -447,13 +447,38 @@ namespace DXDecompiler.DX9Shader
 					WriteAssignment("{0} - {1}", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Tex:
-					if((_shader.MajorVersion == 1 && _shader.MinorVersion >= 4) || (_shader.MajorVersion > 1))
+					if(_shader.MajorVersion > 1)
 					{
 						WriteTextureAssignment(string.Empty, GetSourceName(instruction, 2), GetSourceName(instruction, 1), 0);
 					}
+					// shader model 1
+					else if(_shader.MinorVersion >= 4)
+					{
+						throw new NotImplementedException("texld in ps_1_4 not implemented yet");
+					}
 					else
 					{
-						WriteAssignment("tex2D()");
+						var uvName = GetDestinationName(instruction, out var writeMask);
+						var uvOperand = new SourceOperand
+						{
+							Body = uvName,
+							Swizzle = string.Empty,
+							Modifier = "{0}"
+						};
+
+						var registerNumber = instruction.GetParamRegisterNumber(0);
+						var samplerDecl = _registers.FindConstant(RegisterSet.Sampler, instruction.GetParamRegisterNumber(0));
+						var samplerName = samplerDecl.GetConstantNameByRegisterNumber(registerNumber, null);
+						var samplerType = samplerDecl.GetRegisterTypeByOffset(registerNumber - samplerDecl.RegisterIndex).Type.ParameterType;
+						var samplerOperand = new SourceOperand
+						{
+							Body = samplerName,
+							Swizzle = string.Empty,
+							Modifier = "{0}",
+							SamplerType = samplerType
+						};
+
+						WriteTextureAssignment(string.Empty, samplerOperand, uvOperand, 0);
 					}
 					break;
 				case Opcode.TexLDL:
@@ -539,12 +564,12 @@ namespace DXDecompiler.DX9Shader
 			{
 				throw new InvalidOperationException($"Expression should be written using {nameof(ExpressionHLSLWriter)} in {nameof(EffectHLSLWriter)}");
 			}
-			if(_shader.MajorVersion == 1)
+			/*if(_shader.MajorVersion == 1)
 			{
 				WriteLine("#pragma message \"Shader Model 1.0 not supported\"");
 				WriteLine($"float4 {_entryPoint}(): POSITION;");
 				return;
-			}
+			}*/
 			_registers = new RegisterState(_shader);
 
 			foreach(var declaration in _registers.ConstantDeclarations)
@@ -584,6 +609,10 @@ namespace DXDecompiler.DX9Shader
 			{
 				WriteIndent();
 				WriteLine($"{methodReturnType} o;");
+			}
+			else if(_shader is { Type: ShaderType.Pixel, MajorVersion: 1 })
+			{
+				// TODO
 			}
 			else
 			{

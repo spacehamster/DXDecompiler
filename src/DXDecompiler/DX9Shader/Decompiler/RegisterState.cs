@@ -34,6 +34,9 @@ namespace DXDecompiler.DX9Shader
 		private void Load(ShaderModel shader)
 		{
 			ConstantDeclarations = shader.ConstantTable.ConstantDeclarations;
+
+			var isSm1PixelShader = shader is { Type: ShaderType.Pixel, MajorVersion: 1 };
+
 			foreach(var constantDeclaration in ConstantDeclarations)
 			{
 				RegisterType registerType;
@@ -125,8 +128,8 @@ namespace DXDecompiler.DX9Shader
 					if(!RegisterDeclarations.TryGetValue(registerKey, out var declaration)
 						|| declaration.MaskedLength < maskedLength)
 					{
-						declaration = new RegisterDeclaration(registerKey, maskedLength);
-						RegisterDeclarations[registerKey] = declaration;
+						var isTemp0 = registerKey is { Type: RegisterType.Temp, Number: 0 };
+						var isSm1PixelShaderOutput = isSm1PixelShader && isTemp0;
 						switch(registerType)
 						{
 							case RegisterType.AttrOut:
@@ -134,7 +137,74 @@ namespace DXDecompiler.DX9Shader
 							case RegisterType.DepthOut:
 							case RegisterType.Output:
 							case RegisterType.RastOut:
+							case RegisterType.Temp when isSm1PixelShaderOutput:
+								declaration = new RegisterDeclaration(registerKey, maskedLength, isSm1PixelShaderOutput ? "COLOR" : null);
+								RegisterDeclarations[registerKey] = declaration;
 								MethodOutputRegisters[registerKey] = declaration;
+								break;
+						}
+					}
+				}
+			}
+
+			if(isSm1PixelShader)
+			{
+				// SM1 shaders doesn't have dcl instruction
+				// so we must check through all operands
+				foreach(var instruction in shader.Tokens.OfType<InstructionToken>())
+				{
+					var operandIndex = 0;
+					foreach(var operand in instruction.Operands)
+					{
+						var i = operandIndex++;
+
+						var registerType = instruction.GetParamRegisterType(i);
+						var registerNumber = instruction.GetParamRegisterNumber(i);
+						var writeMask = instruction.HasDestination
+							? instruction.GetDestinationWriteMask()
+							: ComponentFlags.X | ComponentFlags.Y | ComponentFlags.Z | ComponentFlags.W;
+						int registerSize;
+						if(operand is SourceOperand source)
+						{
+							registerSize = instruction.GetSourceSwizzleComponents(i)
+								.Take(instruction.GetSourceSwizzleLimit(i) ?? 4)
+								.Where((_, i) => i switch
+								{
+									0 => writeMask.HasFlag(ComponentFlags.X),
+									1 => writeMask.HasFlag(ComponentFlags.Y),
+									2 => writeMask.HasFlag(ComponentFlags.Z),
+									3 => writeMask.HasFlag(ComponentFlags.W),
+									_ => throw new InvalidOperationException()
+								})
+								.Max() + 1;
+						}
+						else if(operand is DestinationOperand dest)
+						{
+							registerSize = instruction.GetDestinationMaskedLength();
+						}
+						else
+						{
+							throw new InvalidOperationException("Operand is neither source nor dest");
+						}
+
+						var registerKey = new RegisterKey(registerType, registerNumber);
+						switch(registerKey.Type)
+						{
+							case RegisterType.Input:
+							case RegisterType.Texture when shader.Type == ShaderType.Pixel:
+								if(!RegisterDeclarations.TryGetValue(registerKey, out var declaration)
+									|| declaration.MaskedLength < registerSize)
+								{
+									var semantic = registerKey.Type switch
+									{
+										RegisterType.Input => "COLOR",
+										RegisterType.Texture => "TEXCOORD",
+										_ => throw new InvalidOperationException(),
+									};
+									declaration = new RegisterDeclaration(registerKey, registerSize, semantic);
+									RegisterDeclarations[registerKey] = declaration;
+									MethodInputRegisters[registerKey] = declaration;
+								}
 								break;
 						}
 					}

@@ -440,10 +440,6 @@ namespace DXDecompiler.DX9Shader
 			{
 				case RegisterType.Input when _shaderModel is { Type: ShaderType.Pixel, MajorVersion: <= 2 }:
 				case RegisterType.Texture when _shaderModel is { Type: ShaderType.Pixel, MajorVersion: <= 2 }:
-					if(_shaderModel.MajorVersion == 1)
-					{
-						throw new NotImplementedException("Shader model 1 not supported yet");
-					}
 					declIndexString = GetParamRegisterNumber(1) is 0
 						? string.Empty
 						: GetParamRegisterNumber(1).ToString();

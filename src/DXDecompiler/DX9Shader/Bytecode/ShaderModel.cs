@@ -93,13 +93,6 @@ namespace DXDecompiler.DX9Shader
 			result.MinorVersion = reader.ReadByte();
 			result.MajorVersion = reader.ReadByte();
 			result.Type = (ShaderType)reader.ReadUInt16();
-			//SM1 shaders do not encode instruction size which rely on for reading operands.
-			//So we won't support SM1
-			if(result.MajorVersion == 1)
-			{
-				Trace.WriteLine("Shader Model 1 is not supported");
-				return result;
-			}
 			while(true)
 			{
 				var instruction = result.ReadInstruction(reader);
@@ -120,7 +113,14 @@ namespace DXDecompiler.DX9Shader
 			}
 			else
 			{
-				size = (int)((instructionToken >> 24) & 0x0f);
+				if(MajorVersion > 1)
+				{
+					size = (int)((instructionToken >> 24) & 0x0f);
+				}
+				else
+				{
+					size = opcode.GetShaderModel1OpcodeSize(MinorVersion);
+				}
 			}
 			Token token = null;
 			if(opcode == Opcode.Comment)
@@ -190,7 +190,17 @@ namespace DXDecompiler.DX9Shader
 						if((token.Data[i] & (1 << 13)) != 0)
 						{
 							//Relative Address mode
-							token.Data[i + 1] = reader.ReadUInt32();
+							if(MajorVersion < 2)
+							{
+								// special handling for SM1 shaders
+								token.AddData();
+								token.Data[i + 1] = 0xB0000000;
+								size++;
+							}
+							else
+							{
+								token.Data[i + 1] = reader.ReadUInt32();
+							}
 							inst.Operands.Add(new DestinationOperand(token.Data[i], token.Data[i + 1]));
 							i++;
 						}
@@ -202,7 +212,17 @@ namespace DXDecompiler.DX9Shader
 					else if((token.Data[i] & (1 << 13)) != 0)
 					{
 						//Relative Address mode
-						token.Data[i + 1] = reader.ReadUInt32();
+						if(MajorVersion < 2)
+						{
+							// special handling for SM1 shaders
+							token.AddData();
+							token.Data[i + 1] = 0xB0000000;
+							size++;
+						}
+						else
+						{
+							token.Data[i + 1] = reader.ReadUInt32();
+						}
 						inst.Operands.Add(new SourceOperand(token.Data[i], token.Data[i + 1]));
 						i++;
 					}

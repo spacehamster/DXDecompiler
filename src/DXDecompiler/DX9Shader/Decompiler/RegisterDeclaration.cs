@@ -14,10 +14,10 @@ namespace DXDecompiler.DX9Shader
 			MaskedLength = declInstruction.GetDestinationMaskedLength();
 		}
 
-		public RegisterDeclaration(RegisterKey registerKey, int maskedLength = 4)
+		public RegisterDeclaration(RegisterKey registerKey, int maskedLength = 4, string semantic = null)
 		{
 			RegisterType type = registerKey.Type;
-			_semantic = GuessSemanticByRegisterType(type);
+			_semantic = semantic ?? GuessSemanticByRegisterType(type);
 			RegisterKey = registerKey;
 			if(_semantic != null && RegisterKey.Number != 0)
 			{

@@ -225,5 +225,156 @@ namespace DXDecompiler.DX9Shader
 					return false;
 			}
 		}
+		/// <summary>
+		/// Get the size of instruction in shader model 1.
+		/// </summary>
+		/// <param name="opcode">The opcode of the instruction</param>
+		/// <returns>The number of tokens inside this instruction.</returns>
+		public static int GetShaderModel1OpcodeSize(this Opcode opcode, int minorVersion)
+		{
+			switch(opcode)
+			{
+				case Opcode.Abs:
+					return 2;
+				case Opcode.Add:
+					return 3;
+				case Opcode.Bem:
+					return 3;
+				case Opcode.Breakp:
+					return 1;
+				case Opcode.Cmp:
+					return 4;
+				case Opcode.Cnd:
+					return 4;
+				case Opcode.Crs:
+					return 3;
+				case Opcode.Dcl:
+					return 2;
+				case Opcode.Def:
+					return 5;
+				case Opcode.DefB:
+					return 2;
+				case Opcode.DefI:
+					return 5;
+				case Opcode.Dp3:
+					return 3;
+				case Opcode.Dp4:
+					return 3;
+				case Opcode.Dst:
+					return 3;
+				case Opcode.Exp:
+					return 2;
+				case Opcode.ExpP:
+					return 2;
+				case Opcode.Frc:
+					return 2;
+				case Opcode.Lit:
+					return 2;
+				case Opcode.Log:
+					return 2;
+				case Opcode.LogP:
+					return 2;
+				case Opcode.Lrp:
+					return 4;
+				case Opcode.M3x2:
+					return 3;
+				case Opcode.M3x3:
+					return 3;
+				case Opcode.M3x4:
+					return 3;
+				case Opcode.M4x3:
+					return 3;
+				case Opcode.M4x4:
+					return 3;
+				case Opcode.Mad:
+					return 4;
+				case Opcode.Max:
+					return 3;
+				case Opcode.Min:
+					return 3;
+				case Opcode.Mov:
+					return 2;
+				case Opcode.Mul:
+					return 3;
+				case Opcode.Nop:
+					return 0;
+				case Opcode.Nrm:
+					return 2;
+				case Opcode.Phase:
+					return 0;
+				case Opcode.Pow:
+					return 3;
+				case Opcode.Rcp:
+					return 2;
+				case Opcode.Rsq:
+					return 2;
+				case Opcode.SetP:
+					return 3;
+				case Opcode.Sge:
+					return 3;
+				case Opcode.Slt:
+					return 3;
+				case Opcode.Sub:
+					return 3;
+				case Opcode.Tex:
+					if(minorVersion < 4)
+					{
+						return 1;
+					}
+					else
+					{
+						return 2;
+					}
+				case Opcode.TexBem:
+					return 2;
+				case Opcode.TexBeml:
+					return 2;
+				case Opcode.TexCoord:
+					if(minorVersion < 4)
+					{
+						return 1;
+					}
+					else
+					{
+						return 2;
+					}
+				case Opcode.TexDepth:
+					return 1;
+				case Opcode.TexDP3:
+					return 2;
+				case Opcode.TexDP3Tex:
+					return 2;
+				case Opcode.TexKill:
+					return 1;
+				case Opcode.TexM3x2Depth:
+					return 2;
+				case Opcode.TeXM3x2Pad:
+					return 2;
+				case Opcode.TexM3x2Tex:
+					return 2;
+				case Opcode.TexM3x3:
+					return 2;
+				case Opcode.TexM3x3Diff:
+					return 2;
+				case Opcode.TeXM3x3Pad:
+					return 2;
+				case Opcode.TexM3x3Spec:
+					return 3;
+				case Opcode.TexM3x3Tex:
+					return 2;
+				case Opcode.TexM3x3VSpec:
+					return 2;
+				case Opcode.TexReg2AR:
+					return 2;
+				case Opcode.TexReg2GB:
+					return 2;
+				case Opcode.TexReg2RGB:
+					return 2;
+				case Opcode.End:
+					return 0;
+				default:
+					throw new NotImplementedException(opcode.ToString());
+			}
+		}
 	}
 }
