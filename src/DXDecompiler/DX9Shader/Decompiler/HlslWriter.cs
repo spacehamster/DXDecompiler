@@ -610,11 +610,7 @@ namespace DXDecompiler.DX9Shader
 				WriteIndent();
 				WriteLine($"{methodReturnType} o;");
 			}
-			else if(_shader is { Type: ShaderType.Pixel, MajorVersion: 1 })
-			{
-				// TODO
-			}
-			else
+			else if(_shader is not { Type: ShaderType.Pixel, MajorVersion: 1 }) // sm1 pixel shader use temp0 as output
 			{
 				var output = _registers.MethodOutputRegisters.First().Value;
 				WriteIndent();
