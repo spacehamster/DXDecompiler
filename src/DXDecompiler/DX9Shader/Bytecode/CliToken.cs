@@ -1,4 +1,5 @@
 ﻿using DXDecompiler.Util;
+using System;
 using System.Collections.Generic;
 
 namespace DXDecompiler.DX9Shader.Bytecode
@@ -22,7 +23,16 @@ namespace DXDecompiler.DX9Shader.Bytecode
 
 		public string GetLiteral(uint index)
 		{
-			return Numbers[(int)index].ToString();
+			var value = Numbers[(int)index];
+			// TODO: Upgrade to .NET Core 3.0 or above so we can avoid this explicit check
+			// https://stackoverflow.com/a/62768234/4399840
+			if(BitConverter.DoubleToInt64Bits(value) == BitConverter.DoubleToInt64Bits(-0.0))
+			{
+				return "-0";
+			}
+			return value.ToString();
 		}
+
+		public float GetLiteralAsFloat(uint index) => (float)Numbers[(int)index];
 	}
 }

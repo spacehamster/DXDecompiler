@@ -35,6 +35,15 @@
 			_shaderModel = shaderModel;
 		}
 
+		public void AddData()
+		{
+			int len = Data.Length;
+			len++;
+			uint[] d = new uint[len];
+			System.Array.Copy(Data, d, Data.Length);
+			Data = d;
+		}
+
 		public override string ToString()
 		{
 			return Opcode.ToString();

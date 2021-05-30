@@ -342,46 +342,41 @@ namespace DXDecompiler.DX9Shader
 			return swizzleArray;
 		}
 
+		public int? GetSourceSwizzleLimit(int operandDataIndex)
+		{
+			int logicalIndex = 0;
+			for(var i = 0; i < operandDataIndex; ++i)
+			{
+				if(!IsRelativeAddressMode(i))
+				{
+					++logicalIndex;
+				}
+			}
+
+			return Opcode switch
+			{
+				Opcode.Dp3 => 3,
+				Opcode.DP2Add => logicalIndex < 3 ? 2 : 1,// dp2add dst, src0.xy src1.xy src2.x
+				_ => null,
+			};
+		}
+
 		public string GetSourceSwizzleName(int srcIndex, bool hlsl = false)
 		{
-			int swizzleLength = 4;
-			if(Opcode == Opcode.Dp4)
-			{
-				swizzleLength = 4;
-			}
+			int? swizzleLimit = null;
 			//TODO: Probably useful in hlsl mode
-			else if(hlsl)
+			if(hlsl)
 			{
-				if(Opcode == Opcode.Dp3)
-				{
-					swizzleLength = 3;
-				}
-				else if(HasDestination)
-				{
-					swizzleLength = GetDestinationMaskLength();
-				}
+				swizzleLimit = GetSourceSwizzleLimit(srcIndex);
 			}
 
 			string swizzleName = "";
 			byte[] swizzle = GetSourceSwizzleComponents(srcIndex);
-			for(int i = 0; i < swizzleLength; i++)
+			for(int i = 0; i < (swizzleLimit ?? 4); i++)
 			{
-				switch(swizzle[i])
-				{
-					case 0:
-						swizzleName += "x";
-						break;
-					case 1:
-						swizzleName += "y";
-						break;
-					case 2:
-						swizzleName += "z";
-						break;
-					case 3:
-						swizzleName += "w";
-						break;
-				}
+				swizzleName += "xyzw"[swizzle[i]];
 			}
+
 			switch(swizzleName)
 			{
 				case "xxx":
@@ -390,7 +385,7 @@ namespace DXDecompiler.DX9Shader
 					return ".y";
 				case "zzz":
 					return ".z";
-				case "xyz":
+				case "xyz" when swizzleLimit is null:
 					return "";
 				case "xyzw":
 					return "";
@@ -443,6 +438,19 @@ namespace DXDecompiler.DX9Shader
 				: GetDeclIndex().ToString();
 			switch(registerType)
 			{
+				case RegisterType.Input when _shaderModel is { Type: ShaderType.Pixel, MajorVersion: <= 2 }:
+				case RegisterType.Texture when _shaderModel is { Type: ShaderType.Pixel, MajorVersion: <= 2 }:
+					declIndexString = GetParamRegisterNumber(1) is 0
+						? string.Empty
+						: GetParamRegisterNumber(1).ToString();
+
+					// https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dcl---ps
+					return registerType switch
+					{
+						RegisterType.Input => "COLOR",
+						RegisterType.Texture => "TEXCOORD",
+						_ => throw new NotSupportedException(registerType.ToString())
+					} + declIndexString;
 				case RegisterType.Input:
 				case RegisterType.Output when _shaderModel.Type == ShaderType.Vertex && _shaderModel.MajorVersion >= 3:
 					string name;
@@ -491,9 +499,6 @@ namespace DXDecompiler.DX9Shader
 						return "vPos";
 					}
 					throw new NotImplementedException();
-				case RegisterType.Texture when _shaderModel.Type == ShaderType.Pixel && _shaderModel.MajorVersion <= 2:
-					var registerNumber = GetParamRegisterNumber(1);
-					return "TEXCOORD" + (registerNumber == 0 ? string.Empty : registerNumber.ToString());
 				case RegisterType.TexCoordOut:
 					return "TEXCOORD" + declIndexString;
 				default:

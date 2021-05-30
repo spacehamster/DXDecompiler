@@ -5,37 +5,38 @@ namespace DXDecompiler.DX9Shader
 	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff549176(v=vs.85).aspx
 	public class RegisterDeclaration
 	{
-		private readonly int _maskedLength;
 		private readonly string _semantic;
 
 		public RegisterDeclaration(InstructionToken declInstruction)
 		{
 			RegisterKey = declInstruction.GetParamRegisterKey(1);
 			_semantic = declInstruction.GetDeclSemantic();
-			_maskedLength = declInstruction.GetDestinationMaskedLength();
+			MaskedLength = declInstruction.GetDestinationMaskedLength();
 		}
 
-		public RegisterDeclaration(RegisterKey registerKey)
+		public RegisterDeclaration(RegisterKey registerKey, int maskedLength = 4, string semantic = null)
 		{
 			RegisterType type = registerKey.Type;
-			_semantic = GuessSemanticByRegisterType(type);
+			_semantic = semantic ?? GuessSemanticByRegisterType(type);
 			RegisterKey = registerKey;
 			if(_semantic != null && RegisterKey.Number != 0)
 			{
 				_semantic += registerKey.Number;
 			}
-			_maskedLength = 4;
+			MaskedLength = maskedLength;
 		}
 
 		public RegisterKey RegisterKey { get; }
+		public int MaskedLength { get; }
 		public string Semantic => _semantic ?? throw new NotSupportedException();
 		public string Name => _semantic?.ToLower() ?? RegisterKey.ToString();
+
 
 		public string TypeName
 		{
 			get
 			{
-				switch(_maskedLength)
+				switch(MaskedLength)
 				{
 					case 1:
 						return "float";
