@@ -235,9 +235,13 @@ namespace DXDecompiler.DX9Shader
 						sourceResult = string.Format(sourceFormat, args);
 					}
 					// if we cannot "edit" the swizzles, we need to apply write masks on the source result
-					else if(sourceResult.Last() != ')')
+					else
 					{
-						sourceResult = $"({sourceResult}){writeMask}";
+						if(sourceResult.Last() != ')')
+						{
+							sourceResult = $"({sourceResult})";
+						}
+						sourceResult += writeMask;
 					}
 				}
 				WriteLine(destinationModifier, destination, sourceResult);
@@ -442,7 +446,21 @@ namespace DXDecompiler.DX9Shader
 					WriteAssignment("({0} < {1}) ? 1 : 0", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.SinCos:
-					WriteLine("sincos({1}, {0}, {0});", GetDestinationNameWithWriteMask(instruction), GetSourceName(instruction, 1));
+					{
+						var writeMask = instruction.GetDestinationWriteMask();
+						var values = new List<string>(2);
+						if(writeMask.HasFlag(ComponentFlags.X))
+						{
+							values.Add("cos({0})");
+						}
+						if(writeMask.HasFlag(ComponentFlags.Y))
+						{
+							values.Add("sin({0})");
+						}
+						var source = string.Join(", ", values);
+						source = values.Count > 1 ? $"float{values.Count}({source})" : source;
+						WriteAssignment(source, GetSourceName(instruction, 1));
+					}
 					break;
 				case Opcode.Sub:
 					WriteAssignment("{0} - {1}", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
@@ -499,6 +517,10 @@ namespace DXDecompiler.DX9Shader
 					Indent++;
 					break;
 				case Opcode.TexKill:
+					if(instruction.GetDestinationResultModifier() is not ResultModifier.None)
+					{
+						throw new NotImplementedException("Result modifier in texkill");
+					}
 					WriteLine("clip({0});", GetDestinationNameWithWriteMask(instruction));
 					break;
 				case Opcode.DSX:
