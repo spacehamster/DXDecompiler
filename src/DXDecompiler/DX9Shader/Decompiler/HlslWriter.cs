@@ -243,9 +243,9 @@ namespace DXDecompiler.DX9Shader
 				WriteLine(destinationModifier, destination, sourceResult);
 			}
 
-			void WriteTextureAssignment(string postFix, SourceOperand sampler, SourceOperand uv, int extraUvDimensions, params SourceOperand[] others)
+			void WriteTextureAssignment(string postFix, SourceOperand sampler, SourceOperand uv, int? dimension, params SourceOperand[] others)
 			{
-				var (operation, dimension) = sampler.SamplerType switch
+				var (operation, defaultDimension) = sampler.SamplerType switch
 				{
 					ParameterType.Sampler1D => ("tex1D", 1),
 					ParameterType.Sampler2D => ("tex2D", 2),
@@ -254,15 +254,16 @@ namespace DXDecompiler.DX9Shader
 					ParameterType.Sampler => ("texUnknown", 4),
 					_ => throw new InvalidOperationException(sampler.SamplerType.ToString())
 				};
+				dimension ??= defaultDimension;
 				var args = new SourceOperand[others.Length + 2];
 				var uvSwizzle = uv.Swizzle.TrimStart('.');
 				if(uvSwizzle.Length == 0)
 				{
 					uvSwizzle = "xyzw";
 				}
-				if(uvSwizzle.Length > dimension + extraUvDimensions)
+				if(uvSwizzle.Length > dimension)
 				{
-					uv.Swizzle = "." + uvSwizzle.Substring(0, dimension + extraUvDimensions);
+					uv.Swizzle = "." + uvSwizzle.Substring(0, dimension.Value);
 				}
 				args[0] = sampler;
 				args[1] = uv;
@@ -449,7 +450,7 @@ namespace DXDecompiler.DX9Shader
 				case Opcode.Tex:
 					if(_shader.MajorVersion > 1)
 					{
-						WriteTextureAssignment(string.Empty, GetSourceName(instruction, 2), GetSourceName(instruction, 1), 0);
+						WriteTextureAssignment(string.Empty, GetSourceName(instruction, 2), GetSourceName(instruction, 1), null);
 					}
 					// shader model 1
 					else if(_shader.MinorVersion >= 4)
@@ -478,11 +479,11 @@ namespace DXDecompiler.DX9Shader
 							SamplerType = samplerType
 						};
 
-						WriteTextureAssignment(string.Empty, samplerOperand, uvOperand, 0);
+						WriteTextureAssignment(string.Empty, samplerOperand, uvOperand, null);
 					}
 					break;
 				case Opcode.TexLDL:
-					WriteTextureAssignment("lod", GetSourceName(instruction, 2), GetSourceName(instruction, 1), 1);
+					WriteTextureAssignment("lod", GetSourceName(instruction, 2), GetSourceName(instruction, 1), 4);
 					break;
 				case Opcode.Comment:
 					{
