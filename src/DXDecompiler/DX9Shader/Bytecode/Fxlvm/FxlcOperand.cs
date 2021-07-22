@@ -15,6 +15,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		public FxlcOperandType ArrayType { get; private set; }
 		public uint ArrayIndex { get; private set; }
 		public uint ComponentCount { get; private set; }
+		public bool IsScalar { get; private set; }
 
 		public static FxlcOperand Parse(BytecodeReader reader, uint componentCount, bool isScalarOp)
 		{
@@ -23,6 +24,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 				IsArray = reader.ReadUInt32(),
 				OpType = (FxlcOperandType)reader.ReadUInt32(),
 				OpIndex = reader.ReadUInt32(),
+				IsScalar = isScalarOp
 			};
 			result.ComponentCount = isScalarOp && result.OpType != FxlcOperandType.Literal ? 1 : componentCount;
 			Debug.Assert(Enum.IsDefined(typeof(FxlcOperandType), result.OpType),
@@ -121,13 +123,13 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 			{
 				case FxlcOperandType.Literal:
 					var literal = cli.GetLiteral(index);
-					if(literal == "-0")
+					var firstLiteral = literal is "-0" ? "0" : literal;
+					for(var i = 1u; i < ComponentCount; ++i)
 					{
-						literal = string.Format("{0}, 0, 0, 0", literal);
-					}
-					else
-					{
-						literal = string.Join(", ", Enumerable.Repeat(cli.GetLiteral(index), (int)ComponentCount));
+						var text = IsScalar
+							? firstLiteral
+							: cli.GetLiteral(index + i);
+						literal += $", {text}";
 					}
 					component = string.Empty;
 					var typeName = ctab is null || ComponentCount == 1 ? string.Empty : $"float{ComponentCount}";
@@ -193,7 +195,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		/// <param name="cli">CliToken, neccessary for retrieving literal values</param>
 		/// <param name="ctab">ConstantTable, optional. If not null, it will be used to resolve constants.</param>
 		/// <param name="ctabOverride">Constant registers overwritten by preshader</param>
-		/// <returns></returns>
+		/// <returns>The formatted operand as string</returns>
 		public string FormatOperand(CliToken cli, ConstantTable ctab, HashSet<uint> ctabOverride = null)
 		{
 			if(IsArray == 0)
