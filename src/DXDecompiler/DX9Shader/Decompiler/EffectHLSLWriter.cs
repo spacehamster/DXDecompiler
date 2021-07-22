@@ -25,28 +25,62 @@ namespace DXDecompiler.DX9Shader
 		}
 		void BuildNameLookup()
 		{
-			string MakeShaderName(ShaderModel shader) => shader.Type switch
+			var hintNames = new Dictionary<StateBlob, string>();
+			foreach(var technique in _effectChunk.Techniques)
 			{
-				ShaderType.Pixel => "PixelShader",
-				ShaderType.Vertex => "VertexShader",
-				ShaderType.Expression => "Expression",
-				_ => "Shader"
-			} + $"{_shaderNames.Count + 1}";
+				foreach(var assignment in technique.Passes.SelectMany(p => p.Assignments))
+				{
+					if(!_effectChunk.StateBlobLookup.TryGetValue(assignment, out var stateBlob) || stateBlob is null)
+					{
+						continue;
+					}
+
+					if(stateBlob.BlobType is StateBlobType.IndexShader or StateBlobType.Shader)
+					{
+						if(!hintNames.TryGetValue(stateBlob, out var existingName))
+						{
+							hintNames.Add(stateBlob, technique.Name);
+						}
+						else if(existingName != technique.Name)
+						{
+							hintNames[stateBlob] = null;
+						}
+					}
+				}
+			}
+			string MakeShaderName(ShaderModel shader)
+			{
+				return shader.Type switch
+				{
+					ShaderType.Pixel => "PixelShader",
+					ShaderType.Vertex => "VertexShader",
+					ShaderType.Expression => "Expression",
+					_ => "Shader"
+				} + $"{_shaderNames.Count + 1}";
+			}
 
 			foreach(var blob in _effectChunk.VariableBlobs)
 			{
-				if(blob.IsShader)
+				if(!blob.IsShader)
 				{
-					_shaderNames[blob] = MakeShaderName(blob.Shader);
+					continue;
 				}
+				_shaderNames[blob] = MakeShaderName(blob.Shader);
 			}
 			foreach(var blob in _effectChunk.StateBlobs)
 			{
 				if(blob.BlobType == StateBlobType.Shader ||
 					blob.BlobType == StateBlobType.IndexShader)
 				{
-
-					_shaderNames[blob] = MakeShaderName(blob.Shader);
+					if(!hintNames.TryGetValue(blob, out var techniquePrefix) || string.IsNullOrWhiteSpace(techniquePrefix))
+					{
+						techniquePrefix = string.Empty;
+					}
+					else
+					{
+						techniquePrefix += "_";
+					}
+					_shaderNames[blob] = techniquePrefix + MakeShaderName(blob.Shader);
 				}
 			}
 		}
