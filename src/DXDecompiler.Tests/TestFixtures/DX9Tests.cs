@@ -46,7 +46,7 @@ namespace DXDecompiler.Tests
 		/// <summary>
 		/// Compare ASM output produced by fxc.exe and SlimShader.
 		/// </summary>
-		[TestCaseSource("TestShaders")]
+		[TestCaseSource(nameof(TestShaders))]
 		public void AsmMatchesFxc(string relPath)
 		{
 			string file = $"{ShaderDirectory}/{relPath}";
@@ -78,7 +78,7 @@ namespace DXDecompiler.Tests
 		/// <summary>
 		/// Compare ASM output produced by fxc.exe and SlimShader.
 		/// </summary>
-		[TestCaseSource("TestShaders")]
+		[TestCaseSource(nameof(TestShaders))]
 		public void Decompile(string relPath)
 		{
 			string file = $"{ShaderDirectory}/{relPath}";
@@ -93,7 +93,7 @@ namespace DXDecompiler.Tests
 			// Assert.
 		}
 
-		[TestCaseSource("TestShaders")]
+		[TestCaseSource(nameof(TestShaders))]
 		public void DumpStructure(string relPath)
 		{
 			string file = $"{ShaderDirectory}/{relPath}";
