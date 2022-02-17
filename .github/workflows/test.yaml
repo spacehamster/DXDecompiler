@@ -1,0 +1,32 @@
+name: test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./src
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore previous dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+    - name: Restore dependencies
+      run: dotnet restore DXDecompiler.sln
+    - name: Build
+      id: build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test DXDecompiler.Tests --no-build --verbosity normal

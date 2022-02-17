@@ -1,6 +1,9 @@
 DXDecompiler
 ==========
 
+[![build](https://github.com/lanyizi/DXDecompiler/actions/workflows/build.yaml/badge.svg)](https://github.com/lanyizi/DXDecompiler/actions/workflows/build.yaml)
+[![test](https://github.com/lanyizi/DXDecompiler/actions/workflows/test.yaml/badge.svg)](https://github.com/lanyizi/DXDecompiler/actions/workflows/test.yaml)
+
 DXDecompiler is a Direct3D shader bytecode decompiler for .NET. It is in currently in very early development.
 
 Acknowledgements
