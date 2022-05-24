@@ -6,7 +6,7 @@ namespace DXDecompiler.DX9Shader
 	public class DecompileWriter
 	{
 		public int Indent;
-		StreamWriter Writer;
+		protected TextWriter Writer;
 		protected void WriteIndent()
 		{
 			Writer.Write(new string(' ', Indent * 4));

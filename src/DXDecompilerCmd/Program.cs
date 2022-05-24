@@ -1,10 +1,11 @@
-﻿using DXDecompiler;
+using DXDecompiler;
 using DXDecompiler.DebugParser;
 using DXDecompiler.DebugParser.DX9;
 using DXDecompiler.DebugParser.FX9;
 using DXDecompiler.Decompiler;
 using DXDecompiler.Util;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace DXDecompilerCmd
@@ -58,6 +59,8 @@ namespace DXDecompilerCmd
 		}
 		static void Main(string[] args)
 		{
+			Trace.Listeners.Add(new ConsoleTraceListener(useErrorStream: true));
+
 			var options = new Options();
 			for(int i = 0; i < args.Length; i++)
 			{
@@ -89,6 +92,12 @@ namespace DXDecompilerCmd
 			if(string.IsNullOrEmpty(options.SourcePath))
 			{
 				Console.Error.WriteLine("No source path specified");
+				Console.Error.WriteLine("Usage: ");
+				Console.Error.WriteLine("  DXDecompilerCmd <CompiledShader>                # decompile to stdout");
+				Console.Error.WriteLine("  DXDecompilerCmd <CompiledShader>    -O <Output> # decompile to file");
+				Console.Error.WriteLine("  DXDecompilerCmd <CompiledShader> -a             # disassemble to stdout");
+				Console.Error.WriteLine("  DXDecompilerCmd <CompiledShader> -a -O <Output> # disassemble to file");
+				Console.Error.WriteLine("  DXDecompilerCmd <CompiledShader> -h -O <Output> # generate debug HTML");
 				Environment.Exit(1);
 			}
 
@@ -146,8 +155,16 @@ namespace DXDecompilerCmd
 					}
 					else if(options.Mode == DecompileMode.Decompile)
 					{
-						var hlsl = DXDecompiler.DX9Shader.HlslWriter.Decompile(data);
-						sw.Write(hlsl);
+						try
+						{
+							var hlsl = DXDecompiler.DX9Shader.HlslWriter.Decompile(data);
+							sw.Write(hlsl);
+						}
+						catch(Exception e) when(!System.Diagnostics.Debugger.IsAttached)
+						{
+							Console.Error.WriteLine(e);
+							Environment.Exit(1);
+						}
 					}
 					else if(options.Mode == DecompileMode.Debug)
 					{

@@ -9,11 +9,14 @@ namespace DXDecompiler.DX9Shader
 {
 	public class EffectHLSLWriter : DecompileWriter
 	{
-		EffectContainer EffectChunk;
-		Dictionary<object, string> ShaderNames = new Dictionary<object, string>();
+		private readonly Dictionary<object, string> _shaderNames = new();
+		private readonly EffectContainer _effectChunk;
+
+		public Dictionary<string, DecompiledConstantDeclaration> CommonConstantDeclarations { get; } = new();
+
 		public EffectHLSLWriter(EffectContainer effectChunk)
 		{
-			EffectChunk = effectChunk;
+			_effectChunk = effectChunk;
 		}
 		public static string Decompile(EffectContainer effectChunk)
 		{
@@ -22,32 +25,153 @@ namespace DXDecompiler.DX9Shader
 		}
 		void BuildNameLookup()
 		{
-			int shaderCount = 0;
-			foreach(var blob in EffectChunk.VariableBlobs)
+			var hintNames = new Dictionary<StateBlob, string>();
+			foreach(var technique in _effectChunk.Techniques)
 			{
-				if(blob.IsShader)
+				foreach(var assignment in technique.Passes.SelectMany(p => p.Assignments))
 				{
-					ShaderNames[blob] = $"Shader{shaderCount++}";
+					if(!_effectChunk.StateBlobLookup.TryGetValue(assignment, out var stateBlob) || stateBlob is null)
+					{
+						continue;
+					}
+
+					if(stateBlob.BlobType is StateBlobType.IndexShader or StateBlobType.Shader)
+					{
+						if(!hintNames.TryGetValue(stateBlob, out var existingName))
+						{
+							hintNames.Add(stateBlob, technique.Name);
+						}
+						else if(existingName != technique.Name)
+						{
+							hintNames[stateBlob] = null;
+						}
+					}
 				}
 			}
-			foreach(var blob in EffectChunk.StateBlobs)
+			string MakeShaderName(ShaderModel shader)
+			{
+				return shader.Type switch
+				{
+					ShaderType.Pixel => "PixelShader",
+					ShaderType.Vertex => "VertexShader",
+					ShaderType.Expression => "Expression",
+					_ => "Shader"
+				} + $"{_shaderNames.Count + 1}";
+			}
+
+			foreach(var blob in _effectChunk.VariableBlobs)
+			{
+				if(!blob.IsShader)
+				{
+					continue;
+				}
+				_shaderNames[blob] = MakeShaderName(blob.Shader);
+			}
+			foreach(var blob in _effectChunk.StateBlobs)
 			{
 				if(blob.BlobType == StateBlobType.Shader ||
 					blob.BlobType == StateBlobType.IndexShader)
 				{
-					ShaderNames[blob] = $"Shader{shaderCount++}";
+					if(!hintNames.TryGetValue(blob, out var techniquePrefix) || string.IsNullOrWhiteSpace(techniquePrefix))
+					{
+						techniquePrefix = string.Empty;
+					}
+					else
+					{
+						techniquePrefix += "_";
+					}
+					_shaderNames[blob] = techniquePrefix + MakeShaderName(blob.Shader);
+				}
+			}
+		}
+		void FindCommonConstantDeclarations()
+		{
+			var variableShaders = _effectChunk.VariableBlobs
+				.Where(x => x.IsShader)
+				.Select(x => x.Shader);
+			var blobShaders = _effectChunk.StateBlobs
+				.Where(x => x.BlobType is StateBlobType.Shader or StateBlobType.IndexShader)
+				.Select(x => x.Shader);
+
+			foreach(var shader in variableShaders.Concat(blobShaders))
+			{
+				var declarations = shader.ConstantTable?.ConstantDeclarations
+					?? Enumerable.Empty<ConstantDeclaration>();
+				var decompiled = declarations.Select(c => ConstantTypeWriter.Decompile(c, shader));
+				foreach(var declaration in decompiled)
+				{
+					if(!CommonConstantDeclarations.TryGetValue(declaration.Name, out var existing))
+					{
+						CommonConstantDeclarations[declaration.Name] = declaration;
+					}
+					// this means we don't have common constant declaration
+					else if(existing.Code != declaration.Code)
+					{
+						CommonConstantDeclarations.Remove(declaration.Name);
+					}
+					// check if two declarations only differs on register...
+					else
+					{
+						if(!declaration.RegisterAssignments.Any())
+						{
+							continue;
+						}
+						// sanity check
+						if(declaration.RegisterAssignments.Count > 1)
+						{
+							throw new InvalidOperationException();
+						}
+
+						var registerAssignment = declaration.RegisterAssignments.First();
+						if(existing.RegisterAssignments.TryGetValue(registerAssignment.Key, out var existingRegister))
+						{
+							// if register number of the same constant is different
+							// between two shaders of same shader profile
+							if(registerAssignment.Value != existingRegister)
+							{
+								// then probably there weren't a register assignment at all.
+								// I don't think there is a way to specify two different registers 
+								// for the same variable with the same shader profile in DX9's effect.
+								existing.RegisterAssignments.Remove(registerAssignment.Key);
+							}
+						}
+						else
+						{
+							existing.RegisterAssignments[registerAssignment.Key] = registerAssignment.Value;
+						}
+					}
 				}
 			}
 
+			// we should also remove register assignments, 
+			// when there are two different declarations with the same register assignments
+			var occupiedRegisterAssignments = new Dictionary<KeyValuePair<string, string>, DecompiledConstantDeclaration>();
+			foreach(var decl in CommonConstantDeclarations.Values)
+			{
+				foreach(var assignment in decl.RegisterAssignments)
+				{
+					if(occupiedRegisterAssignments.TryGetValue(assignment, out var other))
+					{
+						// remove conflicting register assignments
+						other.RegisterAssignments.Remove(assignment.Key);
+						decl.RegisterAssignments.Remove(assignment.Key);
+					}
+					else
+					{
+						occupiedRegisterAssignments[assignment] = decl;
+					}
+				}
+			}
 		}
 		protected override void Write()
 		{
 			BuildNameLookup();
-			foreach(var variable in EffectChunk.Variables)
+			FindCommonConstantDeclarations();
+			foreach(var variable in _effectChunk.Variables)
 			{
 				WriteVariable(variable);
 			}
-			foreach(var blob in EffectChunk.StateBlobs)
+			foreach(var blob in _effectChunk.StateBlobs)
 			{
 				if(blob.BlobType == StateBlobType.Shader ||
 					blob.BlobType == StateBlobType.IndexShader)
@@ -55,50 +179,49 @@ namespace DXDecompiler.DX9Shader
 					WriteShader(blob);
 				}
 			}
-			foreach(var technique in EffectChunk.Techniques)
+			foreach(var technique in _effectChunk.Techniques)
 			{
 				WriteTechnique(technique);
 			}
 		}
-		void WriteShader(StateBlob blob) => WriteShader(ShaderNames[blob], blob.Shader);
+		void WriteShader(StateBlob blob) => WriteShader(_shaderNames[blob], blob.Shader);
 		void WriteShader(string shaderName, ShaderModel shader)
 		{
 			WriteLine($"// {shaderName} {shader.Type}_{shader.MajorVersion}_{shader.MinorVersion} Has PRES {shader.Preshader != null}");
 			var funcName = shaderName;
-			var text = "";
+			string text;
 			if(shader.Type == ShaderType.Expression)
 			{
 				text = ExpressionHLSLWriter.Decompile(shader, funcName);
 			}
 			else
 			{
-				text = HlslWriter.Decompile(shader, funcName);
-				// text = text.Replace("main(", $"{funcName}(");
+				text = HlslWriter.Decompile(shader, funcName, this);
 			}
 			WriteLine(text);
 		}
 		public string StateBlobToString(Assignment key)
 		{
-			if(!EffectChunk.StateBlobLookup.ContainsKey(key))
+			if(!_effectChunk.StateBlobLookup.ContainsKey(key))
 			{
 				return $"Key not found";
 			}
-			var data = EffectChunk.StateBlobLookup[key];
+			var data = _effectChunk.StateBlobLookup[key];
 			if(data == null)
 			{
-				return "Blob is NULL";
+				return "NULL /* Blob is NULL!!! */";
 			}
 			if(data.BlobType == StateBlobType.Shader)
 			{
 				if(data.Shader.Type == ShaderType.Expression)
 				{
-					var funcName = ShaderNames[data];
-					return $"{funcName}";
+					var funcName = _shaderNames[data];
+					return $"{funcName}()";
 				}
 				else
 				{
-					var funcName = ShaderNames[data];
-					return $"compile {data.Shader.Type.GetDescription()}_{data.Shader.MajorVersion}_{data.Shader.MinorVersion} {funcName}()";
+					var funcName = _shaderNames[data];
+					return $"compile {data.Shader.Profile} {funcName}()";
 				}
 			}
 			if(data.BlobType == StateBlobType.Variable)
@@ -114,30 +237,34 @@ namespace DXDecompiler.DX9Shader
 			}
 			if(data.BlobType == StateBlobType.IndexShader)
 			{
-				var funcName = ShaderNames[data];
+				var funcName = _shaderNames[data];
 				return $"{data.VariableName}[{funcName}()]";
 			}
 			throw new ArgumentException();
 		}
 		public string VariableBlobToString(FX9.Parameter key, int index = 0)
 		{
-			if(!EffectChunk.VariableBlobLookup.ContainsKey(key))
+			if(!_effectChunk.VariableBlobLookup.ContainsKey(key))
 			{
 				return $"Key not found";
 			}
-			var data = EffectChunk.VariableBlobLookup[key][index];
+			var data = _effectChunk.VariableBlobLookup[key][index];
 			if(data == null)
 			{
 				return "Blob is NULL";
 			}
 			if(data.IsShader)
 			{
-				var funcName = ShaderNames[data];
+				var funcName = _shaderNames[data];
 				return $"compile {data.Shader.Type.GetDescription()}_{data.Shader.MajorVersion}_{data.Shader.MinorVersion} {funcName}()";
 			}
 			else if(key.ParameterType == ParameterType.String)
 			{
 				return $"\"{data.Value}\"";
+			}
+			else if(string.IsNullOrEmpty(data.Value))
+			{
+				return string.Empty;
 			}
 			else
 			{
@@ -148,23 +275,41 @@ namespace DXDecompiler.DX9Shader
 		{
 			var param = variable.Parameter;
 			WriteIndent();
-			var isShaderArray = param.ParameterClass == ParameterClass.Object &&
-				(param.ParameterType == ParameterType.PixelShader || param.ParameterType == ParameterType.VertexShader);
-			Dictionary<uint, string> shaderArrayElements = null;
+			var isShaderArray = param is
+			{
+				ParameterClass: ParameterClass.Object,
+				ParameterType: ParameterType.PixelShader or ParameterType.VertexShader
+			};
+			Dictionary<uint, string> shaderArrayCompileStatements = null;
 			if(isShaderArray)
 			{
-				shaderArrayElements = new Dictionary<uint, string>();
-				var blobs = EffectChunk.VariableBlobLookup[param];
+				shaderArrayCompileStatements = new Dictionary<uint, string>();
+				var blobs = _effectChunk.VariableBlobLookup[param];
 				var index = 0;
 				foreach(var blob in blobs)
 				{
 					var name = $"{variable.Parameter.Name}_Shader_{index}";
-					shaderArrayElements.Add(blob.Index, name);
-					WriteShader(name, blob.Shader);
+					var shader = blob.Shader;
+					var compileStatement = $"compile {shader.Type.GetDescription()}_{shader.MajorVersion}_{shader.MinorVersion} {name}()";
+					shaderArrayCompileStatements.Add(blob.Index, compileStatement);
+					WriteShader(name, shader);
 					++index;
 				}
 			}
-			Write(param.GetDecleration());
+			if(CommonConstantDeclarations.TryGetValue(variable.Parameter.Name, out var decompiled))
+			{
+				var semantic = string.IsNullOrEmpty(param.Semantic)
+					? string.Empty
+					: $" : {param.Semantic}";
+				Write($"{decompiled.Code}{semantic}{decompiled.RegisterAssignmentString}");
+			}
+			// shader's constant declaration might differ from the effect variable's parameter declaration
+			// in that case, we should prefer shader's one.
+			// So we write parameter's declaration only if the variable isn't inside the common constant declaration.
+			else
+			{
+				Write(param.GetDeclaration());
+			}
 			if(variable.Annotations.Count > 0)
 			{
 				Write(" ");
@@ -192,7 +337,7 @@ namespace DXDecompiler.DX9Shader
 						if(assignment.Type == StateType.Texture)
 						{
 							var data = StateBlobToString(assignment);
-							WriteLine("{0} = <{1}>; // {2}", assignment.Type, data, assignment.Value[0].UInt);
+							WriteLine("{0} = {1}; // {2}", assignment.Type, data, assignment.Value[0].UInt);
 						}
 						else
 						{
@@ -233,7 +378,7 @@ namespace DXDecompiler.DX9Shader
 						foreach(var idx in variable.DefaultValue)
 						{
 							WriteIndent();
-							WriteLine("{0}, // {1}", shaderArrayElements[idx.UInt], idx.UInt);
+							WriteLine("{0}, // {1}", shaderArrayCompileStatements[idx.UInt], idx.UInt);
 						}
 						Indent--;
 						WriteLine("};");
@@ -249,7 +394,7 @@ namespace DXDecompiler.DX9Shader
 						{
 							WriteLine(" = {0}; // {1}", data, variable.DefaultValue[0].UInt);
 						}
-					}	
+					}
 				}
 				else if(variable.DefaultValue.All(d => d.UInt == 0))
 				{
@@ -269,6 +414,10 @@ namespace DXDecompiler.DX9Shader
 			{
 				var annotation = annotations[i];
 				var value = string.Join(", ", annotation.Value);
+				if(annotation.Value.Count > 1)
+				{
+					value = string.Format("{0}({1})", annotation.Parameter.GetTypeName(), value);
+				}
 				if(annotation.Parameter.ParameterType.HasVariableBlob())
 				{
 					Write("{0} {1} = {2};",
@@ -334,20 +483,20 @@ namespace DXDecompiler.DX9Shader
 				index = string.Format("[{0}]", assignment.ArrayIndex);
 			}
 			string value;
-			if(assignment.Value.Count > 1)
-			{
-				value = string.Format("{{ {0} }}", string.Join(", ", assignment.Value));
-			}
-			else if(EffectChunk.StateBlobLookup.ContainsKey(assignment))
+			if(_effectChunk.StateBlobLookup.ContainsKey(assignment))
 			{
 				value = StateBlobToString(assignment);
+			}
+			else if(assignment.Value.Count > 1)
+			{
+				value = string.Format("{{ {0} }}", string.Join(", ", assignment.Value));
 			}
 			else
 			{
 				value = assignment.Value[0].ToString();
 			}
 			Write("{0}{1} = {2};", assignment.Type.ToString(), index, value);
-			if(EffectChunk.StateBlobLookup.ContainsKey(assignment))
+			if(_effectChunk.StateBlobLookup.ContainsKey(assignment))
 			{
 				Write(" // {0}", assignment.Value[0].UInt);
 			}

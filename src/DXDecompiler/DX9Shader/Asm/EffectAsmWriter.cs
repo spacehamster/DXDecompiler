@@ -1,5 +1,7 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Bytecode.Fxlvm;
 using DXDecompiler.DX9Shader.FX9;
+using System;
 using System.Linq;
 
 namespace DXDecompiler.DX9Shader
@@ -178,7 +180,36 @@ namespace DXDecompiler.DX9Shader
 				}
 				else if(stateBlob.BlobType == StateBlobType.IndexShader)
 				{
-					WriteLine("{0}[TODO];", stateBlob.VariableName);
+					var variable = EffectChunk.Variables.Find(x => x.Parameter.Name == stateBlob.VariableName);
+
+					var indexer = stateBlob.Shader;
+					// TODO: Actually the index should be calculated by executing the index shader
+					var index = 0;
+					try
+					{
+						index = (int)Fx9FxlVm.Execute(indexer)[0];
+					}
+					catch(Exception e)
+					{
+						Write($"/* failed to execute index shader: {e.Message} */");
+					}
+
+					WriteLine();
+					Indent++;
+					WriteIndent();
+					WriteLine("asm {");
+
+					var variableBlobIndex = variable.DefaultValue[index].UInt;
+					var variableBlob = EffectChunk.VariableBlobs.Find(x => x.Index == variableBlobIndex);
+
+					var disasm = string.Join("\n", AsmWriter.Disassemble(variableBlob.Shader)
+						.Split('\n')
+						.Select(l => $"{new string(' ', Indent * 4)}{l}"));
+					WriteLine(disasm);
+
+					WriteIndent();
+					WriteLine("};");
+					Indent--;
 				}
 			}
 			else if(assignment.Type == StateType.VertexShader)

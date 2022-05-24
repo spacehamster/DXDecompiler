@@ -1,6 +1,8 @@
 ﻿using DXDecompiler.DX9Shader.Asm;
 using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Decompiler;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace DXDecompiler.DX9Shader
@@ -29,6 +31,23 @@ namespace DXDecompiler.DX9Shader
 			var asmWriter = new AsmWriter(shaderModel);
 			return asmWriter.Decompile();
 		}
+
+		public string Disassemble(InstructionToken instruction)
+		{
+			using var writer = new StringWriter();
+			var previous = Writer;
+			try
+			{
+				Writer = writer;
+				WriteInstruction(instruction);
+				return writer.ToString();
+			}
+			finally
+			{
+				Writer = previous;
+			}
+		}
+
 		static string ApplyModifier(SourceModifier modifier, string value)
 		{
 			switch(modifier)
@@ -90,7 +109,7 @@ namespace DXDecompiler.DX9Shader
 			{
 				// compute the actual data index, which might be different from logical index 
 				// because of relative addressing mode.
-				
+
 				// TODO: Handle relative addressing mode in a better way,
 				// by using `InstructionToken.Operands`:
 				// https://github.com/spacehamster/DXDecompiler/pull/6#issuecomment-782958769
@@ -193,16 +212,8 @@ namespace DXDecompiler.DX9Shader
 			WriteLine("//");
 			foreach(var declaration in constantTable.ConstantDeclarations)
 			{
-				string arraySubscript = "";
-				if(declaration.Elements > 1)
-				{
-					arraySubscript = $"[{declaration.Elements}]";
-				}
-				WriteLine("//   {0} {1}{2};",
-						declaration.GetTypeName(),
-						declaration.Name,
-						arraySubscript
-						);
+				var decompiled = ConstantTypeWriter.Decompile(declaration.Type, declaration.Name, false, Indent);
+				WriteLine(string.Join("\n", decompiled.Split('\n').Select(l => $"//   {l}")));
 			}
 			WriteLine("//");
 			WriteLine("//");
@@ -615,7 +626,7 @@ namespace DXDecompiler.DX9Shader
 					WriteLine("ret");
 					break;
 				case Opcode.Label:
-					WriteLine("label", GetSourceName(instruction, 0));
+					WriteLine("label {0}", GetSourceName(instruction, 0));
 					break;
 				case Opcode.Comment:
 				case Opcode.End:

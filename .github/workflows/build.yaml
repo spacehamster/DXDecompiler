@@ -1,0 +1,39 @@
+name: build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./src
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore previous dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+    - name: Restore dependencies
+      run: dotnet restore DXDecompiler.sln
+    - name: Build
+      id: build
+      run: dotnet build --no-restore
+    - name: Publish
+      id: publish
+      run: dotnet publish DXDecompilerCmd --no-build
+    - name: Upload published files
+      uses: actions/upload-artifact@v2.3.1
+      with:
+        path: src/DXDecompilerCmd/bin/**/publish

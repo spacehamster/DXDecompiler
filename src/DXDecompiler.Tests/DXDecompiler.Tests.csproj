@@ -1,87 +1,36 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\NUnit3TestAdapter.3.17.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.17.0\build\net35\NUnit3TestAdapter.props')" />
-  <Import Project="..\packages\NUnit.3.12.0\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.12.0\build\NUnit.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3D19DAC1-E727-43BA-A264-A64408B4D598}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DXDecompiler.Tests</RootNamespace>
-    <AssemblyName>DXDecompiler.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>net5.0</TargetFramework>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <AssemblyTitle>SlimShader.Tests</AssemblyTitle>
+    <Product>SlimShader.Tests</Product>
+    <Copyright>Copyright ©  2012</Copyright>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.12.0\lib\net40\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.4.2.0\lib\net40\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.D3DCompiler, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.D3DCompiler.4.2.0\lib\net40\SharpDX.D3DCompiler.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D10, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.Direct3D10.4.2.0\lib\net40\SharpDX.Direct3D10.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D11, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.Direct3D11.4.2.0\lib\net40\SharpDX.Direct3D11.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D11.Effects, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.Direct3D11.Effects.4.2.0\lib\net40\SharpDX.Direct3D11.Effects.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D9, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.Direct3D9.4.2.0\lib\net40\SharpDX.Direct3D9.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.DXGI.4.2.0\lib\net40\SharpDX.DXGI.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="SharpDX" Version="4.2.0" />
+    <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
+    <PackageReference Include="SharpDX.Direct3D10" Version="4.2.0" />
+    <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
+    <PackageReference Include="SharpDX.Direct3D11.Effects" Version="4.2.0" />
+    <PackageReference Include="SharpDX.Direct3D9" Version="4.2.0" />
+    <PackageReference Include="SharpDX.DXGI" Version="4.2.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssertTraceListener.cs" />
-    <Compile Include="ShaderCompiler.cs" />
-    <Compile Include="DX10Util\Extension.cs" />
-    <Compile Include="TestFixtures\TestDX9Effects.cs" />
-    <Compile Include="TestFixtures\CompileShadersFixture.cs" />
-    <Compile Include="TestFixtures\DX9Tests.cs" />
     <Content Include="FXC\D3DCompiler_43.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -129,7 +78,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <Content Include="ShadersDX9\Sdk\dx9sdk\LightingVS.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -280,24 +228,11 @@
     <Content Include="Shaders\Internal\Effects\EffectNoTechnique.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Compile Include="Effects10.cs" />
-    <Compile Include="Effects11.cs" />
     <Content Include="Shaders\Internal\Effects\EffectPacking.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Compile Include="TestFixtures\DoubleFormatterTests.cs" />
-    <Compile Include="TestFixtures\MiscTests.cs" />
-    <Compile Include="TestFixtures\TestEffectCreation.cs" />
-    <Compile Include="TestFixtures\TestLibraryShader.cs" />
-    <Compile Include="Util\DoubleUtil.cs" />
-    <Compile Include="Util\Util.cs" />
-    <Compile Include="TestFixtures\DecoderExtensionsTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestFixtures\DX10Tests.cs" />
-    <Compile Include="Util\TestUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <Content Include="ShadersDX9\HlslCrossCompiler\ps2\tex2d.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1105,14 +1040,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DebugParser\DebugParser.csproj">
-      <Project>{43b35c43-bd28-4731-81aa-772ee71c08b2}</Project>
-      <Name>DebugParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DXDecompiler\DXDecompiler.csproj">
-      <Project>{D75528F5-54F9-4E31-94F6-03C194F74CF2}</Project>
-      <Name>DXDecompiler</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\DebugParser\DebugParser.csproj" />
+    <ProjectReference Include="..\DXDecompiler\DXDecompiler.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Shaders\FxDis\readme.txt">
@@ -1272,21 +1201,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.12.0\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.17.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.17.0\build\net35\NUnit3TestAdapter.props'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

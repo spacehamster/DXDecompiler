@@ -1,4 +1,5 @@
-﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Bytecode.Ctab;
+using DXDecompiler.DX9Shader.Decompiler;
 using DXDecompiler.Util;
 using System;
 using System.Collections.Generic;
@@ -8,17 +9,47 @@ namespace DXDecompiler.DX9Shader
 {
 	public class HlslWriter : DecompileWriter
 	{
+		private class SourceOperand
+		{
+			public string Body { get; set; } // normally, register / constant name, or type name if Literals are not null
+			public string[] Literals { get; set; } // either null, or literal values
+			public string Swizzle { get; set; } // either empty, or a swizzle with leading dot. Empty if Literals are not null.
+			public string Modifier { get; set; } // should be used with string.Format to format the body. Should be "{0}" if Literals are not null.
+			public ParameterType? SamplerType { get; set; } // not null if it's a sampler
+
+			public override string ToString()
+			{
+				var body = Body;
+				if(Literals is not null)
+				{
+					body += string.Format("{0}({1})", Literals.Length, string.Join(", ", Literals));
+				}
+				body = string.Format(Modifier, body);
+				if(body.All(char.IsDigit))
+				{
+					body = $"({body})";
+				}
+				return body + Swizzle;
+			}
+		}
+
 		private readonly ShaderModel _shader;
+		private readonly AsmWriter _disassember;
 		private readonly bool _doAstAnalysis;
 		private int _iterationDepth = 0;
 
-		public RegisterState _registers;
+		private EffectHLSLWriter _effectWriter;
+		private RegisterState _registers;
 		string _entryPoint;
 
 		public HlslWriter(ShaderModel shader, bool doAstAnalysis = false, string entryPoint = null)
 		{
 			_shader = shader;
 			_doAstAnalysis = doAstAnalysis;
+			if(!_doAstAnalysis)
+			{
+				_disassember = new(shader);
+			}
 			if(string.IsNullOrEmpty(entryPoint))
 			{
 				_entryPoint = $"{_shader.Type}Main";
@@ -35,59 +66,89 @@ namespace DXDecompiler.DX9Shader
 			var shaderModel = ShaderReader.ReadShader(bytecode);
 			return Decompile(shaderModel);
 		}
-		public static string Decompile(ShaderModel shaderModel, string entryPoint = null)
+		public static string Decompile(ShaderModel shaderModel, string entryPoint = null, EffectHLSLWriter effect = null)
 		{
 			if(shaderModel.Type == ShaderType.Effect)
 			{
 				return EffectHLSLWriter.Decompile(shaderModel.EffectChunk);
 			}
-			var hlslWriter = new HlslWriter(shaderModel, false, entryPoint);
+			var hlslWriter = new HlslWriter(shaderModel, false, entryPoint)
+			{
+				_effectWriter = effect
+			};
 			return hlslWriter.Decompile();
 		}
 
-		private string GetDestinationName(InstructionToken instruction)
+		private string GetDestinationName(InstructionToken instruction, out string writeMaskName)
 		{
-			return _registers.GetDestinationName(instruction);
+			return _registers.GetDestinationName(instruction, out writeMaskName);
 		}
 
-		private string GetSourceName(InstructionToken instruction, int srcIndex)
+		private string GetDestinationNameWithWriteMask(InstructionToken instruction)
 		{
-			return _registers.GetSourceName(instruction, srcIndex);
+			var destinationName = GetDestinationName(instruction, out var writeMask);
+			return destinationName + writeMask;
 		}
 
-		private static string GetConstantTypeName(ConstantType type)
+		private SourceOperand GetSourceName(InstructionToken instruction, int srcIndex, bool isLogicalIndex = true)
 		{
-			switch(type.ParameterClass)
+			int dataIndex;
+			if(isLogicalIndex)
 			{
-				case ParameterClass.Scalar:
-					return type.ParameterType.GetDescription();
-				case ParameterClass.Vector:
-					return type.ParameterType.GetDescription() + type.Columns;
-				case ParameterClass.Struct:
-					return "struct";
-				case ParameterClass.MatrixColumns:
-					return $"column_major {type.ParameterType.GetDescription()}{type.Rows}x{type.Columns}";
-				case ParameterClass.MatrixRows:
-					return $"row_major {type.ParameterType.GetDescription()}{type.Rows}x{type.Columns}";
-				case ParameterClass.Object:
-					switch(type.ParameterType)
+				// compute the actual data index, which might be different from logical index 
+				// because of relative addressing mode.
+
+				// TODO: Handle relative addressing mode in a better way,
+				// by using `InstructionToken.Operands`:
+				// https://github.com/spacehamster/DXDecompiler/pull/6#issuecomment-782958769
+
+				// if instruction has destination, then source starts at the index 1
+				// here we assume destination won't have relative addressing,
+				// so we assume destination will only occupy 1 slot,
+				// that is, the start index for sources will be 1 if instruction.HasDestination is true.
+				var begin = instruction.HasDestination ? 1 : 0;
+				dataIndex = begin;
+				while(srcIndex > begin)
+				{
+					if(instruction.IsRelativeAddressMode(dataIndex))
 					{
-						case ParameterType.Sampler1D:
-						case ParameterType.Sampler2D:
-						case ParameterType.Sampler3D:
-						case ParameterType.SamplerCube:
-							return "sampler";
-						default:
-							throw new NotImplementedException();
+						++dataIndex;
 					}
+					++dataIndex;
+					--srcIndex;
+				}
 			}
-			throw new NotImplementedException();
+			else
+			{
+				dataIndex = srcIndex;
+			}
+
+			ParameterType? samplerType = null;
+			var registerNumber = instruction.GetParamRegisterNumber(dataIndex);
+			var registerType = instruction.GetParamRegisterType(dataIndex);
+			if(registerType == RegisterType.Sampler)
+			{
+				var decl = _registers.FindConstant(RegisterSet.Sampler, registerNumber);
+				var type = decl.GetRegisterTypeByOffset(registerNumber - decl.RegisterIndex);
+				samplerType = type.Type.ParameterType;
+			}
+
+
+			var body = _registers.GetSourceName(instruction, dataIndex, out var swizzle, out var modifier, out var literals);
+			return new SourceOperand
+			{
+				Body = body,
+				Literals = literals,
+				Swizzle = swizzle,
+				Modifier = modifier,
+				SamplerType = samplerType
+			};
 		}
 
 		private void WriteInstruction(InstructionToken instruction)
 		{
 			WriteIndent();
-			WriteLine($"// {instruction}");
+			WriteLine($"// {_disassember?.Disassemble(instruction).Trim()}");
 			switch(instruction.Opcode)
 			{
 				case Opcode.Def:
@@ -115,38 +176,134 @@ namespace DXDecompiler.DX9Shader
 					return;
 			}
 			WriteIndent();
+
+			void WriteAssignment(string sourceFormat, params SourceOperand[] args)
+			{
+				var destination = GetDestinationName(instruction, out var writeMask);
+				var destinationModifier = instruction.GetDestinationResultModifier() switch
+				{
+					ResultModifier.None => "{0} = {1};",
+					ResultModifier.Saturate => "{0} = saturate({1});",
+					ResultModifier.PartialPrecision => $"{{0}} = /* not implemented _pp modifier */ {{1}};",
+					object unknown => throw new NotImplementedException($"{unknown}")
+				};
+				var sourceResult = string.Format(sourceFormat, args);
+
+				var swizzleSizes = args.Select(x => x.Swizzle.StartsWith(".") ? x.Swizzle.Trim('.').Length : -1);
+				var returnsScalar = instruction.Opcode.ReturnsScalar() || swizzleSizes.All(x => x == 1);
+
+				if(writeMask.Length > 0)
+				{
+					destination += writeMask;
+					if(returnsScalar)
+					{
+						// do nothing, don't need to append write mask as swizzle
+					}
+					// if the instruction is parallel then we are safe to "edit" source swizzles
+					else if(instruction.Opcode.IsParallel(_shader))
+					{
+						foreach(var arg in args)
+						{
+							const string xyzw = ".xyzw";
+
+							if(arg.Literals is not null)
+							{
+								arg.Literals = arg.Literals
+									.Where((v, i) => writeMask.Contains(xyzw[i + 1]))
+									.ToArray();
+								continue;
+							}
+
+							var trimmedSwizzle = ".";
+							if(string.IsNullOrEmpty(arg.Swizzle))
+							{
+								arg.Swizzle = xyzw;
+							}
+							while(arg.Swizzle.Length <= 4)
+							{
+								arg.Swizzle += arg.Swizzle.Last();
+							}
+							for(var i = 1; i <= 4; ++i)
+							{
+								if(writeMask.Contains(xyzw[i]))
+								{
+									trimmedSwizzle += arg.Swizzle[i];
+								}
+							}
+							arg.Swizzle = trimmedSwizzle;
+						}
+						sourceResult = string.Format(sourceFormat, args);
+					}
+					// if we cannot "edit" the swizzles, we need to apply write masks on the source result
+					else
+					{
+						if(sourceResult.Last() != ')')
+						{
+							sourceResult = $"({sourceResult})";
+						}
+						sourceResult += writeMask;
+					}
+				}
+				WriteLine(destinationModifier, destination, sourceResult);
+			}
+
+			void WriteTextureAssignment(string postFix, SourceOperand sampler, SourceOperand uv, int? dimension, params SourceOperand[] others)
+			{
+				var (operation, defaultDimension) = sampler.SamplerType switch
+				{
+					ParameterType.Sampler1D => ("tex1D", 1),
+					ParameterType.Sampler2D => ("tex2D", 2),
+					ParameterType.Sampler3D => ("tex3D", 3),
+					ParameterType.SamplerCube => ("texCUBE", 3),
+					ParameterType.Sampler => ("texUnknown", 4),
+					_ => throw new InvalidOperationException(sampler.SamplerType.ToString())
+				};
+				dimension ??= defaultDimension;
+				var args = new SourceOperand[others.Length + 2];
+				var uvSwizzle = uv.Swizzle.TrimStart('.');
+				if(uvSwizzle.Length == 0)
+				{
+					uvSwizzle = "xyzw";
+				}
+				if(uvSwizzle.Length > dimension)
+				{
+					uv.Swizzle = "." + uvSwizzle.Substring(0, dimension.Value);
+				}
+				args[0] = sampler;
+				args[1] = uv;
+				others.CopyTo(args, 2);
+				var format = string.Join(", ", args.Select((_, i) => $"{{{i}}}"));
+				WriteAssignment($"{operation}{postFix}({format})", args);
+			}
+
 			switch(instruction.Opcode)
 			{
 				case Opcode.Abs:
-					WriteLine("{0} = abs({1});", GetDestinationName(instruction),
-						GetSourceName(instruction, 1));
+					WriteAssignment("abs({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Add:
-					WriteLine("{0} = {1} + {2};", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("{0} + {1}", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Cmp:
 					// TODO: should be per-component
-					WriteLine("{0} = ({1} >= 0) ? {2} : {3};", GetDestinationName(instruction),
+					WriteAssignment("({0} >= 0) ? {1} : {2}",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.DP2Add:
-					WriteLine("{0} = dot({1}, {2}) + {3};", GetDestinationName(instruction),
+					WriteAssignment("dot({0}, {1}) + {2}",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.Dp3:
-					WriteLine("{0} = dot({1}, {2});", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("dot({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Dp4:
-					WriteLine("{0} = dot({1}, {2});", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("dot({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Exp:
-					WriteLine("{0} = exp2({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("exp2({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Frc:
-					WriteLine("{0} = frac({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("frac({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.If:
 					WriteLine("if ({0}) {{", GetSourceName(instruction, 0));
@@ -200,46 +357,71 @@ namespace DXDecompiler.DX9Shader
 					Indent++;
 					break;
 				case Opcode.Log:
-					WriteLine("{0} = log2({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("log2({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Lrp:
-					WriteLine("{0} = lerp({2}, {3}, {1});", GetDestinationName(instruction),
+					WriteAssignment("lerp({2}, {1}, {0})",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.Mad:
-					WriteLine("{0} = {1} * {2} + {3};", GetDestinationName(instruction),
+					WriteAssignment("{0} * {1} + {2}",
 						GetSourceName(instruction, 1), GetSourceName(instruction, 2), GetSourceName(instruction, 3));
 					break;
 				case Opcode.Max:
-					WriteLine("{0} = max({1}, {2});", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("max({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Min:
-					WriteLine("{0} = min({1}, {2});", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("min({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Mov:
-					WriteLine("{0} = {1};", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("{0}", GetSourceName(instruction, 1));
 					break;
 				case Opcode.MovA:
-					WriteLine("{0} = {1};", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("{0}", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Mul:
-					WriteLine("{0} = {1} * {2};", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("{0} * {1}", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Nrm:
-					WriteLine("{0} = normalize({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
-					break;
+					{
+						// the nrm opcode actually only works on the 3D vector
+						var operand = GetSourceName(instruction, 1);
+						if(instruction.GetDestinationMaskedLength() < 4)
+						{
+							var swizzle = operand.Swizzle.TrimStart('.');
+							switch(swizzle.Length)
+							{
+								case 0:
+								case 4:
+									WriteAssignment("normalize({0}.xyz)", operand);
+									break;
+								case 1:
+									// let it reach 3 dimensions
+									operand.Swizzle += swizzle;
+									operand.Swizzle += swizzle;
+									goto case 3;
+								case 3:
+									WriteAssignment("normalize({0})", operand);
+									break;
+								default:
+									WriteAssignment("({0} / length(float3({0}))", operand);
+									break;
+							}
+						}
+						else
+						{
+							WriteAssignment("({0} / length(float3({0}))", operand);
+						}
+						break;
+					}
 				case Opcode.Pow:
-					WriteLine("{0} = pow({1}, {2});", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("pow({0}, {1})", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Rcp:
-					WriteLine("{0} = 1 / {1};", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("1.0f / {0}", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Rsq:
-					WriteLine("{0} = 1 / sqrt({1});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					WriteAssignment("1 / sqrt({0})", GetSourceName(instruction, 1));
 					break;
 				case Opcode.Sge:
 					if(instruction.GetSourceModifier(1) == SourceModifier.AbsAndNegate &&
@@ -247,40 +429,79 @@ namespace DXDecompiler.DX9Shader
 						instruction.GetParamRegisterName(1) + instruction.GetSourceSwizzleName(1) ==
 						instruction.GetParamRegisterName(2) + instruction.GetSourceSwizzleName(2))
 					{
-						WriteLine("{0} = ({1} == 0) ? 1 : 0;", GetDestinationName(instruction),
-							instruction.GetParamRegisterName(1) + instruction.GetSourceSwizzleName(1));
+						WriteAssignment("({0} == 0) ? 1 : 0", new SourceOperand
+						{
+							Body = instruction.GetParamRegisterName(1),
+							Swizzle = instruction.GetSourceSwizzleName(1),
+							Modifier = "{0}"
+						});
 					}
 					else
 					{
-						WriteLine("{0} = ({1} >= {2}) ? 1 : 0;", GetDestinationName(instruction), GetSourceName(instruction, 1),
+						WriteAssignment("({0} >= {1}) ? 1 : 0", GetSourceName(instruction, 1),
 							GetSourceName(instruction, 2));
 					}
 					break;
 				case Opcode.Slt:
-					WriteLine("{0} = ({1} < {2}) ? 1 : 0;", GetDestinationName(instruction), GetSourceName(instruction, 1),
-						GetSourceName(instruction, 2));
+					WriteAssignment("({0} < {1}) ? 1 : 0", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.SinCos:
-					WriteLine("sincos({1}, {0}, {0});", GetDestinationName(instruction), GetSourceName(instruction, 1));
+					{
+						var writeMask = instruction.GetDestinationWriteMask();
+						var values = new List<string>(2);
+						if(writeMask.HasFlag(ComponentFlags.X))
+						{
+							values.Add("cos({0})");
+						}
+						if(writeMask.HasFlag(ComponentFlags.Y))
+						{
+							values.Add("sin({0})");
+						}
+						var source = string.Join(", ", values);
+						source = values.Count > 1 ? $"float{values.Count}({source})" : source;
+						WriteAssignment(source, GetSourceName(instruction, 1));
+					}
 					break;
 				case Opcode.Sub:
-					WriteLine("{0} = {1} - {2};", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteAssignment("{0} - {1}", GetSourceName(instruction, 1), GetSourceName(instruction, 2));
 					break;
 				case Opcode.Tex:
-					if((_shader.MajorVersion == 1 && _shader.MinorVersion >= 4) || (_shader.MajorVersion > 1))
+					if(_shader.MajorVersion > 1)
 					{
-						WriteLine("{0} = tex2D({2}, {1});", GetDestinationName(instruction),
-							GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+						WriteTextureAssignment(string.Empty, GetSourceName(instruction, 2), GetSourceName(instruction, 1), null);
+					}
+					// shader model 1
+					else if(_shader.MinorVersion >= 4)
+					{
+						throw new NotImplementedException("texld in ps_1_4 not implemented yet");
 					}
 					else
 					{
-						WriteLine("{0} = tex2D();", GetDestinationName(instruction));
+						var uvName = GetDestinationName(instruction, out var writeMask);
+						var uvOperand = new SourceOperand
+						{
+							Body = uvName,
+							Swizzle = string.Empty,
+							Modifier = "{0}"
+						};
+
+						var registerNumber = instruction.GetParamRegisterNumber(0);
+						var samplerDecl = _registers.FindConstant(RegisterSet.Sampler, instruction.GetParamRegisterNumber(0));
+						var samplerName = samplerDecl.GetConstantNameByRegisterNumber(registerNumber, null);
+						var samplerType = samplerDecl.GetRegisterTypeByOffset(registerNumber - samplerDecl.RegisterIndex).Type.ParameterType;
+						var samplerOperand = new SourceOperand
+						{
+							Body = samplerName,
+							Swizzle = string.Empty,
+							Modifier = "{0}",
+							SamplerType = samplerType
+						};
+
+						WriteTextureAssignment(string.Empty, samplerOperand, uvOperand, null);
 					}
 					break;
 				case Opcode.TexLDL:
-					WriteLine("{0} = tex2Dlod({2}, {1});", GetDestinationName(instruction),
-						GetSourceName(instruction, 1), GetSourceName(instruction, 2));
+					WriteTextureAssignment("lod", GetSourceName(instruction, 2), GetSourceName(instruction, 1), 4);
 					break;
 				case Opcode.Comment:
 					{
@@ -296,7 +517,20 @@ namespace DXDecompiler.DX9Shader
 					Indent++;
 					break;
 				case Opcode.TexKill:
-					WriteLine("clip({0});", GetDestinationName(instruction));
+					if(instruction.GetDestinationResultModifier() is not ResultModifier.None)
+					{
+						throw new NotImplementedException("Result modifier in texkill");
+					}
+					WriteLine("clip({0});", GetDestinationNameWithWriteMask(instruction));
+					break;
+				case Opcode.DSX:
+					WriteAssignment("ddx({0})", GetSourceName(instruction, 1));
+					break;
+				case Opcode.DSY:
+					WriteAssignment("ddy({0})", GetSourceName(instruction, 1));
+					break;
+				case Opcode.Lit:
+					WriteAssignment("lit({0}.x, {0}.y, {0}.w)", GetSourceName(instruction, 1));
 					break;
 				default:
 					throw new NotImplementedException(instruction.Opcode.ToString());
@@ -311,14 +545,14 @@ namespace DXDecompiler.DX9Shader
 				{
 					if(operand is DestinationOperand dest)
 					{
-						if(dest.RegisterType == RegisterType.Temp)
+						if(dest.RegisterType == RegisterType.Temp
+							|| (_shader.Type == ShaderType.Vertex && dest.RegisterType == RegisterType.Addr))
 						{
-
 							var registerKey = new RegisterKey(dest.RegisterType, dest.RegisterNumber);
 							if(!tempRegisters.ContainsKey(registerKey))
 							{
 								var reg = new RegisterDeclaration(registerKey);
-								_registers._registerDeclarations[registerKey] = reg;
+								_registers.RegisterDeclarations[registerKey] = reg;
 								tempRegisters[registerKey] = (int)inst.GetDestinationWriteMask();
 							}
 							else
@@ -335,61 +569,50 @@ namespace DXDecompiler.DX9Shader
 				kv => kv.Key))
 			{
 				int writeMask = group.Key;
-				string writeMaskName; switch(writeMask)
+				string writeMaskName = writeMask switch
 				{
-					case 0x1:
-						writeMaskName = "float";
-						break;
-					case 0x3:
-						writeMaskName = "float2";
-						break;
-					case 0x7:
-						writeMaskName = "float3";
-						break;
-					case 0xF:
-						writeMaskName = "float4";
-						break;
-					default:
-						// TODO
-						writeMaskName = "float4";
-						break;
-						//throw new NotImplementedException();
-				}
+					0x1 => "float",
+					0x3 => "float2",
+					0x7 => "float3",
+					0xF => "float4",
+					_ => "float4",// TODO
+				};
 				WriteIndent();
 				WriteLine("{0} {1};", writeMaskName, string.Join(", ", group));
 			}
-
-
 		}
 		protected override void Write()
 		{
 			if(_shader.Type == ShaderType.Expression)
 			{
-				Write($"// Writing expression");
-				WriteExpression(_shader);
-				return;
+				throw new InvalidOperationException($"Expression should be written using {nameof(ExpressionHLSLWriter)} in {nameof(EffectHLSLWriter)}");
 			}
+			/*if(_shader.MajorVersion == 1)
+			{
+				WriteLine("#pragma message \"Shader Model 1.0 not supported\"");
+				WriteLine($"float4 {_entryPoint}(): POSITION;");
+				return;
+			}*/
 			_registers = new RegisterState(_shader);
 
-			WriteConstantDeclarations();
-
-			if(_shader.Preshader != null)
+			foreach(var declaration in _registers.ConstantDeclarations)
 			{
-				WriteExpression(_shader.Preshader.Shader);
-			}
-			if(_registers.MethodInputRegisters.Count > 1)
-			{
-				WriteInputStructureDeclaration();
+				if(_effectWriter?.CommonConstantDeclarations.ContainsKey(declaration.Name) is true)
+				{
+					// skip common constant declarations
+					continue;
+				}
+				// write constant declaration
+				var decompiled = ConstantTypeWriter.Decompile(declaration, _shader);
+				var assignment = string.IsNullOrEmpty(decompiled.DefaultValue)
+					? string.Empty
+					: $" = {decompiled.DefaultValue}";
+				WriteLine($"{decompiled.Code}{decompiled.RegisterAssignmentString}{assignment};");
 			}
 
-			if(_registers.MethodOutputRegisters.Count > 1)
-			{
-				WriteOutputStructureDeclaration();
-			}
 
-			string methodReturnType = GetMethodReturnType();
-			string methodParameters = GetMethodParameters();
-			string methodSemantic = GetMethodSemantic();
+			ProcessMethodInputType(out var methodParameters);
+			ProcessMethodOutputType(out var methodReturnType, out var methodSemantic);
 			WriteLine("{0} {1}({2}){3}",
 				methodReturnType,
 				_entryPoint,
@@ -398,13 +621,19 @@ namespace DXDecompiler.DX9Shader
 			WriteLine("{");
 			Indent++;
 
+			if(_shader.Preshader != null)
+			{
+				var preshader = PreshaderWriter.Decompile(_shader.Preshader, Indent, out var ctabOverride);
+				_registers.CtabOverride = ctabOverride;
+				WriteLine(preshader);
+			}
+
 			if(_registers.MethodOutputRegisters.Count > 1)
 			{
-				var outputStructType = _shader.Type == ShaderType.Pixel ? "PS_OUT" : "VS_OUT";
 				WriteIndent();
-				WriteLine($"{outputStructType} o;");
+				WriteLine($"{methodReturnType} o;");
 			}
-			else
+			else if(_shader is not { Type: ShaderType.Pixel, MajorVersion: 1 }) // sm1 pixel shader use temp0 as output
 			{
 				var output = _registers.MethodOutputRegisters.First().Value;
 				WriteIndent();
@@ -441,130 +670,59 @@ namespace DXDecompiler.DX9Shader
 			WriteLine("}");
 		}
 
-		private void WriteConstantDeclarations()
+		private void WriteDeclarationsAsStruct(string typeName, IEnumerable<RegisterDeclaration> declarations)
 		{
-			if(_registers.ConstantDeclarations.Count != 0)
-			{
-				foreach(ConstantDeclaration declaration in _registers.ConstantDeclarations)
-				{
-					Write(declaration);
-				}
-			}
-		}
-		private void Write(ConstantDeclaration declaration)
-		{
-			Write(declaration.Type, declaration.Name);
-			if(!declaration.DefaultValue.All(v => v == 0))
-			{
-				Write(" = {{ {0} }}", string.Join(", ", declaration.DefaultValue));
-			}
-			WriteLine(";");
-			WriteLine();
-		}
-		private void Write(ConstantType type, string name, bool isStructMember = false)
-		{
-			string typeName = GetConstantTypeName(type);
-			WriteIndent();
-			Write("{0}", typeName);
-			if(type.ParameterClass == ParameterClass.Struct)
-			{
-				WriteLine("");
-				WriteLine("{");
-				Indent++;
-				foreach(var member in type.Members)
-				{
-					Write(member.Type, member.Name, true);
-				}
-				Indent--;
-				WriteIndent();
-				Write("}");
-			}
-			Write(" {0}", name);
-			if(type.Elements > 1)
-			{
-				Write("[{0}]", type.Elements);
-			}
-			if(isStructMember)
-			{
-				Write(";\n");
-			}
-		}
-		private void WriteInputStructureDeclaration()
-		{
-			var inputStructType = _shader.Type == ShaderType.Pixel ? "PS_IN" : "VS_IN";
-			WriteLine($"struct {inputStructType}");
+			WriteLine($"struct {typeName}");
 			WriteLine("{");
 			Indent++;
-			foreach(var input in _registers.MethodInputRegisters.Values)
+			foreach(var register in declarations)
 			{
 				WriteIndent();
-				WriteLine($"{input.TypeName} {input.Name} : {input.Semantic};");
+				WriteLine($"{register.TypeName} {register.Name} : {register.Semantic};");
 			}
 			Indent--;
 			WriteLine("};");
 			WriteLine();
 		}
 
-		private void WriteOutputStructureDeclaration()
+		private void ProcessMethodInputType(out string methodParameters)
 		{
-			var outputStructType = _shader.Type == ShaderType.Pixel ? "PS_OUT" : "VS_OUT";
-			WriteLine($"struct {outputStructType}");
-			WriteLine("{");
-			Indent++;
-			foreach(var output in _registers.MethodOutputRegisters.Values)
+			var registers = _registers.MethodInputRegisters.Values;
+			switch(registers.Count)
 			{
-				WriteIndent();
-				WriteLine($"// {output.RegisterKey} {Operand.GetParamRegisterName(output.RegisterKey.Type, (uint)output.RegisterKey.Number)}");
-				WriteIndent();
-				WriteLine($"{output.TypeName} {output.Name} : {output.Semantic};");
+				case 0:
+					methodParameters = string.Empty;
+					break;
+				case 1:
+					var input = registers.First();
+					methodParameters = $"{input.TypeName} {input.Name} : {input.Semantic}";
+					break;
+				default:
+					var inputTypeName = $"{_entryPoint}_Input";
+					WriteDeclarationsAsStruct(inputTypeName, registers);
+					methodParameters = $"{inputTypeName} i";
+					break;
 			}
-			Indent--;
-			WriteLine("};");
-			WriteLine();
 		}
 
-		private string GetMethodReturnType()
+		private void ProcessMethodOutputType(out string methodReturnType, out string methodSemantic)
 		{
-			switch(_registers.MethodOutputRegisters.Count)
+			var registers = _registers.MethodOutputRegisters.Values;
+			switch(registers.Count)
 			{
 				case 0:
 					throw new InvalidOperationException();
 				case 1:
-					return _registers.MethodOutputRegisters.Values.First().TypeName;
+					methodReturnType = registers.First().TypeName;
+					string semantic = registers.First().Semantic;
+					methodSemantic = $" : {semantic}";
+					break;
 				default:
-					return _shader.Type == ShaderType.Pixel ? "PS_OUT" : "VS_OUT";
-			}
-		}
-
-		private string GetMethodSemantic()
-		{
-			switch(_registers.MethodOutputRegisters.Count)
-			{
-				case 0:
-					throw new InvalidOperationException();
-				case 1:
-					string semantic = _registers.MethodOutputRegisters.Values.First().Semantic;
-					return $" : {semantic}";
-				default:
-					return string.Empty;
-			}
-		}
-
-		private string GetMethodParameters()
-		{
-			if(_registers.MethodInputRegisters.Count == 0)
-			{
-				return string.Empty;
-			}
-			else if(_registers.MethodInputRegisters.Count == 1)
-			{
-				var input = _registers.MethodInputRegisters.Values.First();
-				return $"{input.TypeName} {input.Name} : {input.Semantic}";
-			}
-
-			return _shader.Type == ShaderType.Pixel
-					? "PS_IN i"
-					: "VS_IN i";
+					methodReturnType = $"{_entryPoint}_Output";
+					WriteDeclarationsAsStruct(methodReturnType, registers);
+					methodSemantic = string.Empty;
+					break;
+			};
 		}
 
 		private void WriteAst(HlslAst ast)
@@ -606,22 +764,6 @@ namespace DXDecompiler.DX9Shader
 				WriteInstruction(instruction);
 			}
 			WriteLine();
-		}
-		private void WriteExpression(ShaderModel shader)
-		{
-			WriteLine("void {0}Preshader(){{", _entryPoint);
-			Indent++;
-			WriteLine($"// {shader.Type}_{shader.MajorVersion}_{shader.MinorVersion}");
-			foreach(var token in shader.Fxlc.Tokens)
-			{
-				WriteLine($"// {token.ToString(shader.ConstantTable, shader.Cli)}");
-			}
-			if(shader.Prsi != null)
-			{
-				WriteLine(shader.Prsi.Dump());
-			}
-			Indent--;
-			WriteLine("}");
 		}
 	}
 }

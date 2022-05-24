@@ -3,7 +3,7 @@ using DXDecompiler.DebugParser.FX9;
 using DXDecompiler.DX9Shader;
 using DXDecompiler.Tests.Util;
 using NUnit.Framework;
-using SharpDX.D3DCompiler;
+using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,7 +46,7 @@ namespace DXDecompiler.Tests
 		/// <summary>
 		/// Compare ASM output produced by fxc.exe and SlimShader.
 		/// </summary>
-		[TestCaseSource("TestShaders")]
+		[TestCaseSource(nameof(TestShaders))]
 		public void AsmMatchesFxc(string relPath)
 		{
 			string file = $"{ShaderDirectory}/{relPath}";
@@ -78,7 +78,7 @@ namespace DXDecompiler.Tests
 		/// <summary>
 		/// Compare ASM output produced by fxc.exe and SlimShader.
 		/// </summary>
-		[TestCaseSource("TestShaders")]
+		[TestCaseSource(nameof(TestShaders))]
 		public void Decompile(string relPath)
 		{
 			string file = $"{ShaderDirectory}/{relPath}";
@@ -93,7 +93,7 @@ namespace DXDecompiler.Tests
 			// Assert.
 		}
 
-		[TestCaseSource("TestShaders")]
+		[TestCaseSource(nameof(TestShaders))]
 		public void DumpStructure(string relPath)
 		{
 			string file = $"{ShaderDirectory}/{relPath}";
@@ -181,17 +181,25 @@ namespace DXDecompiler.Tests
 			// Act.
 			var binaryFileBytes = File.ReadAllBytes(file + ".o");
 			var shaderModel = ShaderReader.ReadShader(binaryFileBytes);
-			var decompiledHLSL = HlslWriter.Decompile(shaderModel);
+			var decompiledHLSL = HlslWriter.Decompile(shaderModel, "main");
 			File.WriteAllText($"{OutputDir}/{relPath}.d.hlsl", decompiledHLSL);
 
 			using(var shaderBytecode = ShaderBytecode.FromStream(new MemoryStream(binaryFileBytes)))
 			{
-				var profile = shaderModel.Type == DX9Shader.ShaderType.Pixel ?
-					$"ps_{shaderModel.MajorVersion}_{shaderModel.MinorVersion}" :
-					$"vs_{shaderModel.MajorVersion}_{shaderModel.MinorVersion}";
-				var compiledShader = ShaderBytecode.Compile(decompiledHLSL, "main", profile);
-				var disassembly = shaderBytecode.Disassemble();
+				string profile;
+				switch(shaderModel.Type)
+				{
+					case ShaderType.Effect:
+						profile = "fx_2_0";
+						break;
+					default:
+						profile = shaderModel.Profile;
+						break;
+				}
+
+				var compiledShader = ShaderBytecode.Compile(decompiledHLSL, "main", profile, default);
 				var redisassembly = compiledShader.Bytecode.Disassemble();
+				var disassembly = shaderBytecode.Disassemble();
 				File.WriteAllText($"{OutputDir}/{relPath}.d1.asm", disassembly);
 				File.WriteAllText($"{OutputDir}/{relPath}.d2.asm", redisassembly);
 

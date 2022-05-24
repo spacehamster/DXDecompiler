@@ -1,6 +1,7 @@
 ﻿using DXDecompiler.DX9Shader.Bytecode.Ctab;
 using DXDecompiler.Util;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -13,8 +14,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		public uint OpIndex { get; private set; }
 		public FxlcOperandType ArrayType { get; private set; }
 		public uint ArrayIndex { get; private set; }
+		public uint ComponentCount { get; private set; }
+		public bool IsScalar { get; private set; }
 
-		private uint ComponentCount;
 		public static FxlcOperand Parse(BytecodeReader reader, uint componentCount, bool isScalarOp)
 		{
 			var result = new FxlcOperand()
@@ -22,6 +24,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 				IsArray = reader.ReadUInt32(),
 				OpType = (FxlcOperandType)reader.ReadUInt32(),
 				OpIndex = reader.ReadUInt32(),
+				IsScalar = isScalarOp
 			};
 			result.ComponentCount = isScalarOp && result.OpType != FxlcOperandType.Literal ? 1 : componentCount;
 			Debug.Assert(Enum.IsDefined(typeof(FxlcOperandType), result.OpType),
@@ -104,25 +107,55 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					return $".UnknownCount{componentCount}";
 			}
 		}
-		private string FormatOperand(ConstantTable ctab, CliToken cli, FxlcOperandType type, uint index)
+		private string FormatOperand(
+			ConstantTable ctab,
+			CliToken cli,
+			HashSet<uint> ctabOverride,
+			FxlcOperandType type,
+			uint index,
+			string indexer,
+			out string component)
 		{
 			var elementIndex = index / 4;
 			var componentIndex = index % 4;
-			var component = FormatComponent(componentIndex, ComponentCount);
+			component = FormatComponent(componentIndex, ComponentCount);
 			switch(type)
 			{
 				case FxlcOperandType.Literal:
-					var literal = string.Join(", ",
-						Enumerable.Repeat(cli.GetLiteral(index), (int)ComponentCount));
-					return string.Format("({0})", literal);
+					var literal = cli.GetLiteral(index);
+					var firstLiteral = literal is "-0" ? "0" : literal;
+					for(var i = 1u; i < ComponentCount; ++i)
+					{
+						var text = IsScalar
+							? firstLiteral
+							: cli.GetLiteral(index + i);
+						literal += $", {text}";
+					}
+					component = string.Empty;
+					var typeName = ctab is null || ComponentCount == 1 ? string.Empty : $"float{ComponentCount}";
+					return $"{typeName}({literal})";
 				case FxlcOperandType.Temp:
-					return string.Format("r{0}{1}", elementIndex, component);
+					return $"{(ctab is null ? "r" : "temp")}{elementIndex}";
 				case FxlcOperandType.Variable:
-					return string.Format("c{0}{1}", elementIndex, component);
+					if(ctabOverride?.Contains(elementIndex) is true)
+					{
+						return $"expr{elementIndex}";
+					}
+					if(ctab is not null)
+					{
+						return ctab.ConstantDeclarations
+							.First(d => d.ContainsIndex(elementIndex))
+							.GetConstantNameByRegisterNumber(elementIndex, indexer);
+					}
+					else if(!string.IsNullOrEmpty(indexer))
+					{
+						return $"c{elementIndex}[{indexer}]";
+					}
+					return $"c{elementIndex}";
 				case FxlcOperandType.Expr:
-					return string.Format("c{0}{1}", elementIndex, component);
+					return $"{(ctab is null ? "c" : "expr")}{elementIndex}";
 				default:
-					return string.Format("unknown{0}{1}", elementIndex, component);
+					return $"unknown{elementIndex}"; ;
 			}
 		}
 		private string FormatOperand(ConstantTable ctab, Chunks.Fxlvm.Cli4Chunk cli, FxlcOperandType type, uint index)
@@ -159,20 +192,21 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 		/// <summary>
 		/// Format operand for FX9 preshaders
 		/// </summary>
-		/// <param name="ctab"></param>
-		/// <param name="cli"></param>
-		/// <returns></returns>
-		public string FormatOperand(ConstantTable ctab, CliToken cli)
+		/// <param name="cli">CliToken, neccessary for retrieving literal values</param>
+		/// <param name="ctab">ConstantTable, optional. If not null, it will be used to resolve constants.</param>
+		/// <param name="ctabOverride">Constant registers overwritten by preshader</param>
+		/// <returns>The formatted operand as string</returns>
+		public string FormatOperand(CliToken cli, ConstantTable ctab, HashSet<uint> ctabOverride = null)
 		{
 			if(IsArray == 0)
 			{
-				return FormatOperand(ctab, cli, OpType, OpIndex);
+				return FormatOperand(ctab, cli, ctabOverride, OpType, OpIndex, null, out var component) + component;
 			}
 			else
 			{
-				return string.Format("{0}[{1}]",
-					FormatOperand(ctab, cli, ArrayType, ArrayIndex),
-					FormatOperand(ctab, cli, OpType, OpIndex));
+				var indexOperand = FormatOperand(ctab, cli, ctabOverride, OpType, OpIndex, null, out _) + ".x";
+				var arrayOperand = FormatOperand(ctab, cli, ctabOverride, ArrayType, ArrayIndex, indexOperand, out var elementComponent);
+				return string.Format("{0}{1}", arrayOperand, elementComponent);
 			}
 		}
 		/// <summary>

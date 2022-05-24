@@ -36,7 +36,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 			for(int i = 0; i < operandCount; i++)
 			{
 				var isScalarOp = i == 0 && result.IsScalarInstruction;
-				result.Operands.Add(FxlcOperand.Parse(reader, tokenComponentCount, isScalarOp));
+				result.Operands.Add(FxlcOperand.Parse(reader, tokenComponentCount, isScalarOp && i == 0));
 			}
 			// destination operand
 			result.Operands.Insert(0, FxlcOperand.Parse(reader, tokenComponentCount, false));
@@ -56,9 +56,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Fxlvm
 					operands);
 		}
 
-		public string ToString(ConstantTable ctab, CliToken cli)
+		public string ToString(CliToken cli)
 		{
-			var operands = string.Join(", ", Operands.Select(o => o.FormatOperand(ctab, cli)));
+			var operands = string.Join(", ", Operands.Select(o => o.FormatOperand(cli, null)));
 			return string.Format("{0} {1}",
 					Opcode.ToString().ToLowerInvariant(),
 					operands);

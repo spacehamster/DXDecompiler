@@ -25,6 +25,11 @@ namespace DXDecompiler.DX9Shader
 
 	public class ShaderModel
 	{
+		static ShaderModel()
+		{
+			System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+		}
+
 		private static readonly Dictionary<uint, CommentType> KnownCommentTypes =
 			new Dictionary<uint, CommentType>
 		{
@@ -45,6 +50,22 @@ namespace DXDecompiler.DX9Shader
 		public Preshader Preshader { get; set; }
 		public PrsiToken Prsi { get; set; }
 		public IEnumerable<InstructionToken> Instructions => Tokens.OfType<InstructionToken>();
+
+		public string Profile
+		{
+			get
+			{
+				var version = $"{MajorVersion}_{MinorVersion}";
+				version = version switch
+				{
+					"2_1" => "2_a",
+					"2_255" => "2_sw",
+					"3_255" => "3_sw",
+					_ => version
+				};
+				return $"{Type.GetDescription()}_{version}";
+			}
+		}
 
 		public ShaderModel(int majorVersion, int minorVersion, ShaderType type)
 		{
@@ -72,9 +93,6 @@ namespace DXDecompiler.DX9Shader
 			result.MinorVersion = reader.ReadByte();
 			result.MajorVersion = reader.ReadByte();
 			result.Type = (ShaderType)reader.ReadUInt16();
-			//SM1 shaders do not encode instruction size which rely on for reading operands.
-			//So we won't support SM1
-			if(result.MajorVersion == 1) throw new ParseException("Shader Model 1 is not supported");
 			while(true)
 			{
 				var instruction = result.ReadInstruction(reader);
@@ -95,7 +113,14 @@ namespace DXDecompiler.DX9Shader
 			}
 			else
 			{
-				size = (int)((instructionToken >> 24) & 0x0f);
+				if(MajorVersion > 1)
+				{
+					size = (int)((instructionToken >> 24) & 0x0f);
+				}
+				else
+				{
+					size = opcode.GetShaderModel1OpcodeSize(MinorVersion);
+				}
 			}
 			Token token = null;
 			if(opcode == Opcode.Comment)
@@ -117,7 +142,10 @@ namespace DXDecompiler.DX9Shader
 							Fxlc = FxlcBlock.Parse(commentReader);
 							return null;
 						case CommentType.PRES:
-							Preshader = Preshader.Parse(commentReader);
+							if(size > 1)
+							{
+								Preshader = Preshader.Parse(commentReader);
+							}
 							return null;
 						case CommentType.PRSI:
 							Prsi = PrsiToken.Parse(commentReader);
@@ -162,7 +190,17 @@ namespace DXDecompiler.DX9Shader
 						if((token.Data[i] & (1 << 13)) != 0)
 						{
 							//Relative Address mode
-							token.Data[i + 1] = reader.ReadUInt32();
+							if(MajorVersion < 2)
+							{
+								// special handling for SM1 shaders
+								token.AddData();
+								token.Data[i + 1] = 0xB0000000;
+								size++;
+							}
+							else
+							{
+								token.Data[i + 1] = reader.ReadUInt32();
+							}
 							inst.Operands.Add(new DestinationOperand(token.Data[i], token.Data[i + 1]));
 							i++;
 						}
@@ -174,7 +212,17 @@ namespace DXDecompiler.DX9Shader
 					else if((token.Data[i] & (1 << 13)) != 0)
 					{
 						//Relative Address mode
-						token.Data[i + 1] = reader.ReadUInt32();
+						if(MajorVersion < 2)
+						{
+							// special handling for SM1 shaders
+							token.AddData();
+							token.Data[i + 1] = 0xB0000000;
+							size++;
+						}
+						else
+						{
+							token.Data[i + 1] = reader.ReadUInt32();
+						}
 						inst.Operands.Add(new SourceOperand(token.Data[i], token.Data[i + 1]));
 						i++;
 					}

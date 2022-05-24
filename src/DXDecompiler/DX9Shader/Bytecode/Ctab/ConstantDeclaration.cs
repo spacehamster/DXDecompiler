@@ -19,6 +19,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		public ushort RegisterCount { get; private set; }
 		public ConstantType Type { get; private set; }
 		public List<float> DefaultValue { get; private set; }
+		public List<float> DefaultValueWithPadding { get; private set; }
 
 		public uint Rows => Type.Rows;
 		public uint Columns => Type.Columns;
@@ -45,7 +46,8 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		}
 		public ConstantDeclaration()
 		{
-			DefaultValue = new List<float>();
+			DefaultValue = new();
+			DefaultValueWithPadding = new();
 		}
 		public static ConstantDeclaration Parse(BytecodeReader reader, BytecodeReader decReader)
 		{
@@ -68,9 +70,50 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 			{
 				//Note: thre are corrisponding def instructions. TODO: check that they are the same
 				var defaultValueReader = reader.CopyAtOffset((int)defaultValueOffset);
-				for(int i = 0; i < 4; i++)
+				if(result.Type.ParameterClass == ParameterClass.Object)
 				{
-					result.DefaultValue.Add(defaultValueReader.ReadSingle());
+					for(int i = 0; i < 4; i++)
+					{
+						var value = defaultValueReader.ReadSingle();
+						result.DefaultValueWithPadding.Add(value);
+						result.DefaultValue.Add(value);
+					}
+				}
+				else
+				{
+					var forever = uint.MaxValue;
+					var elementCounter = 0;
+					result.TraverseChildTree(ref forever, (type, name, index, depth) =>
+					{
+						float[] ReadFour()
+						{
+							var values = new float[4];
+							for(int i = 0; i < 4; ++i)
+							{
+								values[i] = defaultValueReader.ReadSingle();
+							}
+							result.DefaultValueWithPadding.AddRange(values);
+							return values;
+						}
+
+						switch(type.ParameterClass)
+						{
+							case ParameterClass.Struct:
+								break;
+							case ParameterClass.MatrixColumns:
+								result.DefaultValue.AddRange(ReadFour().Take((int)type.Rows));
+								break;
+							case ParameterClass.MatrixRows:
+							case ParameterClass.Vector:
+								result.DefaultValue.AddRange(ReadFour().Take((int)type.Columns));
+								break;
+							case ParameterClass.Scalar:
+								result.DefaultValue.Add(ReadFour()[0]);
+								break;
+							default:
+								throw new NotSupportedException(type.ParameterClass.ToString());
+						}
+					});
 				}
 			}
 			return result;
@@ -91,6 +134,63 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		public string GetRegisterName()
 		{
 			return $"{RegisterSet.GetDescription()}{RegisterIndex}";
+		}
+
+		public string GetConstantNameByRegisterNumber(uint registerNumber, string relativeAddressing)
+		{
+			var decl = this;
+			var totalOffset = registerNumber - decl.RegisterIndex;
+			var data = decl.GetRegisterTypeByOffset(totalOffset);
+			var name = decl.GetMemberNameByOffset(totalOffset);
+			var offsetFromMember = registerNumber - data.RegisterIndex;
+
+			if(relativeAddressing != null)
+			{
+				// a nasty way to check array subscripts
+				// TODO: we need something less ugly...
+				var firstDotIndex = name.IndexOf('.');
+				firstDotIndex = firstDotIndex == -1 ? name.Length : name.Length;
+				var isChildArray = name.LastIndexOf(']') > firstDotIndex;
+				if(decl.Elements <= 1 || isChildArray || name.Count(x => x == ']') != 1)
+				{
+					// we cannot handle relative addressing if this contant declaration is not an array
+					// we also cannot handle relative addressing if this constant declaration contains nested arrays
+					name = $"Error({name}, {relativeAddressing})";
+				}
+				else
+				{
+					var declElementSize = decl.RegisterCount / decl.Elements;
+					if(declElementSize > 1)
+					{
+						relativeAddressing = $"({relativeAddressing} / {declElementSize})";
+					}
+					name = name.Replace("]", $" + {relativeAddressing}]");
+				}
+			}
+
+			// how many registers should be occupied by the current constant item
+			var registersOccupied = data.Type.ParameterClass == ParameterClass.MatrixColumns
+				? data.Type.Columns
+				: data.Type.Rows;
+			// sanity check: if the current constant item only occupies one register
+			// then its start index must match with the register number
+			if(registersOccupied == 1 && data.RegisterIndex != registerNumber)
+			{
+				throw new InvalidOperationException();
+			}
+
+			// matrix row / columns
+			if(data.Type.ParameterClass == ParameterClass.MatrixRows)
+			{
+				return $"{name}[{offsetFromMember}]";
+			}
+			else if(data.Type.ParameterClass == ParameterClass.MatrixColumns)
+			{
+				var accessors = Enumerable.Range(0, (int)data.Type.Rows).Select(i => $"m{i}{offsetFromMember}");
+				return $"({name}._{string.Join("_", accessors)})";
+			}
+
+			return name;
 		}
 
 		public class ConstantRegisterData
@@ -153,6 +253,7 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 			var lastDepth = 0;
 			TraverseChildTree(ref offset, (type, name, index, depth) =>
 			{
+				name = name.TrimStart('$');
 				if(depth >= indexes.Count)
 				{
 					indexes.Add((name, index, type.Elements));
@@ -190,8 +291,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		/// <param name="type">The type of current target.</param>
 		/// <param name="offset">
 		/// The offset of child element to be searched.
-		/// It will become 0 if a child element has been found exactly on the specified offset,
-		/// non-zero if we are accessing "in the middle of an element",
+		/// If it's <see cref="uint.MaxValue"/>, then it will traverse the entire tree.<br/>
+		/// Otherwise, it will  become 0 if a child element has been found exactly on the specified offset,
+		/// or non-zero if we are accessing "in the middle of an element",
 		/// something like "accessing the 2nd column of matrix".
 		/// </param>
 		/// <param name="visitor">
@@ -199,8 +301,9 @@ namespace DXDecompiler.DX9Shader.Bytecode.Ctab
 		/// </param>
 		private void TraverseChildTree(ref uint offset, ChildTreeVisitor visitor)
 		{
+			var fullTraverse = offset == uint.MaxValue;
 			var found = TraverseChildTree(Name, Type, ref offset, visitor, 0);
-			if(!found)
+			if(!found && !fullTraverse)
 			{
 				throw new InvalidOperationException();
 			}
